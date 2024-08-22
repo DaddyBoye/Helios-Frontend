@@ -11,7 +11,7 @@ const ProgressBar = forwardRef((props, ref) => {
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
         const newProgress = prevProgress + 1;
-        return newProgress <= 60 ? newProgress : 60;
+        return newProgress <= 60 ? newProgress : 0; // Reset to zero when it reaches 60
       });
     }, 1000);
 

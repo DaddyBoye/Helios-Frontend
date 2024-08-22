@@ -11,6 +11,17 @@ function App() {
  const progressBarRef = useRef();
  const completedAirdropsRef = useRef();
 
+ const [totalDivCount, setTotalDivCount] = useState(0);
+
+ const handleDivAdded = () => {
+  // Increment the total div count
+  setTotalDivCount(prevCount => prevCount + 1);
+};
+
+const handleDivReset = () => {
+  // Reset the total div count
+  setTotalDivCount(0);
+};
 
   //countdown timer
   const [timer, setTimer] = useState("00:00:00");
@@ -158,8 +169,12 @@ return (
         </div>
         
         <div className=''>
-          <CompletedAirdrops ref={completedAirdropsRef}/>  
+          <CompletedAirdrops ref={completedAirdropsRef}
+          onDivAdded={handleDivAdded}
+          onDivReset={handleDivReset}
+          />  
           </div>
+          <p>Total Divs Added: {totalDivCount}</p>
         </div>
 
     </div>

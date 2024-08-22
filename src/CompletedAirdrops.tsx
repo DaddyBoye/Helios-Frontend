@@ -10,6 +10,7 @@ const CompletedAirdrops = forwardRef((props, ref) => {
   const clearArray = () => {
     setDivElements([]); // Clear the array
     setElementCount(0); // Reset the element count
+    props.onDivReset();
   };
   useImperativeHandle(ref, () => ({
     emptyArray: clearArray,
@@ -30,6 +31,9 @@ const CompletedAirdrops = forwardRef((props, ref) => {
 
         // Add the new <div> to the existing array of elements
         setDivElements(prevElements => [...prevElements, newDiv]);
+
+        // Invoke the callback to update the total div count in the parent
+        props.onDivAdded();
 
         // Update the element count
         setElementCount(prevCount => prevCount + 1);
