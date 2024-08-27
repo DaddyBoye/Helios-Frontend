@@ -52,6 +52,27 @@
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
+.icon-container {
+  /* Set the desired size for your icon container */
+  width: 50px;
+  height: 50px;
+  /* Add any other styling you need */
+
+  /* Define the rotation animation */
+  animation: rotate 2s infinite linear;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Adjust the rotation duration (2s) and styling as needed */
+
 @keyframes float {
   0% {
     opacity: 1;

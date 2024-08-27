@@ -10,8 +10,42 @@ import { binanceLogo } from './images';
 function App() {
  const progressBarRef = useRef();
  const completedAirdropsRef = useRef();
-
  const [totalDivCount, setTotalDivCount] = useState(0);
+ const [parentProgress, setParentProgress] = useState(0);
+ const [mineRate, setMineRate] = useState(60);
+ const [totalCoins, setTotalCoins] = useState(0);
+ const [cumulativeTotal, setCumulativeTotal] = useState(0);
+
+  // Mine rate increase logic
+  useEffect(() => {
+    const mineRateInterval = setInterval(() => {
+      setMineRate((prevRate) => prevRate + 1); // Increase mine rate by 1 every 60 seconds
+    }, 7000); // 60 seconds in milliseconds
+
+    return () => clearInterval(mineRateInterval); // Cleanup interval on component unmount
+  }, []);
+
+//progress logic
+useEffect(() => {
+  const interval = setInterval(() => {
+    updateParentProgress(); // Call your function to update parentProgress
+  }, 1000);
+
+  return () => {
+    clearInterval(interval);
+  };
+}, [totalDivCount]);
+
+const updateParentProgress = () => {
+  setParentProgress((prevProgress) => {
+    const newProgress = prevProgress + 1;
+    if (newProgress <= 60 && totalDivCount !== 8) {
+      return newProgress;
+    } else {
+      return 0;
+    }
+  });
+};
 
  const handleDivAdded = () => {
   // Increment the total div count
@@ -21,6 +55,14 @@ function App() {
 const handleDivReset = () => {
   // Reset the total div count
   setTotalDivCount(0);
+};
+
+const handleCoinsEarnedUpdate = (newTotal) => {
+  setTotalCoins(newTotal); // Update the total coins in the parent state
+};
+
+const handleAddToCumulative = () => {
+  setCumulativeTotal((prevTotal) => prevTotal + totalCoins);
 };
 
   //countdown timer
@@ -71,16 +113,20 @@ const handleDivReset = () => {
 
   //reset
   const handleParentResetButtonClick = () => {
-    progressBarRef.current.resetButtonClick();
-    Reset();
+    handleAddToCumulative();
     clearArray();
+    handleParentButtonClick();
   };
 
     //reset array
     const clearArray = () => {
-      completedAirdropsRef.current.emptyArray();
+      completedAirdropsRef.current.emptyArray();  
     };
 
+    const handleParentButtonClick = () => {
+      // Call the resetButtonClick function from the child component
+      progressBarRef.current.resetButtonClick();
+    };
 
 return (
   <div className="flex flex-col font-sans bg-gradient-to-b from-[#185C8D] to-[#1A1F20] text-white p-4 ">
@@ -93,7 +139,7 @@ return (
           <div className='text-sm font-bold text-zinc-400'>Mining Rate</div>
           <div className='flex flex-row justify-center text-sm text-center'>
             <img src={Coin} className="my-auto h-4 w-4"/>
-            <strong>1234</strong>/hr
+            <strong>{mineRate}</strong>/hr
           </div>
         </div>
 
@@ -112,7 +158,8 @@ return (
       </div>
 
       <div className='p-3 flex justify-center flex-row border-t-2 border-b-2 border-[#121D28] font-bold text-center text-3xl'>
-      <img src={ReactIcon}/>12,345,678
+      <img src={ReactIcon}/>
+      {cumulativeTotal}
       </div>
 
       <div className='flex flex-row justify-between pl-2 pt-1 pr-2'>
@@ -154,7 +201,7 @@ return (
           </div>  
         </div>
 
-        <button onClick={handleParentResetButtonClick} className=' bg-yellow-400 rounded-lg font-bold p-1.5 pl-3 pr-3 border border-white mr-2 my-auto'>
+        <button onClick={handleParentResetButtonClick} className=' bg-yellow-400 rounded-lg hover:bg-sky-700 font-bold p-1.5 pl-3 pr-3 border border-white mr-2 my-auto'>
            Claim
         </button>
 
@@ -164,18 +211,27 @@ return (
         <div className='mb-2 '>
           Current Airdrop
           <div className="App">
-            <ProgressBar ref={progressBarRef}/>
+            <ProgressBar 
+            totalDivCount={totalDivCount} 
+            ref={progressBarRef} 
+            progress={parentProgress} 
+            progressRate={mineRate}/>
           </div>
         </div>
         
         <div className=''>
-          <CompletedAirdrops ref={completedAirdropsRef}
+          <CompletedAirdrops 
+          ref={completedAirdropsRef}
           onDivAdded={handleDivAdded}
           onDivReset={handleDivReset}
-          />  
+          completedProgress={parentProgress}
+          coinsEarned={mineRate}
+          onCoinsEarnedUpdate={handleCoinsEarnedUpdate} // Pass the callback function
+          />
           </div>
           <p>Total Divs Added: {totalDivCount}</p>
         </div>
+        <p>Progress:{parentProgress}</p>
 
     </div>
 
