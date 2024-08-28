@@ -12,7 +12,7 @@ function App() {
  const completedAirdropsRef = useRef();
  const [totalDivCount, setTotalDivCount] = useState(0);
  const [parentProgress, setParentProgress] = useState(0);
- const [mineRate, setMineRate] = useState(60);
+ const [mineRate, setMineRate] = useState(10);
  const [totalCoins, setTotalCoins] = useState(0);
  const [cumulativeTotal, setCumulativeTotal] = useState(0);
  const [timeLeft, setTimeLeft] = useState({ minutes: 0, seconds: 0 });
@@ -131,12 +131,13 @@ return (
       </div>
 
       <div className='flex flex-row justify-between pl-2 pt-1 pr-2'>
-       <div className='w-40'>
+       <div className='w-50'>
         <div className='font-medium text-left text-xs mb-2'>
-          Lorem ipsum dolor sit, amet
+        Number of tokens droped/ 
+        <p>Total supply</p>
         </div>
         <div className='font-medium text-left text-zinc-400 text-sm '>
-          Lorem / ipsum
+          123456 / 654321
         </div>
        </div>
        <div className='w-40'>
@@ -184,7 +185,7 @@ return (
         <div className='mb-1 text-xs flex flex-col'>
           <p>You have 8 rounds of airdrops unclaimed!</p>
           <p>Airdrop has been suspended!</p>
-          <p>(the next round airdrops automatically after claiming)</p>
+          <p>(the next round of airdrops starts automatically after claiming)</p>
         </div>
       )}
         </div>
