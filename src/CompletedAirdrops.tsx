@@ -1,12 +1,14 @@
-import { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
+import { useState, useEffect,useRef, useImperativeHandle, forwardRef } from 'react';
 import ReactIcon from './assets/react.svg';
 import Coin from './images/dollar-coin.png';
 
 const CompletedAirdrops = forwardRef(({ completedProgress, onDivAdded, onDivReset, coinsEarned, onCoinsEarnedUpdate }, ref) => {
   const [divElements, setDivElements] = useState([]);
   const [elementCount, setElementCount] = useState(0);
+  const Ref = useRef();
   const [hasAddedDiv, setHasAddedDiv] = useState(false); // Track if a div has been added for the current progress
   const [totalCoinsEarned, setTotalCoinsEarned] = useState(0); // New state for total coins earned
+  const coinsEarnedRef = useRef(coinsEarned);
 
   // Reset function
   const clearArray = () => {
@@ -14,13 +16,26 @@ const CompletedAirdrops = forwardRef(({ completedProgress, onDivAdded, onDivRese
     setElementCount(0); // Reset the element count
     setHasAddedDiv(false); // Reset the flag
     setTotalCoinsEarned(0);
+    updateCoinsEarned();
     onDivReset(); // Reset the coins earned in the parent component as well
+  };
+
+  const updateCoinsEarned = () => {
+    if (elementCount === 8) {
+      coinsEarnedRef.current = coinsEarned;
+    }
   };
 
   useImperativeHandle(ref, () => ({
     emptyArray: clearArray,
   }));
   
+  useEffect(() => {
+    if (completedProgress === 0) {
+      coinsEarnedRef.current = coinsEarned; // Update progressRate when progress resets
+    }
+  }, [completedProgress, coinsEarned]);
+
   useEffect(() => {
     if (completedProgress === 60 && divElements.length < 8 && !hasAddedDiv) {
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -33,14 +48,14 @@ const CompletedAirdrops = forwardRef(({ completedProgress, onDivAdded, onDivRese
           <img src={ReactIcon} className="w-6 h-6 my-auto mr-4" />
           <div className="flex my-auto flex-col mr-4">Mining Complete</div>
           <img src={Coin} className="my-auto mr-1 w-4 h-4" />
-          <div className="text-sm my-auto mr-8">{coinsEarned}</div>
+          <div className="text-sm my-auto mr-8">{coinsEarnedRef.current}</div>
           <div className="my-auto">{currentTime}</div>
         </div>
       );
       
       // Update total coins earned
       setTotalCoinsEarned((prevTotal) => {
-        const newTotal = prevTotal + coinsEarned;
+        const newTotal = prevTotal + coinsEarnedRef.current;
         onCoinsEarnedUpdate(newTotal); // Call the parent function to update the total coins earned
         return newTotal;
       });
@@ -56,11 +71,11 @@ const CompletedAirdrops = forwardRef(({ completedProgress, onDivAdded, onDivRese
 
       // Set the flag to true to indicate a div has been added
       setHasAddedDiv(true);
-    } else if (completedProgress !== 60) {
+      } else if (completedProgress !== 60) {
       // Reset the flag if progress is not 60
       setHasAddedDiv(false);
-    }
-  }, [completedProgress, divElements.length, onDivAdded, coinsEarned, onCoinsEarnedUpdate]);
+      }
+      }, [completedProgress, divElements.length, onDivAdded, coinsEarned, onCoinsEarnedUpdate]);
 
   return (
     <div>

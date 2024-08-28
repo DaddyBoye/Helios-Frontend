@@ -2,8 +2,6 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import ReactIcon from './assets/react.svg';
 import Coin from './images/dollar-coin.png';
 
-
-//progress logic//
 const ProgressBar = forwardRef(({ totalDivCount, progress, progressRate },ref) => {
   const [timer, setTimer] = useState("00:00:00");
   const Ref = useRef();
@@ -119,8 +117,8 @@ const ProgressBar = forwardRef(({ totalDivCount, progress, progressRate },ref) =
         </div>
 
         <img src={Coin} className='my-auto w-4 mr-0.5 h-4 ml-5'/>
-        <p className='text-sm my-auto'>{coins.toFixed(3)}</p>
-        <p id='timer' className='ml-9'>{timer}</p>
+        <p className='text-sm w-20 my-auto'>{coins.toFixed(3)}</p>
+        <p id='timer' className='ml-4'>{timer}</p>
       </div>
     </div>
       ) : (

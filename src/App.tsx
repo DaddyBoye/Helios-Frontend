@@ -116,6 +116,7 @@ const handleAddToCumulative = () => {
     handleAddToCumulative();
     clearArray();
     handleParentButtonClick();
+    setTotalCoins(0);
   };
 
     //reset array
@@ -191,10 +192,10 @@ return (
       <div className='border-b-2 border-white pl-4 pt-3 pb-3 pr-4 flex flex-row justify-between'>
         <div className='flex flex-col w-52'>
           <div className='font-bold mb-1 text-xs'>
-            Participate in 8 rounds of airdrop
+            Participate in {totalDivCount} rounds of airdrop
           </div>
           <div className='mb-1 font-bold text-sm'>
-            Get 500 coins
+            Get {totalCoins} coins
           </div>
           <div className='mb-1 text-xs'>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum ea harum hic mollitia quam, iste accus
