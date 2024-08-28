@@ -15,6 +15,7 @@ function App() {
  const [mineRate, setMineRate] = useState(60);
  const [totalCoins, setTotalCoins] = useState(0);
  const [cumulativeTotal, setCumulativeTotal] = useState(0);
+ const [timeLeft, setTimeLeft] = useState({ minutes: 0, seconds: 0 });
 
   // Mine rate increase logic
   useEffect(() => {
@@ -47,6 +48,17 @@ const updateParentProgress = () => {
   });
 };
 
+  //Timer logic
+  useEffect(() => {
+    const totalTimeInSeconds = 60; // Assuming target is 60
+    const remainingTimeInSeconds = (60 - parentProgress);
+
+    setTimeLeft({
+      minutes: Math.floor(remainingTimeInSeconds / 60),
+      seconds: remainingTimeInSeconds % 60
+    });
+  }, [parentProgress]);
+
  const handleDivAdded = () => {
   // Increment the total div count
   setTotalDivCount(prevCount => prevCount + 1);
@@ -64,52 +76,6 @@ const handleCoinsEarnedUpdate = (newTotal) => {
 const handleAddToCumulative = () => {
   setCumulativeTotal((prevTotal) => prevTotal + totalCoins);
 };
-
-  //countdown timer
-  const [timer, setTimer] = useState("00:00:00");
-  const Ref = useRef()
-  
-  function getTimeRemaining(e) {
-    const targetTime = Date.parse(e);
-    const currentTime = Date.now();
-    const total = targetTime - currentTime;
-  
-    const hour = Math.floor(total / (1000 * 60 * 60) % 24);
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-  
-    return { total, hour, minutes, seconds };
-  }
-  
-  function startTimer(e){
-    let {total, hour, minutes, seconds} = getTimeRemaining(e);
-    if(total>= 0) {
-      setTimer(
-        (hour > 9 ? hour : '0' + hour) + ':' +
-        (minutes > 9 ? minutes : '0' + minutes) + ':' +
-        (seconds > 9 ? seconds : '0' + seconds)
-      )
-    }
-  }
-  function clearTimer(e) {
-    setTimer("00:00:00")
-    if(Ref.current) clearInterval(Ref.current);
-    const id = setInterval(()=> {
-      startTimer(e)
-    }, 1000)
-    Ref.current = id;
-  }
-  function getDeadTime() {
-    let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds()+ 61);
-    return deadline;
-  }
-  function Reset() {
-    clearTimer(getDeadTime());
-  }
-  useEffect(()=>{
-    clearTimer(getDeadTime())
-  },[])
 
   //reset
   const handleParentResetButtonClick = () => {
@@ -153,7 +119,8 @@ return (
         </div>
 
         <div className='p-1 text-center'>
-          <div className='text-sm font-bold text-zinc-400'>Airdrop Time</div>{timer}
+          <div className='text-sm font-bold text-zinc-400'>Airdrop Time</div>
+          <p>{timeLeft.minutes}m {timeLeft.seconds}s</p>
         </div>
 
       </div>
@@ -216,7 +183,9 @@ return (
             totalDivCount={totalDivCount} 
             ref={progressBarRef} 
             progress={parentProgress} 
-            progressRate={mineRate}/>
+            progressRate={mineRate}
+            timeLeft={timeLeft}
+            />
           </div>
         </div>
         

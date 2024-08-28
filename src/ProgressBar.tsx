@@ -2,57 +2,10 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import ReactIcon from './assets/react.svg';
 import Coin from './images/dollar-coin.png';
 
-const ProgressBar = forwardRef(({ totalDivCount, progress, progressRate },ref) => {
-  const [timer, setTimer] = useState("00:00:00");
+const ProgressBar = forwardRef(({ totalDivCount, progress, progressRate, timeLeft },ref) => {
   const Ref = useRef();
   const [coins, setCoins] = useState(0);
   const progressRateRef = useRef(progressRate);
-
-  //countdown timer logic// 
-  function getTimeRemaining(e) {
-    const targetTime = Date.parse(e);
-    const currentTime = Date.now();
-    const total = targetTime - currentTime;
-  
-    const hour = Math.floor(total / (1000 * 60 * 60) % 24);
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-  
-    return { total, hour, minutes, seconds };
-  }
-
-  function startTimer(e) {
-    let { total, hour, minutes, seconds } = getTimeRemaining(e);
-    if (total >= 0) {
-      setTimer(
-        (hour > 9 ? hour : '0' + hour) + ':' +
-        (minutes > 9 ? minutes : '0' + minutes) + ':' +
-        (seconds > 9 ? seconds : '0' + seconds)
-      );
-    }
-  }
-  
-  function clearTimer(e) {
-    setTimer("00:00:00");
-    if (Ref.current) clearInterval(Ref.current);
-    const id = setInterval(() => {
-      startTimer(e);
-      if (getTimeRemaining(e).total <= 0) {
-        clearTimer(getDeadTime()); // Restart the timer
-      }
-    }, 1000);
-    Ref.current = id;
-  }
-  
-  function getDeadTime() {
-    let deadline = new Date();
-    deadline.setSeconds(deadline.getSeconds() + 60);
-    return deadline;
-  }
-  
-  useEffect(() => {
-    clearTimer(getDeadTime());
-  }, []);
 
   //Coincounter logic
   useEffect(() => {
@@ -118,7 +71,7 @@ const ProgressBar = forwardRef(({ totalDivCount, progress, progressRate },ref) =
 
         <img src={Coin} className='my-auto w-4 mr-0.5 h-4 ml-5'/>
         <p className='text-sm w-20 my-auto'>{coins.toFixed(3)}</p>
-        <p id='timer' className='ml-4'>{timer}</p>
+        <p id='timer' className='ml-4'>{timeLeft.minutes}m {timeLeft.seconds}s</p>
       </div>
     </div>
       ) : (
