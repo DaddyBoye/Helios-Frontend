@@ -161,18 +161,39 @@ return (
           <div className='font-bold mb-1 text-xs'>
             Participate in {totalDivCount} rounds of airdrop
           </div>
-          <div className='mb-1 font-bold text-sm'>
-            Get {totalCoins} coins
-          </div>
-          <div className='mb-1 text-xs'>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatum ea harum hic mollitia quam, iste accus
+          <div className='mb-1 flex gap-1 flex-row font-bold text-sm'>
+            Get<p className='text-green-500'>{totalCoins}</p> coins
           </div>  
+          {totalDivCount < 8 ? (
+        // Render this when totalDivCount is less than 8
+    <div className="mb-1 text-xs flex flex-col">
+      <p>You have {totalDivCount} rounds of airdrops unclaimed!</p>
+      
+      <p>Please claim it as soon as possible</p>
+      
+      <p>(airdrops suspends automatically after 8 rounds unclaimed)</p>
+    </div>
+      ) : (
+        // Render this when totalDivCount is 8 or greater
+        <div className='mb-1 text-xs flex flex-col'>
+          <p>You have 8 rounds of airdrops unclaimed!</p>
+          <p>Airdrop has been suspended!</p>
+          <p>(the next round airdrops automatically after claiming)</p>
+        </div>
+      )}
         </div>
 
+        {totalDivCount === 0 ? (
+        // Render this when totalDivCount is less than 1
+        <div className=' bg-gray-400 rounded-lg font-bold p-1.5 pl-3 pr-3 border border-white mr-2 my-auto'>
+           Claim
+        </div>
+      ) : (
+        // Render this when totalDivCount is 8 or greater
         <button onClick={handleParentResetButtonClick} className=' bg-yellow-400 rounded-lg hover:bg-sky-700 font-bold p-1.5 pl-3 pr-3 border border-white mr-2 my-auto'>
            Claim
         </button>
-
+      )}
       </div>
 
       <div className='font-bold p-4 pt-2'>

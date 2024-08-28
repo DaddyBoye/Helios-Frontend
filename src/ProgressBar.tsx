@@ -44,12 +44,10 @@ const ProgressBar = forwardRef(({ totalDivCount, progress, progressRate, timeLef
       resetButtonClick: handleResetButtonClick,
     }));
 
-  const isTotalDivCountLessThan8 = totalDivCount < 8;
-
   return (
     <div>
       <p>Current Progress Rate Ref: {progressRateRef.current}</p>
-      {isTotalDivCountLessThan8 ? (
+      {totalDivCount < 8 ? (
         // Render this when totalDivCount is less than 8
     <div className="w-full overflow-hidden bg-gray-600 flex flex-row rounded-2xl h-12">
       <div
