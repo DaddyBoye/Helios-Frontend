@@ -169,8 +169,14 @@ return (
     <div className="mb-1 text-xs flex flex-col">
       <p>You have {totalDivCount} rounds of airdrops unclaimed!</p>
       
-      <p>Please claim it as soon as possible</p>
-      
+      {totalDivCount === 0 ? (
+        // Render this when totalDivCount is zero
+      <p></p>
+      ) : (
+        // Render this when totalDivCount is 1 or greater
+        <p>Please claim it as soon as possible</p>
+      )}
+
       <p>(airdrops suspends automatically after 8 rounds unclaimed)</p>
     </div>
       ) : (
