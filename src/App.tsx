@@ -50,8 +50,8 @@ const updateParentProgress = () => {
 
   //Timer logic
   useEffect(() => {
-    const totalTimeInSeconds = 60; // Assuming target is 60
-    const remainingTimeInSeconds = (60 - parentProgress);
+    const totalTimeInSeconds = 60; // Progress target
+    const remainingTimeInSeconds = (totalTimeInSeconds - parentProgress);
 
     setTimeLeft({
       minutes: Math.floor(remainingTimeInSeconds / 60),
