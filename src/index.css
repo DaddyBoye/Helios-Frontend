@@ -12,3 +12,12 @@
 body {
     font-family: sans-serif;
 }
+/* index.css */
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+    z-index: 1000; /* Ensure it stays on top */
+  }

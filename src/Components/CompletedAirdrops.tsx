@@ -1,6 +1,6 @@
 import { useState, useEffect,useRef, useImperativeHandle, forwardRef } from 'react';
-import ReactIcon from './assets/react.svg';
-import Coin from './images/dollar-coin.png';
+import ReactIcon from '../assets/react.svg';
+import Coin from '../images/dollar-coin.png';
 
 const CompletedAirdrops = forwardRef(({ completedProgress, onDivAdded, onDivReset, coinsEarned, onCoinsEarnedUpdate }, ref) => {
   const [divElements, setDivElements] = useState([]);

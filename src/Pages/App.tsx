@@ -1,11 +1,10 @@
-import './App.css';
-import ProgressBar from './ProgressBar';
-import CompletedAirdrops from './CompletedAirdrops';
+import '../App.css';
+import ProgressBar from '../Components/ProgressBar';
+import CompletedAirdrops from '../Components/CompletedAirdrops';
 import { useState, useEffect, useRef } from 'react';
-import ReactIcon from './assets/react.svg';
-import Coin from './images/dollar-coin.png';
-import Hamster from './images/main-character.png';
-import { binanceLogo } from './images';
+import ReactIcon from '../assets/react.svg';
+import Coin from '../images/dollar-coin.png';
+import Hamster from '../images/main-character.png';
 
 function App() {
  const progressBarRef = useRef();
@@ -96,7 +95,7 @@ const handleAddToCumulative = () => {
     };
 
 return (
-  <div className="flex flex-col font-sans bg-gradient-to-b from-[#185C8D] to-[#1A1F20] text-white p-4 ">
+  <div className="flex flex-col font-sans pb-16 bg-gradient-to-b from-[#185C8D] to-[#1A1F20] text-white p-4 ">
     <h1 className='text-center font-bold font-sans text-2xl'>
       Bamboo
     </h1>
@@ -230,23 +229,7 @@ return (
           <p>Total Divs Added: {totalDivCount}</p>
         </div>
         <p>Progress:{parentProgress}</p>
-
-    </div>
-
-    <div className='mt-auto p-4 pt-2 pb-2 h-16 bg-[#32363C] rounded-lg justify-between flex flex-row'>
-      <div className='bg-[#212429] pl-4 pr-4 justify-center rounded-md text-center text-xs flex flex-col'>
-        <img src={binanceLogo} className='w-6 mx-auto h-5'/> Mine
-      </div>
-      <div className='bg-[#212429] pl-4 pr-4 justify-center rounded-md text-center text-xs flex flex-col'>
-        <img src={binanceLogo} className='w-6 mx-auto h-5'/> Mine
-      </div>
-      <div className='bg-[#212429] pl-4 pr-4 justify-center rounded-md text-center text-xs flex flex-col'>
-        <img src={binanceLogo} className='w-6 mx-auto h-5'/> Mine
-      </div>
-      <div className='bg-[#212429] pl-4 pr-4 justify-center rounded-md text-center text-xs flex flex-col'>
-        <img src={binanceLogo} className='w-6 mx-auto h-5'/> Mine
-      </div>
-    </div>
+    </div>    
   </div>
   )
 }

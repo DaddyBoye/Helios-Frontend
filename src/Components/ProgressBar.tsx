@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import ReactIcon from './assets/react.svg';
-import Coin from './images/dollar-coin.png';
+import ReactIcon from '../assets/react.svg';
+import Coin from '../images/dollar-coin.png';
 
 const ProgressBar = forwardRef(({ totalDivCount, progress, progressRate, timeLeft },ref) => {
   const Ref = useRef();
