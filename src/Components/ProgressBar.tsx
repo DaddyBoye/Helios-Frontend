@@ -46,7 +46,6 @@ const ProgressBar = forwardRef(({ totalDivCount, progress, progressRate, timeLef
 
   return (
     <div>
-      <p>Current Progress Rate Ref: {progressRateRef.current}</p>
       {totalDivCount < 8 ? (
         // Render this when totalDivCount is less than 8
     <div className="w-full overflow-hidden bg-gray-600 flex flex-row rounded-2xl h-12">

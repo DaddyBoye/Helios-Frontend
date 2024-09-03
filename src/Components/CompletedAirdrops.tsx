@@ -79,8 +79,7 @@ const CompletedAirdrops = forwardRef(({ completedProgress, onDivAdded, onDivRese
 
   return (
     <div>
-      <div className='flex flex-row'><div>Completed Airdrops</div><p>({elementCount}&{completedProgress})</p></div>
-      <p>Total Coins Earned: {totalCoinsEarned}</p>
+      <div className='flex flex-row'><div>Completed Airdrops</div><p>({elementCount})</p></div>
             {divElements.length === 0 ? (
         <div className='justify-center p-5 pt-20 pb-20 text-center'>
           No unclaimed airdrops

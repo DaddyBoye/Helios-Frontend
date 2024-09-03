@@ -226,9 +226,7 @@ return (
           onCoinsEarnedUpdate={handleCoinsEarnedUpdate} // Pass the callback function
           />
           </div>
-          <p>Total Divs Added: {totalDivCount}</p>
         </div>
-        <p>Progress:{parentProgress}</p>
     </div>    
   </div>
   )
