@@ -1,7 +1,3 @@
-import Coin from '../images/dollar-coin.png';
-import Arrow from '../images/Arrow.png';
-import Checkmark from '../images/Checkmark.png';
-import ReactIcon from '../assets/react.svg';
 
 const Earn = () => {
 
