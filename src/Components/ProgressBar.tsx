@@ -68,7 +68,7 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
             <img src={ReactIcon} className="w-6 h-6 my-auto mr-1" alt="React Icon" />
             <div className="flex flex-row gap-1">
               Mining
-              <div className="flex bg-red-500 justify-center items-center">
+              <div className="flex justify-center items-center">
                 <div className="flex flex-row gap-1">
                   <div className="w-2 h-2 rounded-full bg-white animate-bounce"></div>
                   <div className="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.3s]"></div>
@@ -78,8 +78,8 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
             </div>
 
             <img src={Coin} className="my-auto w-4 mr-0.5 h-4 ml-2" alt="Coin" />
-            <p className="text-sm w-18 mr-1 bg-red-200 my-auto">{coins.toFixed(3)}</p>
-            <p id="timer" className="w-16 bg-blue-300">
+            <p className="text-sm w-20 mr-1 my-auto">{coins.toFixed(3)}</p>
+            <p id="timer" className="w-16">
               {timeLeft.minutes}m {timeLeft.seconds}s
             </p>
           </div>
