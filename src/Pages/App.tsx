@@ -6,15 +6,37 @@ import ReactIcon from '../assets/react.svg';
 import Coin from '../images/dollar-coin.png';
 import Hamster from '../images/main-character.png';
 
+interface TimeLeft {
+  minutes: number;
+  seconds: number;
+}
+
+interface ProgressBarProps {
+  totalDivCount: number;
+  progress: number;
+  progressRate: number;
+  timeLeft: TimeLeft;
+  resetButtonClick: () => void;
+}
+
+interface CompletedAirdropsProps {
+  onDivAdded: () => void;
+  onDivReset: () => void;
+  completedProgress: number;
+  coinsEarned: number;
+  onCoinsEarnedUpdate: (newTotal: number) => void;
+  emptyArray: () => void;
+}
+
 function App() {
- const progressBarRef = useRef();
- const completedAirdropsRef = useRef();
- const [totalDivCount, setTotalDivCount] = useState(0);
- const [parentProgress, setParentProgress] = useState(0);
- const [mineRate, setMineRate] = useState(10);
- const [totalCoins, setTotalCoins] = useState(0);
- const [cumulativeTotal, setCumulativeTotal] = useState(0);
- const [timeLeft, setTimeLeft] = useState({ minutes: 0, seconds: 0 });
+  const progressBarRef = useRef<ProgressBarProps>(null);
+  const completedAirdropsRef = useRef<CompletedAirdropsProps>(null);
+  const [totalDivCount, setTotalDivCount] = useState<number>(0);
+  const [parentProgress, setParentProgress] = useState<number>(0);
+  const [mineRate, setMineRate] = useState<number>(10);
+  const [totalCoins, setTotalCoins] = useState<number>(0);
+  const [cumulativeTotal, setCumulativeTotal] = useState<number>(0);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ minutes: 0, seconds: 0 });
 
   // Mine rate increase logic
   useEffect(() => {
@@ -68,7 +90,7 @@ const handleDivReset = () => {
   setTotalDivCount(0);
 };
 
-const handleCoinsEarnedUpdate = (newTotal) => {
+const handleCoinsEarnedUpdate = (newTotal: number) => {
   setTotalCoins(newTotal); // Update the total coins in the parent state
 };
 
@@ -86,12 +108,15 @@ const handleAddToCumulative = () => {
 
     //reset array
     const clearArray = () => {
-      completedAirdropsRef.current.emptyArray();  
+      if (completedAirdropsRef.current) {
+        completedAirdropsRef.current.emptyArray();  
+      }
     };
-
+    
     const handleParentButtonClick = () => {
-      // Call the resetButtonClick function from the child component
-      progressBarRef.current.resetButtonClick();
+      if (progressBarRef.current) {
+        progressBarRef.current.resetButtonClick();
+      }
     };
 
 return (

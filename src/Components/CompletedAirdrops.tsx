@@ -1,16 +1,25 @@
-import { useState, useEffect,useRef, useImperativeHandle, forwardRef } from 'react';
+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
 import ReactIcon from '../assets/react.svg';
 import Coin from '../images/dollar-coin.png';
 
-const CompletedAirdrops = forwardRef(({ completedProgress, onDivAdded, onDivReset, coinsEarned, onCoinsEarnedUpdate }, ref) => {
-  const [divElements, setDivElements] = useState([]);
-  const [elementCount, setElementCount] = useState(0);
-  const Ref = useRef();
-  const [hasAddedDiv, setHasAddedDiv] = useState(false); // Track if a div has been added for the current progress
-  const [totalCoinsEarned, setTotalCoinsEarned] = useState(0); // New state for total coins earned
-  const coinsEarnedRef = useRef(coinsEarned);
+interface CompletedAirdropsProps {
+  completedProgress: number;
+  onDivAdded: () => void;
+  onDivReset: () => void;
+  coinsEarned: number;
+  onCoinsEarnedUpdate: (value: number) => void;
+}
 
-  // Reset function
+const CompletedAirdrops = forwardRef((props: CompletedAirdropsProps, ref) => {
+  const { completedProgress, onDivAdded, onDivReset, coinsEarned, onCoinsEarnedUpdate } = props;
+
+  const [divElements, setDivElements] = useState<JSX.Element[]>([]);
+  const [elementCount, setElementCount] = useState<number>(0);
+  const Ref = useRef<HTMLDivElement>(null);
+  const [hasAddedDiv, setHasAddedDiv] = useState<boolean>(false);
+  const [totalCoinsEarned, setTotalCoinsEarned] = useState<number>(0);
+  const coinsEarnedRef = useRef<number>(coinsEarned);
+
   const clearArray = () => {
     setDivElements([]); // Clear the array
     setElementCount(0); // Reset the element count
@@ -71,16 +80,16 @@ const CompletedAirdrops = forwardRef(({ completedProgress, onDivAdded, onDivRese
 
       // Set the flag to true to indicate a div has been added
       setHasAddedDiv(true);
-      } else if (completedProgress !== 60) {
+    } else if (completedProgress !== 60) {
       // Reset the flag if progress is not 60
       setHasAddedDiv(false);
-      }
-      }, [completedProgress, divElements.length, onDivAdded, coinsEarned, onCoinsEarnedUpdate]);
+    }
+  }, [completedProgress, divElements.length, onDivAdded, coinsEarned, onCoinsEarnedUpdate]);
 
   return (
     <div>
       <div className='flex flex-row'><div>Completed Airdrops</div><p>({elementCount})</p></div>
-            {divElements.length === 0 ? (
+      {divElements.length === 0 ? (
         <div className='justify-center p-5 pt-20 pb-20 text-center'>
           No unclaimed airdrops
         </div>
