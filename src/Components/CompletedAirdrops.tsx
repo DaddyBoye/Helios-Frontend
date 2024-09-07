@@ -15,7 +15,6 @@ const CompletedAirdrops = forwardRef((props: CompletedAirdropsProps, ref) => {
 
   const [divElements, setDivElements] = useState<JSX.Element[]>([]);
   const [elementCount, setElementCount] = useState<number>(0);
-  const Ref = useRef<HTMLDivElement>(null);
   const [hasAddedDiv, setHasAddedDiv] = useState<boolean>(false);
   const [totalCoinsEarned, setTotalCoinsEarned] = useState<number>(0);
   const coinsEarnedRef = useRef<number>(coinsEarned);
@@ -96,6 +95,7 @@ const CompletedAirdrops = forwardRef((props: CompletedAirdropsProps, ref) => {
       ) : (
         divElements
       )}
+      <p className='visibility: hidden'>{totalCoinsEarned}</p>
     </div>
   );
 });
