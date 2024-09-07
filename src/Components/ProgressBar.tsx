@@ -77,7 +77,7 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
               </div>
             </div>
 
-            <img src={Coin} className="my-auto w-4 mr-0.5 h-4 ml-5" alt="Coin" />
+            <img src={Coin} className="w-4 mr-0.5 h-4 ml-5" alt="Coin" />
             <p className="text-sm w-20 my-auto">{coins.toFixed(3)}</p>
             <p id="timer" className="ml-4">
               {timeLeft.minutes}m {timeLeft.seconds}s
