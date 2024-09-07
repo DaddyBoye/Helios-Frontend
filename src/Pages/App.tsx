@@ -154,25 +154,7 @@ return (
       {cumulativeTotal}
       </div>
 
-      <div className='flex flex-row justify-between pl-2 pt-1 pr-2'>
-       <div className='w-50'>
-        <div className='font-medium text-left text-xs mb-2'>
-        Number of tokens droped/ 
-        <p>Total supply</p>
-        </div>
-        <div className='font-medium text-left text-zinc-400 text-sm '>
-          123456 / 654321
-        </div>
-       </div>
-       <div className='w-40'>
-        <div className='font-medium text-right text-xs mb-2'>
-          Lorem ipsum dolor sit, amet
-        </div>
-        <div className='font-medium text-zinc-400 text-right text-sm '>
-          Lorem
-        </div>
-       </div>
-      </div>
+
 
       <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-400">
         <div className="bg-gradient-to-r from-green-500 to-yellow-300 h-2.5 rounded-full w-4/12"></div>
