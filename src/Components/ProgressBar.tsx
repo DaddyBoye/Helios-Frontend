@@ -2,11 +2,12 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import ReactIcon from '../assets/react.svg';
 import Coin from '../images/dollar-coin.png';
 
+
 interface ProgressBarProps {
   totalDivCount: number;
   progress: number;
   progressRate: number;
-  timeLeft: { minutes: number; seconds: number }; // Ensure timeLeft is an object with minutes and seconds
+  timeLeft: { minutes: number; seconds: number }
 }
 
 const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
@@ -15,13 +16,14 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
   const [coins, setCoins] = useState<number>(0);
   const progressRateRef = useRef<number>(progressRate);
 
-  // Coin counter logic
+
+  //Coincounter logic
   useEffect(() => {
     if (totalDivCount < 8) {
       const progressPerSecond = progressRateRef.current / 60;
 
       const interval = setInterval(() => {
-        setCoins((prevCoins) => prevCoins + progressPerSecond);
+        setCoins(prevCoins => prevCoins + progressPerSecond);
       }, 1000);
 
       // Cleanup interval on component unmount
@@ -29,31 +31,28 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
     }
   }, [totalDivCount]);
 
-  // Reset coins when progress is 0
   useEffect(() => {
     if (progress === 0) {
       setCoins(0);
     }
   }, [progress]);
 
-  // Update progressRateRef when progressRate changes
   useEffect(() => {
     if (progress === 60) {
-      progressRateRef.current = progressRate;
+      progressRateRef.current = progressRate; // Update progressRate when progress resets
     }
   }, [progress, progressRate]);
 
-  // Reset function
-  const handleResetButtonClick = () => {
-    if (totalDivCount === 8) {
-      progressRateRef.current = progressRate;
-    }
-  };
-
-  // Expose reset function to parent
-  useImperativeHandle(ref, () => ({
-    resetButtonClick: handleResetButtonClick,
-  }));
+    // Reset function
+    const handleResetButtonClick = () => {
+      if (totalDivCount === 8) {
+        progressRateRef.current = progressRate;
+      }
+    };
+  
+    useImperativeHandle(ref, () => ({
+      resetButtonClick: handleResetButtonClick,
+    }));
 
   return (
     <div>
@@ -88,3 +87,4 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
 });
 
 export default ProgressBar;
+
