@@ -64,8 +64,8 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
             className="bg-gradient-to-r from-green-500 to-yellow-400 h-12 rounded-l-2xl"
             style={{ width: `${(progress / 60) * 100}%` }}
           ></div>
-          <div className="z-40 absolute flex flex-row text-md p-3 pl-5">
-            <img src={ReactIcon} className="w-6 h-6 mr-2" alt="React Icon" />
+          <div className="z-40 absolute flex flex-row text-md my-auto p-3 pl-4">
+            <img src={ReactIcon} className="w-6 h-6 my-auto mr-1" alt="React Icon" />
             <div className="flex flex-row gap-1">
               Mining
               <div className="flex justify-center items-center">
@@ -77,9 +77,9 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
               </div>
             </div>
 
-            <img src={Coin} className="w-4 mr-0.5 h-4 ml-5" alt="Coin" />
-            <p className="text-sm w-20">{coins.toFixed(3)}</p>
-            <p id="timer" className="ml-4">
+            <img src={Coin} className="my-auto w-4 mr-0.5 h-4 ml-5" alt="Coin" />
+            <p className="text-sm w-20 my-auto">{coins.toFixed(3)}</p>
+            <p id="timer" className="ml-1">
               {timeLeft.minutes}m {timeLeft.seconds}s
             </p>
           </div>
