@@ -51,12 +51,12 @@ const CompletedAirdrops = forwardRef((props: CompletedAirdropsProps, ref) => {
       const newDiv = (
         <div
           key={divElements.length}
-          className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl h-12 text-sm pl-8 my-auto"
+          className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl h-12 pl-3 text-sm my-auto"
         >
-          <img src={ReactIcon} className="w-6 h-6 my-auto mr-4" />
-          <div className="flex my-auto flex-col mr-4">Mining Complete</div>
+          <img src={ReactIcon} className="w-6 h-6 mr-2 my-auto" />
+          <div className="flex my-auto mr-2 flex-col">Mining Complete</div>
           <img src={Coin} className="my-auto mr-1 w-4 h-4" />
-          <div className="text-sm my-auto mr-8">{coinsEarnedRef.current}</div>
+          <div className="text-sm mr-2 my-auto">{coinsEarnedRef.current}</div>
           <div className="my-auto">{currentTime}</div>
         </div>
       );

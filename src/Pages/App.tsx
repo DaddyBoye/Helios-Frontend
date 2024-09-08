@@ -155,11 +155,6 @@ return (
       </div>
 
 
-
-      <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-400">
-        <div className="bg-gradient-to-r from-green-500 to-yellow-300 h-2.5 rounded-full w-4/12"></div>
-      </div>
-
     </div>
 
     <div className='flex flex-col my-2 rounded-xl bg-gradient-to-b from-[#253948] to-[#161617]'>
