@@ -46,7 +46,7 @@ const CompletedAirdrops = forwardRef((props: CompletedAirdropsProps, ref) => {
 
   useEffect(() => {
     if (completedProgress === 60 && divElements.length < 8 && !hasAddedDiv) {
-      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
       const newDiv = (
         <div
