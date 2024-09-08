@@ -60,7 +60,7 @@ const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
         // Render this when totalDivCount is less than 8
         <div className="w-full overflow-hidden bg-gray-600 flex flex-row rounded-2xl h-12 relative">
           <div
-            className="bg-gradient-to-r from-green-500 to-yellow-400 h-12 rounded-l-2xl"
+            className="bg-gradient-to-r from-teal-500 to-purple-500 h-12 rounded-l-2xl"
             style={{ width: `${(progress / 60) * 100}%` }}
           ></div>
           <div className="z-40 absolute flex flex-row text-md my-auto p-3 pl-4">

@@ -120,14 +120,14 @@ const handleAddToCumulative = () => {
     };
 
 return (
-  <div className="flex flex-col font-sans pb-16 bg-[#185C8D] text-white p-4 ">
-    <h1 className='text-center font-bold font-sans text-2xl'>
+  <div className="flex flex-col font-sans pb-16 bg-[#1F1F2E] text-white p-4 ">
+    <h1 className='text-center font-bold text-[#00FFFF] font-sans text-2xl'>
       Helios
     </h1>
-    <div className='flex flex-col my-2 rounded-lg bg-[#4067B3] p-4 pt-1'>
+    <div className='flex flex-col my-2 rounded-lg bg-[#1A1A27] p-4 pt-1'>
       <div className='flex flex-row justify-between mb-2'>
         <div className='p-1'>
-          <div className='text-sm font-bold text-zinc-400'>Mining Rate</div>
+          <div className='text-sm font-bold text-[#00BFFF]'>Mining Rate</div>
           <div className='flex flex-row justify-center text-sm text-center'>
             <img src={Coin} className="my-auto h-4 w-4"/>
             <strong>{mineRate}</strong>/hr
@@ -135,7 +135,7 @@ return (
         </div>
 
         <div className='p-1'>
-          <div className='text-sm font-bold text-zinc-400'>Friends</div>
+          <div className='text-sm font-bold text-[#00BFFF]'>Friends</div>
           <div className='text-center flex flex-row justify-center'>
             12
             <img src={Hamster} className='h-6 w-6 my-auto'/>
@@ -143,43 +143,37 @@ return (
         </div>
 
         <div className='p-1 text-center'>
-          <div className='text-sm font-bold text-zinc-400'>Airdrop Time</div>
+          <div className='text-sm font-bold text-[#00BFFF]'>Airdrop Time</div>
           <p>{timeLeft.minutes}m {timeLeft.seconds}s</p>
         </div>
 
       </div>
 
-      <div className='p-3 flex justify-center flex-row border-t-2 border-b-2 border-[#121D28] font-bold text-center text-3xl'>
+      <div className='p-3 flex justify-center flex-row border-t-2 border-b-2 border-[#121D28] font-bold text-center text-[#00FFFF] text-3xl'>
       <img src={ReactIcon}/>
-      {cumulativeTotal}
+      <p>{cumulativeTotal}</p>
       </div>
-
-
     </div>
 
-    <div className='flex flex-col my-2 rounded-xl bg-[#253948]'>
+    <div className='flex flex-col my-2 rounded-xl bg-[#1A1A27]'>
       <div className='border-b-2 border-white pl-4 pt-3 pb-3 pr-4 flex flex-row justify-between'>
         <div className='flex flex-col w-52'>
-          <div className='font-bold mb-1 text-xs'>
+          <div className=' mb-1 text-xs'>
             Participate in {totalDivCount} rounds of airdrop
           </div>
-          <div className='mb-1 flex gap-1 flex-row font-bold text-sm'>
+          <div className='mb-1 flex gap-1 flex-row font-bold text-lg'>
             Get<p className='text-green-500'>{totalCoins}</p> coins
           </div>  
           {totalDivCount < 8 ? (
         // Render this when totalDivCount is less than 8
-    <div className="mb-1 text-xs flex flex-col">
-      <p>You have {totalDivCount} rounds of airdrops unclaimed!</p>
-      
+    <div className="mb-1 text-xs flex flex-col">      
       {totalDivCount === 0 ? (
         // Render this when totalDivCount is zero
       <p></p>
       ) : (
-        // Render this when totalDivCount is 1 or greater
-        <p>Please claim it as soon as possible</p>
+        <p></p>
       )}
-
-      <p>(airdrops suspends automatically after 8 rounds unclaimed)</p>
+      <p>Airdrops suspends automatically after 8 rounds unclaimed</p>
     </div>
       ) : (
         // Render this when totalDivCount is 8 or greater
@@ -198,7 +192,7 @@ return (
         </div>
       ) : (
         // Render this when totalDivCount is 8 or greater
-        <button onClick={handleParentResetButtonClick} className=' bg-yellow-400 rounded-lg hover:bg-sky-700 font-bold p-1.5 pl-3 pr-3 border border-white mr-2 my-auto'>
+        <button onClick={handleParentResetButtonClick} className=' bg-[#333344] rounded-lg hover:bg-sky-700 font-bold p-1.5 pl-3 pr-3 text-[#39FF14] border border-white mr-2 my-auto'>
            Claim
         </button>
       )}
