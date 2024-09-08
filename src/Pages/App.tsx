@@ -122,7 +122,7 @@ const handleAddToCumulative = () => {
 return (
   <div className="flex flex-col font-sans pb-16 bg-gradient-to-b from-[#185C8D] to-[#1A1F20] text-white p-4 ">
     <h1 className='text-center font-bold font-sans text-2xl'>
-      Bamboo
+      Helios
     </h1>
     <div className='flex flex-col my-2 rounded-lg bg-gradient-to-b from-[#4067B3] to-[#24373A] p-4 pt-1'>
       <div className='flex flex-row justify-between mb-2'>
