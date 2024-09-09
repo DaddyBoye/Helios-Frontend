@@ -146,69 +146,6 @@ return (
           <div className='text-sm font-bold text-[#00BFFF]'>Airdrop Time</div>
           <p>{timeLeft.minutes}m {timeLeft.seconds}s</p>
         </div>
-
-      </div>
-
-      <div className='p-3 flex justify-center flex-row border-t-2 border-b-2 border-[#121D28] font-bold text-center text-[#00FFFF] text-3xl'>
-      <img src={ReactIcon}/>
-      <p>{cumulativeTotal}</p>
-      </div>
-    </div>
-
-div className='flex flex-col my-2 rounded-lg bg-[#1A1A27] p-4 pt-1'>
-      <div className='flex flex-row justify-between mb-2'>
-        <div className='p-1'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Mining Rate</div>
-          <div className='flex flex-row justify-center text-sm text-center'>
-            <img src={Coin} className="my-auto h-4 w-4"/>
-            <strong>{mineRate}</strong>/hr
-          </div>
-        </div>
-
-        <div className='p-1'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Friends</div>
-          <div className='text-center flex flex-row justify-center'>
-            12
-            <img src={Hamster} className='h-6 w-6 my-auto'/>
-          </div>
-        </div>
-
-        <div className='p-1 text-center'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Airdrop Time</div>
-          <p>{timeLeft.minutes}m {timeLeft.seconds}s</p>
-        </div>
-
-      </div>
-
-      <div className='p-3 flex justify-center flex-row border-t-2 border-b-2 border-[#121D28] font-bold text-center text-[#00FFFF] text-3xl'>
-      <img src={ReactIcon}/>
-      <p>{cumulativeTotal}</p>
-      </div>
-    </div>
-
-div className='flex flex-col my-2 rounded-lg bg-[#1A1A27] p-4 pt-1'>
-      <div className='flex flex-row justify-between mb-2'>
-        <div className='p-1'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Mining Rate</div>
-          <div className='flex flex-row justify-center text-sm text-center'>
-            <img src={Coin} className="my-auto h-4 w-4"/>
-            <strong>{mineRate}</strong>/hr
-          </div>
-        </div>
-
-        <div className='p-1'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Friends</div>
-          <div className='text-center flex flex-row justify-center'>
-            12
-            <img src={Hamster} className='h-6 w-6 my-auto'/>
-          </div>
-        </div>
-
-        <div className='p-1 text-center'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Airdrop Time</div>
-          <p>{timeLeft.minutes}m {timeLeft.seconds}s</p>
-        </div>
-
       </div>
 
       <div className='p-3 flex justify-center flex-row border-t-2 border-b-2 border-[#121D28] font-bold text-center text-[#00FFFF] text-3xl'>
