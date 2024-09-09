@@ -89,7 +89,7 @@ const CompletedAirdrops = forwardRef((props: CompletedAirdropsProps, ref) => {
     <div>
       <div className='flex flex-row'><div>Completed Airdrops</div><p>({elementCount})</p></div>
       {divElements.length === 0 ? (
-        <div className='justify-center p-5 pt-20 pb-40 text-center'>
+        <div className='justify-center p-5 pt-20 pb-20 text-center'>
           No unclaimed airdrops
         </div>
       ) : (

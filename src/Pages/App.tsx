@@ -146,7 +146,6 @@ return (
           <div className='text-sm font-bold text-[#00BFFF]'>Airdrop Time</div>
           <p>{timeLeft.minutes}m {timeLeft.seconds}s</p>
         </div>
-
       </div>
 
       <div className='p-3 flex justify-center flex-row border-t-2 border-b-2 border-[#121D28] font-bold text-center text-[#00FFFF] text-3xl'>
