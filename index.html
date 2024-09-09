@@ -1,13 +1,89 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta
+      charset="UTF-8"
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hamster Kombat Clone</title>
+    <style>
+      /*  */
+      *,
+      *::after,
+      *::before {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        background-color: "red";
+      }
+      body {
+        position: fixed; /* required */
+        bottom: 0; /* required */
+        width: 100%; /* required */
+        height: 100vh; /* required */
+        background-color: blue;
+      }
+      .scrollable {
+        overflow-y: scroll;
+        background-color: green; 
+        height: 24rem; 
+        font-size: 2rem;
+        margin: 1rem;
+      }
+      .scrollable div {
+        padding: 1rem;
+        border: 1px solid black;
+      }
+      .status {
+        padding: 1rem;
+        border: 1px solid black;
+        background-color: white;
+        margin: 1rem;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.Telegram.WebApp.expand();
+      const num = 9999;
+      const scrollable = document.querySelector(".scrollable");
+      const status = document.querySelector(".status");
+      
+      // The preventCollapse function should be called when the scrollable content scrollTop is not equal to zero. 
+      function preventCollapse() {
+        document.documentElement.style.marginTop = num + "px";
+        document.documentElement.style.height = window.innerHeight + num + "px";
+        document.documentElement.style.overflow = "hidden";
+        window.scrollTo(0, num);
+      }
+      
+      // The allowCollapse function should be called when the scrollable content is finished being touched.
+      // Do not use this function if you want to lock the mini app completely on scroll.
+      function allowCollapse() {
+        document.documentElement.style.marginTop = "auto";
+        document.documentElement.style.height = "auto";
+        document.documentElement.style.overflow = "auto";
+      }
+
+      document.body.addEventListener("touchstart", function () {
+        if (scrollable.scrollTop !== 0) {
+          preventCollapse();
+          document.body.style.backgroundColor = "red";
+          status.innerText = "Collapse: Locked";
+        }
+      });
+      scrollable.addEventListener("touchend", function () {
+        allowCollapse();
+        document.body.style.backgroundColor = "blue";
+        status.innerText = "Collapse: Released";
+      });
+    </script>
   </body>
 </html>
