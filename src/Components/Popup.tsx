@@ -52,7 +52,8 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
           <>
             <p className="mb-4">You have no airdrops to claim!</p>
             <p className="mb-4">
-              Please come back after: {minutes}m:{seconds < 10 ? `0${seconds}` : seconds}s
+              Please come back after: {minutes} {minutes === 1 ? 'minute' : 'minutes'}:
+              {seconds < 10 ? `0${seconds}` : seconds} {seconds === 1 ? 'second' : 'seconds'}
             </p>
             <div className="flex justify-end space-x-4">
               <button onClick={onClose} className="bg-yellow-500 p-2 rounded-lg">Close</button>
