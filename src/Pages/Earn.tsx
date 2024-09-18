@@ -1,6 +1,6 @@
 
-const Earn = () => {
 
+const Earn = () => {
 
 
     return (
@@ -9,7 +9,6 @@ const Earn = () => {
           Helios
         </h1>
         <div className='p-8 flex justify-center'>
-
         </div>
       </div>
     );

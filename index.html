@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" ></script>
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Helios</title>
@@ -16,7 +16,7 @@
     <script type="module" src="/src/main.tsx"></script>
     <script>
       window.Telegram.WebApp.expand();
-      disableVerticalSwipes
+      disableVerticalSwipes();
     </script>
   </body>
 </html>

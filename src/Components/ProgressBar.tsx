@@ -1,90 +1,56 @@
-import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
-import ReactIcon from '../assets/react.svg';
 import Coin from '../images/dollar-coin.png';
+import Hamster from '../icons/Hamster';
+import io from 'socket.io-client';
+import { useState, useEffect } from 'react';
 
+const socket = io('http://localhost:8000');
 
-interface ProgressBarProps {
-  totalDivCount: number;
-  progress: number;
-  progressRate: number;
-  timeLeft: { minutes: number; seconds: number }
-}
-
-const ProgressBar = forwardRef((props: ProgressBarProps, ref) => {
-  const { totalDivCount, progress, progressRate, timeLeft } = props;
-
-  const [coins, setCoins] = useState<number>(0);
-  const progressRateRef = useRef<number>(progressRate);
-
-
-  //Coincounter logic
-  useEffect(() => {
-    if (totalDivCount < 8) {
-      const progressPerSecond = progressRateRef.current / 60;
-
-      const interval = setInterval(() => {
-        setCoins(prevCoins => prevCoins + progressPerSecond);
-      }, 1000);
-
-      // Cleanup interval on component unmount
-      return () => clearInterval(interval);
-    }
-  }, [totalDivCount]);
+const ProgressBar = () => {
+  const [progress, setProgress] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(0);
 
   useEffect(() => {
-    if (progress === 0) {
-      setCoins(0);
-    }
+    setTimeRemaining(60 - progress); // Update remaining time whenever progress changes
   }, [progress]);
 
-  useEffect(() => {
-    if (progress === 60) {
-      progressRateRef.current = progressRate; // Update progressRate when progress resets
-    }
-  }, [progress, progressRate]);
+  // Format timeRemaining into minutes and seconds
+  const minutes = Math.floor(timeRemaining / 60);
+  const seconds = timeRemaining % 60;
 
-    // Reset function
-    const handleResetButtonClick = () => {
-      if (totalDivCount === 8) {
-        progressRateRef.current = progressRate;
-      }
+  useEffect(() => {
+    // Listen for progress updates
+    socket.on('progressUpdate', (data) => {
+      setProgress(data.progress);
+    });
+
+    // Clean up the socket connection on unmount
+    return () => {
+      socket.off('progressUpdate');
     };
-  
-    useImperativeHandle(ref, () => ({
-      resetButtonClick: handleResetButtonClick,
-    }));
+  }, []);
 
   return (
     <div>
-      {totalDivCount < 8 ? (
-        // Render this when totalDivCount is less than 8
-        <div className="w-full overflow-hidden bg-gray-600 flex flex-row rounded-2xl h-12 relative">
+        <div className="w-11/12 overflow-hidden bg-gray-600 text-white flex flex-row rounded-2xl mx-auto h-16 relative">
           <div
-            className="bg-gradient-to-r from-teal-500 to-purple-500 h-12 rounded-l-2xl"
+            className="bg-gradient-to-r from-[#25F503] to-[#C5D327] h-16 rounded-l-2xl"
             style={{ width: `${(progress / 60) * 100}%` }}
           ></div>
-          <div className="z-40 absolute flex flex-row text-md my-auto p-3 pl-4">
-            <img src={ReactIcon} className="w-6 h-6 my-auto ml-4 mr-1" alt="React Icon" />
-            <div className="flex flex-row gap-1">
-              Mining
+          <div className="z-40 absolute flex flex-row h-16 text-md my-auto p-3 pl-6">
+            <Hamster className="w-5 h-5 mr-3 my-auto"/>
+            <div className="flex my-auto text-sm flex-row gap-1">
+              Mining...
             </div>
-
             <img src={Coin} className="my-auto w-4 mr-0.5 h-4 ml-3" alt="Coin" />
-            <p className="text-sm w-20 mr-1 my-auto">{coins.toFixed(3)}</p>
-            <p id="timer" className="w-16">
-              {timeLeft.minutes}m {timeLeft.seconds}s
+            <p className="text-sm w-10 mr-1 my-auto">123</p>
+            <p id="timer" className=" text-sm my-auto">
+              {minutes}m:{seconds < 10 ? `0${seconds}` : seconds}s
             </p>
           </div>
         </div>
-      ) : (
-        // Render this when totalDivCount is 8 or greater
-        <div className="w-full h-12 bg-blue-500 rounded-2xl flex items-center justify-center">
-          Claim airdrops to continue mining!
-        </div>
-      )}
     </div>
   );
-});
+};
 
 export default ProgressBar;
 

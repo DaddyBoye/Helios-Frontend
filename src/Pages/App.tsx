@@ -1,228 +1,201 @@
 import '../App.css';
 import ProgressBar from '../Components/ProgressBar';
-import CompletedAirdrops from '../Components/CompletedAirdrops';
-import { useState, useEffect, useRef } from 'react';
-import ReactIcon from '../assets/react.svg';
-import Coin from '../images/dollar-coin.png';
-import Hamster from '../images/main-character.png';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import background from '../images/Starryy.svg';
+import mascot from '../images/MascotCircles.svg';
+import freshcoin from '../images/FreshCoin.svg';
+import Hamster from '../icons/Hamster';
+import Popup from '../Components/Popup'; // Import Popup component
 
-interface TimeLeft {
-  minutes: number;
-  seconds: number;
-}
-
-interface ProgressBarProps {
-  totalDivCount: number;
-  progress: number;
-  progressRate: number;
-  timeLeft: TimeLeft;
-  resetButtonClick: () => void;
-}
-
-interface CompletedAirdropsProps {
-  onDivAdded: () => void;
-  onDivReset: () => void;
-  completedProgress: number;
-  coinsEarned: number;
-  onCoinsEarnedUpdate: (newTotal: number) => void;
-  emptyArray: () => void;
+// Define the type for the airdrop data
+interface Airdrop {
+  id: number;
+  value: number;
+  timestamp: string;
 }
 
 function App() {
-  const progressBarRef = useRef<ProgressBarProps>(null);
-  const completedAirdropsRef = useRef<CompletedAirdropsProps>(null);
-  const [totalDivCount, setTotalDivCount] = useState<number>(0);
-  const [parentProgress, setParentProgress] = useState<number>(0);
-  const [mineRate, setMineRate] = useState<number>(10);
-  const [totalCoins, setTotalCoins] = useState<number>(0);
-  const [cumulativeTotal, setCumulativeTotal] = useState<number>(0);
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ minutes: 0, seconds: 0 });
+  const [airdrops, setAirdrops] = useState<Airdrop[]>([]); // Explicitly type the airdrops array
+  const [parentTotal, setParentTotal] = useState(0);
+  const [cumulativeTotal, setCumulativeTotal] = useState(0);
+  const [airdropCount, setAirdropCount] = useState(0);
+  const [message, setMessage] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Mine rate increase logic
-  useEffect(() => {
-    const mineRateInterval = setInterval(() => {
-      setMineRate((prevRate) => prevRate + 1); // Increase mine rate by 1 every 60 seconds
-    }, 7000); // 60 seconds in milliseconds
-
-    return () => clearInterval(mineRateInterval); // Cleanup interval on component unmount
-  }, []);
-
-//progress logic
-useEffect(() => {
-  const interval = setInterval(() => {
-    updateParentProgress(); // Call your function to update parentProgress
-  }, 1000);
-
-  return () => {
-    clearInterval(interval);
-  };
-}, [totalDivCount]);
-
-const updateParentProgress = () => {
-  setParentProgress((prevProgress) => {
-    const newProgress = prevProgress + 1;
-    if (newProgress <= 60 && totalDivCount !== 8) {
-      return newProgress;
-    } else {
-      return 0;
+  // Fetch all airdrops
+  const fetchAirdrops = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/airdrops');
+      setAirdrops(response.data);
+    } catch (error) {
+      console.error('Error fetching airdrops:', error);
+    } finally {
+      setLoading(false);
     }
-  });
-};
-
-  //Timer logic
-  useEffect(() => {
-    const totalTimeInSeconds = 60; // Progress target
-    const remainingTimeInSeconds = (totalTimeInSeconds - parentProgress);
-
-    setTimeLeft({
-      minutes: Math.floor(remainingTimeInSeconds / 60),
-      seconds: remainingTimeInSeconds % 60
-    });
-  }, [parentProgress]);
-
- const handleDivAdded = () => {
-  // Increment the total div count
-  setTotalDivCount(prevCount => prevCount + 1);
-};
-
-const handleDivReset = () => {
-  // Reset the total div count
-  setTotalDivCount(0);
-};
-
-const handleCoinsEarnedUpdate = (newTotal: number) => {
-  setTotalCoins(newTotal); // Update the total coins in the parent state
-};
-
-const handleAddToCumulative = () => {
-  setCumulativeTotal((prevTotal) => prevTotal + totalCoins);
-};
-
-  //reset
-  const handleParentResetButtonClick = () => {
-    handleAddToCumulative();
-    clearArray();
-    handleParentButtonClick();
-    setTotalCoins(0);
   };
 
-    //reset array
-    const clearArray = () => {
-      if (completedAirdropsRef.current) {
-        completedAirdropsRef.current.emptyArray();  
-      }
+  // Fetch the number of airdrops from the backend
+  const fetchAirdropCount = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/airdrops/count');
+      setAirdropCount(response.data.count);
+    } catch (error) {
+      console.error('Error fetching airdrop count:', error);
+    }
+  };
+
+  // Fetch parent total
+  const fetchParentTotal = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/airdrops/sum');
+      setParentTotal(response.data.totalValue);
+    } catch (error) {
+      console.error('Error fetching parent total:', error);
+    }
+  };
+
+  // Fetch the current cumulative total from the backend
+  const fetchCurrentCumulativeTotal = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/airdrops/currentCumulativeTotal');
+      setCumulativeTotal(response.data.cumulativeTotal); // Update cumulative total
+    } catch (error) {
+      console.error('Error fetching cumulative total:', error);
+    }
+  };
+
+  // Fetch and calculate a new cumulative total
+  const fetchCumulativeTotal = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/airdrops/incrementCumulative');
+      setCumulativeTotal(response.data.cumulativeTotal); // Update cumulative total
+    } catch (error) {
+      console.error('Error fetching cumulative total:', error);
+    }
+  };
+
+  // Delete all airdrops and update parent total
+  const deleteAllAirdrops = async () => {
+    try {
+      const response = await axios.delete('http://localhost:8000/api/airdrops/deleteAll');
+      setMessage(response.data.message);
+      setParentTotal(response.data.newParentTotal);
+      // Refetch airdrops to update the UI
+      fetchAirdrops();
+    } catch (error) {
+      console.error('Error deleting airdrops or updating parent total:', error);
+    }
+  };
+
+  const claimFunction = () => {
+    fetchCumulativeTotal(); // Calculate and update cumulative total
+    deleteAllAirdrops(); // Delete all airdrops
+    setShowPopup(false);
+  };
+
+
+
+  useEffect(() => {
+    // Fetch airdrops, parent total, airdrop count, and cumulative total initially
+    fetchAirdrops();
+    fetchParentTotal();
+    fetchAirdropCount();
+    fetchCurrentCumulativeTotal();
+
+    // Set up intervals to fetch data every second
+    const airdropIntervalId = setInterval(fetchAirdrops, 1000);
+    const parentTotalIntervalId = setInterval(fetchParentTotal, 1000);
+    const airdropCountIntervalId = setInterval(fetchAirdropCount, 1000);
+    const cumulativeTotalIntervalId = setInterval(fetchCurrentCumulativeTotal, 1000);
+
+    // Cleanup function: clear all intervals on component unmount
+    return () => {
+      clearInterval(airdropIntervalId);
+      clearInterval(parentTotalIntervalId);
+      clearInterval(airdropCountIntervalId);
+      clearInterval(cumulativeTotalIntervalId);
     };
-    
-    const handleParentButtonClick = () => {
-      if (progressBarRef.current) {
-        progressBarRef.current.resetButtonClick();
-      }
-    };
+  }, []); // Empty dependency array to run only once after component mounts
+
+  // Set loading to false after initial fetches
+  useEffect(() => {
+    if (airdrops.length > 0 && parentTotal !== 0) {
+      setLoading(false);
+    }
+  }, [airdrops, parentTotal]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
 
 return (
-  <div className="flex flex-col font-sans pb-16 bg-[#1F1F2E] text-white p-4 ">
-    <h1 className='text-center font-bold text-[#00FFFF] font-sans text-xl'>
-      Helios
-    </h1>
-    <div className='flex flex-col my-2 rounded-lg bg-[#1A1A27] p-4 pt-1'>
-      <div className='flex flex-row justify-between mb-2'>
-        <div className='p-1'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Mining Rate</div>
-          <div className='flex flex-row justify-center text-sm text-center'>
-            <img src={Coin} className="my-auto h-4 w-4"/>
-            <strong>{mineRate}</strong>/hr
-          </div>
+  <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
+    <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${background})` }}></div>
+      <div className="relative flex items-center">
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+          <h1 className='text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl'>
+            Helios
+          </h1>
         </div>
-
-        <div className='p-1'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Friends</div>
-          <div className='text-center flex flex-row justify-center'>
-            12
-            <img src={Hamster} className='h-6 w-6 my-auto'/>
-          </div>
-        </div>
-
-        <div className='p-1 text-center'>
-          <div className='text-sm font-bold text-[#00BFFF]'>Airdrop Time</div>
-          <p>{timeLeft.minutes}m {timeLeft.seconds}s</p>
+        <div className="ml-auto">
+          <img src={mascot} alt="Mascot Circle" className='w-24 h-24 z-10 object-contain' />
         </div>
       </div>
-
-      <div className='p-3 flex justify-center flex-row border-t-2 border-b-2 border-[#121D28] font-bold text-center text-[#00FFFF] text-3xl'>
-      <img src={ReactIcon}/>
-      <p>{cumulativeTotal}</p>
+      <div className='flex flex-row mb-10 z-10 items-center justify-center'>
+        <img src={freshcoin} alt="" className='w-12 pr-0.5 h-12' />
+        <p className='my-auto text-white font-bold text-4xl'>{cumulativeTotal}</p>
       </div>
-    </div>
-
-    <div className='flex flex-col my-2 rounded-xl bg-[#1A1A27]'>
-      <div className='border-b-2 border-white pl-4 pt-3 pb-3 pr-4 flex flex-row justify-between'>
-        <div className='flex flex-col w-52'>
-          <div className=' mb-1 text-xs'>
-            Participate in {totalDivCount} rounds of airdrop
+      <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12 '>
+        <div className='flex flex-row pl-7 pr-6 pt-3 justify-between'>
+          <div className='flex flex-col'>
+            <p className='font-bold text-lg'>Mining Rate</p>
+            <div className='flex flex-row'>
+              <img src={freshcoin} alt="" className='w-5 my-auto pr-0.5 h-5' />
+              <p className='text-md'>20/hr</p>
+            </div>
+            <p className='font-bold text-sm'>Current Airdrop</p>
           </div>
-          <div className='mb-1 flex gap-1 flex-row font-bold text-lg'>
-            Get<p className='text-green-500'>{totalCoins}</p> coins
-          </div>  
-          {totalDivCount < 8 ? (
-        // Render this when totalDivCount is less than 8
-    <div className="mb-1 text-xs flex flex-col">      
-      {totalDivCount === 0 ? (
-        // Render this when totalDivCount is zero
-      <p></p>
-      ) : (
-        <p></p>
-      )}
-      <p>Airdrops suspends automatically after 8 rounds unclaimed</p>
-    </div>
-      ) : (
-        // Render this when totalDivCount is 8 or greater
-        <div className='mb-1 text-xs flex flex-col'>
-          <p>You have 8 rounds of airdrops unclaimed!</p>
-          <p>Airdrop has been suspended!</p>
-          <p>(the next round of airdrops starts automatically after claiming)</p>
+          <div className='my-auto pl-8'>
+          <button onClick={() => setShowPopup(true)} className="bg-yellow-500 p-2 pl-4 pr-4 rounded-lg">Claim</button>
+          </div>
         </div>
-      )}
-        </div>
-
-        {totalDivCount === 0 ? (
-        // Render this when totalDivCount is less than 1
-        <div className=' bg-gray-400 rounded-lg font-bold p-1.5 pl-3 pr-3 border border-white mr-2 my-auto'>
-           Claim
-        </div>
-      ) : (
-        // Render this when totalDivCount is 8 or greater
-        <button onClick={handleParentResetButtonClick} className=' bg-[#333344] rounded-lg hover:bg-sky-700 font-bold p-1.5 pl-3 pr-3 text-[#39FF14] border border-white mr-2 my-auto'>
-           Claim
-        </button>
-      )}
+        <ProgressBar/>
       </div>
 
-      <div className='font-bold p-4 pt-2'>
-        <div className='mb-2 '>
-          Current Airdrop
-          <div className="App">
-            <ProgressBar 
-            totalDivCount={totalDivCount} 
-            ref={progressBarRef} 
-            progress={parentProgress} 
-            progressRate={mineRate}
-            timeLeft={timeLeft}
-            />
-          </div>
+      {showPopup && (
+        <Popup
+          airdropCount={airdropCount}
+          totalValue={parentTotal}
+          onConfirm={claimFunction}
+          onClose={() => setShowPopup(false)}
+
+        />
+      )}
+
+      <div className='bg-[#D9D9D9] min-h-72 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
+        <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
+        <div className='flex flex-col items-center justify-center'>
+                {airdrops.length > 0 ? (
+                    <ul className='flex flex-col w-full items-center justify-center'>
+                        {airdrops.map((airdrop) => (
+                            <li key={airdrop.id} className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto">
+                                   <Hamster className="w-6 h-6 mr-3 my-auto"/>
+                                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
+                                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
+                                   <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
+                                   <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p className='text-black font-bold pt-20'>No Unclaimed Airdrops</p>
+                )}
         </div>
-        
-        <div className=''>
-          <CompletedAirdrops 
-          ref={completedAirdropsRef}
-          onDivAdded={handleDivAdded}
-          onDivReset={handleDivReset}
-          completedProgress={parentProgress}
-          coinsEarned={mineRate}
-          onCoinsEarnedUpdate={handleCoinsEarnedUpdate} // Pass the callback function
-          />
-          </div>
-        </div>
-    </div>    
+      </div>
+      <p>{message}</p>
   </div>
   )
 }
