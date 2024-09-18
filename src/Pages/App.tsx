@@ -6,9 +6,8 @@ import background from '../images/Starryy.svg';
 import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
-import Popup from '../Components/Popup'; // Import Popup component
+import Popup from '../Components/Popup';
 
-// Define the type for the airdrop data
 interface Airdrop {
   id: number;
   value: number;
@@ -73,6 +72,7 @@ function App() {
       setCumulativeTotal(response.data.cumulativeTotal); // Update cumulative total
     } catch (error) {
       console.error('Error fetching cumulative total:', error);
+      throw error; // Re-throw the error to handle it in the claimFunction
     }
   };
 
@@ -83,19 +83,30 @@ function App() {
       setMessage(response.data.message);
       setParentTotal(response.data.newParentTotal);
       // Refetch airdrops to update the UI
-      fetchAirdrops();
+      await fetchAirdrops(); // Ensure airdrops are refetched after deletion
     } catch (error) {
       console.error('Error deleting airdrops or updating parent total:', error);
+      throw error; // Re-throw the error to handle it in the claimFunction
     }
   };
 
-  const claimFunction = () => {
-    fetchCumulativeTotal(); // Calculate and update cumulative total
-    deleteAllAirdrops(); // Delete all airdrops
-    setShowPopup(false);
+  const claimFunction = async () => {
+    try {
+      // Fetch the cumulative total and wait for it to complete
+      await fetchCumulativeTotal();
+  
+      // Now delete all airdrops
+      await deleteAllAirdrops();
+  
+      // Optionally, you can refetch data or update state if necessary
+  
+      // Close the popup after operations are complete
+      setShowPopup(false);
+    } catch (error) {
+      console.error('Error during claim function execution:', error);
+      // Handle the error appropriately (e.g., show an error message to the user)
+    }
   };
-
-
 
   useEffect(() => {
     // Fetch airdrops, parent total, airdrop count, and cumulative total initially
