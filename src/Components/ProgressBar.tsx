@@ -3,7 +3,7 @@ import Hamster from '../icons/Hamster';
 import io from 'socket.io-client';
 import { useState, useEffect } from 'react';
 
-const socket = io('http://localhost:8000');
+const socket = io('http://13.60.190.243:8000');
 
 const ProgressBar = () => {
   const [progress, setProgress] = useState(0);

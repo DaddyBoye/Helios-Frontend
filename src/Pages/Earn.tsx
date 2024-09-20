@@ -1,4 +1,4 @@
-
+import SignUp from "../Components/SignUp";
 
 const Earn = () => {
 
@@ -9,6 +9,7 @@ const Earn = () => {
           Helios
         </h1>
         <div className='p-8 flex justify-center'>
+          <SignUp/>
         </div>
       </div>
     );
