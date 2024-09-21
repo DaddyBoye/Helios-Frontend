@@ -26,7 +26,7 @@ function App() {
   // Fetch all airdrops
   const fetchAirdrops = async () => {
     try {
-      const response = await axios.get('http://13.53.116.100:8000/api/airdrops');
+      const response = await axios.get('http://13.60.127.109:8000/api/airdrops');
       setAirdrops(response.data);
     } catch (error) {
       console.error('Error fetching airdrops:', error);
@@ -38,7 +38,7 @@ function App() {
   // Fetch the number of airdrops from the backend
   const fetchAirdropCount = async () => {
     try {
-      const response = await axios.get('http://13.53.116.100:8000/api/airdrops/count');
+      const response = await axios.get('http://13.60.127.109:8000/api/airdrops/count');
       setAirdropCount(response.data.count);
     } catch (error) {
       console.error('Error fetching airdrop count:', error);
@@ -48,7 +48,7 @@ function App() {
   // Fetch parent total
   const fetchParentTotal = async () => {
     try {
-      const response = await axios.get('http://13.53.116.100:8000/api/airdrops/sum');
+      const response = await axios.get('http://13.60.127.109:8000/api/airdrops/sum');
       setParentTotal(response.data.totalValue);
     } catch (error) {
       console.error('Error fetching parent total:', error);
@@ -58,7 +58,7 @@ function App() {
   // Fetch the current cumulative total from the backend
   const fetchCurrentCumulativeTotal = async () => {
     try {
-      const response = await axios.get('http://13.53.116.100:8000/api/airdrops/currentCumulativeTotal');
+      const response = await axios.get('http://13.60.127.109:8000/api/airdrops/currentCumulativeTotal');
       setCumulativeTotal(response.data.cumulativeTotal); // Update cumulative total
     } catch (error) {
       console.error('Error fetching cumulative total:', error);
@@ -68,7 +68,7 @@ function App() {
   // Fetch and calculate a new cumulative total
   const fetchCumulativeTotal = async () => {
     try {
-      const response = await axios.get('http://13.53.116.100:8000/api/airdrops/incrementCumulative');
+      const response = await axios.get('http://13.60.127.109:8000/api/airdrops/incrementCumulative');
       setCumulativeTotal(response.data.cumulativeTotal); // Update cumulative total
     } catch (error) {
       console.error('Error fetching cumulative total:', error);
@@ -79,7 +79,7 @@ function App() {
   // Delete all airdrops and update parent total
   const deleteAllAirdrops = async () => {
     try {
-      const response = await axios.delete('http://13.53.116.100:8000/api/airdrops/deleteAll');
+      const response = await axios.delete('http://13.60.127.109:8000/api/airdrops/deleteAll');
       setMessage(response.data.message);
       setParentTotal(response.data.newParentTotal);
       // Refetch airdrops to update the UI
