@@ -2,7 +2,7 @@ import React from 'react';
 import io from 'socket.io-client';
 import { useState, useEffect } from 'react';
 
-const socket = io('http://localhost:8000');
+const socket = io('https://server.therotrade.tech');
 
 interface PopupProps {
   airdropCount: number;
