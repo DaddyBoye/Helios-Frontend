@@ -7,6 +7,7 @@ import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
 import Popup from '../Components/Popup';
+import UserProfile from '../Components/UserProfile';
 
 interface Airdrop {
   id: number;
@@ -150,6 +151,7 @@ return (
           <h1 className='text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl'>
             Helios
           </h1>
+          <UserProfile/>
         </div>
         <div className="ml-auto">
           <img src={mascot} alt="Mascot Circle" className='w-24 h-24 z-10 object-contain' />
