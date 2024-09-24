@@ -86,7 +86,7 @@ const UserProfile: React.FC = () => {
             <p>Your current points: {user?.points}</p>
 
             {/* Automatically start counting progress when user is logged in */}
-            {user && <UserProgress telegramId={user.telegramId} />} 
+            <p className='text-2xl'>{user && <UserProgress telegramId={user.telegramId}/>}</p> 
         </div>
     );
 };
