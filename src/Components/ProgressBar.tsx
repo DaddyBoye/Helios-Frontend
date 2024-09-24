@@ -1,12 +1,8 @@
 import Coin from '../images/dollar-coin.png';
 import Hamster from '../icons/Hamster';
-import io from 'socket.io-client';
 import { useState, useEffect } from 'react';
 
-const socket = io('https://server.therotrade.tech');
-
 const ProgressBar = () => {
-  const [progress1, setProgress1] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -72,18 +68,6 @@ useEffect(() => {
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
 
-  useEffect(() => {
-    // Listen for progress updates
-    socket.on('progressUpdate', (data) => {
-      setProgress1(data.progress);
-    });
-
-    // Clean up the socket connection on unmount
-    return () => {
-      socket.off('progressUpdate');
-    };
-  }, []);
-
   return (
     <div>
         <div className="w-11/12 overflow-hidden bg-gray-600 text-white flex flex-row rounded-2xl mx-auto h-16 relative">
@@ -104,7 +88,6 @@ useEffect(() => {
           </div>
         </div>
         {error && <p className="error invisible">{error}</p>}
-        <div className='invisible'>{progress1}</div>
     </div>
   );
 };
