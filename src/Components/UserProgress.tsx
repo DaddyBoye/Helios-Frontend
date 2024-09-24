@@ -24,7 +24,7 @@ const UserProgress: React.FC<{ telegramId: number }> = ({ telegramId }) => {
 
     if (error) return <div>{error}</div>;
 
-    return <div>Current Progress: <p className='text-2xl font-bold text-[#DCAA19]'>{progress}</p></div>;
+    return <div><p className='text-2xl font-bold text-[#DCAA19]'>{progress}</p></div>;
 };
 
 export default UserProgress;
