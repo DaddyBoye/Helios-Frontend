@@ -1,7 +1,6 @@
 // src/components/UserProfile.tsx
 import React, { useEffect, useState } from 'react';
-import { createUser } from '../utils/api';
-import { calculateUserProgress } from '../utils/api';
+import { createUser, calculateUserProgress, updateUserProgress } from '../utils/api';
 
 interface User {
     id: number;
@@ -34,6 +33,7 @@ const UserProfile: React.FC = () => {
 
     const handleUser = async (userData: any) => {
         try {
+            // Step 1: Create the user
             const user = await createUser({
                 telegramId: userData.id,
                 username: userData.username,
@@ -42,9 +42,23 @@ const UserProfile: React.FC = () => {
             });
             setUser(user);
 
-            // After user is created, calculate their progress
-            const calculatedProgress = await calculateUserProgress(userData.id);
-            setProgress(calculatedProgress); // Set progress in state
+            // Step 2: Calculate the initial progress (wait for this to finish)
+            const initialProgress = await calculateUserProgress(userData.id);
+            setProgress(initialProgress);
+
+            // Step 3: Only start the interval for updating progress after the initial progress is set
+            const interval = setInterval(async () => {
+                try {
+                    // Fetch the updated progress from the backend after each interval
+                    const updatedProgress = await updateUserProgress(userData.id);
+                    setProgress(updatedProgress); // Update the state with the new progress
+                } catch (err) {
+                    console.error('Error updating progress:', err);
+                }
+            }, 1000); // Update every second
+
+            // Cleanup the interval when the component unmounts
+            return () => clearInterval(interval);
         } catch (err: any) {
             setError(err.message);
         } finally {

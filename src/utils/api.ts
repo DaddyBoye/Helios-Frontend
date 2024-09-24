@@ -35,6 +35,17 @@ export const saveUserProgress = async (telegramId: number, progress: number) => 
     }
 };
 
+// Function to update user progress
+export const updateUserProgress = async (telegramId: number) => {
+    try {
+        const response = await axios.post(`${API_URL}/user/progress`, { telegramId });
+        return response.data.progress;
+    } catch (error) {
+        console.error('Error updating progress:', error);
+        throw new Error('Error updating progress');
+    }
+};
+
 // Calculate progress on login
 export const calculateUserProgress = async (telegramId: number) => {
     try {
