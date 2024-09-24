@@ -103,7 +103,7 @@ useEffect(() => {
             </p>
           </div>
         </div>
-        {error && <p className="error">{error}</p>}
+        {error && <p className="error invisible">{error}</p>}
         <div className='invisible'>{progress1}</div>
     </div>
   );
