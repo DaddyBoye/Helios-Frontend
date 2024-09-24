@@ -47,6 +47,23 @@ const ProgressBar = () => {
     }
 };
 
+useEffect(() => {
+  if (telegramId !== null) {
+      // Set up intervals to fetch data every second
+      const userProgressIntervalId = setInterval(() => {
+          fetchUserProgress(telegramId); // Pass the telegramId
+      }, 1000);
+
+      // Initial fetch to update progress immediately
+      fetchUserProgress(telegramId);
+
+      // Cleanup function: clear all intervals on component unmount
+      return () => {
+          clearInterval(userProgressIntervalId);
+      };
+  }
+}, [telegramId]);
+
   useEffect(() => {
     setTimeRemaining(60 - progress); // Update remaining time whenever progress changes
   }, [progress]);
@@ -86,6 +103,8 @@ const ProgressBar = () => {
             </p>
           </div>
         </div>
+        {error && <p className="error">{error}</p>}
+        <div className='visibility: hidden;'>{progress1}</div>
     </div>
   );
 };
