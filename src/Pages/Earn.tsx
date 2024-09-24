@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 const Earn = () => {
   const [progress, setProgress] = useState<number | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
 
@@ -24,7 +23,6 @@ const Earn = () => {
   }, []);
 
   const fetchUserProgress = async (telegramId: number) => {
-    setLoading(true);
     setError(null); // Reset error state
     try {
         const response = await fetch(`https://server.therotrade.tech/api/user/current-progress?telegramId=${telegramId}`);
@@ -39,8 +37,6 @@ const Earn = () => {
         } else {
             setError('An unknown error occurred'); // Fallback for unknown error types
         }
-    } finally {
-        setLoading(false);
     }
 };
 
@@ -65,7 +61,6 @@ return (
         </h1>
         <div className='p-8 flex justify-center'>
             <div>
-                {loading && <p>Loading...</p>}
                 {error && <p className="error">{error}</p>}
                 {progress !== null && <p>Your current progress: {progress}</p>}
             </div>
