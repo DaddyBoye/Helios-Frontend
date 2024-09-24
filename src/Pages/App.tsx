@@ -208,7 +208,7 @@ return (
                 )}
         </div>
       </div>
-      <p className='visibility: hidden;'>{message}</p>
+      <p className='invisible'>{message}</p>
   </div>
   )
 }

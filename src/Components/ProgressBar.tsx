@@ -104,7 +104,7 @@ useEffect(() => {
           </div>
         </div>
         {error && <p className="error">{error}</p>}
-        <div className='visibility: hidden;'>{progress1}</div>
+        <div className='invisible'>{progress1}</div>
     </div>
   );
 };
