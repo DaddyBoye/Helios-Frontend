@@ -22,19 +22,6 @@ export const createUser = async (userData: UserData) => {
     }
 };
 
-// Save progress on logout
-export const saveUserProgress = async (telegramId: number, progress: number) => {
-    try {
-        const response = await axios.post(`${API_URL}/save-progress`, {
-            telegramId,
-            progress,
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error('Error saving progress');
-    }
-};
-
 // Function to update user progress
 export const updateUserProgress = async (telegramId: number) => {
     try {
