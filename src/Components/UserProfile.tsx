@@ -1,6 +1,7 @@
 // src/components/UserProfile.tsx
 import React, { useEffect, useState } from 'react';
 import { createUser } from '../utils/api';
+import { calculateUserProgress } from '../utils/api';
 
 interface User {
     id: number;
@@ -11,6 +12,7 @@ interface User {
 
 const UserProfile: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
+    const [progress, setProgress] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -39,6 +41,10 @@ const UserProfile: React.FC = () => {
                 lastName: userData.last_name,
             });
             setUser(user);
+
+            // After user is created, calculate their progress
+            const calculatedProgress = await calculateUserProgress(userData.id);
+            setProgress(calculatedProgress); // Set progress in state
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -52,6 +58,7 @@ const UserProfile: React.FC = () => {
     return (
         <div>
             <h1>Welcome, {user?.firstName}!</h1>
+            {progress !== null && <p>Your current progress: {progress}</p>} {/* Display progress */}
         </div>
     );
 };
