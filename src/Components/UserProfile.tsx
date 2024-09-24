@@ -1,5 +1,5 @@
 // src/components/UserProfile.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { createUser, calculateUserProgress, updateUserProgress } from '../utils/api';
 
 interface User {
@@ -14,6 +14,8 @@ const UserProfile: React.FC = () => {
     const [progress, setProgress] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const intervalId = useRef<ReturnType<typeof setInterval> | null>(null); // Reference for the interval
+    const intervalSet = useRef<boolean>(false); // Flag to check if interval is set
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -22,7 +24,7 @@ const UserProfile: React.FC = () => {
 
             const userData = tg.initDataUnsafe.user;
             if (userData) {
-                handleUser(userData);
+                handleUserCreation(userData); // Call the user creation function
             } else {
                 setError('No user data available');
             }
@@ -31,9 +33,9 @@ const UserProfile: React.FC = () => {
         }
     }, []);
 
-    const handleUser = async (userData: any) => {
+    const handleUserCreation = async (userData: any) => {
         try {
-            // Step 1: Create the user
+            // Create the user
             const user = await createUser({
                 telegramId: userData.id,
                 username: userData.username,
@@ -42,29 +44,46 @@ const UserProfile: React.FC = () => {
             });
             setUser(user);
 
-            // Step 2: Calculate the initial progress (wait for this to finish)
-            const initialProgress = await calculateUserProgress(userData.id);
-            setProgress(initialProgress);
-
-            // Step 3: Only start the interval for updating progress after the initial progress is set
-            const interval = setInterval(async () => {
-                try {
-                    // Fetch the updated progress from the backend after each interval
-                    const updatedProgress = await updateUserProgress(userData.id);
-                    setProgress(updatedProgress); // Update the state with the new progress
-                } catch (err) {
-                    console.error('Error updating progress:', err);
-                }
-            }, 1000); // Update every second
-
-            // Cleanup the interval when the component unmounts
-            return () => clearInterval(interval);
+            // After creating the user, calculate initial progress
+            await calculateInitialProgress(userData.id);
         } catch (err: any) {
             setError(err.message);
         } finally {
             setLoading(false);
         }
     };
+
+    const calculateInitialProgress = async (telegramId: number) => {
+        try {
+            // Get initial progress
+            const initialProgress = await calculateUserProgress(telegramId);
+            setProgress(initialProgress);
+
+            // Start the interval for updating progress if not already set
+            if (!intervalSet.current) {
+                intervalId.current = setInterval(async () => {
+                    try {
+                        const updatedProgress = await updateUserProgress(telegramId);
+                        setProgress(updatedProgress); // Update the state with the new progress
+                    } catch (err) {
+                        console.error('Error updating progress:', err);
+                    }
+                }, 1000); // Update every second
+                intervalSet.current = true; // Set the flag to true
+            }
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
+    // Cleanup the interval when the component unmounts
+    useEffect(() => {
+        return () => {
+            if (intervalId.current) {
+                clearInterval(intervalId.current);
+            }
+        };
+    }, []);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="error">{error}</div>;
