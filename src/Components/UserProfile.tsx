@@ -23,7 +23,7 @@ const UserProfile: React.FC = () => {
 
             const userData = tg.initDataUnsafe?.user;
             if (userData) {
-                handleUser(userData);
+                handleUserLogin(userData);
             } else {
                 setError('No user data available');
                 setLoading(false);
@@ -34,16 +34,17 @@ const UserProfile: React.FC = () => {
         }
     }, []);
 
-    // Handle user creation and progress calculation
-    const handleUser = async (userData: any) => {
+    // Handle user creation and initial progress calculation
+    const handleUserLogin = async (userData: any) => {
         try {
+            // Create or fetch the user and their progress
             const user = await createUser({
                 telegramId: userData.id,
                 username: userData.username,
                 firstName: userData.first_name,
                 lastName: userData.last_name,
             });
-            
+
             const calculatedProgress = await calculateUserProgress(user.telegramId);
             setUser({
                 ...user,

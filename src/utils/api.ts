@@ -25,7 +25,7 @@ export const createUser = async (userData: UserData) => {
 // Save progress on logout
 export const saveUserProgress = async (telegramId: number, progress: number) => {
     try {
-        const response = await axios.post(`${API_URL}/progress/save-progress`, {
+        const response = await axios.post(`${API_URL}/save-progress`, {
             telegramId,
             progress,
         });
@@ -38,7 +38,7 @@ export const saveUserProgress = async (telegramId: number, progress: number) => 
 // Calculate progress on login
 export const calculateUserProgress = async (telegramId: number) => {
     try {
-        const response = await axios.get(`${API_URL}/progress/calculate-progress`, {
+        const response = await axios.get(`${API_URL}/calculate-progress`, {
             params: { telegramId },
         });
         return response.data.progress; // Return calculated progress
