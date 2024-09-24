@@ -3,12 +3,21 @@ import axios from 'axios';
 
 const API_URL = 'https://server.therotrade.tech/api';
 
+interface UserProgressProps {
+    telegramId: number;
+    isLoggedIn: boolean; // New prop to determine if user is logged in
+}
 
-const UserProgress: React.FC<{ telegramId: number }> = ({ telegramId }) => {
+const UserProgress: React.FC<UserProgressProps> = ({ telegramId, isLoggedIn }) => {
     const [progress, setProgress] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!isLoggedIn) {
+            setProgress(0); // Reset progress if not logged in
+            return; // Exit if user is not logged in
+        }
+
         const intervalId = setInterval(async () => {
             try {
                 const response = await axios.post(`${API_URL}/user/progress`, { telegramId });
@@ -20,7 +29,7 @@ const UserProgress: React.FC<{ telegramId: number }> = ({ telegramId }) => {
         }, 1000); // Call API every second to increment progress
 
         return () => clearInterval(intervalId); // Cleanup interval on component unmount
-    }, [telegramId]);
+    }, [telegramId, isLoggedIn]); // Depend on isLoggedIn
 
     if (error) return <div>{error}</div>;
 
