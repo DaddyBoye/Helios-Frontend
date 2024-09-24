@@ -209,6 +209,7 @@ return (
         </div>
       </div>
       <p>{message}</p>
+      <UserProfile/>
   </div>
   )
 }
