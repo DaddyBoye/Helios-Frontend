@@ -1,4 +1,3 @@
-// src/components/UserProfile.tsx
 import React, { useEffect, useState } from 'react';
 import { createUser } from '../utils/api';
 
@@ -8,6 +7,14 @@ interface User {
     firstName?: string;
     lastName?: string;
     points: number;
+}
+
+// Define the structure of the Telegram user data
+interface TelegramUserData {
+    id: number;
+    username?: string;
+    first_name?: string;
+    last_name?: string;
 }
 
 const UserProfile: React.FC = () => {
@@ -20,18 +27,21 @@ const UserProfile: React.FC = () => {
             const tg = window.Telegram.WebApp;
             tg.ready();
 
-            const userData = tg.initDataUnsafe.user;
+            const userData = tg.initDataUnsafe?.user as TelegramUserData | undefined;
+
             if (userData) {
                 handleUser(userData);
             } else {
-                setError('No user data available');
+                setError('No user data available from Telegram');
+                setLoading(false); // Stop loading when there's an error
             }
         } else {
             setError('This app should be opened in Telegram');
+            setLoading(false); // Stop loading in case the app is opened outside of Telegram
         }
     }, []);
 
-    const handleUser = async (userData: any) => {
+    const handleUser = async (userData: TelegramUserData) => {
         try {
             const user = await createUser({
                 telegramId: userData.id,
@@ -43,7 +53,7 @@ const UserProfile: React.FC = () => {
         } catch (err: any) {
             setError(err.message);
         } finally {
-            setLoading(false);
+            setLoading(false); // Ensure loading stops whether the request succeeds or fails
         }
     };
 
@@ -53,7 +63,7 @@ const UserProfile: React.FC = () => {
     return (
         <div>
             <h1>Welcome, {user?.firstName}!</h1>
-            <p>Your current points: {user?.points}</p>
+            <p>Your current points: {user?.points ?? 0}</p> {/* Default to 0 if points is undefined */}
         </div>
     );
 };

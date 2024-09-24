@@ -1,7 +1,6 @@
-// src/utils/api.ts
 import axios from 'axios';
 
-const API_URL = 'https://server.therotrade.tech/api'; // Adjust if hosted elsewhere
+const API_URL = 'https://server.therotrade.tech/api';
 
 interface UserData {
     telegramId: number;
@@ -16,11 +15,9 @@ export const createUser = async (userData: UserData) => {
         return response.data;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
-            // Now TypeScript knows that error is an Axios error
             throw new Error(error.response?.data?.error || 'Error creating user');
         } else {
-            // Handle unexpected error types
-            throw new Error('Error creating user');
+            throw new Error('Unexpected error occurred while creating user');
         }
     }
 };
