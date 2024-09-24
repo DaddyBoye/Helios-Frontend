@@ -27,7 +27,7 @@ const Earn = () => {
     setLoading(true);
     setError(null); // Reset error state
     try {
-        const response = await fetch(`https://server.therotrade.tech/api/user/progress?telegramId=${telegramId}`);
+        const response = await fetch(`https://server.therotrade.tech/api/user/current-progress?telegramId=${telegramId}`);
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }
