@@ -6,8 +6,46 @@ import { useState, useEffect } from 'react';
 const socket = io('https://server.therotrade.tech');
 
 const ProgressBar = () => {
-  const [progress, setProgress] = useState(0);
+  const [progress1, setProgress1] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [telegramId, setTelegramId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+
+        const userData = tg.initDataUnsafe.user;
+        if (userData) {
+            setTelegramId(userData.id); // Store telegramId in state
+            fetchUserProgress(userData.id); // Fetch initial progress
+        } else {
+            console.error('No user data available');
+        }
+    } else {
+        console.error('This app should be opened in Telegram');
+    }
+  }, []);
+
+  const fetchUserProgress = async (telegramId: number) => {
+    setError(null); // Reset error state
+    try {
+        const response = await fetch(`https://server.therotrade.tech/api/user/current-progress?telegramId=${telegramId}`);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setProgress(data.progress); // Set progress state
+    } catch (error: unknown) { // Specify error type here
+        if (error instanceof Error) {
+            setError(error.message); // Use the message from the Error instance
+        } else {
+            setError('An unknown error occurred'); // Fallback for unknown error types
+        }
+    }
+};
 
   useEffect(() => {
     setTimeRemaining(60 - progress); // Update remaining time whenever progress changes
@@ -20,7 +58,7 @@ const ProgressBar = () => {
   useEffect(() => {
     // Listen for progress updates
     socket.on('progressUpdate', (data) => {
-      setProgress(data.progress);
+      setProgress1(data.progress);
     });
 
     // Clean up the socket connection on unmount
