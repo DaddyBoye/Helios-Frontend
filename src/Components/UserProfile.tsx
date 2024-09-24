@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { createUser } from '../utils/api';
+import { createUser, calculateUserProgress, saveUserProgress } from '../utils/api';
 import UserProgress from './UserProgress';
 
 interface User {
-    id: number;
     telegramId: number;
     username?: string;
     firstName?: string;
@@ -16,6 +15,7 @@ const UserProfile: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
+    // Effect to handle user login
     useEffect(() => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
             const tg = window.Telegram.WebApp;
@@ -34,6 +34,7 @@ const UserProfile: React.FC = () => {
         }
     }, []);
 
+    // Handle user creation and progress calculation
     const handleUser = async (userData: any) => {
         try {
             const user = await createUser({
@@ -42,7 +43,12 @@ const UserProfile: React.FC = () => {
                 firstName: userData.first_name,
                 lastName: userData.last_name,
             });
-            setUser(user);
+            
+            const calculatedProgress = await calculateUserProgress(user.telegramId);
+            setUser({
+                ...user,
+                points: calculatedProgress,
+            });
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -50,6 +56,26 @@ const UserProfile: React.FC = () => {
         }
     };
 
+    // Handle saving user progress on logout
+    const handleLogout = async () => {
+        if (user) {
+            try {
+                await saveUserProgress(user.telegramId, user.points);
+                console.log('Progress saved on logout');
+            } catch (error) {
+                console.error('Error saving progress on logout:', error);
+            }
+        }
+    };
+
+    // Effect to save progress on unmount
+    useEffect(() => {
+        return () => {
+            handleLogout();
+        };
+    }, [user]);
+
+    // Loading and error handling
     if (loading) return <div>Loading...</div>;
     if (error) return <div className="error">{error}</div>;
 
