@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { createUser } from '../utils/api';
+import UserProgress from './UserProgress';
 
 interface User {
     id: number;
+    telegramId: number;
     username?: string;
     firstName?: string;
     lastName?: string;
     points: number;
-}
-
-// Define the structure of the Telegram user data
-interface TelegramUserData {
-    id: number;
-    username?: string;
-    first_name?: string;
-    last_name?: string;
 }
 
 const UserProfile: React.FC = () => {
@@ -27,21 +21,20 @@ const UserProfile: React.FC = () => {
             const tg = window.Telegram.WebApp;
             tg.ready();
 
-            const userData = tg.initDataUnsafe?.user as TelegramUserData | undefined;
-
+            const userData = tg.initDataUnsafe?.user;
             if (userData) {
                 handleUser(userData);
             } else {
-                setError('No user data available from Telegram');
-                setLoading(false); // Stop loading when there's an error
+                setError('No user data available');
+                setLoading(false);
             }
         } else {
             setError('This app should be opened in Telegram');
-            setLoading(false); // Stop loading in case the app is opened outside of Telegram
+            setLoading(false);
         }
     }, []);
 
-    const handleUser = async (userData: TelegramUserData) => {
+    const handleUser = async (userData: any) => {
         try {
             const user = await createUser({
                 telegramId: userData.id,
@@ -53,7 +46,7 @@ const UserProfile: React.FC = () => {
         } catch (err: any) {
             setError(err.message);
         } finally {
-            setLoading(false); // Ensure loading stops whether the request succeeds or fails
+            setLoading(false);
         }
     };
 
@@ -63,7 +56,10 @@ const UserProfile: React.FC = () => {
     return (
         <div>
             <h1>Welcome, {user?.firstName}!</h1>
-            <p>Your current points: {user?.points ?? 0}</p> {/* Default to 0 if points is undefined */}
+            <p>Your current points: {user?.points}</p>
+
+            {/* Automatically start counting progress when user is logged in */}
+            {user && <UserProgress telegramId={user.telegramId} />} 
         </div>
     );
 };
