@@ -28,7 +28,7 @@ const UserProgress: React.FC<UserProgressProps> = ({ telegramId, isLoggedIn }) =
         };
 
         // Fetch progress every 5 seconds instead of every second
-        const intervalId = setInterval(fetchProgress, 5000);
+        const intervalId = setInterval(fetchProgress, 1000);
 
         // Initial fetch on mount
         fetchProgress();
