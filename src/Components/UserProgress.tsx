@@ -18,22 +18,28 @@ const UserProgress: React.FC<UserProgressProps> = ({ telegramId, isLoggedIn }) =
             return; // Exit if user is not logged in
         }
 
-        const intervalId = setInterval(async () => {
+        const fetchProgress = async () => {
             try {
                 const response = await axios.post(`${API_URL}/user/progress`, { telegramId });
                 setProgress(response.data.progress);
             } catch (err: any) {
                 setError('Error updating progress');
-                clearInterval(intervalId); // Stop the loop if there's an error
             }
-        }, 1000); // Call API every second to increment progress
+        };
+
+        // Fetch progress every 5 seconds instead of every second
+        const intervalId = setInterval(fetchProgress, 5000);
+
+        // Initial fetch on mount
+        fetchProgress();
 
         return () => clearInterval(intervalId); // Cleanup interval on component unmount
-    }, [telegramId, isLoggedIn]); // Depend on isLoggedIn
+    }, [telegramId, isLoggedIn]);
 
     if (error) return <div>{error}</div>;
 
-    return <div><p className='text-2xl font-bold text-[#DCAA19]'>{progress}</p></div>;
+    return <div>Current Progress: <p className='text-2xl font-bold text-[#DCAA19]'>{progress}</p></div>;
 };
+
 
 export default UserProgress;
