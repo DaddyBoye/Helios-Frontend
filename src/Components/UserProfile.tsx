@@ -1,6 +1,6 @@
 // src/components/UserProfile.tsx
 import React, { useEffect, useState } from 'react';
-import { createUser } from '../utils/api';
+import { createUser, calculateUserProgress } from '../utils/api'; // Make sure to implement the API functions.
 
 interface User {
     id: number;
@@ -13,10 +13,12 @@ const UserProfile: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [currentProgress, setCurrentProgress] = useState<number>(0);
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-            const tg = window.Telegram.WebApp;
+        const tg = window.Telegram?.WebApp;
+
+        if (tg) {
             tg.ready();
 
             const userData = tg.initDataUnsafe.user;
@@ -39,10 +41,21 @@ const UserProfile: React.FC = () => {
                 lastName: userData.last_name,
             });
             setUser(user);
+            // After user creation, calculate the progress
+            await fetchProgress(user.telegramId);
         } catch (err: any) {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchProgress = async (telegramId: number) => {
+        try {
+            const response = await calculateUserProgress(telegramId); // Implement this API call to hit the /calculate-progress endpoint.
+            setCurrentProgress(response.progress);
+        } catch (err: any) {
+            setError(err.message);
         }
     };
 
@@ -52,6 +65,7 @@ const UserProfile: React.FC = () => {
     return (
         <div>
             <h1>Welcome, {user?.firstName}!</h1>
+            <p>Your current progress: {currentProgress}</p>
         </div>
     );
 };
