@@ -47,6 +47,9 @@ useEffect(() => {
             fetchUserProgress(telegramId); // Pass the telegramId
         }, 1000);
 
+        // Initial fetch to update progress immediately
+        fetchUserProgress(telegramId);
+
         // Cleanup function: clear all intervals on component unmount
         return () => {
             clearInterval(userProgressIntervalId);
