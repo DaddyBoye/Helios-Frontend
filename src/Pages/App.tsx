@@ -81,7 +81,7 @@ const claimFunction = async () => {
     if (telegramId !== null) {
       // Set up intervals to fetch data every second
       const userProgressIntervalId = setInterval(() => {
-        fetchUserAirdrops(telegramId); // Fetch airdrops every second if necessary
+        fetchUserAirdrops(telegramId); // Fetch airdrops every second
       }, 1000);
 
       // Initial fetch to update airdrops immediately

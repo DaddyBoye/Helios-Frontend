@@ -7,8 +7,8 @@ const ProgressBar = () => {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
-  const [telegramUsername, setTelegramUsername] = useState<string | null>(null); // Store telegramUsername
-  const CYCLE_DURATION = 60; // Constant for cycle duration
+  const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
+  const CYCLE_DURATION = 60;
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -17,8 +17,8 @@ const ProgressBar = () => {
 
       const userData = tg.initDataUnsafe.user;
       if (userData) {
-        setTelegramId(userData.id); // Store telegramId in state
-        setTelegramUsername(userData.username); // Store telegramUsername in state
+        setTelegramId(userData.id);
+        setTelegramUsername(userData.username);
       } else {
         console.error('No user data available');
       }
