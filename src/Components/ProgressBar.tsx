@@ -71,18 +71,23 @@ const ProgressBar = () => {
 
   useEffect(() => {
     if (telegramId !== null) {
-      // Fetch progress every second
+      // Fetch user progress every second
       const userProgressIntervalId = setInterval(() => {
-        fetchUserProgress(telegramId); // Pass the telegramId
-        triggerAirdrop(); // Call airdrop check
+        fetchUserProgress(telegramId); // Fetch progress every 1 second
       }, 1000);
-
-      // Cleanup function: clear interval on component unmount
+  
+      // Trigger airdrop check every half second (500ms)
+      const triggerAirdropIntervalId = setInterval(() => {
+        triggerAirdrop(); // Call airdrop check every 0.5 seconds
+      }, 500);
+  
+      // Cleanup function: clear intervals on component unmount
       return () => {
-        clearInterval(userProgressIntervalId);
+        clearInterval(userProgressIntervalId); // Clear progress interval
+        clearInterval(triggerAirdropIntervalId); // Clear airdrop interval
       };
     }
-  }, [telegramId]);
+  }, [telegramId]);  
 
   useEffect(() => {
     setTimeRemaining(CYCLE_DURATION - progress); // Update remaining time whenever progress changes
