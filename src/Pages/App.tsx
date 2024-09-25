@@ -149,8 +149,8 @@ return (
                 )}
         </div>
       </div>
-      {airdropsError && <p className="error invisible">{airdropsError}</p>}
-      <p className='invisible'>{message}</p>
+      {airdropsError && <p className="hidden">{airdropsError}</p>}
+      <p className='hidden'>{message}</p>
   </div>
   )
 }
