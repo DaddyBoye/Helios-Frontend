@@ -7,8 +7,7 @@ const ProgressBar = () => {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
-  const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
-  const [hasAirdropBeenAdded, setHasAirdropBeenAdded] = useState<boolean>(false); // Flag for airdrop addition
+  const [telegramUsername, setTelegramUsername] = useState<string | null>(null); // Store telegramUsername
   const CYCLE_DURATION = 60; // Constant for cycle duration
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const ProgressBar = () => {
 
   // Function to trigger the airdrop check
   const triggerAirdrop = async () => {
-    if (telegramId && telegramUsername && progress === 60 && !hasAirdropBeenAdded) {
+    if (telegramId && telegramUsername) {
       try {
         const response = await fetch('https://server.therotrade.tech/api/add-airdrop', {
           method: 'POST',
@@ -61,21 +60,18 @@ const ProgressBar = () => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
-
-        setHasAirdropBeenAdded(true); // Set flag to prevent multiple airdrops
+        // Optionally handle success response
       } catch (error: unknown) {
         if (error instanceof Error) {
           setError(error.message); // Handle error if needed
         }
       }
-    } else if (progress < 60) {
-      setHasAirdropBeenAdded(false); // Reset flag if progress drops below 60
     }
   };
 
   useEffect(() => {
     if (telegramId !== null) {
-      // Fetch progress and check for airdrop every second
+      // Fetch progress every second
       const userProgressIntervalId = setInterval(() => {
         fetchUserProgress(telegramId); // Pass the telegramId
         triggerAirdrop(); // Call airdrop check
@@ -86,7 +82,7 @@ const ProgressBar = () => {
         clearInterval(userProgressIntervalId);
       };
     }
-  }, [telegramId, progress]); // Add progress to dependency array
+  }, [telegramId]);
 
   useEffect(() => {
     setTimeRemaining(CYCLE_DURATION - progress); // Update remaining time whenever progress changes
