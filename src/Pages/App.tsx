@@ -56,7 +56,7 @@ const fetchUserAirdrops = async (telegramId: number) => {
 // Delete all airdrops for the user
 const deleteAllUserAirdrops = async (telegramId: number) => {
   try {
-      const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/user/${telegramId}`);
+      const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/delete/${telegramId}`);
       setMessage(response.data.message);
       // Optionally refetch airdrops or update UI
       await fetchUserAirdrops(telegramId); // Refetch airdrops after deletion
