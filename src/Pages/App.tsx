@@ -19,6 +19,7 @@ function App() {
   const [airdropsError, setAirdropsError] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -51,6 +52,30 @@ const fetchUserAirdrops = async (telegramId: number) => {
       }
   }
 };
+
+// Delete all airdrops for the user
+const deleteAllUserAirdrops = async (telegramId: number) => {
+  try {
+      const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/user/${telegramId}`);
+      setMessage(response.data.message);
+      // Optionally refetch airdrops or update UI
+      await fetchUserAirdrops(telegramId); // Refetch airdrops after deletion
+  } catch (error) {
+      console.error('Error deleting airdrops:', error);
+  }
+};
+
+const claimFunction = async () => {
+  try {
+      // Perform any necessary pre-delete operations
+
+      // Now delete all airdrops for the user
+      await deleteAllUserAirdrops(telegramId as number);
+    } catch (error) {
+      console.error('Error during claim function execution:', error);
+  }
+};
+
 
   useEffect(() => {
     if (telegramId !== null) {
@@ -98,6 +123,7 @@ return (
             <p className='font-bold text-sm'>Current Airdrop</p>
           </div>
           <div className='my-auto pl-8'>
+          <button onClick={() => claimFunction()} className="bg-yellow-500 p-2 pl-4 pr-4 rounded-lg">Claim</button>
          </div>
         </div>
         <ProgressBar/>
@@ -124,6 +150,7 @@ return (
         </div>
       </div>
       {airdropsError && <p className="error invisible">{airdropsError}</p>}
+      <p className='invisible'>{message}</p>
   </div>
   )
 }
