@@ -116,7 +116,7 @@ const ProgressBar = () => {
           </p>
         </div>
       </div>
-      {error && <p className="error text-red-600 invisible">{error}</p>}
+      {error && <p className="hidden">{error}</p>}
     </div>
   );
 };
