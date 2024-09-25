@@ -16,23 +16,50 @@ interface Airdrop {
 }
 
 function App() {
-  const [airdrops, setAirdrops] = useState<Airdrop[]>([]); // Explicitly type the airdrops array
+  const [airdrops, setAirdrops] = useState<Airdrop[]>([]);
+  const [airdropsError, setAirdropsError] = useState<string | null>(null);
   const [parentTotal, setParentTotal] = useState(0);
   const [cumulativeTotal, setCumulativeTotal] = useState(0);
   const [airdropCount, setAirdropCount] = useState(0);
   const [message, setMessage] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [telegramId, setTelegramId] = useState<number | null>(null);
+  const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+
+      const userData = tg.initDataUnsafe.user;
+      if (userData) {
+        setTelegramId(userData.id); // Store telegramId in state
+        setTelegramUsername(userData.username); // Store telegramUsername in state
+      } else {
+        console.error('No user data available');
+      }
+    } else {
+      console.error('This app should be opened in Telegram');
+    }
+  }, []);
 
   // Fetch all airdrops
-  const fetchAirdrops = async () => {
+  const fetchUserAirdrops = async (telegramId: number) => {
+    setAirdropsError(null); // Reset error state
     try {
-      const response = await axios.get('https://server.therotrade.tech/api/airdrops');
-      setAirdrops(response.data);
-    } catch (error) {
-      console.error('Error fetching airdrops:', error);
-    } finally {
-      setLoading(false);
+      const response = await fetch(`https://server.therotrade.tech/api/airdrops/${telegramId}`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const data = await response.json();
+      setAirdrops(data); // Set airdrops state
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setAirdropsError(error.message);
+      } else {
+        setAirdropsError('An unknown error occurred while fetching airdrops');
+      }
     }
   };
 
@@ -46,25 +73,6 @@ function App() {
     }
   };
 
-  // Fetch parent total
-  const fetchParentTotal = async () => {
-    try {
-      const response = await axios.get('https://server.therotrade.tech/api/airdrops/sum');
-      setParentTotal(response.data.totalValue);
-    } catch (error) {
-      console.error('Error fetching parent total:', error);
-    }
-  };
-
-  // Fetch the current cumulative total from the backend
-  const fetchCurrentCumulativeTotal = async () => {
-    try {
-      const response = await axios.get('https://server.therotrade.tech/api/airdrops/currentCumulativeTotal');
-      setCumulativeTotal(response.data.cumulativeTotal); // Update cumulative total
-    } catch (error) {
-      console.error('Error fetching cumulative total:', error);
-    }
-  };
 
   // Fetch and calculate a new cumulative total
   const fetchCumulativeTotal = async () => {
@@ -84,7 +92,7 @@ function App() {
       setMessage(response.data.message);
       setParentTotal(response.data.newParentTotal);
       // Refetch airdrops to update the UI
-      await fetchAirdrops(); // Ensure airdrops are refetched after deletion
+      await fetchAirdropCount(); // Ensure airdrops are refetched after deletion
     } catch (error) {
       console.error('Error deleting airdrops or updating parent total:', error);
       throw error; // Re-throw the error to handle it in the claimFunction
@@ -110,26 +118,21 @@ function App() {
   };
 
   useEffect(() => {
-    // Fetch airdrops, parent total, airdrop count, and cumulative total initially
-    fetchAirdrops();
-    fetchParentTotal();
-    fetchAirdropCount();
-    fetchCurrentCumulativeTotal();
+    if (telegramId !== null) {
+      // Set up intervals to fetch data every second
+      const userProgressIntervalId = setInterval(() => {
+        fetchUserAirdrops(telegramId); // Fetch airdrops every second if necessary
+      }, 1000);
 
-    // Set up intervals to fetch data every second
-    const airdropIntervalId = setInterval(fetchAirdrops, 1000);
-    const parentTotalIntervalId = setInterval(fetchParentTotal, 1000);
-    const airdropCountIntervalId = setInterval(fetchAirdropCount, 1000);
-    const cumulativeTotalIntervalId = setInterval(fetchCurrentCumulativeTotal, 1000);
+      // Initial fetch to update airdrops immediately
+      fetchUserAirdrops(telegramId);
 
-    // Cleanup function: clear all intervals on component unmount
-    return () => {
-      clearInterval(airdropIntervalId);
-      clearInterval(parentTotalIntervalId);
-      clearInterval(airdropCountIntervalId);
-      clearInterval(cumulativeTotalIntervalId);
-    };
-  }, []); // Empty dependency array to run only once after component mounts
+      // Cleanup function: clear all intervals on component unmount
+      return () => {
+        clearInterval(userProgressIntervalId);
+      };
+    }
+  }, [telegramId]);
 
   // Set loading to false after initial fetches
   useEffect(() => {
@@ -149,7 +152,7 @@ return (
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className='text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl'>
-            Helios
+          {telegramUsername}
           </h1>
           <UserProfile/>
         </div>
@@ -209,6 +212,7 @@ return (
         </div>
       </div>
       <p className='invisible'>{message}</p>
+      {airdropsError && <p className="error invisible">{airdropsError}</p>}
   </div>
   )
 }
