@@ -1,33 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 interface PopupProps {
   airdropCount: number;
   totalValue: number;
   onConfirm: () => void;
   onClose: () => void;
-  telegramId: number | null; // Add telegramId prop
+  telegramId: number | null;
+  progress: number; // Add progress prop
 }
 
-const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose, telegramId }) => {
+const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose, telegramId, progress }) => {
   const [timeRemaining, setTimeRemaining] = useState(60);
-  const [progress, setProgress] = useState(0); // Local progress state
 
   useEffect(() => {
-    // Fetch user progress when the component mounts
-    const fetchUserProgress = async () => {
-      if (telegramId) {
-        try {
-          const response = await axios.get(`https://server.therotrade.tech/api/user/current-progress/${telegramId}`);
-          setProgress(response.data.progress);
-        } catch (error) {
-          console.error('Error fetching user progress:', error);
-        }
-      }
-    };
-
-    fetchUserProgress();
-
     // Update the timeRemaining whenever progress changes
     const intervalId = setInterval(() => {
       setTimeRemaining(60 - progress);
@@ -36,7 +21,8 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
     return () => {
       clearInterval(intervalId);
     };
-  }, [telegramId, progress]);
+  }, [progress]);
+
 
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;

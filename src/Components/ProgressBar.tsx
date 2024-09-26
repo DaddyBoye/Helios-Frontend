@@ -2,48 +2,16 @@ import Coin from '../images/dollar-coin.png';
 import Hamster from '../icons/Hamster';
 import { useState, useEffect } from 'react';
 
-const ProgressBar = () => {
+interface ProgressBarProps {
+  progress: number;
+  telegramId: number | null; 
+  telegramUsername: string | null; 
+}
+
+const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const [error, setError] = useState<string | null>(null);
-  const [telegramId, setTelegramId] = useState<number | null>(null);
-  const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
   const CYCLE_DURATION = 60;
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-
-      const userData = tg.initDataUnsafe.user;
-      if (userData) {
-        setTelegramId(userData.id);
-        setTelegramUsername(userData.username);
-      } else {
-        console.error('No user data available');
-      }
-    } else {
-      console.error('This app should be opened in Telegram');
-    }
-  }, []);
-
-  const fetchUserProgress = async (telegramId: number) => {
-    setError(null); // Reset error state
-    try {
-      const response = await fetch(`https://server.therotrade.tech/api/user/current-progress?telegramId=${telegramId}`);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-      const data = await response.json();
-      setProgress(data.progress); // Set progress state
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message); // Use the message from the Error instance
-      } else {
-        setError('An unknown error occurred'); // Fallback for unknown error types
-      }
-    }
-  };
 
   // Function to trigger the airdrop check
   const triggerAirdrop = async () => {
@@ -63,19 +31,17 @@ const ProgressBar = () => {
         // Optionally handle success response
       } catch (error: unknown) {
         if (error instanceof Error) {
-          setError(error.message); // Handle error if needed
         }
       }
     }
   };
 
   useEffect(() => {
+    setTimeRemaining(CYCLE_DURATION - progress); // Update remaining time whenever progress changes
+  }, [progress]);
+
+  useEffect(() => {
     if (telegramId !== null) {
-      // Fetch user progress every second
-      const userProgressIntervalId = setInterval(() => {
-        fetchUserProgress(telegramId); // Fetch progress every 1 second
-      }, 1000);
-  
       // Trigger airdrop check every half second (500ms)
       const triggerAirdropIntervalId = setInterval(() => {
         triggerAirdrop(); // Call airdrop check every 0.5 seconds
@@ -83,7 +49,6 @@ const ProgressBar = () => {
   
       // Cleanup function: clear intervals on component unmount
       return () => {
-        clearInterval(userProgressIntervalId); // Clear progress interval
         clearInterval(triggerAirdropIntervalId); // Clear airdrop interval
       };
     }
@@ -116,7 +81,6 @@ const ProgressBar = () => {
           </p>
         </div>
       </div>
-      {error && <p className="hidden">{error}</p>}
     </div>
   );
 };

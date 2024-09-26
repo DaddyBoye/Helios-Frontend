@@ -23,6 +23,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [totalAirdrops, setTotalAirdrops] = useState<number>(0);
   const [popupVisible, setPopupVisible] = useState(false);
+  const [userProgress, setUserProgress] = useState(0);
   const [airdropCount, setAirdropCount] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
 
@@ -38,10 +39,20 @@ function App() {
         fetchAirdropCount(telegramId),
         fetchTotalValue(telegramId),
         fetchUserAirdrops(telegramId),
-        fetchTotalAirdrops(telegramId)
+        fetchTotalAirdrops(telegramId),
+        fetchUserProgress(telegramId)
       ]);
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  };
+
+  const fetchUserProgress = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/user/current-progress?telegramId=${telegramId}`);
+      setUserProgress(response.data.progress);
+    } catch (error) {
+      console.error('Error fetching user progress:', error);
     }
   };
 
@@ -186,7 +197,11 @@ function App() {
           <p className='hidden'>{message}</p>
           <p className='hidden'>{airdropsError}</p>
         </div>
-        <ProgressBar />
+        <ProgressBar
+          progress={userProgress}
+          telegramId={telegramId}
+          telegramUsername={telegramUsername}
+         />
       </div>
 
       <div className='bg-[#D9D9D9] min-h-72 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
@@ -216,6 +231,7 @@ function App() {
           telegramId={telegramId}
           onConfirm={handleConfirm}
           onClose={handleClose}
+          progress={userProgress}
         />
       )}
     </div>
