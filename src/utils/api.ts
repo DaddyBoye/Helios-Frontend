@@ -44,3 +44,16 @@ export const calculateUserProgress = async (telegramId: number) => {
         throw new Error('Error calculating progress');
     }
 };
+
+// Function to calculate airdrops based on last saved progress
+export const calculateAirdrops = async (telegramId: number) => {
+    try {
+        const response = await axios.get(`${API_URL}/calculate-airdrops`, {
+            params: { telegramId },
+        });
+        return response.data; // Return the response data, including total airdrops added
+    } catch (error) {
+        console.error('Error calculating airdrops:', error);
+        throw new Error('Error calculating airdrops');
+    }
+};

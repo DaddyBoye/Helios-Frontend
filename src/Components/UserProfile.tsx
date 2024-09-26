@@ -1,6 +1,6 @@
 // src/components/UserProfile.tsx
 import React, { useEffect, useState, useRef } from 'react';
-import { createUser, calculateUserProgress, updateUserProgress } from '../utils/api';
+import { createUser, calculateUserProgress, updateUserProgress, calculateAirdrops } from '../utils/api';
 
 interface User {
     id: number;
@@ -58,6 +58,7 @@ const UserProfile: React.FC = () => {
             // Get initial progress
             const initialProgress = await calculateUserProgress(telegramId);
             setProgress(initialProgress);
+            await calculateAirdrops(telegramId); // Calculate airdrops upon initial login
 
             // Start the interval for updating progress if not already set
             if (!intervalSet.current) {
