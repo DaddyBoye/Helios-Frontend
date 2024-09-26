@@ -6,7 +6,6 @@ import background from '../images/Starryy.svg';
 import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
-import UserProgress from '../Components/UserProgress';
 import UserProfile from '../Components/UserProfile';
 
 interface Airdrop {
@@ -103,7 +102,6 @@ return (
           <h1 className='text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl'>
           {telegramUsername}
           </h1>
-          <UserProgress/>
           <UserProfile/>
         </div>
         <div className="ml-auto">
