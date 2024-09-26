@@ -1,6 +1,5 @@
-// src/components/UserProfile.tsx
 import React, { useEffect, useState, useRef } from 'react';
-import { createUser, calculateUserProgress, updateUserProgress} from '../utils/api';
+import { createUser, calculateUserProgress, updateUserProgress, calculateAirdrops } from '../utils/api';
 
 interface User {
     id: number;
@@ -46,6 +45,9 @@ const UserProfile: React.FC = () => {
 
             // After creating the user, calculate initial progress
             await calculateInitialProgress(userData.id);
+
+            // After calculating progress, check and add airdrops
+            await calculateAirdropsOnMount(userData.id);
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -73,6 +75,18 @@ const UserProfile: React.FC = () => {
             }
         } catch (err: any) {
             setError(err.message);
+        }
+    };
+
+    // New function to calculate and add airdrops on mount
+    const calculateAirdropsOnMount = async (telegramId: number) => {
+        try {
+            // Call the API to calculate and add airdrops for the user
+            const result = await calculateAirdrops(telegramId);
+            console.log('Airdrops calculated:', result);
+        } catch (err: any) {
+            console.error('Error calculating airdrops:', err);
+            setError('Error calculating airdrops');
         }
     };
 
