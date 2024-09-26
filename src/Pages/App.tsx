@@ -105,6 +105,17 @@ function App() {
     }
   };
 
+  const updateTotalAirdrops = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/sum/update/${telegramId}`);
+      console.log('Updated Total Airdrops:', response.data.newTotalAirdrops);
+      return response.data; // Return data if needed for further use
+    } catch (error) {
+      console.error('Error updating total airdrops:', error);
+      throw error; // Rethrow error for handling in the calling function
+    }
+  };
+
   const deleteAllUserAirdrops = async (telegramId: number) => {
     try {
       const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/delete/${telegramId}`);
@@ -117,7 +128,10 @@ function App() {
 
   const claimFunction = async () => {
     try {
-      await deleteAllUserAirdrops(telegramId as number);
+      // First, update total airdrops
+      await updateTotalAirdrops(telegramId as number);
+      // Then, delete all user airdrops
+      await deleteAllUserAirdrops(telegramId as number);  
     } catch (error) {
       console.error('Error during claim function execution:', error);
     }
