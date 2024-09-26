@@ -1,8 +1,4 @@
-import React from 'react';
-import io from 'socket.io-client';
-import { useState, useEffect } from 'react';
-
-const socket = io('https://server.therotrade.tech');
+import React, { useEffect, useState } from 'react';
 
 interface PopupProps {
   airdropCount: number;
@@ -11,29 +7,29 @@ interface PopupProps {
   onClose: () => void;
 }
 
-const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose}) => {
+const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose }) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    setTimeRemaining(60 - progress); // Update remaining time whenever progress changes
-  }, [progress]);
-
-  // Format timeRemaining into minutes and seconds
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
 
   useEffect(() => {
-    // Listen for progress updates
-    socket.on('progressUpdate', (data) => {
-      setProgress(data.progress);
-    });
+    if (airdropCount === 0) {
+      // Set the time for the countdown (e.g., 2 minutes)
+      setTimeRemaining(120); // 120 seconds for demonstration
 
-    // Clean up the socket connection on unmount
-    return () => {
-      socket.off('progressUpdate');
-    };
-  }, []);
+      const timer = setInterval(() => {
+        setTimeRemaining((prev) => {
+          if (prev <= 0) {
+            clearInterval(timer);
+            return 0; // Stop at 0
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer); // Clean up the interval on unmount
+    }
+  }, [airdropCount]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -63,5 +59,6 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
       </div>
     </div>
   );
-}
+};
+
 export default Popup;

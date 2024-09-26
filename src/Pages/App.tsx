@@ -7,6 +7,7 @@ import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
 import UserProfile from '../Components/UserProfile';
+import Popup from '../Components/Popup';
 
 interface Airdrop {
   id: number;
@@ -20,7 +21,49 @@ function App() {
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
   const [message, setMessage] = useState('');
-  const [totalAirdrops, setTotalAirdrops] = useState<number>(0); // New state for total airdrops
+  const [totalAirdrops, setTotalAirdrops] = useState<number>(0);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [airdropCount, setAirdropCount] = useState(0);
+  const [totalValue, setTotalValue] = useState(0);
+
+  useEffect(() => {
+    if (telegramId) {
+      fetchAirdropCount(telegramId);
+      fetchTotalValue(telegramId);
+      fetchUserAirdrops(telegramId);
+      fetchTotalAirdrops(telegramId);
+    }
+  }, [telegramId]);
+
+  const fetchAirdropCount = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/count/${telegramId}`);
+      setAirdropCount(response.data.count);
+      if (response.data.count > 0) {
+        setPopupVisible(true); // Show popup if there are airdrops
+      }
+    } catch (error) {
+      console.error('Error fetching airdrop count:', error);
+    }
+  };
+
+  const fetchTotalValue = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/sum/${telegramId}`);
+      setTotalValue(response.data.totalValue);
+    } catch (error) {
+      console.error('Error fetching total airdrop value:', error);
+    }
+  };
+
+  const handleConfirm = () => {
+    claimFunction();
+    setPopupVisible(false);
+  };
+
+  const handleClose = () => {
+    setPopupVisible(false);
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -39,7 +82,6 @@ function App() {
     }
   }, []);
 
-  // Fetch all airdrops
   const fetchUserAirdrops = async (telegramId: number) => {
     setAirdropsError(null);
     try {
@@ -54,11 +96,10 @@ function App() {
     }
   };
 
-  // Fetch total airdrops for the user
   const fetchTotalAirdrops = async (telegramId: number) => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/airdrops/total/${telegramId}`);
-      setTotalAirdrops(response.data.totalAirdrops); // Update the total airdrops state
+      setTotalAirdrops(response.data.totalAirdrops);
     } catch (error) {
       console.error('Error fetching total airdrops:', error);
     }
@@ -86,11 +127,8 @@ function App() {
     if (telegramId !== null) {
       const userProgressIntervalId = setInterval(() => {
         fetchUserAirdrops(telegramId);
-        fetchTotalAirdrops(telegramId); // Fetch total airdrops every second
+        fetchTotalAirdrops(telegramId);
       }, 1000);
-
-      fetchUserAirdrops(telegramId);
-      fetchTotalAirdrops(telegramId); // Fetch total airdrops on mount
 
       return () => {
         clearInterval(userProgressIntervalId);
@@ -104,7 +142,7 @@ function App() {
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className='text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl'>
-          {telegramUsername}
+            {telegramUsername}
           </h1>
           <UserProfile/>
         </div>
@@ -114,9 +152,9 @@ function App() {
       </div>
       <div className='flex flex-row mb-10 z-10 items-center justify-center'>
         <img src={freshcoin} alt="" className='w-12 pr-0.5 h-12' />
-        <p className='my-auto text-white font-bold text-4xl'>{totalAirdrops}</p> {/* Display total airdrops */}
+        <p className='my-auto text-white font-bold text-4xl'>{totalAirdrops}</p>
       </div>
-      <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12 '>
+      <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12'>
         <div className='flex flex-row pl-7 pr-6 pt-3 justify-between'>
           <div className='flex flex-col'>
             <p className='font-bold text-lg'>Mining Rate</p>
@@ -127,36 +165,42 @@ function App() {
             <p className='font-bold text-sm'>Current Airdrop</p>
           </div>
           <div className='my-auto pl-8'>
-          <button onClick={() => claimFunction()} className="bg-yellow-500 p-2 pl-4 pr-4 rounded-lg">Claim</button>
-         </div>
+            <button onClick={() => setPopupVisible(true)} className="bg-yellow-500 p-2 pl-4 pr-4 rounded-lg">Claim</button>
+          </div>
         </div>
-        <ProgressBar/>
+        <ProgressBar />
       </div>
 
       <div className='bg-[#D9D9D9] min-h-72 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
         <div className='flex flex-col items-center justify-center'>
-                {airdrops.length > 0 ? (
-                    <ul className='flex flex-col w-full items-center justify-center'>
-                        {airdrops.map((airdrop) => (
-                            <li key={airdrop.id} className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto">
-                                   <Hamster className="w-6 h-6 mr-3 my-auto"/>
-                                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
-                                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
-                                   <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
-                                   <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p className='text-black font-bold pt-20'>No Unclaimed Airdrops</p>
-                )}
+          {airdrops.length > 0 ? (
+            <ul className='flex flex-col w-full items-center justify-center'>
+              {airdrops.map((airdrop) => (
+                <li key={airdrop.id} className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto">
+                  <Hamster className="w-6 h-6 mr-3 my-auto" />
+                  <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
+                  <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
+                  <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
+                  <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className='text-black font-bold pt-20'>No Unclaimed Airdrops</p>
+          )}
         </div>
       </div>
-      {airdropsError && <p className="hidden">{airdropsError}</p>}
-      <p className='hidden'>{message}</p>
-  </div>
-  )
+      {popupVisible && (
+        <Popup
+          airdropCount={airdropCount}
+          totalValue={totalValue}
+          onConfirm={handleConfirm}
+          onClose={handleClose}
+        />
+      )}
+    </div>
+  );
 }
 
 export default App;
