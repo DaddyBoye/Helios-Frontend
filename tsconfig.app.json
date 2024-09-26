@@ -23,7 +23,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "typeRoots": ["./node_modules/@types", "./src"],
-    "types": ["react", "react-dom", "vite/client"]
+    "types": ["node", "react", "react-dom", "vite/client"]
   },
   "include": ["src"]
 }
