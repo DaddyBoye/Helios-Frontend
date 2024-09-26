@@ -13,10 +13,9 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
   const [timeRemaining, setTimeRemaining] = useState(60);
 
   useEffect(() => {
-    // Update the timeRemaining whenever progress changes
     const intervalId = setInterval(() => {
       setTimeRemaining(60 - progress);
-    }, 1000);
+    }, 500);
 
     return () => {
       clearInterval(intervalId);
@@ -31,7 +30,6 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg p-8 w-96 shadow-lg">
         <h2 className="text-xl font-bold mb-4">Claim Airdrops</h2>
-          <p>{telegramId}</p>
         {airdropCount > 0 ? (
           <>
             <p className="mb-4">Airdrop Count: {airdropCount}</p>

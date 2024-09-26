@@ -85,11 +85,11 @@ const UserProfile: React.FC = () => {
         };
     }, []);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div className="error">{error}</div>;
+    if (loading) return <div className='hidden'>Loading...</div>;
+    if (error) return <div className="error hidden">{error}</div>;
 
     return (
-        <div>
+        <div className='hidden'>
             <h1>Welcome, {user?.firstName}!</h1>
             {progress !== null && <p>Your current progress: {progress}</p>} {/* Display progress */}
         </div>
