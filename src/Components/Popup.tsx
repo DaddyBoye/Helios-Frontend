@@ -5,11 +5,10 @@ interface PopupProps {
   totalValue: number;
   onConfirm: () => void;
   onClose: () => void;
-  telegramId: number | null;
   progress: number; // Add progress prop
 }
 
-const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose, telegramId, progress }) => {
+const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose, progress }) => {
   const [timeRemaining, setTimeRemaining] = useState(60);
 
   useEffect(() => {
