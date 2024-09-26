@@ -197,6 +197,7 @@ function App() {
         <Popup
           airdropCount={airdropCount}
           totalValue={totalValue}
+          telegramId={telegramId}
           onConfirm={handleConfirm}
           onClose={handleClose}
         />

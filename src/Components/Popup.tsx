@@ -1,35 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 interface PopupProps {
   airdropCount: number;
   totalValue: number;
   onConfirm: () => void;
   onClose: () => void;
+  telegramId: number | null; // Add telegramId prop
 }
 
-const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose }) => {
-  const [timeRemaining, setTimeRemaining] = useState(0);
-  const minutes = Math.floor(timeRemaining / 60);
-  const seconds = timeRemaining % 60;
+const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose, telegramId }) => {
+  const [timeRemaining, setTimeRemaining] = useState(60);
+  const [progress, setProgress] = useState(0); // Local progress state
 
   useEffect(() => {
-    if (airdropCount === 0) {
-      // Set the time for the countdown (e.g., 2 minutes)
-      setTimeRemaining(120); // 120 seconds for demonstration
+    // Fetch user progress when the component mounts
+    const fetchUserProgress = async () => {
+      if (telegramId) {
+        try {
+          const response = await axios.get(`https://server.therotrade.tech/api/progress/${telegramId}`);
+          setProgress(response.data.progress);
+        } catch (error) {
+          console.error('Error fetching user progress:', error);
+        }
+      }
+    };
 
-      const timer = setInterval(() => {
-        setTimeRemaining((prev) => {
-          if (prev <= 0) {
-            clearInterval(timer);
-            return 0; // Stop at 0
-          }
-          return prev - 1;
-        });
-      }, 1000);
+    fetchUserProgress();
 
-      return () => clearInterval(timer); // Clean up the interval on unmount
-    }
-  }, [airdropCount]);
+    // Update the timeRemaining whenever progress changes
+    const intervalId = setInterval(() => {
+      setTimeRemaining(60 - progress);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [telegramId, progress]);
+
+  const minutes = Math.floor(timeRemaining / 60);
+  const seconds = timeRemaining % 60;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
