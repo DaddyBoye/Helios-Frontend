@@ -18,7 +18,7 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
     const fetchUserProgress = async () => {
       if (telegramId) {
         try {
-          const response = await axios.get(`https://server.therotrade.tech/api/progress/${telegramId}`);
+          const response = await axios.get(`https://server.therotrade.tech/api/user/current-progress/${telegramId}`);
           setProgress(response.data.progress);
         } catch (error) {
           console.error('Error fetching user progress:', error);
@@ -51,7 +51,7 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
             <p className="mb-4">Airdrop Count: {airdropCount}</p>
             <p className="mb-4">Total Value: {totalValue}</p>
             <div className="flex justify-end space-x-4">
-              <button onClick={onConfirm} className="bg-yellow-500 p-2 rounded-lg">Confirm</button>
+              <button onClick={onConfirm} className="bg-yellow-500 p-2 rounded-lg">Claim All</button>
             </div>
           </>
         ) : (

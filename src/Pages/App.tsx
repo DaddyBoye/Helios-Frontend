@@ -28,20 +28,27 @@ function App() {
 
   useEffect(() => {
     if (telegramId) {
-      fetchAirdropCount(telegramId);
-      fetchTotalValue(telegramId);
-      fetchUserAirdrops(telegramId);
-      fetchTotalAirdrops(telegramId);
+      fetchAllData(telegramId);
     }
   }, [telegramId]);
+
+  const fetchAllData = async (telegramId: number) => {
+    try {
+      await Promise.all([
+        fetchAirdropCount(telegramId),
+        fetchTotalValue(telegramId),
+        fetchUserAirdrops(telegramId),
+        fetchTotalAirdrops(telegramId)
+      ]);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   const fetchAirdropCount = async (telegramId: number) => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/airdrops/count/${telegramId}`);
       setAirdropCount(response.data.count);
-      if (response.data.count > 0) {
-        setPopupVisible(true); // Show popup if there are airdrops
-      }
     } catch (error) {
       console.error('Error fetching airdrop count:', error);
     }
@@ -128,27 +135,20 @@ function App() {
 
   const claimFunction = async () => {
     try {
-      // First, update total airdrops
       await updateTotalAirdrops(telegramId as number);
-      // Then, delete all user airdrops
-      await deleteAllUserAirdrops(telegramId as number);  
+      await deleteAllUserAirdrops(telegramId as number);
     } catch (error) {
-      console.error('Error during claim function execution:', error);
+      console.error('Error during claim process:', error);
     }
   };
 
   useEffect(() => {
     if (telegramId !== null) {
-      const userProgressIntervalId = setInterval(() => {
-        fetchUserAirdrops(telegramId);
-        fetchTotalAirdrops(telegramId);
-        fetchAirdropCount(telegramId);
-        fetchTotalValue(telegramId);
+      const intervalId = setInterval(() => {
+        fetchAllData(telegramId);
       }, 1000);
 
-      return () => {
-        clearInterval(userProgressIntervalId);
-      };
+      return () => clearInterval(intervalId); // Clear interval when component unmounts
     }
   }, [telegramId]);
 
