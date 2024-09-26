@@ -1,6 +1,6 @@
 // src/components/UserProfile.tsx
 import React, { useEffect, useState, useRef } from 'react';
-import { createUser, calculateUserProgress, updateUserProgress, calculateAirdrops } from '../utils/api';
+import { createUser, calculateUserProgress, updateUserProgress} from '../utils/api';
 
 interface User {
     id: number;
