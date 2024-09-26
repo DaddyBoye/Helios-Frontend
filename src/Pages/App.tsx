@@ -167,6 +167,8 @@ function App() {
           <div className='my-auto pl-8'>
             <button onClick={() => setPopupVisible(true)} className="bg-yellow-500 p-2 pl-4 pr-4 rounded-lg">Claim</button>
           </div>
+          <p className='hidden'>{message}</p>
+          <p className='hidden'>{airdropsError}</p>
         </div>
         <ProgressBar />
       </div>
