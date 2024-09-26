@@ -6,7 +6,6 @@ import background from '../images/Starryy.svg';
 import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
-import UserProfile from '../Components/UserProfile';
 import UserProgress from '../Components/UserProgress';
 
 interface Airdrop {
