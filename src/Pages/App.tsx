@@ -142,6 +142,8 @@ function App() {
       const userProgressIntervalId = setInterval(() => {
         fetchUserAirdrops(telegramId);
         fetchTotalAirdrops(telegramId);
+        fetchAirdropCount(telegramId);
+        fetchTotalValue(telegramId);
       }, 1000);
 
       return () => {
