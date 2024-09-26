@@ -20,6 +20,7 @@ function App() {
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
   const [message, setMessage] = useState('');
+  const [totalAirdrops, setTotalAirdrops] = useState<number>(0); // New state for total airdrops
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -28,8 +29,8 @@ function App() {
 
       const userData = tg.initDataUnsafe.user;
       if (userData) {
-        setTelegramId(userData.id); // Store telegramId in state
-        setTelegramUsername(userData.username); // Store telegramUsername in state
+        setTelegramId(userData.id);
+        setTelegramUsername(userData.username);
       } else {
         console.error('No user data available');
       }
@@ -38,65 +39,68 @@ function App() {
     }
   }, []);
 
-// Fetch all airdrops
-const fetchUserAirdrops = async (telegramId: number) => {
-  setAirdropsError(null); // Reset error state
-  try {
+  // Fetch all airdrops
+  const fetchUserAirdrops = async (telegramId: number) => {
+    setAirdropsError(null);
+    try {
       const response = await axios.get(`https://server.therotrade.tech/api/airdrops/${telegramId}`);
-      setAirdrops(response.data); // Set airdrops state
-  } catch (error) {
+      setAirdrops(response.data);
+    } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-          setAirdropsError(`Error: ${error.response.data.message}`);
+        setAirdropsError(`Error: ${error.response.data.message}`);
       } else {
-          setAirdropsError('An unknown error occurred while fetching airdrops');
+        setAirdropsError('An unknown error occurred while fetching airdrops');
       }
-  }
-};
+    }
+  };
 
-// Delete all airdrops for the user
-const deleteAllUserAirdrops = async (telegramId: number) => {
-  try {
+  // Fetch total airdrops for the user
+  const fetchTotalAirdrops = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/total/${telegramId}`);
+      setTotalAirdrops(response.data.totalAirdrops); // Update the total airdrops state
+    } catch (error) {
+      console.error('Error fetching total airdrops:', error);
+    }
+  };
+
+  const deleteAllUserAirdrops = async (telegramId: number) => {
+    try {
       const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/delete/${telegramId}`);
       setMessage(response.data.message);
-      // Optionally refetch airdrops or update UI
-      await fetchUserAirdrops(telegramId); // Refetch airdrops after deletion
-  } catch (error) {
+      await fetchUserAirdrops(telegramId);
+    } catch (error) {
       console.error('Error deleting airdrops:', error);
-  }
-};
+    }
+  };
 
-const claimFunction = async () => {
-  try {
-      // Perform any necessary pre-delete operations
-
-      // Now delete all airdrops for the user
+  const claimFunction = async () => {
+    try {
       await deleteAllUserAirdrops(telegramId as number);
     } catch (error) {
       console.error('Error during claim function execution:', error);
-  }
-};
-
+    }
+  };
 
   useEffect(() => {
     if (telegramId !== null) {
-      // Set up intervals to fetch data every second
       const userProgressIntervalId = setInterval(() => {
-        fetchUserAirdrops(telegramId); // Fetch airdrops every second
+        fetchUserAirdrops(telegramId);
+        fetchTotalAirdrops(telegramId); // Fetch total airdrops every second
       }, 1000);
 
-      // Initial fetch to update airdrops immediately
       fetchUserAirdrops(telegramId);
+      fetchTotalAirdrops(telegramId); // Fetch total airdrops on mount
 
-      // Cleanup function: clear all intervals on component unmount
       return () => {
         clearInterval(userProgressIntervalId);
       };
     }
   }, [telegramId]);
 
-return (
-  <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
-    <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${background})` }}></div>
+  return (
+    <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
+      <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${background})` }}></div>
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className='text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl'>
@@ -110,7 +114,7 @@ return (
       </div>
       <div className='flex flex-row mb-10 z-10 items-center justify-center'>
         <img src={freshcoin} alt="" className='w-12 pr-0.5 h-12' />
-        <p className='my-auto text-white font-bold text-4xl'>23</p>
+        <p className='my-auto text-white font-bold text-4xl'>{totalAirdrops}</p> {/* Display total airdrops */}
       </div>
       <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12 '>
         <div className='flex flex-row pl-7 pr-6 pt-3 justify-between'>
