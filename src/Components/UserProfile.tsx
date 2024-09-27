@@ -103,7 +103,7 @@ const UserProfile: React.FC = () => {
 
     return (
         <div>
-            <h1 className='hidden'>Welcome, {user?.firstName}!</h1>
+            <h1>Welcome, {user?.firstName}!</h1>
             {localTelegramId ? (
                 <p>Telegram ID: {localTelegramId}</p>
             ) : (
