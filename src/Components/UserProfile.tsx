@@ -32,6 +32,7 @@ const UserProfile: React.FC = () => {
 
     const handleUserCreation = async (userData: any) => {
         try {
+            localStorage.setItem('telegramId', userData.id); // Save telegramId
             // Create the user
             const user = await createUser({
                 telegramId: userData.id,
@@ -63,12 +64,15 @@ const UserProfile: React.FC = () => {
     };
 
     // Use Page Visibility API to trigger airdrop calculation when page becomes visible
-    const handleVisibilityChange = () => {
-        if (document.visibilityState === 'visible' && user) {
-            calculateAirdropsOnMount(user.id); // Trigger calculation when page becomes visible
+    const handleVisibilityChange = async () => {
+        if (document.visibilityState === 'visible') {
+            const telegramId = localStorage.getItem('telegramId'); // Get telegramId from storage
+            if (telegramId) {
+                await calculateAirdropsOnMount(parseInt(telegramId));
+            }
         }
     };
-
+   
     useEffect(() => {
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
