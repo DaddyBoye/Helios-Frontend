@@ -1,9 +1,10 @@
 import Coin from '../images/dollar-coin.png';
 import Hamster from '../icons/Hamster';
 import { useState, useEffect } from 'react';
+import { updateUserProgress } from '../utils/api'; // Import the function
 
 interface ProgressBarProps {
-  progress: number;
+  progress: number; // Use the progress passed as a prop
   telegramId: number | null; 
   telegramUsername: string | null; 
 }
@@ -11,7 +12,6 @@ interface ProgressBarProps {
 const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 60;
-
 
   // Function to trigger the airdrop check
   const triggerAirdrop = async () => {
@@ -31,6 +31,7 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
         // Optionally handle success response
       } catch (error: unknown) {
         if (error instanceof Error) {
+          console.error(error.message); // Log error
         }
       }
     }
@@ -46,17 +47,32 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
       const triggerAirdropIntervalId = setInterval(() => {
         triggerAirdrop(); // Call airdrop check every 0.5 seconds
       }, 500);
-  
+
       // Cleanup function: clear intervals on component unmount
       return () => {
         clearInterval(triggerAirdropIntervalId); // Clear airdrop interval
       };
     }
-  }, [telegramId]);  
+  }, [telegramId]);
 
+  // Interval to update user progress every second
   useEffect(() => {
-    setTimeRemaining(CYCLE_DURATION - progress); // Update remaining time whenever progress changes
-  }, [progress]);
+    const progressIntervalId = setInterval(async () => {
+      if (telegramId) {
+        try {
+          const updatedProgress = await updateUserProgress(telegramId); // Call the function to update progress
+          setTimeRemaining(CYCLE_DURATION - updatedProgress); // Update remaining time
+        } catch (error) {
+          console.error('Error updating progress:', error);
+        }
+      }
+    }, 1000); // Update progress every second
+
+    // Cleanup function: clear the interval on component unmount
+    return () => {
+      clearInterval(progressIntervalId);
+    };
+  }, [telegramId]);
 
   // Format timeRemaining into minutes and seconds
   const minutes = Math.floor(timeRemaining / 60);
@@ -76,7 +92,7 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
           </div>
           <img src={Coin} className="my-auto w-4 mr-0.5 h-4 ml-3" alt="Coin" />
           <p className="text-sm w-10 mr-1 my-auto">123</p>
-          <p id="timer" className=" text-sm my-auto">
+          <p id="timer" className="text-sm my-auto">
             {minutes}m:{seconds < 10 ? `0${seconds}` : seconds}s
           </p>
         </div>

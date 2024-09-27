@@ -33,18 +33,6 @@ export const updateUserProgress = async (telegramId: number) => {
     }
 };
 
-// Calculate progress on login
-export const calculateUserProgress = async (telegramId: number) => {
-    try {
-        const response = await axios.get(`${API_URL}/calculate-progress`, {
-            params: { telegramId },
-        });
-        return response.data.progress; // Return calculated progress
-    } catch (error) {
-        throw new Error('Error calculating progress');
-    }
-};
-
 // Function to calculate airdrops based on last saved progress
 export const calculateAirdrops = async (telegramId: number) => {
     try {
