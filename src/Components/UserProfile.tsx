@@ -32,7 +32,6 @@ const UserProfile: React.FC = () => {
 
     const handleUserCreation = async (userData: any) => {
         try {
-            localStorage.setItem('telegramId', userData.id); // Save telegramId
             // Create the user
             const user = await createUser({
                 telegramId: userData.id,
@@ -63,26 +62,14 @@ const UserProfile: React.FC = () => {
         }
     };
 
-    // Use Page Visibility API to trigger airdrop calculation when page becomes visible
-    const handleVisibilityChange = async () => {
-        if (document.visibilityState === 'visible') {
-            const telegramId = localStorage.getItem('telegramId'); // Get telegramId from storage
-            if (telegramId) {
-                await calculateAirdropsOnMount(parseInt(telegramId));
-            }
-        }
-    };
-   
+    // Cleanup the interval when the component unmounts
     useEffect(() => {
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-
         return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
             if (intervalId.current) {
                 clearInterval(intervalId.current);
             }
         };
-    }, [user]);
+    }, []);
 
     if (loading) return <div className='hidden'>Loading...</div>;
     if (error) return <div className="error hidden">{error}</div>;
@@ -90,6 +77,7 @@ const UserProfile: React.FC = () => {
     return (
         <div className='hidden'>
             <h1>Welcome, {user?.firstName}!</h1>
+            {/* Removed progress display as it's no longer calculated */}
         </div>
     );
 };
