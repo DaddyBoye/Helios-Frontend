@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import Cookies from 'js-cookie';
 import { createUser, calculateAirdrops } from '../utils/api';
 
 interface User {
@@ -35,7 +36,8 @@ const UserProfile: React.FC = () => {
 
     const handleUserCreation = async (userData: any) => {
         try {
-            localStorage.setItem('telegramId', userData.id);
+            const telegramId = userData.id.toString(); // Ensure it's a string
+            Cookies.set('telegramId', telegramId, { expires: 1 }); // Set cookie to expire after 1 day
             // Create the user...
             const user = await createUser({
                 telegramId: userData.id,
@@ -53,11 +55,11 @@ const UserProfile: React.FC = () => {
     };
 
     useEffect(() => {
-        // Fetch the telegramId from localStorage when the component mounts
-        const storedTelegramId = localStorage.getItem('telegramId');
+        // Fetch the telegramId from cookies when the component mounts
+        const storedTelegramId = Cookies.get('telegramId') || null; // Use `null` if not found
         setLocalTelegramId(storedTelegramId);
-    }, []); // This should remain unchanged
-
+    }, []);
+    
     const calculateAirdropsOnMount = async (telegramId: number) => {
         try {
             const result = await calculateAirdrops(telegramId);
@@ -70,12 +72,12 @@ const UserProfile: React.FC = () => {
 
     const handleVisibilityChange = () => {
         if (document.visibilityState === 'visible' && user) {
-            const storedTelegramId = localStorage.getItem('telegramId'); // Get it again when visibility changes
+            const storedTelegramId = Cookies.get('telegramId'); // Get it again when visibility changes
             if (storedTelegramId) {
-                console.log('Telegram ID from localStorage:', storedTelegramId);
+                console.log('Telegram ID from cookies:', storedTelegramId);
                 calculateAirdropsOnMount(parseInt(storedTelegramId));
             } else {
-                console.log('No Telegram ID found in localStorage');
+                console.log('No Telegram ID found in cookies');
             }
         }
     };
