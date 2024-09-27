@@ -1,10 +1,10 @@
 import Coin from '../images/dollar-coin.png';
 import Hamster from '../icons/Hamster';
 import { useState, useEffect } from 'react';
-import { updateUserProgress } from '../utils/api'; // Import the function
+import { updateUserProgress } from '../utils/api';
 
 interface ProgressBarProps {
-  progress: number; // Use the progress passed as a prop
+  progress: number;
   telegramId: number | null; 
   telegramUsername: string | null; 
 }
@@ -12,9 +12,8 @@ interface ProgressBarProps {
 const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 60;
-  const [progressIntervalId, setProgressIntervalId] = useState<NodeJS.Timeout | null>(null); // State to hold interval ID
+  const [progressIntervalId, setProgressIntervalId] = useState<NodeJS.Timeout | null>(null);
 
-  // Function to trigger the airdrop check
   const triggerAirdrop = async () => {
     if (telegramId && telegramUsername) {
       try {
@@ -31,85 +30,74 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.error(error.message); // Log error
+          console.error(error.message);
         }
       }
     }
   };
 
   useEffect(() => {
-    setTimeRemaining(CYCLE_DURATION - progress); // Update remaining time whenever progress changes
+    setTimeRemaining(CYCLE_DURATION - progress);
   }, [progress]);
 
   useEffect(() => {
     if (telegramId !== null) {
-      // Trigger airdrop check every half second (500ms)
       const triggerAirdropIntervalId = setInterval(() => {
-        triggerAirdrop(); // Call airdrop check every 0.5 seconds
+        triggerAirdrop();
       }, 500);
 
-      // Cleanup function: clear intervals on component unmount
       return () => {
-        clearInterval(triggerAirdropIntervalId); // Clear airdrop interval
+        clearInterval(triggerAirdropIntervalId);
       };
     }
   }, [telegramId]);
 
-  // Interval to update user progress every second
   useEffect(() => {
     if (telegramId) {
       const id = setInterval(async () => {
-        try {
-          const updatedProgress = await updateUserProgress(telegramId); // Call the function to update progress
-          setTimeRemaining(CYCLE_DURATION - updatedProgress); // Update remaining time
-        } catch (error) {
-          console.error('Error updating progress:', error);
+        // Check if the document is visible before updating progress
+        if (!document.hidden) {
+          try {
+            const updatedProgress = await updateUserProgress(telegramId);
+            setTimeRemaining(CYCLE_DURATION - updatedProgress);
+          } catch (error) {
+            console.error('Error updating progress:', error);
+          }
         }
-      }, 1000); // Update progress every second
+      }, 1000);
 
-      setProgressIntervalId(id); // Store the interval ID in state
+      setProgressIntervalId(id);
 
       // Cleanup function: clear the interval on component unmount
       return () => {
-        clearInterval(id); // Clear the interval on unmount
+        clearInterval(id);
       };
     }
   }, [telegramId]);
 
-  // Function to handle visibility change
-  const handleVisibilityChange = () => {
-    if (document.hidden) {
-      // If the document is hidden, stop updating progress
-      if (progressIntervalId) {
-        clearInterval(progressIntervalId); // Clear the progress interval
-      }
-    } else {
-      // If the document is visible, restart updating progress
-      if (!progressIntervalId) {
-        const id = setInterval(async () => {
-          if (telegramId) {
-            try {
-              const updatedProgress = await updateUserProgress(telegramId); // Call the function to update progress
-              setTimeRemaining(CYCLE_DURATION - updatedProgress); // Update remaining time
-            } catch (error) {
-              console.error('Error updating progress:', error);
-            }
-          }
-        }, 1000);
-        setProgressIntervalId(id); // Set the new interval ID
-      }
-    }
-  };
-
-  // Setup visibility change listener
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        console.log("Document is hidden, updates will be paused.");
+      } else {
+        console.log("Document is visible, updates will resume.");
+        // Optionally, you could also trigger an immediate update when the document becomes visible
+        if (telegramId) {
+          updateUserProgress(telegramId).then(updatedProgress => {
+            setTimeRemaining(CYCLE_DURATION - updatedProgress);
+          }).catch(error => {
+            console.error('Error updating progress on visibility change:', error);
+          });
+        }
+      }
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [progressIntervalId]);
+  }, [telegramId]);
 
-  // Format timeRemaining into minutes and seconds
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
 
