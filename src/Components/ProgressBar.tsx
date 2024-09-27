@@ -12,7 +12,7 @@ interface ProgressBarProps {
 const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 60;
-  const [isVisible, setIsVisible] = useState(true); // State to track visibility
+  const [progressIntervalId, setProgressIntervalId] = useState<NodeJS.Timeout | null>(null); // State to hold interval ID
 
   // Function to trigger the airdrop check
   const triggerAirdrop = async () => {
@@ -29,7 +29,6 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
-        // Optionally handle success response
       } catch (error: unknown) {
         if (error instanceof Error) {
           console.error(error.message); // Log error
@@ -41,22 +40,6 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
   useEffect(() => {
     setTimeRemaining(CYCLE_DURATION - progress); // Update remaining time whenever progress changes
   }, [progress]);
-
-  // Use Page Visibility API to manage component visibility
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      setIsVisible(document.visibilityState === 'visible');
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, []);
-
-  // Only proceed if the component is visible
-  if (!isVisible) return null; // Unmount the component when not visible
 
   useEffect(() => {
     if (telegramId !== null) {
@@ -74,22 +57,57 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
 
   // Interval to update user progress every second
   useEffect(() => {
-    const progressIntervalId = setInterval(async () => {
-      if (telegramId) {
+    if (telegramId) {
+      const id = setInterval(async () => {
         try {
           const updatedProgress = await updateUserProgress(telegramId); // Call the function to update progress
           setTimeRemaining(CYCLE_DURATION - updatedProgress); // Update remaining time
         } catch (error) {
           console.error('Error updating progress:', error);
         }
-      }
-    }, 1000); // Update progress every second
+      }, 1000); // Update progress every second
 
-    // Cleanup function: clear the interval on component unmount
-    return () => {
-      clearInterval(progressIntervalId);
-    };
+      setProgressIntervalId(id); // Store the interval ID in state
+
+      // Cleanup function: clear the interval on component unmount
+      return () => {
+        clearInterval(id); // Clear the interval on unmount
+      };
+    }
   }, [telegramId]);
+
+  // Function to handle visibility change
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      // If the document is hidden, stop updating progress
+      if (progressIntervalId) {
+        clearInterval(progressIntervalId); // Clear the progress interval
+      }
+    } else {
+      // If the document is visible, restart updating progress
+      if (!progressIntervalId) {
+        const id = setInterval(async () => {
+          if (telegramId) {
+            try {
+              const updatedProgress = await updateUserProgress(telegramId); // Call the function to update progress
+              setTimeRemaining(CYCLE_DURATION - updatedProgress); // Update remaining time
+            } catch (error) {
+              console.error('Error updating progress:', error);
+            }
+          }
+        }, 1000);
+        setProgressIntervalId(id); // Set the new interval ID
+      }
+    }
+  };
+
+  // Setup visibility change listener
+  useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [progressIntervalId]);
 
   // Format timeRemaining into minutes and seconds
   const minutes = Math.floor(timeRemaining / 60);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { createUser, calculateAirdrops } from '../utils/api';
 
 interface User {
@@ -12,7 +12,7 @@ const UserProfile: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [isVisible, setIsVisible] = useState<boolean>(false); // State to track visibility
+    const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -21,18 +21,19 @@ const UserProfile: React.FC = () => {
 
             const userData = tg.initDataUnsafe.user;
             if (userData) {
-                handleUserCreation(userData); // Call the user creation function
+                handleUserCreation(userData);
             } else {
                 setError('No user data available');
+                setLoading(false); // Update loading state
             }
         } else {
             setError('This app should be opened in Telegram');
+            setLoading(false); // Update loading state
         }
     }, []);
 
     const handleUserCreation = async (userData: any) => {
         try {
-            // Create the user
             const user = await createUser({
                 telegramId: userData.id,
                 username: userData.username,
@@ -40,8 +41,6 @@ const UserProfile: React.FC = () => {
                 lastName: userData.last_name,
             });
             setUser(user);
-
-            // After creating the user, check and add airdrops
             await calculateAirdropsOnMount(userData.id);
         } catch (err: any) {
             setError(err.message);
@@ -50,10 +49,8 @@ const UserProfile: React.FC = () => {
         }
     };
 
-    // New function to calculate and add airdrops on mount
     const calculateAirdropsOnMount = async (telegramId: number) => {
         try {
-            // Call the API to calculate and add airdrops for the user
             const result = await calculateAirdrops(telegramId);
             console.log('Airdrops calculated:', result);
         } catch (err: any) {
@@ -62,30 +59,36 @@ const UserProfile: React.FC = () => {
         }
     };
 
-    // Use Page Visibility API to manage component visibility
     const handleVisibilityChange = () => {
-        if (document.visibilityState === 'visible') {
-            setIsVisible(true); // Component should mount
-        } else {
-            setIsVisible(false); // Component should unmount
+        if (document.visibilityState === 'visible' && user) {
+            calculateAirdropsOnMount(user.id);
         }
     };
 
     useEffect(() => {
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
+        // Optional: Add interval to recalculate airdrops periodically while visible
+        if (user) {
+            intervalId.current = setInterval(() => {
+                calculateAirdropsOnMount(user.id);
+            }, 30000); // Adjust the interval as needed (e.g., every 30 seconds)
+        }
+
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
+            if (intervalId.current) {
+                clearInterval(intervalId.current);
+            }
         };
-    }, []);
+    }, [user]);
 
-    if (!isVisible) return null; // Unmount the component when not visible
-    if (loading) return <div className='hidden'>Loading...</div>;
-    if (error) return <div className="error hidden">{error}</div>;
+    if (loading) return <div className='hidden'>Loading...</div>; // Remove 'hidden' class
+    if (error) return <div className="error hidden">{error}</div>; // Remove 'hidden' class
 
     return (
-        <div className='hidden'>
-            <h1>Welcome, {user?.firstName}!</h1>
+        <div>
+            <h1 className='hidden'>Welcome, {user?.firstName}!</h1>
         </div>
     );
 };
