@@ -67,7 +67,7 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
               console.error('Error updating progress:', error);
             }
           }
-        }, 1000);
+        }, 500);
   
         // Cleanup function: clear the interval on component unmount
         return () => {
