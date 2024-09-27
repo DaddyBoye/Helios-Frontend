@@ -13,6 +13,7 @@ const UserProfile: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
+    const [localTelegramId, setLocalTelegramId] = useState<string | null>(null);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -34,6 +35,8 @@ const UserProfile: React.FC = () => {
 
     const handleUserCreation = async (userData: any) => {
         try {
+            localStorage.setItem('telegramId', userData.id);
+            // Create the user...
             const user = await createUser({
                 telegramId: userData.id,
                 username: userData.username,
@@ -49,6 +52,12 @@ const UserProfile: React.FC = () => {
         }
     };
 
+    useEffect(() => {
+        // Fetch the telegramId from localStorage when the component mounts
+        const storedTelegramId = localStorage.getItem('telegramId');
+        setLocalTelegramId(storedTelegramId);
+    }, []);
+
     const calculateAirdropsOnMount = async (telegramId: number) => {
         try {
             const result = await calculateAirdrops(telegramId);
@@ -61,10 +70,14 @@ const UserProfile: React.FC = () => {
 
     const handleVisibilityChange = () => {
         if (document.visibilityState === 'visible' && user) {
-            calculateAirdropsOnMount(user.id);
+            if (localTelegramId) {
+                console.log('Telegram ID from localStorage:', localTelegramId);
+                calculateAirdropsOnMount(parseInt(localTelegramId));
+            } else {
+                console.log('No Telegram ID found in localStorage');
+            }
         }
     };
-
     useEffect(() => {
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
@@ -89,6 +102,7 @@ const UserProfile: React.FC = () => {
     return (
         <div>
             <h1 className='hidden'>Welcome, {user?.firstName}!</h1>
+            <h1>{localTelegramId}</h1>
         </div>
     );
 };
