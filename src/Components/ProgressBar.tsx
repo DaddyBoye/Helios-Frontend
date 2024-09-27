@@ -12,7 +12,6 @@ interface ProgressBarProps {
 const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 60;
-  const [progressIntervalId, setProgressIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const triggerAirdrop = async () => {
     if (telegramId && telegramUsername) {
@@ -66,8 +65,6 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
         }
       }, 1000);
 
-      setProgressIntervalId(id);
-
       // Cleanup function: clear the interval on component unmount
       return () => {
         clearInterval(id);
@@ -81,7 +78,6 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
         console.log("Document is hidden, updates will be paused.");
       } else {
         console.log("Document is visible, updates will resume.");
-        // Optionally, you could also trigger an immediate update when the document becomes visible
         if (telegramId) {
           updateUserProgress(telegramId).then(updatedProgress => {
             setTimeRemaining(CYCLE_DURATION - updatedProgress);
