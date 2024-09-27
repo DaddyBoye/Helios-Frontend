@@ -62,14 +62,23 @@ const UserProfile: React.FC = () => {
         }
     };
 
-    // Cleanup the interval when the component unmounts
+    // Use Page Visibility API to trigger airdrop calculation when page becomes visible
+    const handleVisibilityChange = () => {
+        if (document.visibilityState === 'visible' && user) {
+            calculateAirdropsOnMount(user.id); // Trigger calculation when page becomes visible
+        }
+    };
+
     useEffect(() => {
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
         return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             if (intervalId.current) {
                 clearInterval(intervalId.current);
             }
         };
-    }, []);
+    }, [user]);
 
     if (loading) return <div className='hidden'>Loading...</div>;
     if (error) return <div className="error hidden">{error}</div>;
