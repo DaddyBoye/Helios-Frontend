@@ -56,24 +56,32 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
 
   useEffect(() => {
     if (telegramId) {
-      const id = setInterval(async () => {
-        // Check if the document is visible before updating progress
-        if (!document.hidden) {
-          try {
-            const updatedProgress = await updateUserProgress(telegramId);
-            setTimeRemaining(CYCLE_DURATION - updatedProgress);
-          } catch (error) {
-            console.error('Error updating progress:', error);
+      const timeoutId = setTimeout(() => {
+        const id = setInterval(async () => {
+          // Check if the document is visible before updating progress
+          if (!document.hidden) {
+            try {
+              const updatedProgress = await updateUserProgress(telegramId);
+              setTimeRemaining(CYCLE_DURATION - updatedProgress);
+            } catch (error) {
+              console.error('Error updating progress:', error);
+            }
           }
-        }
-      }, 1000);
-
-      // Cleanup function: clear the interval on component unmount
+        }, 1000);
+  
+        // Cleanup function: clear the interval on component unmount
+        return () => {
+          clearInterval(id);
+        };
+      }, 1000); // Delay by 1 second before running the first interval
+  
+      // Clear the timeout on unmount
       return () => {
-        clearInterval(id);
+        clearTimeout(timeoutId);
       };
     }
   }, [telegramId]);
+  
 
   useEffect(() => {
     const handleVisibilityChange = () => {
