@@ -12,6 +12,7 @@ interface ProgressBarProps {
 const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 60;
+  const [isVisible, setIsVisible] = useState(true); // State to track visibility
 
   // Function to trigger the airdrop check
   const triggerAirdrop = async () => {
@@ -40,6 +41,22 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
   useEffect(() => {
     setTimeRemaining(CYCLE_DURATION - progress); // Update remaining time whenever progress changes
   }, [progress]);
+
+  // Use Page Visibility API to manage component visibility
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsVisible(document.visibilityState === 'visible');
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  // Only proceed if the component is visible
+  if (!isVisible) return null; // Unmount the component when not visible
 
   useEffect(() => {
     if (telegramId !== null) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createUser, calculateAirdrops } from '../utils/api';
 
 interface User {
@@ -12,7 +12,7 @@ const UserProfile: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
+    const [isVisible, setIsVisible] = useState<boolean>(false); // State to track visibility
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -62,27 +62,24 @@ const UserProfile: React.FC = () => {
         }
     };
 
-    // Use Page Visibility API to trigger airdrop calculation when page becomes visible
-    const handleVisibilityChange = async () => {
+    // Use Page Visibility API to manage component visibility
+    const handleVisibilityChange = () => {
         if (document.visibilityState === 'visible') {
-            const telegramId = localStorage.getItem('telegramId'); // Get telegramId from storage
-            if (telegramId) {
-                await calculateAirdropsOnMount(parseInt(telegramId));
-            }
+            setIsVisible(true); // Component should mount
+        } else {
+            setIsVisible(false); // Component should unmount
         }
     };
-   
+
     useEffect(() => {
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
-            if (intervalId.current) {
-                clearInterval(intervalId.current);
-            }
         };
-    }, [user]);
+    }, []);
 
+    if (!isVisible) return null; // Unmount the component when not visible
     if (loading) return <div className='hidden'>Loading...</div>;
     if (error) return <div className="error hidden">{error}</div>;
 
