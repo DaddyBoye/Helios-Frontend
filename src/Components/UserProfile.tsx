@@ -25,11 +25,11 @@ const UserProfile: React.FC = () => {
                 handleUserCreation(userData);
             } else {
                 setError('No user data available');
-                setLoading(false); // Update loading state
+                setLoading(false);
             }
         } else {
             setError('This app should be opened in Telegram');
-            setLoading(false); // Update loading state
+            setLoading(false);
         }
     }, []);
 
@@ -56,7 +56,7 @@ const UserProfile: React.FC = () => {
         // Fetch the telegramId from localStorage when the component mounts
         const storedTelegramId = localStorage.getItem('telegramId');
         setLocalTelegramId(storedTelegramId);
-    }, []);
+    }, []); // This should remain unchanged
 
     const calculateAirdropsOnMount = async (telegramId: number) => {
         try {
@@ -70,22 +70,24 @@ const UserProfile: React.FC = () => {
 
     const handleVisibilityChange = () => {
         if (document.visibilityState === 'visible' && user) {
-            if (localTelegramId) {
-                console.log('Telegram ID from localStorage:', localTelegramId);
-                calculateAirdropsOnMount(parseInt(localTelegramId));
+            const storedTelegramId = localStorage.getItem('telegramId'); // Get it again when visibility changes
+            if (storedTelegramId) {
+                console.log('Telegram ID from localStorage:', storedTelegramId);
+                calculateAirdropsOnMount(parseInt(storedTelegramId));
             } else {
                 console.log('No Telegram ID found in localStorage');
             }
         }
     };
+
     useEffect(() => {
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
-        // Optional: Add interval to recalculate airdrops periodically while visible
+        // Set up an interval to recalculate airdrops periodically
         if (user) {
             intervalId.current = setInterval(() => {
                 calculateAirdropsOnMount(user.id);
-            }, 30000); // Adjust the interval as needed (e.g., every 30 seconds)
+            }, 30000);
         }
 
         return () => {
@@ -96,8 +98,8 @@ const UserProfile: React.FC = () => {
         };
     }, [user]);
 
-    if (loading) return <div className='hidden'>Loading...</div>; // Remove 'hidden' class
-    if (error) return <div className="error hidden">{error}</div>; // Remove 'hidden' class
+    if (loading) return <div className='hidden'>Loading...</div>;
+    if (error) return <div className="error hidden">{error}</div>;
 
     return (
         <div>
