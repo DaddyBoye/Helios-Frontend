@@ -42,7 +42,10 @@ const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProp
   useEffect(() => {
     if (telegramId !== null) {
       const triggerAirdropIntervalId = setInterval(() => {
-        triggerAirdrop();
+        // Check if the document is visible before triggering the airdrop
+        if (!document.hidden) {
+          triggerAirdrop();
+        }
       }, 500);
 
       return () => {
