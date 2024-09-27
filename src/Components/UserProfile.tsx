@@ -16,6 +16,7 @@ const UserProfile: React.FC = () => {
     const [localTelegramId, setLocalTelegramId] = useState<string | null>(null);
 
     useEffect(() => {
+        // Check if the app is opened in Telegram Web App
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
             const tg = window.Telegram.WebApp;
             tg.ready();
@@ -35,16 +36,18 @@ const UserProfile: React.FC = () => {
 
     const handleUserCreation = async (userData: any) => {
         try {
-            localStorage.setItem('telegramId', userData.id);
+            const telegramId = userData.id.toString(); // Store as string for localStorage
+            localStorage.setItem('telegramId', telegramId); // Save to local storage
+
             // Create the user...
             const user = await createUser({
-                telegramId: userData.id,
+                telegramId,
                 username: userData.username,
                 firstName: userData.first_name,
                 lastName: userData.last_name,
             });
             setUser(user);
-            await calculateAirdropsOnMount(userData.id);
+            await calculateAirdropsOnMount(telegramId);
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -56,11 +59,11 @@ const UserProfile: React.FC = () => {
         // Fetch the telegramId from localStorage when the component mounts
         const storedTelegramId = localStorage.getItem('telegramId');
         setLocalTelegramId(storedTelegramId);
-    }, []); // This should remain unchanged
+    }, []);
 
-    const calculateAirdropsOnMount = async (telegramId: number) => {
+    const calculateAirdropsOnMount = async (telegramId: string) => {
         try {
-            const result = await calculateAirdrops(telegramId);
+            const result = await calculateAirdrops(parseInt(telegramId));
             console.log('Airdrops calculated:', result);
         } catch (err: any) {
             console.error('Error calculating airdrops:', err);
@@ -70,10 +73,10 @@ const UserProfile: React.FC = () => {
 
     const handleVisibilityChange = () => {
         if (document.visibilityState === 'visible' && user) {
-            const storedTelegramId = localStorage.getItem('telegramId'); // Get it again when visibility changes
+            const storedTelegramId = localStorage.getItem('telegramId');
             if (storedTelegramId) {
                 console.log('Telegram ID from localStorage:', storedTelegramId);
-                calculateAirdropsOnMount(parseInt(storedTelegramId));
+                calculateAirdropsOnMount(storedTelegramId);
             } else {
                 console.log('No Telegram ID found in localStorage');
             }
@@ -86,7 +89,7 @@ const UserProfile: React.FC = () => {
         // Set up an interval to recalculate airdrops periodically
         if (user) {
             intervalId.current = setInterval(() => {
-                calculateAirdropsOnMount(user.id);
+                calculateAirdropsOnMount(user.id.toString());
             }, 30000);
         }
 
