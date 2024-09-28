@@ -1,16 +1,14 @@
+import background from '../images/Starryy.svg';
 
 const Airdrop = () => {
 
+  return (
+    <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
+      <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${background})` }}></div>
 
+    
+    </div>
+  );
+};
 
-    return (
-      <div className="flex flex-col font-sans h-screen bg-[#185C8D]text-white p-4 ">
-        <h1 className='text-center font-bold font-sans text-2xl'>
-          Helios
-        </h1>
-        
-      </div>
-    );
-  };
-  
-  export default Airdrop;
+export default Airdrop;

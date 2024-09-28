@@ -1,48 +1,81 @@
-import WebApp from '@twa-dev/sdk'
-import { useEffect, useState } from 'react'
-
-// Define the interface for user data
-interface UserData {
-  id: number;
-  first_name: string;
-  last_name?: string;
-  username?: string;
-  language_code: string;
-  is_premium?: boolean;
-}
+import background from '../images/Starryy.svg';
+import friendsLogo from '../images/Mask group.svg';
+import arrow from '../icons/Arrow 3.svg';
 
 const Friends = () => {
-  const [userData, setUserData] = useState<UserData | null>(null)
-
-  useEffect(() => {
-    if (WebApp.initDataUnsafe.user) {
-      setUserData(WebApp.initDataUnsafe.user as UserData)
-    }
-  }, [])
-
   return (
-    <div className="flex flex-col font-sans h-screen bg-[#185C8D] text-white p-4 ">
-    <h1 className='text-center font-bold font-sans text-2xl'>
-      Helios
-    </h1>
-    
-    {userData ? (
-        <>
-          <h1 className="text-2xl font-bold mb-4">User Data</h1>
-          <ul>
-            <li>ID: {userData.id}</li>
-            <li>First Name: {userData.first_name}</li>
-            <li>Last Name: {userData.last_name || 'N/A'}</li>
-            <li>Username: {userData.username || 'N/A'}</li>
-            <li>Language Code: {userData.language_code}</li>
-            <li>Is Premium: {userData.is_premium ? 'Yes' : 'No'}</li>
-          </ul>
-        </>
-      ) : (
-        <div>Loading...</div>
-      )}
-
-
+    <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: `url(${background})` }}
+      ></div>
+      <div className="z-10">
+        <div className="mt-10 flex flex-col">
+          <div className="w-20 mx-auto h-20 bg-[#D9D9D9] rounded-full">
+            <img src={friendsLogo} alt="Three Friends" className="w-20 h-20" />
+          </div>
+          <p className="mx-auto text-3xl font-bold text-center text-white">
+            Invite friends, earn points
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <div className="pl-5 flex flex-col">
+            <div className="mb-6 mt-8">
+              <p className="text-white text-xl font-bold">How it works</p>
+            </div>
+            <div>
+              <div className="relative">
+                <div className="mb-4 flex">
+                  <img
+                    src={arrow}
+                    alt="Arrow svg"
+                    className="absolute top-1 left-0"
+                  />
+                  <div className="flex pl-6 flex-col">
+                    <p className="text-white">Share your invite link</p>
+                    <p className="text-[#87939D] text-sm">
+                      Get a free play pass for each friend
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="mb-4 flex">
+                  <img
+                    src={arrow}
+                    alt="Arrow svg"
+                    className="absolute top-1 left-0"
+                  />
+                  <div className="flex pl-6 flex-col">
+                    <p className="text-white">Your friend join Helois</p>
+                    <p className="text-[#87939D] text-sm">
+                    And start farming
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="mb-4 flex">
+                  <img
+                    src={arrow}
+                    alt="Arrow svg"
+                    className="absolute top-1 left-0"
+                  />
+                  <div className="flex pl-6 flex-col">
+                    <p className="text-white">Score 10% from buddies</p>
+                    <p className="text-[#87939D] text-sm">
+                    Plus a extra 2.5% from their referrals
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button className="mx-auto bg-[#DCAA19] rounded-2xl pt-3 pb-3 w-4/6">
+            Invite a friend
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
