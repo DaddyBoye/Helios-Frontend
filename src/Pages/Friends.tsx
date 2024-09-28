@@ -25,7 +25,7 @@ const Friends = () => {
             </div>
             <div>
               <div className="relative">
-                <div className="mb-4 flex">
+                <div className="mb-8 flex">
                   <img
                     src={arrow}
                     alt="Arrow svg"
@@ -40,7 +40,7 @@ const Friends = () => {
                 </div>
               </div>
               <div className="relative">
-                <div className="mb-4 flex">
+                <div className="mb-8 flex">
                   <img
                     src={arrow}
                     alt="Arrow svg"
@@ -55,7 +55,7 @@ const Friends = () => {
                 </div>
               </div>
               <div className="relative">
-                <div className="mb-4 flex">
+                <div className="mb-8 flex">
                   <img
                     src={arrow}
                     alt="Arrow svg"

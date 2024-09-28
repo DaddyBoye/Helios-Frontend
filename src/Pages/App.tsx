@@ -204,7 +204,7 @@ function App() {
          />
       </div>
 
-      <div className='bg-[#D9D9D9] min-h-72 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
+      <div className='bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
         <div className='flex flex-col items-center justify-center'>
           {airdrops.length > 0 ? (
