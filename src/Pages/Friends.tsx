@@ -71,7 +71,7 @@ const Friends = () => {
               </div>
             </div>
           </div>
-          <button className="mx-auto bg-[#DCAA19] rounded-2xl pt-3 pb-3 w-4/6">
+          <button className="mx-auto bg-[#DCAA19] mt-5 rounded-2xl pt-6 pb-6 w-4/6">
             Invite a friend
           </button>
         </div>
