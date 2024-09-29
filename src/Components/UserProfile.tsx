@@ -18,22 +18,22 @@ const UserProfile: React.FC = () => {
     const [localTelegramId, setLocalTelegramId] = useState<string | null>(null);
     const [referralToken, setReferralToken] = useState<string | null>(null);
 
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('referralToken');
+        if (token) {
+            alert(`Referral Token: ${token}`);
+            setReferralToken(token);
+        }
+    }, []);
+
     useEffect(() => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
             const tg = window.Telegram.WebApp;
             tg.ready();
     
             const userData = tg.initDataUnsafe.user;
-    
-            // Extract the referral token from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const referralToken = urlParams.get('referralToken'); // `start` is the parameter in the URL
-    
-            console.log("Referral Token from URL:", referralToken); // Log to ensure it's captured
-    
-            if (referralToken) {
-                setReferralToken(referralToken); // Store referral token in state
-            }
     
             if (userData) {
                 handleUserCreation(userData); // Proceed to create user with referral token
@@ -42,13 +42,13 @@ const UserProfile: React.FC = () => {
                 setLoading(false);
             }
         }
-    }, []);
+    }, [referralToken]); // Depend on referralToken to ensure it's set before creating user
 
     const handleUserCreation = async (userData: any) => {
         try {
             const telegramId = userData.id.toString(); // Ensure it's a string
             Cookies.set('telegramId', telegramId, { expires: 1 }); // Set cookie to expire after 1 day
-    
+
             // Log the referral token to check if it's passed correctly
             console.log("Creating user with referralToken:", referralToken);
     
@@ -67,7 +67,7 @@ const UserProfile: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };    
+    };  
 
     useEffect(() => {
         // Fetch the telegramId from cookies when the component mounts
