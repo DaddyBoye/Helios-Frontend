@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "node bot.js", 
+    "start": "concurrently \"vite preview\" \"node server/bot.js\"", 
     "client": "cd client && npm start", 
     "server": "cd server && node index.js",
     "heroku-postbuild": "npm install --prefix client && npm run build --prefix client", 

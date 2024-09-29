@@ -1,5 +1,10 @@
-import TelegramBot from 'node-telegram-bot-api'; // Using import instead of require
-const token = '7394104022:AAFbbeaeuGx0zUKPKejUTdrVgzvjVlnCDfo'; // Replace with your actual bot token
+import TelegramBot from 'node-telegram-bot-api';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
+
+const token = process.env.TELEGRAM_BOT_TOKEN; // Use the token from the environment variable
 const bot = new TelegramBot(token, { polling: true });
 
 bot.onText(/\/start (.+)/, (msg, match) => {

@@ -25,5 +25,5 @@
     "typeRoots": ["./node_modules/@types", "./src"],
     "types": ["node", "react", "react-dom", "vite/client"]
   },
-  "include": ["src"]
+  "include": ["src", "bot.js"]
 }
