@@ -27,7 +27,7 @@ const UserProfile: React.FC = () => {
     
             // Extract the referral token from the URL
             const urlParams = new URLSearchParams(window.location.search);
-            const referralToken = urlParams.get('start'); // `start` is the parameter in the URL
+            const referralToken = urlParams.get('referralToken'); // `start` is the parameter in the URL
     
             console.log("Referral Token from URL:", referralToken); // Log to ensure it's captured
     
