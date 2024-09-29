@@ -18,7 +18,6 @@ const UserProfile: React.FC = () => {
     const [localTelegramId, setLocalTelegramId] = useState<string | null>(null);
     const [referralToken, setReferralToken] = useState<string | null>(null);
 
-
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('referralToken');
@@ -29,20 +28,25 @@ const UserProfile: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.ready();
-    
-            const userData = tg.initDataUnsafe.user;
-    
-            if (userData) {
-                handleUserCreation(userData); // Proceed to create user with referral token
-            } else {
-                setError('No user data available');
-                setLoading(false);
+        const fetchUserData = async () => {
+            if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+                const tg = window.Telegram.WebApp;
+                tg.ready();
+        
+                const userData = tg.initDataUnsafe.user;
+
+                if (userData) {
+                    await handleUserCreation(userData);
+                } else {
+                    setError('No user data available');
+                    setLoading(false);
+                }
             }
-        }
-    }, [referralToken]); // Depend on referralToken to ensure it's set before creating user
+        };
+
+        // Call the fetchUserData function
+        fetchUserData();
+    }, []); // Note: Removed referralToken from here to avoid calling it before it's set
 
     const handleUserCreation = async (userData: any) => {
         try {
@@ -60,6 +64,7 @@ const UserProfile: React.FC = () => {
                 referralToken: referralToken // Pass the referral token here
             });
     
+            console.log("Created user:", user); // Log created user data
             setUser(user);
             await calculateAirdropsOnMount(userData.id);
         } catch (err: any) {
@@ -67,10 +72,9 @@ const UserProfile: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };  
+    };    
 
     useEffect(() => {
-        // Fetch the telegramId from cookies when the component mounts
         const storedTelegramId = Cookies.get('telegramId') || null; // Use `null` if not found
         setLocalTelegramId(storedTelegramId);
     }, []);
