@@ -22,25 +22,25 @@ const UserProfile: React.FC = () => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
             const tg = window.Telegram.WebApp;
             tg.ready();
-
+    
             const userData = tg.initDataUnsafe.user;
-
-            // Parse URL parameters to get referralToken
+    
+            // Extract the referral token from the URL
             const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('start'); // Changed to 'start' to match your format
-            if (token) {
-                setReferralToken(token);
+            const referralToken = urlParams.get('start'); // `start` is the parameter in the URL
+    
+            console.log("Referral Token from URL:", referralToken); // Log to ensure it's captured
+    
+            if (referralToken) {
+                setReferralToken(referralToken); // Store referral token in state
             }
-
+    
             if (userData) {
-                handleUserCreation(userData);
+                handleUserCreation(userData); // Proceed to create user with referral token
             } else {
                 setError('No user data available');
                 setLoading(false);
             }
-        } else {
-            setError('This app should be opened in Telegram');
-            setLoading(false);
         }
     }, []);
 
@@ -48,15 +48,18 @@ const UserProfile: React.FC = () => {
         try {
             const telegramId = userData.id.toString(); // Ensure it's a string
             Cookies.set('telegramId', telegramId, { expires: 1 }); // Set cookie to expire after 1 day
-
-            // Create the user with the referral token if available
+    
+            // Log the referral token to check if it's passed correctly
+            console.log("Creating user with referralToken:", referralToken);
+    
             const user = await createUser({
                 telegramId: userData.id,
                 username: userData.username,
                 firstName: userData.first_name,
                 lastName: userData.last_name,
-                referralToken: referralToken,
+                referralToken: referralToken // Pass the referral token here
             });
+    
             setUser(user);
             await calculateAirdropsOnMount(userData.id);
         } catch (err: any) {
@@ -64,7 +67,7 @@ const UserProfile: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
+    };    
 
     useEffect(() => {
         // Fetch the telegramId from cookies when the component mounts
@@ -116,7 +119,7 @@ const UserProfile: React.FC = () => {
     if (error) return <div className="error hidden">{error}</div>;
 
     return (
-        <div>
+        <div className='hidden'>
             <h1>Welcome, {user?.firstName}!</h1>
             {localTelegramId ? (
                 <p>Telegram ID: {localTelegramId}</p>
