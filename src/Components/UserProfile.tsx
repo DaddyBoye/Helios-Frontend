@@ -7,6 +7,7 @@ interface User {
     username?: string;
     firstName?: string;
     lastName?: string;
+    referralToken?: string | null;
 }
 
 const UserProfile: React.FC = () => {
@@ -15,6 +16,7 @@ const UserProfile: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
     const [localTelegramId, setLocalTelegramId] = useState<string | null>(null);
+    const [referralToken, setReferralToken] = useState<string | null>(null);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -22,6 +24,14 @@ const UserProfile: React.FC = () => {
             tg.ready();
 
             const userData = tg.initDataUnsafe.user;
+
+            // Parse URL parameters to get referralToken
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('start'); // Changed to 'start' to match your format
+            if (token) {
+                setReferralToken(token);
+            }
+
             if (userData) {
                 handleUserCreation(userData);
             } else {
@@ -38,12 +48,14 @@ const UserProfile: React.FC = () => {
         try {
             const telegramId = userData.id.toString(); // Ensure it's a string
             Cookies.set('telegramId', telegramId, { expires: 1 }); // Set cookie to expire after 1 day
-            // Create the user...
+
+            // Create the user with the referral token if available
             const user = await createUser({
                 telegramId: userData.id,
                 username: userData.username,
                 firstName: userData.first_name,
                 lastName: userData.last_name,
+                referralToken: referralToken,
             });
             setUser(user);
             await calculateAirdropsOnMount(userData.id);

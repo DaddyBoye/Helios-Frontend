@@ -7,6 +7,7 @@ interface UserData {
     username?: string;
     firstName?: string;
     lastName?: string;
+    referralToken?: string | null; // Added referralToken to the interface
 }
 
 export const createUser = async (userData: UserData) => {
