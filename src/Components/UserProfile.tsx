@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import Cookies from 'js-cookie';
-import { createUser, calculateAirdrops } from '../utils/api';
+import React, { useEffect, useState } from 'react';
+import { createUser } from '../utils/api';
 import moment from 'moment-timezone';
 
 interface User {
@@ -15,7 +14,6 @@ const UserProfile: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
     const [referralToken, setReferralToken] = useState<string | null>(null);
 
     // Fetch referral token from URL
