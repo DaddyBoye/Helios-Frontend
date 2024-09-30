@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Cookies from 'js-cookie';
 import { createUser, calculateAirdrops } from '../utils/api';
+import moment from 'moment-timezone';
 
 interface User {
     id: number;
@@ -30,7 +31,8 @@ const UserProfile: React.FC = () => {
 
     // Fetch timezone information
     const getUserTimezone = () => {
-        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const timezone = moment.tz.guess(); // This should return 'Africa/Accra' in Ghana
+        return timezone;
     };
 
     // Handle user creation when Telegram WebApp is available
@@ -45,7 +47,7 @@ const UserProfile: React.FC = () => {
                 if (userData) {
                     // Wait for referralToken to be set
                     const tokenAvailable = await waitForReferralToken();
-                    const timezone = getUserTimezone(); // Get the user's timezone
+                    const timezone = getUserTimezone();
                     await handleUserCreation(userData, tokenAvailable, timezone);
                 } else {
                     setError('No user data available');
