@@ -34,8 +34,13 @@ const UserProfile: React.FC = () => {
                 tg.ready();
         
                 const userData = tg.initDataUnsafe.user;
-
+    
                 if (userData) {
+                    // Wait for referralToken to be set
+                    if (!referralToken) {
+                        console.log("Waiting for referralToken...");
+                        return; // Exit if referralToken is not set
+                    }
                     await handleUserCreation(userData);
                 } else {
                     setError('No user data available');
@@ -43,10 +48,9 @@ const UserProfile: React.FC = () => {
                 }
             }
         };
-
-        // Call the fetchUserData function
+    
         fetchUserData();
-    }, []); // Note: Removed referralToken from here to avoid calling it before it's set
+    }, [referralToken]);
 
     const handleUserCreation = async (userData: any) => {
         try {

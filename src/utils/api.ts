@@ -12,6 +12,7 @@ interface UserData {
 
 export const createUser = async (userData: UserData) => {
     try {
+        console.log("Sending user data to API:", userData); // Log userData including referralToken
         const response = await axios.post(`${API_URL}/user`, userData);
         return response.data;
     } catch (error: unknown) {
