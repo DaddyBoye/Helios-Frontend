@@ -39,7 +39,6 @@ const UserProfile: React.FC = () => {
                     // Wait for referralToken to be set
                     if (!referralToken) {
                         console.log("Waiting for referralToken...");
-                        return; // Exit if referralToken is not set
                     }
                     await handleUserCreation(userData);
                 } else {
