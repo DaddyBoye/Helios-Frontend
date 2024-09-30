@@ -18,6 +18,7 @@ const UserProfile: React.FC = () => {
     const [localTelegramId, setLocalTelegramId] = useState<string | null>(null);
     const [referralToken, setReferralToken] = useState<string | null>(null);
 
+    // Fetch referral token from URL
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('referralToken');
@@ -27,6 +28,12 @@ const UserProfile: React.FC = () => {
         }
     }, []);
 
+    // Fetch timezone information
+    const getUserTimezone = () => {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    };
+
+    // Handle user creation when Telegram WebApp is available
     useEffect(() => {
         const fetchUserData = async () => {
             if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -38,7 +45,8 @@ const UserProfile: React.FC = () => {
                 if (userData) {
                     // Wait for referralToken to be set
                     const tokenAvailable = await waitForReferralToken();
-                    await handleUserCreation(userData, tokenAvailable);
+                    const timezone = getUserTimezone(); // Get the user's timezone
+                    await handleUserCreation(userData, tokenAvailable, timezone);
                 } else {
                     setError('No user data available');
                     setLoading(false);
@@ -49,6 +57,7 @@ const UserProfile: React.FC = () => {
         fetchUserData();
     }, [referralToken]);
 
+    // Wait for referralToken to be available
     const waitForReferralToken = (): Promise<boolean> => {
         return new Promise((resolve) => {
             const interval = setInterval(() => {
@@ -65,7 +74,8 @@ const UserProfile: React.FC = () => {
         });
     };
 
-    const handleUserCreation = async (userData: any, tokenAvailable: boolean) => {
+    // Handle user creation with timezone
+    const handleUserCreation = async (userData: any, tokenAvailable: boolean, timezone: string) => {
         try {
             const telegramId = userData.id.toString(); // Ensure it's a string
             Cookies.set('telegramId', telegramId, { expires: 1 }); // Set cookie to expire after 1 day
@@ -79,6 +89,7 @@ const UserProfile: React.FC = () => {
                 firstName: userData.first_name,
                 lastName: userData.last_name,
                 referralToken: tokenAvailable ? referralToken : null, // Pass the referral token if available
+                timezone, // Pass the timezone to the backend
             });
 
             console.log("Created user:", user); // Log created user data

@@ -7,12 +7,13 @@ interface UserData {
     username?: string;
     firstName?: string;
     lastName?: string;
-    referralToken?: string | null; // Added referralToken to the interface
+    referralToken?: string | null;
+    timezone: string;
 }
 
 export const createUser = async (userData: UserData) => {
     try {
-        console.log("Sending user data to API:", userData); // Log userData including referralToken
+        console.log("Sending user data to API:", userData);
         const response = await axios.post(`${API_URL}/user`, userData);
         return response.data;
     } catch (error: unknown) {
