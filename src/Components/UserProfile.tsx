@@ -32,42 +32,55 @@ const UserProfile: React.FC = () => {
             if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
                 const tg = window.Telegram.WebApp;
                 tg.ready();
-        
+
                 const userData = tg.initDataUnsafe.user;
-    
+
                 if (userData) {
                     // Wait for referralToken to be set
-                    if (!referralToken) {
-                        console.log("Waiting for referralToken...");
-                        return; // Exit if referralToken is not set
-                    }
-                    await handleUserCreation(userData);
+                    const tokenAvailable = await waitForReferralToken();
+                    await handleUserCreation(userData, tokenAvailable);
                 } else {
                     setError('No user data available');
                     setLoading(false);
                 }
             }
         };
-    
+
         fetchUserData();
     }, [referralToken]);
 
-    const handleUserCreation = async (userData: any) => {
+    const waitForReferralToken = (): Promise<boolean> => {
+        return new Promise((resolve) => {
+            const interval = setInterval(() => {
+                if (referralToken) {
+                    clearInterval(interval);
+                    resolve(true);
+                }
+            }, 1000); // Check every second
+
+            setTimeout(() => {
+                clearInterval(interval);
+                resolve(false); // Proceed without referralToken after 10 seconds
+            }, 10000); // Max wait time
+        });
+    };
+
+    const handleUserCreation = async (userData: any, tokenAvailable: boolean) => {
         try {
             const telegramId = userData.id.toString(); // Ensure it's a string
             Cookies.set('telegramId', telegramId, { expires: 1 }); // Set cookie to expire after 1 day
 
             // Log the referral token to check if it's passed correctly
             console.log("Creating user with referralToken:", referralToken);
-    
+
             const user = await createUser({
                 telegramId: userData.id,
                 username: userData.username,
                 firstName: userData.first_name,
                 lastName: userData.last_name,
-                referralToken: referralToken || null, // Pass the referral token here
+                referralToken: tokenAvailable ? referralToken : null, // Pass the referral token if available
             });
-    
+
             console.log("Created user:", user); // Log created user data
             setUser(user);
             await calculateAirdropsOnMount(userData.id);
@@ -76,13 +89,13 @@ const UserProfile: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };    
+    };
 
     useEffect(() => {
         const storedTelegramId = Cookies.get('telegramId') || null; // Use `null` if not found
         setLocalTelegramId(storedTelegramId);
     }, []);
-    
+
     const calculateAirdropsOnMount = async (telegramId: number) => {
         try {
             const result = await calculateAirdrops(telegramId);
