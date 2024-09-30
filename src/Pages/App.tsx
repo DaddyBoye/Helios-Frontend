@@ -8,6 +8,7 @@ import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
 import UserProfile from '../Components/UserProfile';
 import Popup from '../Components/Popup';
+import { io } from 'socket.io-client';
 
 interface Airdrop {
   id: number;
@@ -23,7 +24,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [totalAirdrops, setTotalAirdrops] = useState<number>(0);
   const [popupVisible, setPopupVisible] = useState(false);
-  const [userProgress, setUserProgress] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [airdropCount, setAirdropCount] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
   const [referralToken, setReferralToken] = useState<string | null>(null); // State for referral token
@@ -35,6 +36,21 @@ function App() {
           alert(`Referral Token: ${token}`);
           setReferralToken(token); // Set referral token in state
       }
+  }, []);
+
+  useEffect(() => {
+    // Connect to the Socket.IO server
+    const socket = io('https://server.therotrade.tech'); // Adjust URL to match your server
+
+    // Listen for progress updates from the server
+    socket.on('progressUpdate', (newProgress) => {
+      setProgress(newProgress); // Update the state with the new progress
+    });
+
+    // Cleanup when the component unmounts
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -50,19 +66,9 @@ function App() {
         fetchTotalValue(telegramId),
         fetchUserAirdrops(telegramId),
         fetchTotalAirdrops(telegramId),
-        fetchUserProgress(telegramId)
       ]);
     } catch (error) {
       console.error('Error fetching data:', error);
-    }
-  };
-
-  const fetchUserProgress = async (telegramId: number) => {
-    try {
-      const response = await axios.get(`https://server.therotrade.tech/api/user/current-progress?telegramId=${telegramId}`);
-      setUserProgress(response.data.progress);
-    } catch (error) {
-      console.error('Error fetching user progress:', error);
     }
   };
 
@@ -209,7 +215,7 @@ function App() {
           <p className='hidden'>{airdropsError}</p>
         </div>
         <ProgressBar
-          progress={userProgress}
+          progress={progress}
           telegramId={telegramId}
           telegramUsername={telegramUsername}
          />
@@ -241,7 +247,7 @@ function App() {
           totalValue={totalValue}
           onConfirm={handleConfirm}
           onClose={handleClose}
-          progress={userProgress}
+          progress={progress}
         />
       )}
     </div>

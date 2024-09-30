@@ -65,7 +65,7 @@ const UserProfile: React.FC = () => {
                 username: userData.username,
                 firstName: userData.first_name,
                 lastName: userData.last_name,
-                referralToken: referralToken // Pass the referral token here
+                referralToken: referralToken || null, // Pass the referral token here
             });
     
             console.log("Created user:", user); // Log created user data
