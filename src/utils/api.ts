@@ -4,7 +4,7 @@ const API_URL = 'https://server.therotrade.tech/api';
 
 interface UserData {
     telegramId: number;
-    username?: string;
+    telegramUsername?: string;
     firstName?: string;
     lastName?: string;
     referralToken?: string | null;
@@ -25,26 +25,3 @@ export const createUser = async (userData: UserData) => {
     }
 };
 
-// Function to update user progress
-export const updateUserProgress = async (telegramId: number) => {
-    try {
-        const response = await axios.post(`${API_URL}/user/progress`, { telegramId });
-        return response.data.progress;
-    } catch (error) {
-        console.error('Error updating progress:', error);
-        throw new Error('Error updating progress');
-    }
-};
-
-// Function to calculate airdrops based on last saved progress
-export const calculateAirdrops = async (telegramId: number) => {
-    try {
-        const response = await axios.get(`${API_URL}/calculate-airdrops`, {
-            params: { telegramId },
-        });
-        return response.data; // Return the response data, including total airdrops added
-    } catch (error) {
-        console.error('Error calculating airdrops:', error);
-        throw new Error('Error calculating airdrops');
-    }
-};

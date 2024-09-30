@@ -1,10 +1,31 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({ 
+      emitFile: true,
+      filename: 'bundle-analysis.html',
+      open: true,
+      sourcemap: true, // Enable source maps for the visualizer
+    }),
+  ],
+  build: {
+    sourcemap: true, // Enable source maps for the build
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        }
+      }
+    }
+  },
   server: {
-    port: process.env.PORT ? parseInt(process.env.PORT) : 5173, // Use the port specified by Render or fallback to 5173
-    host: true, // This allows connections from outside
+    port: process.env.PORT ? parseInt(process.env.PORT) : 5173,
+    host: true,
   },
 });

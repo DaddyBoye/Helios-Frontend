@@ -186,7 +186,7 @@ function App() {
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className='text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl'>
             {telegramUsername}
-            {referralToken}
+            <p className='hidden'>{referralToken}</p>
           </h1>
           <UserProfile/>
         </div>
@@ -216,8 +216,6 @@ function App() {
         </div>
         <ProgressBar
           progress={progress}
-          telegramId={telegramId}
-          telegramUsername={telegramUsername}
          />
       </div>
 

@@ -21,7 +21,6 @@ const UserProfile: React.FC = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('referralToken');
         if (token) {
-            alert(`Referral Token: ${token}`);
             setReferralToken(token);
         }
     }, []);
@@ -81,7 +80,7 @@ const UserProfile: React.FC = () => {
 
             const user = await createUser({
                 telegramId: userData.id,
-                username: userData.username,
+                telegramUsername: userData.username,
                 firstName: userData.first_name,
                 lastName: userData.last_name,
                 referralToken: tokenAvailable ? referralToken : null, // Pass the referral token if available

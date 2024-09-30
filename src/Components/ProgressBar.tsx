@@ -1,109 +1,18 @@
 import Coin from '../images/dollar-coin.png';
 import Hamster from '../icons/Hamster';
 import { useState, useEffect } from 'react';
-import { updateUserProgress } from '../utils/api';
 
 interface ProgressBarProps {
   progress: number;
-  telegramId: number | null; 
-  telegramUsername: string | null; 
 }
 
-const ProgressBar = ({ progress, telegramId, telegramUsername }: ProgressBarProps) => {
+const ProgressBar = ({ progress }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 60;
-
-  const triggerAirdrop = async () => {
-    if (telegramId && telegramUsername) {
-      try {
-        const response = await fetch('https://server.therotrade.tech/api/add-airdrop', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ telegramId, telegramUsername }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
-      }
-    }
-  };
 
   useEffect(() => {
     setTimeRemaining(CYCLE_DURATION - progress);
   }, [progress]);
-
-  useEffect(() => {
-    if (telegramId !== null) {
-      const triggerAirdropIntervalId = setInterval(() => {
-        // Check if the document is visible before triggering the airdrop
-        if (!document.hidden) {
-          triggerAirdrop();
-        }
-      }, 500);
-
-      return () => {
-        clearInterval(triggerAirdropIntervalId);
-      };
-    }
-  }, [telegramId]);
-
-  useEffect(() => {
-    if (telegramId) {
-      const timeoutId = setTimeout(() => {
-        const id = setInterval(async () => {
-          // Check if the document is visible before updating progress
-          if (!document.hidden) {
-            try {
-              const updatedProgress = await updateUserProgress(telegramId);
-              setTimeRemaining(CYCLE_DURATION - updatedProgress);
-            } catch (error) {
-              console.error('Error updating progress:', error);
-            }
-          }
-        }, 500);
-  
-        // Cleanup function: clear the interval on component unmount
-        return () => {
-          clearInterval(id);
-        };
-      }, 1000); // Delay by 1 second before running the first interval
-  
-      // Clear the timeout on unmount
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
-  }, [telegramId]);
-  
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        console.log("Document is hidden, updates will be paused.");
-      } else {
-        console.log("Document is visible, updates will resume.");
-        if (telegramId) {
-          updateUserProgress(telegramId).then(updatedProgress => {
-            setTimeRemaining(CYCLE_DURATION - updatedProgress);
-          }).catch(error => {
-            console.error('Error updating progress on visibility change:', error);
-          });
-        }
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [telegramId]);
 
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
