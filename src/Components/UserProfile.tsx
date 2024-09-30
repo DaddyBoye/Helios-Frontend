@@ -16,7 +16,6 @@ const UserProfile: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
-    const [localTelegramId, setLocalTelegramId] = useState<string | null>(null);
     const [referralToken, setReferralToken] = useState<string | null>(null);
 
     // Fetch referral token from URL
@@ -79,9 +78,6 @@ const UserProfile: React.FC = () => {
     // Handle user creation with timezone
     const handleUserCreation = async (userData: any, tokenAvailable: boolean, timezone: string) => {
         try {
-            const telegramId = userData.id.toString(); // Ensure it's a string
-            Cookies.set('telegramId', telegramId, { expires: 1 }); // Set cookie to expire after 1 day
-
             // Log the referral token to check if it's passed correctly
             console.log("Creating user with referralToken:", referralToken);
 
@@ -96,7 +92,6 @@ const UserProfile: React.FC = () => {
 
             console.log("Created user:", user); // Log created user data
             setUser(user);
-            await calculateAirdropsOnMount(userData.id);
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -104,63 +99,12 @@ const UserProfile: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        const storedTelegramId = Cookies.get('telegramId') || null; // Use `null` if not found
-        setLocalTelegramId(storedTelegramId);
-    }, []);
-
-    const calculateAirdropsOnMount = async (telegramId: number) => {
-        try {
-            const result = await calculateAirdrops(telegramId);
-            console.log('Airdrops calculated:', result);
-        } catch (err: any) {
-            console.error('Error calculating airdrops:', err);
-            setError('Error calculating airdrops');
-        }
-    };
-
-    const handleVisibilityChange = () => {
-        if (document.visibilityState === 'visible' && user) {
-            const storedTelegramId = Cookies.get('telegramId'); // Get it again when visibility changes
-            if (storedTelegramId) {
-                console.log('Telegram ID from cookies:', storedTelegramId);
-                calculateAirdropsOnMount(parseInt(storedTelegramId));
-            } else {
-                console.log('No Telegram ID found in cookies');
-            }
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-
-        // Set up an interval to recalculate airdrops periodically
-        if (user) {
-            intervalId.current = setInterval(() => {
-                calculateAirdropsOnMount(user.id);
-            }, 30000);
-        }
-
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            if (intervalId.current) {
-                clearInterval(intervalId.current);
-            }
-        };
-    }, [user]);
-
     if (loading) return <div className='hidden'>Loading...</div>;
     if (error) return <div className="error hidden">{error}</div>;
 
     return (
         <div className='hidden'>
             <h1>Welcome, {user?.firstName}!</h1>
-            {localTelegramId ? (
-                <p>Telegram ID: {localTelegramId}</p>
-            ) : (
-                <p>No Telegram ID found</p>
-            )}
-            {/* Other component content goes here */}
         </div>
     );
 };
