@@ -27,7 +27,8 @@ function App() {
   const [progress, setProgress] = useState(0);
   const [airdropCount, setAirdropCount] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
-  const [referralToken, setReferralToken] = useState<string | null>(null); // State for referral token
+  const [referralToken, setReferralToken] = useState<string | null>(null);
+  const [minerate, setMinerate] = useState<number | null>(null);
 
   useEffect(() => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -66,9 +67,19 @@ function App() {
         fetchTotalValue(telegramId),
         fetchUserAirdrops(telegramId),
         fetchTotalAirdrops(telegramId),
+        fetchUserMinerate(telegramId),
       ]);
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  };
+
+  const fetchUserMinerate = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/users/minerate/${telegramId}`);
+      setMinerate(response.data.minerate);
+    } catch (error) {
+      console.error('Error fetching minerate:', error);
     }
   };
 
@@ -204,7 +215,7 @@ function App() {
             <p className='font-bold text-lg'>Mining Rate</p>
             <div className='flex flex-row'>
               <img src={freshcoin} alt="" className='w-5 my-auto pr-0.5 h-5' />
-              <p className='text-md'>20/hr</p>
+              <p className='text-md'>{minerate}/hr</p>
             </div>
             <p className='font-bold text-sm'>Current Airdrop</p>
           </div>
