@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-interface SocialMediaShareProps {
-  referralLink: string;
-}
-
-const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ referralLink }) => {
+const SocialMediaShare: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [referralLink, setReferralLink] = useState<string | null>(null);
+  const baseUrl = "https://t.me/HeeliossBot?start="; // Base URL for the Telegram bot
+  const telegramId = 8431679544; // Replace this with the actual telegramId you are fetching
+
+  // Fetch referral token from server when component mounts
+  useEffect(() => {
+    const fetchReferralToken = async () => {
+      try {
+        const response = await axios.get(`https://server.therotrade.tech/api/users/referral-token/${telegramId}`);
+        const referralToken = response.data.referralToken;
+        setReferralLink(`${baseUrl}${referralToken}`);
+      } catch (error) {
+        console.error('Error fetching referral token:', error);
+      }
+    };
+
+    fetchReferralToken(); // Fetch the referral token when the component mounts
+  }, []);
 
   // Define the allowed platforms using a union type
   type Platform = 'twitter' | 'facebook' | 'whatsapp';
@@ -15,6 +30,11 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ referralLink }) => 
   };
 
   const shareToSocialMedia = (platform: Platform) => {
+    if (!referralLink) {
+      console.error('Referral link not available');
+      return;
+    }
+
     let url = '';
     switch (platform) {
       case 'twitter':
@@ -41,7 +61,7 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ referralLink }) => 
       >
         Share Referral
       </button>
-      {isOpen && (
+      {isOpen && referralLink && ( // Ensure referralLink exists before rendering the menu
         <div className="absolute top-10 left-0 bg-white border border-gray-200 shadow-lg rounded-lg z-10">
           <ul className="p-2 space-y-2">
             <li

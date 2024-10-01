@@ -7,7 +7,6 @@ import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
 import UserProfile from '../Components/UserProfile';
-import SocialMediaShare from '../Components/SocialMediaShare';
 import Popup from '../Components/Popup';
 import { io } from 'socket.io-client';
 
@@ -22,7 +21,6 @@ function App() {
   const [airdropsError, setAirdropsError] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
-  const [userReferralToken, setUserReferralToken] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [totalAirdrops, setTotalAirdrops] = useState<number>(0);
   const [popupVisible, setPopupVisible] = useState(false);
@@ -31,7 +29,6 @@ function App() {
   const [totalValue, setTotalValue] = useState(0);
   const [referralToken, setReferralToken] = useState<string | null>(null);
   const [minerate, setMinerate] = useState<number | null>(null);
-  const baseUrl = "https://t.me/HeeliossBot?start=";
 
   useEffect(() => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -41,26 +38,6 @@ function App() {
           setReferralToken(token); // Set referral token in state
       }
   }, []);
-
-  // Fetch user referral token 3 seconds after mounting
-  useEffect(() => {
-    if (telegramId !== null) {
-      const fetchReferralToken = async () => {
-        try {
-          const response = await axios.get(`https://server.therotrade.tech/api/users/referral-token/${telegramId}`);
-          setUserReferralToken(response.data.referralToken);
-        } catch (error) {
-          console.error('Error fetching referral token:', error);
-        }
-      };
-
-      const timer = setTimeout(fetchReferralToken, 3000); // Set referral token after 3 seconds
-
-      return () => clearTimeout(timer); // Cleanup timer on unmount
-    }
-  }, [telegramId]);
-
-  const referralLink = userReferralToken ? `${baseUrl}${userReferralToken}` : '';
 
   useEffect(() => {
     // Connect to the Socket.IO server
@@ -252,9 +229,7 @@ function App() {
           progress={progress}
          />
       </div>
-      <div className='hidden'>
-        {referralLink && <SocialMediaShare referralLink={referralLink} />}
-      </div>
+
       <div className='bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
         <div className='flex flex-col items-center justify-center'>
