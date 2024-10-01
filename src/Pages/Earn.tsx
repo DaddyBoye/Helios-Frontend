@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import SocialMediaShare from '../Components/SocialMediaShare';
 
 const Earn = () => {
     const [qrCode, setQrCode] = useState<string | null>(null); // QR code state
@@ -34,6 +35,7 @@ const Earn = () => {
                     <p>Loading QR code...</p>
                 )}
             </div>
+            <SocialMediaShare/>
         </div>
     );
 };
