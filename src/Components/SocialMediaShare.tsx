@@ -4,86 +4,89 @@ import axios from 'axios';
 const SocialMediaShare: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [referralLink, setReferralLink] = useState<string | null>(null);
-  const baseUrl = "https%3A//t.me/HeeliossBot%3Fstart%3D%22";
-  const telegramId = 8431679544; // Replace this with the actual telegramId you are fetching
+  const [telegramId, setTelegramId] = useState<number | null>(null);
+  const baseUrl = "https://t.me/HeeliossBot?start=";
 
-  // Fetch referral token from server when component mounts
+  // Fetch referral token from server when the telegramId is available
   useEffect(() => {
+    if (!telegramId) return;
+
     const fetchReferralToken = async () => {
       try {
         const response = await axios.get(`https://server.therotrade.tech/api/users/referral-token/${telegramId}`);
         const referralToken = response.data.referralToken;
-        setReferralLink(`${baseUrl}${referralToken}`);
+        setReferralLink(`${baseUrl}${encodeURIComponent(referralToken)}`);
       } catch (error) {
         console.error('Error fetching referral token:', error);
       }
     };
 
-    fetchReferralToken(); // Fetch the referral token when the component mounts
+    fetchReferralToken();
+  }, [telegramId]);
+
+  // Fetch telegramId using the Telegram SDK
+  useEffect(() => {
+    if (window.Telegram?.WebApp?.initDataUnsafe) {
+      const userData = window.Telegram.WebApp.initDataUnsafe.user;
+      if (userData) {
+        setTelegramId(userData.id); // Set the telegramId from the SDK
+      }
+    }
   }, []);
 
-  // Define the allowed platforms using a union type
-  type Platform = 'twitter' | 'facebook' | 'whatsapp';
-
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const shareToSocialMedia = (platform: Platform) => {
-    if (!referralLink) {
-      console.error('Referral link not available');
-      return;
-    }
-
-    let url = '';
-    switch (platform) {
-      case 'twitter':
-        url = `https://twitter.com/intent/tweet?url=${referralLink}`;
-        break;
-      case 'facebook':
-        url = `https://www.facebook.com/sharer/sharer.php?u=${referralLink}`;
-        break;
-      case 'whatsapp':
-        url = `https://wa.me/?text=${referralLink}`;
-        break;
-      default:
-        break;
-    }
-
-    window.open(url, '_blank'); // Open in a new tab
+    setIsOpen(prev => !prev); // Toggle menu visibility
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <button
         onClick={toggleMenu}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        className="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600"
       >
-        {referralLink}
-        Share Referral
+        {isOpen ? 'Close Share Menu' : 'Share Referral'}
       </button>
-      {isOpen && referralLink && ( // Ensure referralLink exists before rendering the menu
-        <div className="absolute top-10 left-0 bg-white border border-gray-200 shadow-lg rounded-lg z-10">
-          <ul className="p-2 space-y-2">
-            <li
-              onClick={() => shareToSocialMedia('twitter')}
-              className="cursor-pointer text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
-            >
-              Twitter
-            </li>
-            <li
-              onClick={() => shareToSocialMedia('facebook')}
-              className="cursor-pointer text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
+
+      {isOpen && referralLink && (
+        <div className="absolute top-12 left-0 w-full bg-white border border-gray-200 shadow-lg rounded-lg z-10">
+          <div className="p-4 grid grid-cols-2 gap-4">
+            {/* Facebook */}
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-600 text-white rounded-md px-4 py-2 flex items-center justify-center"
             >
               Facebook
-            </li>
-            <li
-              onClick={() => shareToSocialMedia('whatsapp')}
-              className="cursor-pointer text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
+            </a>
+            {/* WhatsApp */}
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(referralLink)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-500 text-white rounded-md px-4 py-2 flex items-center justify-center"
             >
               WhatsApp
-            </li>
-          </ul>
+            </a>
+            {/* Twitter */}
+            <a
+              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(referralLink)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-400 text-white rounded-md px-4 py-2 flex items-center justify-center"
+            >
+              Twitter
+            </a>
+            {/* Telegram */}
+            <a
+              href={`https://t.me/share/url?url=${encodeURIComponent(referralLink)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-500 text-white rounded-md px-4 py-2 flex items-center justify-center"
+            >
+              Telegram
+            </a>
+          </div>
         </div>
       )}
     </div>
