@@ -223,6 +223,9 @@ function App() {
             <p className='hidden'>{referralToken}</p>
           </h1>
           <UserProfile/>
+          <div className='z-10'>
+        referralLink && <SocialMediaShare referralLink={referralLink} />
+      </div>
         </div>
         <div className="ml-auto">
           <img src={mascot} alt="Mascot Circle" className='w-24 h-24 z-10 object-contain' />
@@ -251,9 +254,6 @@ function App() {
         <ProgressBar
           progress={progress}
          />
-      </div>
-      <div className='z-10'>
-        referralLink && <SocialMediaShare referralLink={referralLink} />
       </div>
       <div className='bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
