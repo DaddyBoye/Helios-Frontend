@@ -13,7 +13,7 @@ const SocialMediaShare: React.FC = () => {
 
     const fetchReferralToken = async () => {
       try {
-        const response = await axios.get(`https://server.therotrade.tech/api/users/referral-token/${telegramId}`);
+        const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
         const referralToken = response.data.referralToken;
         setReferralLink(`${baseUrl}${encodeURIComponent(referralToken)}`);
       } catch (error) {
