@@ -252,8 +252,8 @@ function App() {
           progress={progress}
          />
       </div>
-      <div>
-        {referralLink && <SocialMediaShare referralLink={referralLink} />}
+      <div className='z-10'>
+        referralLink && <SocialMediaShare referralLink={referralLink} />
       </div>
       <div className='bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
