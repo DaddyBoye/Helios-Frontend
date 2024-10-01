@@ -4,7 +4,7 @@ import axios from 'axios';
 const SocialMediaShare: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [referralLink, setReferralLink] = useState<string | null>(null);
-  const baseUrl = "https://t.me/HeeliossBot?start="; // Base URL for the Telegram bot
+  const baseUrl = "https%3A//t.me/HeeliossBot%3Fstart%3D%22";
   const telegramId = 8431679544; // Replace this with the actual telegramId you are fetching
 
   // Fetch referral token from server when component mounts
@@ -59,6 +59,7 @@ const SocialMediaShare: React.FC = () => {
         onClick={toggleMenu}
         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
       >
+        {referralLink}
         Share Referral
       </button>
       {isOpen && referralLink && ( // Ensure referralLink exists before rendering the menu
