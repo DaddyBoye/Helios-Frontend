@@ -240,7 +240,7 @@ function App() {
               <img src={freshcoin} alt="" className='w-5 my-auto pr-0.5 h-5' />
               <p className='text-md'>{minerate}/hr</p>
             </div>
-            <p className='font-bold text-sm'>Current Airdrop</p>
+            <p className='font-bold text-sm'>Current Airdrop Round</p>
           </div>
           <div className='my-auto pl-8'>
             <button onClick={() => setPopupVisible(true)} className="bg-yellow-500 p-2 pl-4 pr-4 rounded-lg">Claim</button>
