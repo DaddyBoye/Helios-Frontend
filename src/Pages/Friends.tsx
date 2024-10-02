@@ -1,8 +1,17 @@
+import { useState } from 'react';
 import background from '../images/Starryy.svg';
 import friendsLogo from '../images/Mask group.svg';
 import arrow from '../icons/Arrow 3.svg';
+import ShareComponent from '../Components/ShareComponent';
 
 const Friends = () => {
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
+
+  // Toggle the share menu
+  const toggleShareMenu = () => {
+    setIsShareMenuOpen(!isShareMenuOpen);
+  };
+
   return (
     <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
       <div
@@ -47,10 +56,8 @@ const Friends = () => {
                     className="absolute top-1 left-0"
                   />
                   <div className="flex pl-6 flex-col">
-                    <p className="text-white">Your friend join Helois</p>
-                    <p className="text-[#87939D] text-sm">
-                    And start farming
-                    </p>
+                    <p className="text-white">Your friend joins Helois</p>
+                    <p className="text-[#87939D] text-sm">And starts farming</p>
                   </div>
                 </div>
               </div>
@@ -64,18 +71,24 @@ const Friends = () => {
                   <div className="flex pl-6 flex-col">
                     <p className="text-white">Score 10% from buddies</p>
                     <p className="text-[#87939D] text-sm">
-                    Plus a extra 2.5% from their referrals
+                      Plus an extra 2.5% from their referrals
                     </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <button className="mx-auto bg-[#DCAA19] rounded-2xl pt-4 pb-4 w-4/6">
+          <button
+            className="mx-auto bg-[#DCAA19] rounded-2xl pt-4 pb-4 w-4/6"
+            onClick={toggleShareMenu}
+          >
             Invite a friend
           </button>
         </div>
       </div>
+
+      {/* Share Component */}
+      <ShareComponent isShareMenuOpen={isShareMenuOpen} toggleShareMenu={toggleShareMenu} />
     </div>
   );
 };
