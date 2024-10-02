@@ -72,7 +72,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
           {/* Share Menu */}
           <div className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl">
             {alertMessage && (
-              <div className="mb-4 mt-4 p-2 bg-green-500 text-white w-10/12 text-center rounded-md fixed top-20 left-1/2 transform -translate-x-1/2">
+              <div className="mb-4 mt-4 p-2 bg-green-500 text-white w-10/12 text-center rounded-md fixed top-15 left-1/2 transform -translate-x-1/2">
                 {alertMessage}
               </div>
             )}
