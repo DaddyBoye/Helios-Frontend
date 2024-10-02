@@ -71,6 +71,12 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
           {/* Share Menu */}
           <div className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl">
+            {alertMessage && (
+              <div className="mb-4 mt-4 p-2 bg-green-500 text-white text-center rounded-md fixed top-20 left-1/2 transform -translate-x-1/2">
+                {alertMessage}
+              </div>
+            )}
+
             <p className="text-lg font-bold pt-8 text-white mb-4">Invite a friend</p>
 
             <QRCode
@@ -81,8 +87,8 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
               fgColor="#FAAD00"
               bgColor="#194464"
               logoImage={logo}
-              logoWidth={72}
-              logoHeight={72}
+              logoWidth={73}
+              logoHeight={73}
               removeQrCodeBehindLogo={true}
             />
             <button
@@ -91,12 +97,6 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             >
               Copy Link
             </button>
-
-            {alertMessage && (
-              <div className="mt-4 p-2 bg-green-500 text-white text-center rounded-md">
-                {alertMessage}
-              </div>
-            )}
 
             <button
               onClick={toggleSocialMediaMenu} // Use the new function for toggling social media share
@@ -108,7 +108,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             {/* Close Share Menu Button */}
             <button
               onClick={toggleShareMenu} // Use the prop function to close the main share menu
-              className=" text-white px-4 py-2 text-opacity-50 mb-5 mt-2 rounded-md w-11/12 hover:bg-red-600"
+              className="text-white px-4 py-2 text-opacity-50 mb-5 mt-2 rounded-md w-11/12 hover:bg-red-600"
             >
               Close
             </button>
