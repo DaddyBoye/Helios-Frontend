@@ -71,26 +71,33 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
           {/* Share Menu */}
           <div className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl">
-            {alertMessage && (
-              <div className="mb-4 mt-4 p-2 bg-green-500 text-white text-center rounded-md fixed top-20 left-1/2 transform -translate-x-1/2">
+            {(
+              <div className="mb-4 mt-4 p-2 bg-green-500 text-white text-center w-10/12 rounded-md fixed top-20 left-1/2 transform -translate-x-1/2">
                 {alertMessage}
               </div>
             )}
 
             <p className="text-lg font-bold pt-8 text-white mb-4">Invite a friend</p>
 
-            <QRCode
-              value={referralLink || ''}  // Fallback to an empty string when referralLink is null
-              size={225}
-              qrStyle="dots"
-              eyeRadius={[{ outer: 20, inner: 2 }, { outer: 20, inner: 2 }, { outer: 20, inner: 2 }]}
-              fgColor="#FAAD00"
-              bgColor="#194464"
-              logoImage={logo}
-              logoWidth={73}
-              logoHeight={73}
-              removeQrCodeBehindLogo={true}
-            />
+            {
+              referralLink ? (
+                <QRCode
+                  value={referralLink}  // Pass referralLink when it's available
+                  size={225}
+                  qrStyle="dots"
+                  eyeRadius={[{ outer: 20, inner: 2 }, { outer: 20, inner: 2 }, { outer: 20, inner: 2 }]}
+                  fgColor="#FAAD00"
+                  bgColor="#194464"
+                  logoImage={logo}
+                  logoWidth={73}
+                  logoHeight={73}
+                  removeQrCodeBehindLogo={true}
+                />
+              ) : (
+                <p className="text-white">Generating QR Code...</p> // Message while loading
+              )
+            }
+
             <button
               onClick={copyToClipboard}
               className="bg-blue-500 text-white w-11/12 px-4 py-2 mt-4 rounded-md hover:bg-blue-600"
