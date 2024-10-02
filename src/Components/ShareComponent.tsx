@@ -77,7 +77,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
               value={referralLink || ''}  // Fallback to an empty string when referralLink is null
               size={225}
               qrStyle="dots"
-              eyeRadius={[{ outer: 10, inner: 0 }, { outer: 10, inner: 0 }, { outer: 10, inner: 0 }]}
+              eyeRadius={[{ outer: 20, inner: 2 }, { outer: 20, inner: 2 }, { outer: 20, inner: 2 }]}
               fgColor="#FAAD00"
               bgColor="#194464"
               logoImage={logo}
@@ -108,7 +108,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             {/* Close Share Menu Button */}
             <button
               onClick={toggleShareMenu} // Use the prop function to close the main share menu
-              className="bg-red-500 text-white px-4 py-2 mt-4 rounded-md w-11/12 hover:bg-red-600"
+              className=" text-white px-4 py-2 text-opacity-50 mb-5 mt-2 rounded-md w-11/12 hover:bg-red-600"
             >
               Close
             </button>

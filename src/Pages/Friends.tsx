@@ -4,12 +4,17 @@ import friendsLogo from '../images/Mask group.svg';
 import arrow from '../icons/Arrow 3.svg';
 import ShareComponent from '../Components/ShareComponent';
 
-const Friends = () => {
+interface FriendsProps {
+  toggleTaskbar: (isVisible: boolean) => void; // Pass the toggleTaskbar prop
+}
+
+const Friends: React.FC<FriendsProps> = ({ toggleTaskbar }) => {
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
 
-  // Toggle the share menu
+  // Toggle the share menu and taskbar visibility
   const toggleShareMenu = () => {
     setIsShareMenuOpen(!isShareMenuOpen);
+    toggleTaskbar(isShareMenuOpen); // Hide taskbar when share menu is open
   };
 
   return (
