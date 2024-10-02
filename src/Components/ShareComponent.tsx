@@ -92,6 +92,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
                   logoWidth={50}  // Adjust logo size to avoid issues
                   logoHeight={50}
                   removeQrCodeBehindLogo={true}  // Removes background behind the logo
+                  quietZone={8}
                 />
               ) : (
                 <p className="text-white">Generating QR Code...</p>
