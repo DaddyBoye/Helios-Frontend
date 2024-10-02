@@ -71,7 +71,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
           {/* Share Menu */}
           <div className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl">
-            {(
+          {alertMessage && (
               <div className="mb-4 mt-4 p-2 bg-green-500 text-white text-center w-10/12 rounded-md fixed top-20 left-1/2 transform -translate-x-1/2">
                 {alertMessage}
               </div>
@@ -82,18 +82,19 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             {
               referralLink ? (
                 <QRCode
-                  value={referralLink}  // Pass referralLink when it's available
+                  value={referralLink}  // Ensure referralLink is non-null
                   size={225}
                   qrStyle="dots"
                   eyeRadius={[{ outer: 20, inner: 2 }, { outer: 20, inner: 2 }, { outer: 20, inner: 2 }]}
                   fgColor="#FAAD00"
-                  bgColor="#194464"
+                  bgColor="#194464"  // QR background
                   logoImage={logo}
-                  logoWidth={73}
-                  logoHeight={73}
+                  logoWidth={50}  // Adjust logo size to avoid issues
+                  logoHeight={50}
+                  removeQrCodeBehindLogo={true}  // Removes background behind the logo
                 />
               ) : (
-                <p className="text-white">Generating QR Code...</p> // Message while loading
+                <p className="text-white">Generating QR Code...</p>
               )
             }
 
