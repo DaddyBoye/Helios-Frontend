@@ -15,7 +15,9 @@ const SocialMediaShare: React.FC = () => {
       try {
         const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
         const referralToken = response.data.referralToken;
-        setReferralLink(`${baseUrl}${encodeURIComponent(referralToken)}`);
+        const generatedLink = `${baseUrl}${encodeURIComponent(referralToken)}`;
+        setReferralLink(generatedLink);
+        console.log('Referral link generated:', generatedLink);
       } catch (error) {
         console.error('Error fetching referral token:', error);
       }
@@ -26,11 +28,15 @@ const SocialMediaShare: React.FC = () => {
 
   // Fetch telegramId using the Telegram SDK
   useEffect(() => {
-    if (window.Telegram?.WebApp?.initDataUnsafe) {
-      const userData = window.Telegram.WebApp.initDataUnsafe.user;
+    if (window.Telegram?.WebApp) {
+      const userData = window.Telegram.WebApp.initDataUnsafe?.user;
       if (userData) {
         setTelegramId(userData.id); // Set the telegramId from the SDK
+      } else {
+        console.error('No Telegram user data found.');
       }
+    } else {
+      console.error('Telegram WebApp SDK is not available.');
     }
   }, []);
 
@@ -46,6 +52,14 @@ const SocialMediaShare: React.FC = () => {
       >
         {isOpen ? 'Close Share Menu' : 'Share Referral'}
       </button>
+
+      {/* Always render the referral link for better debugging */}
+      <div className="mt-4 p-2 bg-gray-100 border border-gray-300 rounded-md">
+        <p>Your referral link:</p>
+        <p className="text-blue-500 break-all">
+          {referralLink ? referralLink : 'Loading referral link...'}
+        </p>
+      </div>
 
       {isOpen && referralLink && (
         <div className="absolute top-12 left-0 w-full bg-white border border-gray-200 shadow-lg rounded-lg z-10">
