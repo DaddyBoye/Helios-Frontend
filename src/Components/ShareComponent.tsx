@@ -71,14 +71,17 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
           {/* Share Menu */}
           <div className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl">
-            {(
-              <div className="mb-4 mt-4 p-2 bg-green-500 text-white text-center w-10/12 rounded-md fixed top-20 left-1/2 transform -translate-x-1/2">
+            {alertMessage && (
+              <div className="mb-4 mt-4 p-2 bg-green-500 text-white w-10/12 text-center rounded-md fixed top-20 left-1/2 transform -translate-x-1/2">
                 {alertMessage}
               </div>
             )}
 
+
             <p className="text-lg font-bold pt-8 text-white mb-4">Invite a friend</p>
 
+            {
+          referralLink ? (
             <QRCode
               value={referralLink || ''}  // Fallback to an empty string when referralLink is null
               size={225}
@@ -91,7 +94,12 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
               logoHeight={60}
               removeQrCodeBehindLogo={true}
               quietZone={20} 
-            />
+              />
+            ) : (
+              <p className="text-white">Generating QR Code...</p>
+            )
+          }
+
             <button
               onClick={copyToClipboard}
               className="bg-blue-500 text-white w-11/12 px-4 py-2 mt-4 rounded-md hover:bg-blue-600"
