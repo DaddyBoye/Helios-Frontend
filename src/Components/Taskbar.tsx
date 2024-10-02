@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 
 const Taskbar = () => {
   return (
-    <div className="taskbar hidden">
+    <div className="taskbar">
       <div className="p-4 bg-white/20 pt-2 pb-2 h-16 backdrop-blur-2xl justify-between flex flex-row">
         <NavLink
           to="/"
