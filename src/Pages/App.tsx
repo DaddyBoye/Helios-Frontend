@@ -204,7 +204,7 @@ function App({ toggleTaskbar }: AppProps) {
     }, minLoadingTime);
 
     return () => clearTimeout(loadingTimeout); // Cleanup the timeout on unmount
-  }, []);
+  }, []); // Only run once on mount
 
   // Effect to manage taskbar visibility based on loading state
   useEffect(() => {

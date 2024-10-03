@@ -85,7 +85,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
           referralLink ? (
             <QRCode
               value={referralLink || ''}  // Fallback to an empty string when referralLink is null
-              size={225}
+              size={289}
               qrStyle="dots"
               eyeRadius={[{ outer: 10, inner: 0 }, { outer: 10, inner: 0 }, { outer: 10, inner: 0 }]}
               fgColor="#FAAD00"
@@ -94,7 +94,6 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
               logoWidth={60}
               logoHeight={60}
               removeQrCodeBehindLogo={true}
-              quietZone={10} 
               />
             ) : (
               <p className="text-white">Generating QR Code...</p>
