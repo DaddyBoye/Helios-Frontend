@@ -198,7 +198,7 @@ function App({ toggleTaskbar }: AppProps) {
 
   // Effect to manage loading logic
   useEffect(() => {
-    const minLoadingTime = 600000; // Minimum loading time
+    const minLoadingTime = 3000; // Minimum loading time
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false); // Stop loading after the defined time
     }, minLoadingTime);

@@ -73,7 +73,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
           {/* Share Menu */}
           <div className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl">
             { alertMessage &&(
-              <div className="mb-4 mt-4 pl-2 text-sm p-1 text-white w-10/12 text-center rounded-md fixed flex flex-row bg-[#5D5D5D] top-16 left-1/2 transform -translate-x-1/2">
+              <div className="mb-4 mt-4 pl-2 text-sm p-1 text-white w-11/12 text-center rounded-md fixed flex flex-row bg-[#000000]/50 top-16 left-1/2 transform -translate-x-1/2">
                 <img src={checkmark} alt="" width={17} height={17}/><p className='pl-1 my-auto'>{alertMessage}</p>
               </div>
             )}
