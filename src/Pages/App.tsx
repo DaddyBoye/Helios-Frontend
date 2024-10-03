@@ -66,13 +66,6 @@ function App({ toggleTaskbar }: AppProps) {
     }
   }, [telegramId]);
 
-  // Set loading to false after fetching data
-  useEffect(() => {
-    if (telegramId !== null) {
-      setIsLoading(false); // Data has been fetched, stop loading
-    }
-  }, [telegramId]);
-
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp;
