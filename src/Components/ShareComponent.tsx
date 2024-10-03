@@ -82,12 +82,12 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             <p className="text-lg font-bold mt-8 text-white mb-4">Invite a friend</p>
 
             {
-          referralLink ? (
+          baseUrl ? (
             <QRCode
               value={referralLink || ''}  // Fallback to an empty string when referralLink is null
               size={289}
               qrStyle="dots"
-              eyeRadius={[{ outer: 10, inner: 0 }, { outer: 10, inner: 0 }, { outer: 10, inner: 0 }]}
+              eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
               fgColor="#FAAD00"
               bgColor="#194464"
               logoImage={logo}
