@@ -117,7 +117,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             {/* Close Share Menu Button */}
             <button
               onClick={toggleShareMenu} // Use the prop function to close the main share menu
-              className="text-white px-4 py-2 text-opacity-50 mb-8 mt-2 rounded-md w-11/12 hover:bg-red-600"
+              className="text-white px-4 py-2 text-opacity-50 mb-4 mt-2 rounded-md w-11/12 hover:bg-red-600"
             >
               Close
             </button>

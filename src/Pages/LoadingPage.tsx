@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Helios from '../icons/HeliosLogo copy 2.svg';
+import Helios2 from '../icons/HeliosLogo.svg'
 
 const LoadingPage: React.FC = () => {
   const [progress, setProgress] = useState(0);
@@ -15,6 +16,7 @@ const LoadingPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0D2D47]">
       <img src={Helios} alt="Helios Logo" className="mb-6" />
+      <img src={Helios2} alt="" />
       {/* Loading Bar */}
       <div className="w-64 bg-gray-300 rounded-full h-2.5">
         <div
