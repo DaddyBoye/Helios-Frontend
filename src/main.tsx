@@ -19,14 +19,16 @@ const RootComponent = () => {
     <Router>
       {isTaskbarVisible && <Taskbar />} {/* Taskbar only shows if isTaskbarVisible is true */}
       <Routes>
-        <Route path="/" element={<App />} />
+      <Route
+          path="/"
+          element={<App toggleTaskbar={handleToggleTaskbar} />} 
+        />
         <Route path="/airdrop" element={<Airdrop />} />
         <Route path="/earn" element={<Earn />} />
         <Route
           path="/friends"
           element={<Friends toggleTaskbar={handleToggleTaskbar} />} 
         />
-
       </Routes>
     </Router>
   );

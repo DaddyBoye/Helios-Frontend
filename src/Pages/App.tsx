@@ -9,6 +9,7 @@ import Hamster from '../icons/Hamster';
 import UserProfile from '../Components/UserProfile';
 import Popup from '../Components/Popup';
 import { io } from 'socket.io-client';
+import LoadingPage from './LoadingPage';
 
 interface Airdrop {
   id: number;
@@ -16,7 +17,11 @@ interface Airdrop {
   timestamp: string;
 }
 
-function App() {
+interface AppProps {
+  toggleTaskbar: (isVisible: boolean) => void; // Add toggleTaskbar prop
+}
+
+function App({ toggleTaskbar }: AppProps) {
   const [airdrops, setAirdrops] = useState<Airdrop[]>([]);
   const [airdropsError, setAirdropsError] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
@@ -29,6 +34,7 @@ function App() {
   const [totalValue, setTotalValue] = useState(0);
   const [referralToken, setReferralToken] = useState<string | null>(null);
   const [minerate, setMinerate] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -59,6 +65,30 @@ function App() {
       fetchAllData(telegramId);
     }
   }, [telegramId]);
+
+  // Set loading to false after fetching data
+  useEffect(() => {
+    if (telegramId !== null) {
+      setIsLoading(false); // Data has been fetched, stop loading
+    }
+  }, [telegramId]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+
+      const userData = tg.initDataUnsafe.user;
+      if (userData) {
+        setTelegramId(userData.id);
+        setTelegramUsername(userData.username);
+      } else {
+        console.error('No user data available');
+      }
+    } else {
+      console.error('This app should be opened in Telegram');
+    }
+  }, []);
 
   const fetchAllData = async (telegramId: number) => {
     try {
@@ -109,23 +139,6 @@ function App() {
   const handleClose = () => {
     setPopupVisible(false);
   };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-
-      const userData = tg.initDataUnsafe.user;
-      if (userData) {
-        setTelegramId(userData.id);
-        setTelegramUsername(userData.username);
-      } else {
-        console.error('No user data available');
-      }
-    } else {
-      console.error('This app should be opened in Telegram');
-    }
-  }, []);
 
   const fetchUserAirdrops = async (telegramId: number) => {
     setAirdropsError(null);
@@ -189,6 +202,19 @@ function App() {
       return () => clearInterval(intervalId); // Clear interval when component unmounts
     }
   }, [telegramId]);
+
+  useEffect(() => {
+    if (isLoading) {
+      toggleTaskbar(false); // Hide taskbar when loading
+    } else {
+      toggleTaskbar(true); // Show taskbar when loading is done
+    }
+  }, [isLoading, toggleTaskbar]);
+
+  // Render loading page while data is being fetched
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
