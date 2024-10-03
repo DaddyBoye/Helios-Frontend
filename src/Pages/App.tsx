@@ -196,21 +196,27 @@ function App({ toggleTaskbar }: AppProps) {
     }
   }, [telegramId]);
 
+  // Effect to manage loading logic
   useEffect(() => {
-    toggleTaskbar(false); // Hide taskbar while loading
-
-    // Simulate loading for at least 3 seconds
-    const minLoadingTime = 5000;
+    const minLoadingTime = 4000; // Minimum loading time
     const loadingTimeout = setTimeout(() => {
-      setIsLoading(false); // Stop loading after 3 seconds
-      toggleTaskbar(true); // Show taskbar after loading
+      setIsLoading(false); // Stop loading after the defined time
     }, minLoadingTime);
 
-    return () => clearTimeout(loadingTimeout);
-  }, [toggleTaskbar]);
+    return () => clearTimeout(loadingTimeout); // Cleanup the timeout on unmount
+  }, []);
+
+  // Effect to manage taskbar visibility based on loading state
+  useEffect(() => {
+    if (isLoading) {
+      toggleTaskbar(false); // Hide taskbar while loading
+    } else {
+      toggleTaskbar(true); // Show taskbar when loading is complete
+    }
+  }, [isLoading, toggleTaskbar]); // Dependencies include isLoading
 
   if (isLoading) {
-    return <LoadingPage />;
+    return <LoadingPage />; // Show loading page while loading
   }
 
   return (
