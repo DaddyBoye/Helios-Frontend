@@ -7,7 +7,7 @@ const LoadingPage: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prevProgress) => (prevProgress < 100 ? prevProgress + 1 : 100));
-    }, 39); // Increment progress every 30ms to simulate loading
+    }, 28); // Increment progress every 30ms to simulate loading
 
     return () => clearInterval(interval);
   }, []);
