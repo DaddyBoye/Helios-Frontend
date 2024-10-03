@@ -204,14 +204,18 @@ function App({ toggleTaskbar }: AppProps) {
   }, [telegramId]);
 
   useEffect(() => {
-    if (isLoading) {
-      toggleTaskbar(false); // Hide taskbar when loading
-    } else {
-      toggleTaskbar(true); // Show taskbar when loading is done
-    }
-  }, [isLoading, toggleTaskbar]);
+    toggleTaskbar(false); // Hide taskbar while loading
 
-  // Render loading page while data is being fetched
+    // Simulate loading for at least 3 seconds
+    const minLoadingTime = 5000;
+    const loadingTimeout = setTimeout(() => {
+      setIsLoading(false); // Stop loading after 3 seconds
+      toggleTaskbar(true); // Show taskbar after loading
+    }, minLoadingTime);
+
+    return () => clearTimeout(loadingTimeout);
+  }, [toggleTaskbar]);
+
   if (isLoading) {
     return <LoadingPage />;
   }
