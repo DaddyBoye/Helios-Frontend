@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from '../icons/Helios.svg';
+import checkmark from '../icons/mdi_tick-circle.svg'
 import { QRCode } from 'react-qrcode-logo';
 import SocialMediaShare from '../Components/SocialMediaShare';
 
@@ -71,14 +72,14 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
           {/* Share Menu */}
           <div className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl">
-            {alertMessage && (
-              <div className="mb-4 mt-4 p-2 bg-green-500 text-white w-10/12 text-center rounded-md fixed top-15 left-1/2 transform -translate-x-1/2">
-                {alertMessage}
+            { alertMessage &&(
+              <div className="mb-4 mt-4 pl-2 text-sm p-1 text-white w-10/12 text-center rounded-md fixed flex flex-row bg-[#5D5D5D] top-16 left-1/2 transform -translate-x-1/2">
+                <img src={checkmark} alt="" width={17} height={17}/><p className='pl-1 my-auto'>{alertMessage}</p>
               </div>
             )}
 
 
-            <p className="text-lg font-bold pt-8 text-white mb-4">Invite a friend</p>
+            <p className="text-lg font-bold mt-8 text-white mb-4">Invite a friend</p>
 
             {
           referralLink ? (
