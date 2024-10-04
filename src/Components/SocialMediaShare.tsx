@@ -59,52 +59,52 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu 
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink || '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-full"
+                className="flex items-center justify-center w-full transition-transform transform hover:scale-110 hover:shadow-lg active:scale-95"
               >
-                <img src={FacebookLogo} alt="Facebook" className="h-12 w-12" />
+                <img src={FacebookLogo} alt="Facebook" className="h-12 w-12 transition-transform" />
               </a>
               {/* WhatsApp */}
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(referralLink || '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-full"
+                className="flex items-center justify-center w-full transition-transform transform hover:scale-110 hover:shadow-lg active:scale-95"
               >
-                <img src={WhatsAppLogo} alt="WhatsApp" className="h-14 w-14" />
+                <img src={WhatsAppLogo} alt="WhatsApp" className="h-14 w-14 transition-transform" />
               </a>
               {/* Twitter */}
               <a
                 href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(referralLink || '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-full"
+                className="flex items-center justify-center w-full transition-transform transform hover:scale-110 hover:shadow-lg active:scale-95"
               >
-                <img src={XLogo} alt="Twitter" className="h-10 w-10" />
+                <img src={XLogo} alt="Twitter" className="h-10 w-10 transition-transform" />
               </a>
               {/* Telegram */}
               <a
                 href={`https://t.me/share/url?url=${encodeURIComponent(referralLink || '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-full"
+                className="flex items-center justify-center w-full transition-transform transform hover:scale-110 hover:shadow-lg active:scale-95"
               >
-                <img src={TelegramLogo} alt="Telegram" className="h-12 w-12" />
+                <img src={TelegramLogo} alt="Telegram" className="h-12 w-12 transition-transform" />
               </a>
               {/* Instagram */}
               <a
                 href={`https://www.instagram.com/direct/inbox/`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-full"
+                className="flex items-center justify-center w-full transition-transform transform hover:scale-110 hover:shadow-lg active:scale-95"
               >
-                <img src={InstagramLogo} alt="Instagram" className="h-12 w-12" />
+                <img src={InstagramLogo} alt="Instagram" className="h-12 w-12 transition-transform" />
               </a>
             </div>
-            
+
             {/* Close Button at the Bottom */}
             <button
               onClick={toggleMenu}
-              className="mt-auto bg-red-500 text-white mb-4 rounded-md px-4 py-2 w-full"
+              className="mt-auto bg-red-500 text-white mb-4 rounded-md px-4 py-2 w-full transition-transform transform hover:scale-105 active:scale-95"
             >
               Close
             </button>
