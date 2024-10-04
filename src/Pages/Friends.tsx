@@ -3,12 +3,14 @@ import background from '../images/Starryy.svg';
 import friendsLogo from '../images/Mask group.svg';
 import arrow from '../icons/Arrow 3.svg';
 import ShareComponent from '../Components/ShareComponent';
+import { useOutletContext } from 'react-router-dom';
 
 interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void; // Pass the toggleTaskbar prop
 }
 
-const Friends: React.FC<FriendsProps> = ({ toggleTaskbar }) => {
+const Friends: React.FC = () => {
+  const { toggleTaskbar } = useOutletContext<FriendsProps>();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
 
   // Toggle the share menu and taskbar visibility

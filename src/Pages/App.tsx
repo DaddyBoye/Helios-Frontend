@@ -9,7 +9,6 @@ import Hamster from '../icons/Hamster';
 import UserProfile from '../Components/UserProfile';
 import Popup from '../Components/Popup';
 import { io } from 'socket.io-client';
-import LoadingPage from './LoadingPage';
 
 interface Airdrop {
   id: number;
@@ -17,11 +16,7 @@ interface Airdrop {
   timestamp: string;
 }
 
-interface AppProps {
-  toggleTaskbar: (isVisible: boolean) => void; // Add toggleTaskbar prop
-}
-
-function App({ toggleTaskbar }: AppProps) {
+function App() {
   const [airdrops, setAirdrops] = useState<Airdrop[]>([]);
   const [airdropsError, setAirdropsError] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
@@ -34,7 +29,6 @@ function App({ toggleTaskbar }: AppProps) {
   const [totalValue, setTotalValue] = useState(0);
   const [referralToken, setReferralToken] = useState<string | null>(null);
   const [minerate, setMinerate] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -195,29 +189,6 @@ function App({ toggleTaskbar }: AppProps) {
       return () => clearInterval(intervalId); // Clear interval when component unmounts
     }
   }, [telegramId]);
-
-  // Effect to manage loading logic
-  useEffect(() => {
-    const minLoadingTime = 3000; // Minimum loading time
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false); // Stop loading after the defined time
-    }, minLoadingTime);
-
-    return () => clearTimeout(loadingTimeout); // Cleanup the timeout on unmount
-  }, []); // Only run once on mount
-
-  // Effect to manage taskbar visibility based on loading state
-  useEffect(() => {
-    if (isLoading) {
-      toggleTaskbar(false); // Hide taskbar while loading
-    } else {
-      toggleTaskbar(true); // Show taskbar when loading is complete
-    }
-  }, [isLoading, toggleTaskbar]); // Dependencies include isLoading
-
-  if (isLoading) {
-    return <LoadingPage />; // Show loading page while loading
-  }
 
   return (
     <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">

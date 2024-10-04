@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Helios from '../icons/HeliosLogo.svg'
+import Helios from '../icons/HeliosLogo.svg';
 
 const LoadingPage: React.FC = () => {
   const [progress, setProgress] = useState(0);
@@ -7,14 +7,14 @@ const LoadingPage: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prevProgress) => (prevProgress < 100 ? prevProgress + 1 : 100));
-    }, 28); // Increment progress every 30ms to simulate loading
+    }, 28); // Increment progress every 28ms to simulate loading
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0D2D47]">
-      <img src={Helios} alt="" className="" width={200}/>
+      <img src={Helios} alt="Helios Logo" className="animate-bounce" width={200} />
       {/* Loading Bar */}
       <div className="w-64 bg-gray-300 rounded-full h-2.5">
         <div
