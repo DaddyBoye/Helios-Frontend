@@ -82,7 +82,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             <p className="text-lg font-bold mt-8 text-white mb-4">Invite a friend</p>
 
             {
-          baseUrl ? (
+          referralLink ? (
             <QRCode
               value={referralLink || ''}  // Fallback to an empty string when referralLink is null
               size={289}
