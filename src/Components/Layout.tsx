@@ -57,9 +57,13 @@ const Layout = () => {
   }, []);
 
   useEffect(() => {
-    if (telegramId) {
+    if (!telegramId) return;
+
+    const intervalId = setInterval(() => {
       fetchAllData(telegramId);
-    }
+    }, 1000); // Fetch data every second
+
+    return () => clearInterval(intervalId);
   }, [telegramId]);
 
   useEffect(() => {
