@@ -19,7 +19,6 @@ function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
   const [deletingAirdrops, setDeletingAirdrops] = useState<number[]>([]);
-  const [prevTotalAirdrops, setPrevTotalAirdrops] = useState<number>(0); // Track previous total airdrops
 
   const {
     airdrops,
@@ -52,11 +51,6 @@ function App() {
   useEffect(() => {
     setVisibleAirdrops(airdrops);
   }, [airdrops]);
-
-  useEffect(() => {
-    // Update previous total airdrops
-    setPrevTotalAirdrops(totalAirdrops);
-  }, [totalAirdrops]);
 
   const handleConfirm = () => {
     claimFunction();
@@ -95,16 +89,6 @@ function App() {
     }
   };
 
-  // Animation for total airdrop count
-  const totalAirdropAnimation = useSpring({
-    from: { transform: 'translateY(20px)', opacity: 0 },
-    to: {
-      transform: 'translateY(0)',
-      opacity: totalAirdrops > prevTotalAirdrops ? 1 : 0,
-    },
-    config: { tension: 150, friction: 10 },
-  });
-
   return (
     <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
       <StarryBackground />
@@ -121,11 +105,7 @@ function App() {
       </div>
       <div className='flex flex-row mb-10 z-10 items-center justify-center'>
         <img src={freshcoin} alt="" className='w-12 pr-0.5 h-12' />
-        <animated.p
-          style={totalAirdropAnimation}
-          className='my-auto text-white font-bold text-4xl'>
-          {totalAirdrops}
-        </animated.p>
+        <p className='my-auto text-white font-bold text-4xl'>{totalAirdrops}</p>
       </div>
       <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12'>
         <div className='flex flex-row pl-7 pr-6 pt-3 justify-between'>
@@ -144,6 +124,7 @@ function App() {
         </div>
         <ProgressBar progress={progress} />
       </div>
+
       <div className='bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
         <div className='flex flex-col items-center justify-center'>
