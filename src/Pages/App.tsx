@@ -19,7 +19,7 @@ function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
   const [deletingAirdrops, setDeletingAirdrops] = useState<number[]>([]);
-  const [prevTotalAirdrops, setPrevTotalAirdrops] = useState<number>(0);
+  const [prevTotalAirdrops, setPrevTotalAirdrops] = useState<number>(0); // Track previous total airdrops
 
   const {
     airdrops,
@@ -52,6 +52,11 @@ function App() {
   useEffect(() => {
     setVisibleAirdrops(airdrops);
   }, [airdrops]);
+
+  useEffect(() => {
+    // Update previous total airdrops
+    setPrevTotalAirdrops(totalAirdrops);
+  }, [totalAirdrops]);
 
   const handleConfirm = () => {
     claimFunction();
