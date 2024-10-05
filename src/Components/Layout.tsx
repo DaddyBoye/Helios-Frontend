@@ -156,16 +156,16 @@ const Layout = () => {
     }
   };
 
-  // Corrected function to delete all airdrops for a user
   const deleteAllUserAirdrops = async (telegramId: number) => {
     try {
       const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/delete/${telegramId}`);
       setAirdrops([]); // Reset the airdrops after deletion
-      console.log('Airdrops deleted successfully');
+      console.log('Airdrops deleted successfully', response.data);
     } catch (error) {
       console.error('Error deleting airdrops:', error);
     }
   };
+  
 
   const handleToggleTaskbar = (isVisible: boolean) => {
     setIsTaskbarVisible(isVisible);

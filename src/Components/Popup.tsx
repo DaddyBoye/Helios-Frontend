@@ -24,14 +24,13 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
 
+  // @ts-ignore
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Close the popup when clicking outside the modal content
-    onClose();
+    onClose(); // Close the popup when clicking outside the modal content
   };
-
+  
   const handlePopupClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Prevent closing when clicking inside the modal content
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent closing when clicking inside the modal content
   };
 
   return (
