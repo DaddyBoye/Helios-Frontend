@@ -21,13 +21,22 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
     };
   }, [progress]);
 
-
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
 
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Close the popup when clicking outside the modal content
+    onClose();
+  };
+
+  const handlePopupClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Prevent closing when clicking inside the modal content
+    e.stopPropagation();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-8 w-96 shadow-lg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={handleBackgroundClick}>
+      <div className="bg-white rounded-lg p-8 w-96 shadow-lg" onClick={handlePopupClick}>
         <h2 className="text-xl font-bold mb-4">Claim Airdrops</h2>
         {airdropCount > 0 ? (
           <>
