@@ -5,7 +5,7 @@ import Hamster from '../icons/Hamster';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useSpring, animated } from 'react-spring';
+import { useSpring, animated } from 'react-spring'; // Import useSpring and animated
 import StarryBackground from '../Components/StarryBackground';
 import '../App.css';
 
@@ -18,7 +18,6 @@ interface Airdrop {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
-  const [deletingAirdrops, setDeletingAirdrops] = useState<number[]>([]);
 
   const {
     airdrops,
@@ -49,6 +48,7 @@ function App() {
   }>();
 
   useEffect(() => {
+    // Set airdrops to visible state
     setVisibleAirdrops(airdrops);
   }, [airdrops]);
 
@@ -62,30 +62,19 @@ function App() {
   };
 
   const claimFunction = async () => {
-    if (!telegramId) return;
-
     try {
-      for (const airdropToClaim of visibleAirdrops) {
-        // Animate the deletion
-        setDeletingAirdrops((prev) => [...prev, airdropToClaim.id]);
-        await updateTotalAirdrops(telegramId); // Update total airdrops
-        
-        // Simulate deletion delay
-        await new Promise((resolve) => setTimeout(resolve, 300));
-
-        // Remove the airdrop from the visible state after the animation
+      if (telegramId) {
+        // Get the first airdrop to claim
+        const airdropToClaim = visibleAirdrops[0];
+        await updateTotalAirdrops(telegramId);
+        // Remove airdrop from the visible state
         setVisibleAirdrops((prevAirdrops) =>
           prevAirdrops.filter((airdrop) => airdrop.id !== airdropToClaim.id)
         );
+        await deleteAllUserAirdrops(telegramId);
       }
-
-      // After all individual deletions, call the API to delete all airdrops
-      await deleteAllUserAirdrops(telegramId);
-      
     } catch (error) {
       console.error('Error during claim process:', error);
-    } finally {
-      setDeletingAirdrops([]); // Clear the deleting state after the process
     }
   };
 
@@ -132,23 +121,15 @@ function App() {
             <ul className='flex flex-col w-full items-center justify-center'>
               {visibleAirdrops.map((airdrop) => {
                 const slideUpAnimation = useSpring({
-                  from: { transform: 'translateY(20px)', opacity: 0 }, // Start off-screen
-                  to: { transform: 'translateY(0)', opacity: 1 }, // Slide up into view
-                  config: { tension: 150, friction: 10 },
-                });
-
-                const slideDownAnimation = useSpring({
-                  from: { transform: 'translateY(0)', opacity: 1 },
-                  to: deletingAirdrops.includes(airdrop.id)
-                    ? { transform: 'translateY(20px)', opacity: 0 } // Slide down animation for deletion
-                    : { transform: 'translateY(0)', opacity: 1 }, // No movement for visible airdrop
+                  from: { transform: 'translateY(20px)', opacity: 0 },
+                  to: { transform: 'translateY(0)', opacity: 1 },
                   config: { tension: 150, friction: 10 },
                 });
 
                 return (
                   <animated.li
                     key={airdrop.id}
-                    style={deletingAirdrops.includes(airdrop.id) ? slideDownAnimation : slideUpAnimation} // Apply respective animation
+                    style={slideUpAnimation}
                     className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
                     <Hamster className="w-6 h-6 mr-3 my-auto" />
                     <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
