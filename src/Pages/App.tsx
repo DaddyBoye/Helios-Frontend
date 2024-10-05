@@ -5,8 +5,10 @@ import Hamster from '../icons/Hamster';
 import UserProfile from '../Components/UserProfile';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
-import { useState } from 'react';
-import StarryBackground from '../Components/StarryBackground'; // Import the new background component
+import { useState, useEffect } from 'react';
+import StarryBackground from '../Components/StarryBackground';
+import '../App.css'
+
 
 
 interface Airdrop {
@@ -17,6 +19,7 @@ interface Airdrop {
 
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
+  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
   
   const {
     airdrops,
@@ -46,6 +49,11 @@ function App() {
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
 
+  useEffect(() => {
+    // Set airdrops to visible state
+    setVisibleAirdrops(airdrops);
+  }, [airdrops]);
+
   const handleConfirm = () => {
     claimFunction();
     setPopupVisible(false);
@@ -66,6 +74,12 @@ function App() {
     }
   };
 
+  const removeAirdrop = (id: number) => {
+    setVisibleAirdrops((prev) =>
+      prev.filter((airdrop) => airdrop.id !== id)
+    );
+  };
+
   return (
     <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
       <StarryBackground />
@@ -75,7 +89,7 @@ function App() {
             {telegramUsername}
             <p className='hidden'>{referralToken}</p>
           </h1>
-          <UserProfile/>
+          <UserProfile />
         </div>
         <div className="ml-auto">
           <img src={mascot} alt="Mascot Circle" className='w-24 h-24 z-10 object-contain' />
@@ -100,18 +114,20 @@ function App() {
           </div>
           <p className='hidden'>{airdropsError}</p>
         </div>
-        <ProgressBar
-          progress={progress}
-         />
+        <ProgressBar progress={progress} />
       </div>
 
       <div className='bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
         <div className='flex flex-col items-center justify-center'>
-          {airdrops.length > 0 ? (
+          {visibleAirdrops.length > 0 ? (
             <ul className='flex flex-col w-full items-center justify-center'>
-              {airdrops.map((airdrop) => (
-                <li key={airdrop.id} className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto">
+              {visibleAirdrops.map((airdrop) => (
+                <li
+                  key={airdrop.id}
+                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto slide-in`}
+                  onAnimationEnd={() => removeAirdrop(airdrop.id)} // Remove after animation
+                >
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
