@@ -6,9 +6,7 @@ import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
-import '../App.css'
-
-
+import '../App.css';
 
 interface Airdrop {
   id: number;
@@ -19,7 +17,7 @@ interface Airdrop {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
-  const [airdropToRemove, setAirdropToRemove] = useState<number | null>(null);
+  const [removingAirdropId, setRemovingAirdropId] = useState<number | null>(null);
   
   const {
     airdrops,
@@ -66,37 +64,19 @@ function App() {
   const claimFunction = async () => {
     try {
       if (telegramId) {
-        await updateTotalAirdrops(telegramId);
-        // Sequential removal of airdrops
-        removeAirdropsOneByOne();
+        setRemovingAirdropId(visibleAirdrops[0]?.id); // Set the ID of the first airdrop to remove
+
+        await updateTotalAirdrops(telegramId); // Using the update function
+        await deleteAllUserAirdrops(telegramId); // Using the delete function
+
+        // After a short delay, remove the airdrop from the visible state
+        setTimeout(() => {
+          setVisibleAirdrops((prev) => prev.filter(airdrop => airdrop.id !== removingAirdropId));
+          setRemovingAirdropId(null); // Reset the removing ID
+        }, 300); // Delay should match your CSS animation duration
       }
     } catch (error) {
       console.error('Error during claim process:', error);
-    }
-  };
-
-  const removeAirdropsOneByOne = () => {
-    if (visibleAirdrops.length > 0) {
-      let index = 0;
-      
-      const interval = setInterval(() => {
-        const currentAirdrop = visibleAirdrops[index];
-        if (currentAirdrop) {
-          // Mark the current airdrop to be removed
-          setAirdropToRemove(currentAirdrop.id);
-          
-          // Remove it from the state after the animation
-          setTimeout(() => {
-            setVisibleAirdrops((prev) => prev.filter((airdrop) => airdrop.id !== currentAirdrop.id));
-            index++;
-
-            if (index >= visibleAirdrops.length) {
-              clearInterval(interval);
-              deleteAllUserAirdrops(telegramId!);
-            }
-          }, 500); // Matches the CSS animation duration
-        }
-      }, 600); // A little longer than the animation duration to ensure smooth transition
     }
   };
 
@@ -144,7 +124,7 @@ function App() {
               {visibleAirdrops.map((airdrop) => (
                 <li
                   key={airdrop.id}
-                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto ${airdropToRemove === airdrop.id ? 'fade-out' : ''}`}>
+                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto ${removingAirdropId === airdrop.id ? 'fade-out' : 'slide-in'}`}>
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
