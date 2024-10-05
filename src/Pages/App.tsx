@@ -5,9 +5,9 @@ import Hamster from '../icons/Hamster';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useSpring, animated } from 'react-spring';
 import StarryBackground from '../Components/StarryBackground';
-import { useSpring, animated } from 'react-spring'; // Import useSpring and animated from react-spring
-import '../App.css'
+import '../App.css';
 
 interface Airdrop {
   id: number;
@@ -18,8 +18,8 @@ interface Airdrop {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
-  const [displayedAirdrops, setDisplayedAirdrops] = useState(0); // State for displayed airdrops
-  const [newTotal, setNewTotal] = useState(0); // New total for updates
+  const [deletingAirdrops, setDeletingAirdrops] = useState<number[]>([]);
+  const [prevTotalAirdrops, setPrevTotalAirdrops] = useState<number>(0);
 
   const {
     airdrops,
@@ -32,8 +32,8 @@ function App() {
     totalValue,
     referralToken,
     minerate,
-    updateTotalAirdrops, // Receiving update function
-    deleteAllUserAirdrops, // Receiving delete function
+    updateTotalAirdrops,
+    deleteAllUserAirdrops,
   } = useOutletContext<{
     airdrops: Airdrop[];
     airdropsError: string | null;
@@ -49,30 +49,9 @@ function App() {
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
 
-  // Animation spring for displayed airdrops
-  const { number } = useSpring({
-    number: displayedAirdrops,
-    from: { number: 0 },
-    config: { duration: 1000 }, // Animation duration for smooth transition
-  });
-
   useEffect(() => {
-    // Set airdrops to visible state
     setVisibleAirdrops(airdrops);
-    setDisplayedAirdrops(totalAirdrops); // Initialize displayed airdrops
-
-    // Update the displayed count gradually when totalAirdrops changes
-    if (totalAirdrops !== displayedAirdrops) {
-      setNewTotal(totalAirdrops);
-      const incrementCount = async () => {
-        for (let count = displayedAirdrops + 1; count <= totalAirdrops; count++) {
-          setDisplayedAirdrops(count);
-          await new Promise(resolve => setTimeout(resolve, 50)); // Delay for smooth count-up
-        }
-      };
-      incrementCount();
-    }
-  }, [airdrops, totalAirdrops]);
+  }, [airdrops]);
 
   const handleConfirm = () => {
     claimFunction();
@@ -84,21 +63,42 @@ function App() {
   };
 
   const claimFunction = async () => {
+    if (!telegramId) return;
+
     try {
-      if (telegramId) {
-        // Get the first airdrop to claim
-        const airdropToClaim = visibleAirdrops[0];
-        await updateTotalAirdrops(telegramId); // Assuming this updates totals
-        // Remove airdrop from the visible state
+      for (const airdropToClaim of visibleAirdrops) {
+        // Animate the deletion
+        setDeletingAirdrops((prev) => [...prev, airdropToClaim.id]);
+        await updateTotalAirdrops(telegramId); // Update total airdrops
+        
+        // Simulate deletion delay
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        // Remove the airdrop from the visible state after the animation
         setVisibleAirdrops((prevAirdrops) =>
           prevAirdrops.filter((airdrop) => airdrop.id !== airdropToClaim.id)
         );
-        await deleteAllUserAirdrops(telegramId); // Adjust this to remove airdrop from the backend if needed
       }
+
+      // After all individual deletions, call the API to delete all airdrops
+      await deleteAllUserAirdrops(telegramId);
+      
     } catch (error) {
       console.error('Error during claim process:', error);
+    } finally {
+      setDeletingAirdrops([]); // Clear the deleting state after the process
     }
   };
+
+  // Animation for total airdrop count
+  const totalAirdropAnimation = useSpring({
+    from: { transform: 'translateY(20px)', opacity: 0 },
+    to: {
+      transform: 'translateY(0)',
+      opacity: totalAirdrops > prevTotalAirdrops ? 1 : 0,
+    },
+    config: { tension: 150, friction: 10 },
+  });
 
   return (
     <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
@@ -116,9 +116,11 @@ function App() {
       </div>
       <div className='flex flex-row mb-10 z-10 items-center justify-center'>
         <img src={freshcoin} alt="" className='w-12 pr-0.5 h-12' />
-        <p className='my-auto text-white font-bold text-4xl'>
-          <animated.span>{number.to(n => Math.floor(n))}</animated.span> {/* Display animated count */}
-        </p>
+        <animated.p
+          style={totalAirdropAnimation}
+          className='my-auto text-white font-bold text-4xl'>
+          {totalAirdrops}
+        </animated.p>
       </div>
       <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12'>
         <div className='flex flex-row pl-7 pr-6 pt-3 justify-between'>
@@ -137,30 +139,44 @@ function App() {
         </div>
         <ProgressBar progress={progress} />
       </div>
-
       <div className='bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
         <div className='flex flex-col items-center justify-center'>
           {visibleAirdrops.length > 0 ? (
             <ul className='flex flex-col w-full items-center justify-center'>
-              {visibleAirdrops.map((airdrop) => (
-                <li
-                  key={airdrop.id}
-                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto slide-in`}>
-                  <Hamster className="w-6 h-6 mr-3 my-auto" />
-                  <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
-                  <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
-                  <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
-                  <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
-                </li>
-              ))}
+              {visibleAirdrops.map((airdrop) => {
+                const slideUpAnimation = useSpring({
+                  from: { transform: 'translateY(20px)', opacity: 0 }, // Start off-screen
+                  to: { transform: 'translateY(0)', opacity: 1 }, // Slide up into view
+                  config: { tension: 150, friction: 10 },
+                });
 
+                const slideDownAnimation = useSpring({
+                  from: { transform: 'translateY(0)', opacity: 1 },
+                  to: deletingAirdrops.includes(airdrop.id)
+                    ? { transform: 'translateY(20px)', opacity: 0 } // Slide down animation for deletion
+                    : { transform: 'translateY(0)', opacity: 1 }, // No movement for visible airdrop
+                  config: { tension: 150, friction: 10 },
+                });
+
+                return (
+                  <animated.li
+                    key={airdrop.id}
+                    style={deletingAirdrops.includes(airdrop.id) ? slideDownAnimation : slideUpAnimation} // Apply respective animation
+                    className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
+                    <Hamster className="w-6 h-6 mr-3 my-auto" />
+                    <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
+                    <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
+                    <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
+                    <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+                  </animated.li>
+                );
+              })}
             </ul>
           ) : (
             <p className='text-black font-bold pt-20'>No Unclaimed Airdrops</p>
           )}
         </div>
-        <p className='hidden'>{newTotal}</p>
       </div>
       {popupVisible && (
         <Popup
