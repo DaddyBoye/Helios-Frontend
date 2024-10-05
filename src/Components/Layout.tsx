@@ -142,6 +142,31 @@ const Layout = () => {
     }
   };
 
+  // Corrected function to update total airdrops for a user
+  const updateTotalAirdrops = async (telegramId: number) => {
+    try {
+      const response = await axios.patch(`https://server.therotrade.tech/api/airdrops/sum/update/${telegramId}`);
+      const updatedTotalAirdrops = response.data.newTotalAirdrops;
+      setTotalAirdrops(updatedTotalAirdrops);
+      console.log('Total Airdrops updated successfully:', updatedTotalAirdrops);
+      return updatedTotalAirdrops; // return if needed in child components
+    } catch (error) {
+      console.error('Error updating total airdrops:', error);
+      throw error;
+    }
+  };
+
+  // Corrected function to delete all airdrops for a user
+  const deleteAllUserAirdrops = async (telegramId: number) => {
+    try {
+      const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/delete/${telegramId}`);
+      setAirdrops([]); // Reset the airdrops after deletion
+      console.log('Airdrops deleted successfully');
+    } catch (error) {
+      console.error('Error deleting airdrops:', error);
+    }
+  };
+
   const handleToggleTaskbar = (isVisible: boolean) => {
     setIsTaskbarVisible(isVisible);
   };
@@ -166,6 +191,8 @@ const Layout = () => {
           totalValue,
           referralToken,
           minerate,
+          updateTotalAirdrops,
+          deleteAllUserAirdrops
         }}
       />
     </>

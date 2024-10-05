@@ -16,9 +16,11 @@ interface Airdrop {
 
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
+  
   const {
     airdrops,
     airdropsError,
+    telegramId,
     telegramUsername,
     totalAirdrops,
     progress,
@@ -26,26 +28,43 @@ function App() {
     totalValue,
     referralToken,
     minerate,
+    updateTotalAirdrops, // Receiving update function
+    deleteAllUserAirdrops, // Receiving delete function
   } = useOutletContext<{
     airdrops: Airdrop[];
     airdropsError: string | null;
+    telegramId: number | null;
     telegramUsername: string | null;
     totalAirdrops: number;
-    popupVisible: boolean;
     progress: number;
     airdropCount: number;
     totalValue: number;
     referralToken: string | null;
     minerate: number | null;
+    updateTotalAirdrops: (telegramId: number) => Promise<void>;
+    deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
 
   const handleConfirm = () => {
-    // handle claim logic here
+    claimFunction();
+    setPopupVisible(false);
   };
 
   const handleClose = () => {
-    // handle close popup here
+    setPopupVisible(false);
   };
+
+  const claimFunction = async () => {
+    try {
+      if (telegramId) {
+        await updateTotalAirdrops(telegramId); // Using the update function
+        await deleteAllUserAirdrops(telegramId); // Using the delete function
+      }
+    } catch (error) {
+      console.error('Error during claim process:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
       <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${background})` }}></div>
