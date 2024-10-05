@@ -2,7 +2,6 @@ import ProgressBar from '../Components/ProgressBar';
 import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
-import UserProfile from '../Components/UserProfile';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -83,7 +82,6 @@ function App() {
             {telegramUsername}
             <p className='hidden'>{referralToken}</p>
           </h1>
-          <UserProfile />
         </div>
         <div className="ml-auto">
           <img src={mascot} alt="Mascot Circle" className='w-24 h-24 z-10 object-contain' />

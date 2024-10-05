@@ -68,7 +68,7 @@ const UserProfile: React.FC = () => {
             setTimeout(() => {
                 clearInterval(interval);
                 resolve(false); // Proceed without referralToken after 10 seconds
-            }, 10000); // Max wait time
+            }, 5000); // Max wait time
         });
     };
 
