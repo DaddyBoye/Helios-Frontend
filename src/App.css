@@ -116,3 +116,18 @@
 .slide-out {
   animation: slideOut 0.5s forwards;
 }
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.fade-out {
+  animation: fade-out 0.5s forwards;
+}

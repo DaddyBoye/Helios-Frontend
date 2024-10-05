@@ -30,7 +30,7 @@ const Layout = () => {
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearTimeout(loadingTimeout);
