@@ -1,12 +1,13 @@
 import ProgressBar from '../Components/ProgressBar';
 import mascot from '../images/MascotCircles.svg';
-import background from '../images/Starryy.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
 import UserProfile from '../Components/UserProfile';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState } from 'react';
+import StarryBackground from '../Components/StarryBackground'; // Import the new background component
+
 
 interface Airdrop {
   id: number;
@@ -66,8 +67,8 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
-      <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${background})` }}></div>
+    <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
+      <StarryBackground />
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className='text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl'>
@@ -92,7 +93,7 @@ function App() {
               <img src={freshcoin} alt="" className='w-5 my-auto pr-0.5 h-5' />
               <p className='text-md'>{minerate}/hr</p>
             </div>
-            <p className='font-bold text-sm'>Current Airdrop</p>
+            <p className='font-bold text-sm'>Current Airdrop Round</p>
           </div>
           <div className='my-auto pl-8'>
             <button onClick={() => setPopupVisible(true)} className="bg-yellow-500 p-2 pl-4 pr-4 rounded-lg">Claim</button>

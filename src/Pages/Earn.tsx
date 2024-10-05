@@ -1,15 +1,15 @@
+import StarryBackground from '../Components/StarryBackground';
 
-
-const Earn = () => {
-
+const App = () => {
     return (
-        <div className="flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
-            <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(../images/Starryy.svg)` }}></div>
-            <div className="flex items-center justify-center">
-
+        <div className="relative h-screen ">
+            <StarryBackground />
+            <div className="relative z-10 text-center text-white">
+                <h1 className="text-4xl text-black font-bold"></h1>
+                {/* Other content goes here */}
             </div>
         </div>
     );
 };
 
-export default Earn;
+export default App;
