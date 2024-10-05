@@ -74,12 +74,6 @@ function App() {
     }
   };
 
-  const removeAirdrop = (id: number) => {
-    setVisibleAirdrops((prev) =>
-      prev.filter((airdrop) => airdrop.id !== id)
-    );
-  };
-
   return (
     <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
       <StarryBackground />
@@ -125,9 +119,7 @@ function App() {
               {visibleAirdrops.map((airdrop) => (
                 <li
                   key={airdrop.id}
-                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto slide-in`}
-                  onAnimationEnd={() => removeAirdrop(airdrop.id)} // Remove after animation
-                >
+                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto slide-in`}>
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
