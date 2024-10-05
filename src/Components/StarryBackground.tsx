@@ -93,7 +93,7 @@ const StarryBackground: React.FC = () => {
     }, []);
 
     return (
-        <div className="absolute inset-0 overflow-hidden bg-gradient-to-b from-[#185C8D] to-[#1A1F20]"> {/* Set background color */} 
+        <div className="absolute inset-0 overflow-hidden bg-gradient-to-b from-[#0D2E48] to-[#0D151A]"> {/* Set background color */} 
             {stars}
             {shootingStar && shootingStar} {/* Render the shooting star */}
             <style>
