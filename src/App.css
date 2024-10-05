@@ -103,17 +103,18 @@
 }
 
 .slide-out {
-  animation: slideOut 0.5s forwards;
+  animation: slide-out 0.5s forwards; /* Match this duration with your JS timeout */
 }
 
-@keyframes slideOut {
+@keyframes slide-out {
   0% {
     transform: translateX(0);
     opacity: 1;
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(-100%); /* Slide out to the left */
     opacity: 0;
   }
 }
+
 

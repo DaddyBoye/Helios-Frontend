@@ -6,7 +6,7 @@ import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
-import '../App.css'
+import '../App.css';
 
 interface Airdrop {
   id: number;
@@ -17,7 +17,7 @@ interface Airdrop {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
-  const [removingAirdrop, setRemovingAirdrop] = useState<number | null>(null); // State to track the airdrop being removed
+  const [removingAirdrop, setRemovingAirdrop] = useState<number | null>(null); // Track the airdrop being removed
   
   const {
     airdrops,
@@ -66,18 +66,29 @@ function App() {
       if (telegramId) {
         await updateTotalAirdrops(telegramId);
         await deleteAllUserAirdrops(telegramId);
-        setRemovingAirdrop(airdropCount); // Set the airdrop count or relevant id here
-        // You might want to add some delay or a mechanism to manage removing the airdrops after the animation
+        // Initiate the process of removing airdrops one by one
+        handleRemoveAirdrops(); // Start removing
       }
     } catch (error) {
       console.error('Error during claim process:', error);
     }
   };
 
-  const handleRemoveAirdrop = (id: number) => {
-    setRemovingAirdrop(id); // Trigger the sliding out animation
+  const handleRemoveAirdrops = () => {
+    const airdropIds = [...visibleAirdrops.map(airdrop => airdrop.id)]; // Get all airdrop IDs
+    removeAirdrop(airdropIds);
+  };
+
+  const removeAirdrop = (ids: number[]) => {
+    if (ids.length === 0) return; // Exit if no more airdrops to remove
+
+    const idToRemove = ids[0]; // Get the first airdrop ID to remove
+    setRemovingAirdrop(idToRemove); // Set the id to trigger animation
+
+    // Wait for the animation to finish before removing the airdrop
     setTimeout(() => {
-      setVisibleAirdrops((prev) => prev.filter((airdrop) => airdrop.id !== id)); // Remove airdrop after animation
+      setVisibleAirdrops(prev => prev.filter(airdrop => airdrop.id !== idToRemove)); // Remove airdrop from state
+      removeAirdrop(ids.slice(1)); // Recursively call to remove the next airdrop
     }, 500); // Match this duration to the CSS animation duration
   };
 
@@ -126,7 +137,6 @@ function App() {
                 <li
                   key={airdrop.id}
                   className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto ${removingAirdrop === airdrop.id ? 'slide-out' : ''}`}
-                  onAnimationEnd={() => removingAirdrop === airdrop.id && handleRemoveAirdrop(airdrop.id)} // Trigger remove on animation end
                 >
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
