@@ -6,7 +6,9 @@ import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
-import '../App.css';
+import '../App.css'
+
+
 
 interface Airdrop {
   id: number;
@@ -17,8 +19,8 @@ interface Airdrop {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
-  const [fadingIndex, setFadingIndex] = useState<number | null>(null);
-
+  const [airdropToRemove, setAirdropToRemove] = useState<number | null>(null);
+  
   const {
     airdrops,
     airdropsError,
@@ -30,8 +32,8 @@ function App() {
     totalValue,
     referralToken,
     minerate,
-    updateTotalAirdrops,
-    deleteAllUserAirdrops,
+    updateTotalAirdrops, // Receiving update function
+    deleteAllUserAirdrops, // Receiving delete function
   } = useOutletContext<{
     airdrops: Airdrop[];
     airdropsError: string | null;
@@ -48,39 +50,54 @@ function App() {
   }>();
 
   useEffect(() => {
+    // Set airdrops to visible state
     setVisibleAirdrops(airdrops);
   }, [airdrops]);
 
-  // Sequentially fade out and remove airdrops
-  const handleClaim = async () => {
+  const handleConfirm = () => {
+    claimFunction();
+    setPopupVisible(false);
+  };
+
+  const handleClose = () => {
+    setPopupVisible(false);
+  };
+
+  const claimFunction = async () => {
     try {
       if (telegramId) {
         await updateTotalAirdrops(telegramId);
-        await deleteAllUserAirdrops(telegramId);
-        
-        // Start fading out airdrops one by one
-        for (let i = 0; i < visibleAirdrops.length; i++) {
-          setTimeout(() => {
-            setFadingIndex(i); // Apply fade-out effect to the current item
-            setTimeout(() => {
-              setVisibleAirdrops(prev => prev.slice(1)); // Remove the first item after the fade-out
-              setFadingIndex(null); // Reset fading index
-            }, 500); // Wait for fade-out animation to complete
-          }, i * 700); // Delay each fade-out by 700ms
-        }
+        // Sequential removal of airdrops
+        removeAirdropsOneByOne();
       }
     } catch (error) {
       console.error('Error during claim process:', error);
     }
   };
 
-  const handleConfirm = () => {
-    handleClaim();
-    setPopupVisible(false);
-  };
+  const removeAirdropsOneByOne = () => {
+    if (visibleAirdrops.length > 0) {
+      let index = 0;
+      
+      const interval = setInterval(() => {
+        const currentAirdrop = visibleAirdrops[index];
+        if (currentAirdrop) {
+          // Mark the current airdrop to be removed
+          setAirdropToRemove(currentAirdrop.id);
+          
+          // Remove it from the state after the animation
+          setTimeout(() => {
+            setVisibleAirdrops((prev) => prev.filter((airdrop) => airdrop.id !== currentAirdrop.id));
+            index++;
 
-  const handleClose = () => {
-    setPopupVisible(false);
+            if (index >= visibleAirdrops.length) {
+              clearInterval(interval);
+              deleteAllUserAirdrops(telegramId!);
+            }
+          }, 500); // Matches the CSS animation duration
+        }
+      }, 600); // A little longer than the animation duration to ensure smooth transition
+    }
   };
 
   return (
@@ -124,10 +141,10 @@ function App() {
         <div className='flex flex-col items-center justify-center'>
           {visibleAirdrops.length > 0 ? (
             <ul className='flex flex-col w-full items-center justify-center'>
-              {visibleAirdrops.map((airdrop, index) => (
+              {visibleAirdrops.map((airdrop) => (
                 <li
                   key={airdrop.id}
-                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto ${index === fadingIndex ? 'fade-out' : ''}`}>
+                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto ${airdropToRemove === airdrop.id ? 'fade-out' : ''}`}>
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
@@ -141,7 +158,6 @@ function App() {
           )}
         </div>
       </div>
-
       {popupVisible && (
         <Popup
           airdropCount={airdropCount}
