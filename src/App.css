@@ -98,17 +98,6 @@
   }
 }
 
-@keyframes slideOut {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-}
-
 .slide-in {
   animation: slideIn 0.5s forwards;
 }
@@ -117,17 +106,14 @@
   animation: slideOut 0.5s forwards;
 }
 
-.fade-out {
-  animation: fadeOut 0.3s forwards; /* Adjust the duration as needed */
-}
-
-@keyframes fadeOut {
-  from {
+@keyframes slideOut {
+  0% {
+    transform: translateX(0);
     opacity: 1;
   }
-  to {
+  100% {
+    transform: translateX(100%);
     opacity: 0;
-    transform: translateY(-20px); /* Optional: adds a slight upward movement */
   }
 }
 
