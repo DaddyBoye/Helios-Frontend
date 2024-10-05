@@ -25,6 +25,7 @@ const Layout = () => {
   const [totalValue, setTotalValue] = useState(0);
   const [referralToken, setReferralToken] = useState<string | null>(null);
   const [minerate, setMinerate] = useState<number | null>(null);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
@@ -142,30 +143,26 @@ const Layout = () => {
     }
   };
 
-  // Corrected function to update total airdrops for a user
   const updateTotalAirdrops = async (telegramId: number) => {
     try {
-      const response = await axios.patch(`https://server.therotrade.tech/api/airdrops/sum/update/${telegramId}`);
-      const updatedTotalAirdrops = response.data.newTotalAirdrops;
-      setTotalAirdrops(updatedTotalAirdrops);
-      console.log('Total Airdrops updated successfully:', updatedTotalAirdrops);
-      return updatedTotalAirdrops; // return if needed in child components
+      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/sum/update/${telegramId}`);
+      console.log('Updated Total Airdrops:', response.data.newTotalAirdrops);
+      return response.data; // Return data if needed for further use
     } catch (error) {
       console.error('Error updating total airdrops:', error);
-      throw error;
+      throw error; // Rethrow error for handling in the calling function
     }
   };
 
   const deleteAllUserAirdrops = async (telegramId: number) => {
     try {
       const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/delete/${telegramId}`);
-      setAirdrops([]); // Reset the airdrops after deletion
-      console.log('Airdrops deleted successfully', response.data);
+      setMessage(response.data.message);
+      await fetchUserAirdrops(telegramId);
     } catch (error) {
       console.error('Error deleting airdrops:', error);
     }
-  };
-  
+  };  
 
   const handleToggleTaskbar = (isVisible: boolean) => {
     setIsTaskbarVisible(isVisible);
@@ -195,6 +192,7 @@ const Layout = () => {
           deleteAllUserAirdrops
         }}
       />
+      <p className='hidden'>{message}</p>
     </>
   );
 };
