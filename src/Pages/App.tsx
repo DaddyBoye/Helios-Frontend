@@ -6,7 +6,7 @@ import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
-import { useSpring, animated, useTransition } from 'react-spring'; // Import useTransition
+import { useSpring, animated } from 'react-spring';
 import '../App.css';
 
 interface Airdrop {
@@ -20,7 +20,7 @@ function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
   const [claimInitiated, setClaimInitiated] = useState(false); 
-  const [isRemoving, setIsRemoving] = useState(false); // Track if removal process is ongoing
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const {
     airdrops,
@@ -33,8 +33,8 @@ function App() {
     totalValue,
     referralToken,
     minerate,
-    updateTotalAirdrops, // Receiving update function
-    deleteAllUserAirdrops, // Receiving delete function
+    updateTotalAirdrops,
+    deleteAllUserAirdrops,
   } = useOutletContext<{
     airdrops: Airdrop[];
     airdropsError: string | null;
@@ -50,7 +50,6 @@ function App() {
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
 
-  // Animation spring for displayed airdrops
   const { number } = useSpring({
     number: totalAirdrops,
     from: { number: claimInitiated ? 0 : totalAirdrops },
@@ -58,7 +57,6 @@ function App() {
   });
 
   useEffect(() => {
-    // Set visible airdrops on mount
     if (!isRemoving) {
       setVisibleAirdrops(airdrops);
     }
@@ -78,7 +76,7 @@ function App() {
       (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
 
-    setIsRemoving(true); // Set removing state to true
+    setIsRemoving(true);
 
     for (const [index, airdrop] of sortedAirdrops.entries()) {
       await new Promise((resolve) => {
@@ -86,34 +84,34 @@ function App() {
           setVisibleAirdrops((prevAirdrops) =>
             prevAirdrops.filter((visibleAirdrop) => visibleAirdrop.id !== airdrop.id)
           );
-          resolve(null); // Resolve promise after removal
-        }, index * 50); // Increase delay by 50ms for each airdrop
+          resolve(null);
+        }, index * 500); // Adjusted delay to 500ms for a smoother effect
       });
     }
-    // All airdrops removed, now call deleteAllUserAirdrops
+
     if (telegramId) {
       await deleteAllUserAirdrops(telegramId);
     }
-    setIsRemoving(false); // Reset removing state
+    setIsRemoving(false);
   };
 
   const claimFunction = async () => {
     try {
       if (telegramId) {
         await updateTotalAirdrops(telegramId);
-        await removeAirdropsWithDelay(); // Remove airdrops one by one
-        setClaimInitiated(true); // Trigger count-up after claim
+        await removeAirdropsWithDelay();
+        setClaimInitiated(true);
       }
     } catch (error) {
       console.error('Error during claim process:', error);
     }
   };
 
-  // Apply fade effect using useTransition for visibleAirdrops
-  const transitions = useTransition(visibleAirdrops, {
-    from: { opacity: 1, transform: 'translateY(0px)' },
-    leave: { opacity: 0, transform: 'translateY(-20px)' }, // Fade out and move upward
-    config: { duration: 500 }, // Adjust animation speed
+  // Animation for each airdrop fade-out
+  const fadeOutSpring = useSpring({
+    opacity: isRemoving ? 0 : 1,
+    transform: isRemoving ? 'translateY(-20px)' : 'translateY(0px)',
+    config: { duration: 300 }, // Adjusted duration for fade-out effect
   });
 
   return (
@@ -134,9 +132,9 @@ function App() {
         <img src={freshcoin} alt="" className='w-12 pr-0.5 h-12' />
         <p className='my-auto text-white font-bold text-4xl'>
           {claimInitiated ? (
-            <animated.span>{number.to(n => Math.floor(n))}</animated.span> // Display animated count if claim initiated
+            <animated.span>{number.to(n => Math.floor(n))}</animated.span>
           ) : (
-            totalAirdrops // Display the static total on mount
+            totalAirdrops
           )}
         </p>
       </div>
@@ -163,11 +161,11 @@ function App() {
         <div className='flex flex-col items-center justify-center'>
           {visibleAirdrops.length > 0 ? (
             <ul className='flex flex-col w-full items-center justify-center'>
-              {transitions((style, airdrop) => (
+              {visibleAirdrops.map((airdrop) => (
                 <animated.li
-                  style={style} // Apply the animated style (fade out)
                   key={airdrop.id}
-                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto slide-in`}>
+                  style={fadeOutSpring} // Apply fade-out animation
+                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
