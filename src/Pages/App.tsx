@@ -87,7 +87,7 @@ function App() {
             prevAirdrops.filter((visibleAirdrop) => visibleAirdrop.id !== airdrop.id)
           );
           resolve(null); // Resolve promise after removal
-        }, index * 500); // Increase delay by 500ms for each airdrop
+        }, index * 50); // Increase delay by 500ms for each airdrop
       });
     }
     // All airdrops removed, now call deleteAllUserAirdrops
