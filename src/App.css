@@ -161,7 +161,7 @@
     opacity: 0.7; /* Shadow opacity */
   }
   50% {
-    width: 160px; /* Increase width during the bounce */
+    width: 140px; /* Increase width during the bounce */
     height: 8px;  /* Decrease height during the bounce */
     opacity: 0.5; /* Shadow fades slightly when the element rises */
   }
@@ -176,6 +176,3 @@
   transform: translateX(0); /* Slide in when added */
 }
 
-.animated-li {
-  transition: transform 0.3s ease; /* Adjust the duration here for smoother transition */
-}

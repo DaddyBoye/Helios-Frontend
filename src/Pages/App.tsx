@@ -125,7 +125,7 @@ function App() {
     );
   
     // Wait for the slide-out animation to complete
-    await new Promise(resolve => setTimeout(resolve, 160)); // Adjust this timing for the smoothness of the animation
+    await new Promise(resolve => setTimeout(resolve, 150)); // Adjust this timing for the smoothness of the animation
   };
   
   const removeAirdropsWithDelay = async () => {
@@ -210,7 +210,7 @@ function App() {
                   key={airdrop.id}
                   style={{
                     transform: airdrop.adding
-                      ? 'translateX(-100%)' // Slide in from left
+                      ? 'translateX(-200%)' // Slide in from left
                       : airdrop.removing
                       ? 'translateX(200%)' // Slide out to right
                       : 'translateX(0)',   // Remain in place
