@@ -6,7 +6,7 @@ import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
-import { useSpring, animated } from 'react-spring'; // Import useSpring and animated from react-spring
+import { useSpring, animated, useTransition } from 'react-spring'; // Import useTransition
 import '../App.css';
 
 interface Airdrop {
@@ -87,7 +87,7 @@ function App() {
             prevAirdrops.filter((visibleAirdrop) => visibleAirdrop.id !== airdrop.id)
           );
           resolve(null); // Resolve promise after removal
-        }, index * 50); // Increase delay by 500ms for each airdrop
+        }, index * 50); // Increase delay by 50ms for each airdrop
       });
     }
     // All airdrops removed, now call deleteAllUserAirdrops
@@ -108,6 +108,13 @@ function App() {
       console.error('Error during claim process:', error);
     }
   };
+
+  // Apply fade effect using useTransition for visibleAirdrops
+  const transitions = useTransition(visibleAirdrops, {
+    from: { opacity: 1, transform: 'translateY(0px)' },
+    leave: { opacity: 0, transform: 'translateY(-20px)' }, // Fade out and move upward
+    config: { duration: 500 }, // Adjust animation speed
+  });
 
   return (
     <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
@@ -156,8 +163,9 @@ function App() {
         <div className='flex flex-col items-center justify-center'>
           {visibleAirdrops.length > 0 ? (
             <ul className='flex flex-col w-full items-center justify-center'>
-              {visibleAirdrops.map((airdrop) => (
-                <li
+              {transitions((style, airdrop) => (
+                <animated.li
+                  style={style} // Apply the animated style (fade out)
                   key={airdrop.id}
                   className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto slide-in`}>
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
@@ -165,7 +173,7 @@ function App() {
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
                   <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
                   <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
-                </li>
+                </animated.li>
               ))}
             </ul>
           ) : (
