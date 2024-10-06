@@ -125,7 +125,7 @@ function App() {
     );
   
     // Wait for the slide-out animation to complete
-    await new Promise(resolve => setTimeout(resolve, 150)); // Adjust this timing for the smoothness of the animation
+    await new Promise(resolve => setTimeout(resolve, 500)); // Adjust this timing for the smoothness of the animation
   };
   
   const removeAirdropsWithDelay = async () => {
