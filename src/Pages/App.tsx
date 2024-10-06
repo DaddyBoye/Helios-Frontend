@@ -156,26 +156,21 @@ function App() {
         <div className='flex flex-col items-center justify-center'>
           {visibleAirdrops.length > 0 ? (
             <ul className='flex flex-col w-full items-center justify-center'>
-              {visibleAirdrops.map((airdrop) => {
-                const slideInProps = useSpring({
-                  transform: airdrop.removing ? 'translateX(100%)' : 'translateX(0%)',
-                  opacity: airdrop.removing ? 0 : 1,
-                  config: { tension: 250, friction: 20 },
-                });
-
-                return (
-                  <animated.li
-                    key={airdrop.id}
-                    style={slideInProps}
-                    className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
-                    <Hamster className="w-6 h-6 mr-3 my-auto" />
-                    <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
-                    <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
-                    <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
-                    <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
-                  </animated.li>
-                );
-              })}
+              {visibleAirdrops.map((airdrop) => (
+                <animated.li
+                  key={airdrop.id}
+                  style={{
+                    transform: airdrop.removing ? 'translateX(100%)' : 'translateX(0)',
+                    transition: 'transform 0.5s ease', // Smooth slide-out transition
+                  }}
+                  className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
+                  <Hamster className="w-6 h-6 mr-3 my-auto" />
+                  <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
+                  <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
+                  <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
+                  <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+                </animated.li>
+              ))}
             </ul>
           ) : (
             <p className='text-black font-bold pt-20'>No Unclaimed Airdrops</p>
