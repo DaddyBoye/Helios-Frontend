@@ -117,6 +117,9 @@ function App() {
       await removeAirdrop(airdrop); // Slide out each airdrop
     }
   
+    // Clear the visibleAirdrops array
+    setVisibleAirdrops([]);
+
     // After all airdrops have slid out, call the API to delete all airdrops
     if (telegramId) {
       await deleteAllUserAirdrops(telegramId);
