@@ -1,4 +1,4 @@
-import ProgressBar from '../Components/ProgressBar'; 
+import ProgressBar from '../Components/ProgressBar';
 import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
 import Hamster from '../icons/Hamster';
@@ -70,13 +70,11 @@ function App() {
       );
 
       // Reset 'adding' state after animation completes
-      const timeout = setTimeout(() => {
+      setTimeout(() => {
         setVisibleAirdrops(prevAirdrops =>
           prevAirdrops.map(airdrop => ({ ...airdrop, adding: false }))
         );
-      }, 300); // Match this duration with your CSS transition time
-
-      return () => clearTimeout(timeout);
+      }, 50);
     }
   }, [airdrops, isRemoving]);
 
@@ -150,7 +148,7 @@ function App() {
           )}
         </p>
       </div>
-      <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 justify-center mx-auto w-11/12'>
+      <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12'>
         <div className='flex flex-row pl-7 pr-6 pt-3 justify-between'>
           <div className='flex flex-col'>
             <p className='font-bold text-lg'>Mining Rate</p>
@@ -181,10 +179,10 @@ function App() {
                       : airdrop.removing
                       ? 'translateX(100%)' // Slide out to right
                       : 'translateX(0)',   // Remain in place
-                    transition: 'transform 0.5s ease', // Smooth transition for sliding
+                    transition: 'transform 0.5s ease',
                   }}
                   className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
-                  
+
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
