@@ -98,29 +98,33 @@ function App() {
   };
 
   const removeAirdrop = async (airdrop: Airdrop) => {
+    // Set the removing state for the selected airdrop
     setVisibleAirdrops(prevAirdrops =>
       prevAirdrops.map(item =>
         item.id === airdrop.id ? { ...item, removing: true } : item
       )
     );
-
-    await new Promise(resolve => setTimeout(resolve, 450)); // Wait for slide-out animation
-    setVisibleAirdrops(prevAirdrops => prevAirdrops.filter(item => item.id !== airdrop.id));
+  
+    // Wait for the slide-out animation to complete
+    await new Promise(resolve => setTimeout(resolve, 300)); // Adjust this timing for the smoothness of the animation
   };
-
+  
   const removeAirdropsWithDelay = async () => {
     setIsRemoving(true);
-
+  
+    // Loop through visible airdrops one by one with a delay
     for (const airdrop of visibleAirdrops) {
-      await removeAirdrop(airdrop); // Remove each airdrop individually
+      await removeAirdrop(airdrop); // Slide out each airdrop
     }
-
+  
+    // After all airdrops have slid out, call the API to delete all airdrops
     if (telegramId) {
       await deleteAllUserAirdrops(telegramId);
     }
-
+  
     setIsRemoving(false);
   };
+  
 
   const claimFunction = async () => {
     try {
