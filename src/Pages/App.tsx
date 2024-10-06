@@ -58,25 +58,25 @@ function App() {
   });
 
   useEffect(() => {
-    if (!isRemoving) {
-      setVisibleAirdrops(
-        airdrops.length > 0
-          ? airdrops.map(airdrop => ({
-              ...airdrop,
-              removing: false,
-              adding: true, // Trigger adding animation for new airdrops
-            }))
-          : visibleAirdrops // Keep mock data for local testing
-      );
+    const addAirdropsOneByOne = async () => {
+      const sortedAirdrops = airdrops.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+      
+      for (const airdrop of sortedAirdrops) {
+        setVisibleAirdrops(prevAirdrops => [
+          ...prevAirdrops,
+          { ...airdrop, removing: false, adding: true }
+        ]);
 
-      // Reset 'adding' state after animation completes
-      const timeout = setTimeout(() => {
+        // Reset 'adding' state after animation completes
+        await new Promise(resolve => setTimeout(resolve, 5));
         setVisibleAirdrops(prevAirdrops =>
-          prevAirdrops.map(airdrop => ({ ...airdrop, adding: false }))
+          prevAirdrops.map(item => ({ ...item, adding: false }))
         );
-      }, 300); // Match this duration with your CSS transition time
+      }
+    };
 
-      return () => clearTimeout(timeout);
+    if (!isRemoving) {
+      addAirdropsOneByOne();
     }
   }, [airdrops, isRemoving]);
 
