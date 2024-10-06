@@ -116,8 +116,8 @@ function App() {
     setPopupVisible(false);
   };
 
-  const slideOutDuration = 160; // Duration of the slide-out animation for each airdrop (in ms)
-  const slideOutOverlap = 80;   // Overlap delay before starting the next airdrop (in ms)
+  const slideOutDuration = 250; // Duration of the slide-out animation for each airdrop (in ms)
+  const slideOutOverlap = 125;   // Overlap delay before starting the next airdrop (in ms)
   
   const removeAirdrop = async (airdrop: Airdrop) => {
     // Set the removing state for the selected airdrop
