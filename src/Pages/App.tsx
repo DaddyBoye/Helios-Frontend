@@ -116,6 +116,9 @@ function App() {
     setPopupVisible(false);
   };
 
+  const slideOutDuration = 160; // Duration of the slide-out animation for each airdrop (in ms)
+  const slideOutOverlap = 80;   // Overlap delay before starting the next airdrop (in ms)
+  
   const removeAirdrop = async (airdrop: Airdrop) => {
     // Set the removing state for the selected airdrop
     setVisibleAirdrops(prevAirdrops =>
@@ -124,21 +127,24 @@ function App() {
       )
     );
   
-    // Wait for the slide-out animation to complete
-    await new Promise(resolve => setTimeout(resolve, 250)); // Adjust this timing for the smoothness of the animation
+    // Wait for the animation to progress for the current airdrop (but not fully complete)
+    await new Promise(resolve => setTimeout(resolve, slideOutOverlap)); // Overlap with the next airdrop
   };
   
   const removeAirdropsWithDelay = async () => {
     setIsRemoving(true);
   
-    // Loop through visible airdrops one by one with a delay
+    // Loop through visible airdrops and start sliding them out with overlap
     for (const airdrop of visibleAirdrops) {
-      await removeAirdrop(airdrop); // Slide out each airdrop
+      removeAirdrop(airdrop); // Slide out each airdrop, but don't wait for the full completion
+  
+      // Wait for the overlap duration before triggering the next airdrop
+      await new Promise(resolve => setTimeout(resolve, slideOutDuration - slideOutOverlap));
     }
   
-    // Clear the visibleAirdrops array
+    // Clear the visibleAirdrops array after all animations
     setVisibleAirdrops([]);
-
+  
     // After all airdrops have slid out, call the API to delete all airdrops
     if (telegramId) {
       await deleteAllUserAirdrops(telegramId);
@@ -146,6 +152,7 @@ function App() {
   
     setIsRemoving(false);
   };
+  
 
   const claimFunction = async () => {
     try {
