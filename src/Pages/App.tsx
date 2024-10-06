@@ -83,7 +83,7 @@ function App() {
           setVisibleAirdrops(prevAirdrops =>
             prevAirdrops.map(airdrop => ({ ...airdrop, adding: false }))
           );
-        }, 500); // Adjust the duration to match the animation timing
+        }, 100); // Adjust the duration to match the animation timing
       }
     }
   }, [airdrops, isRemoving, airdropsFromParent]);
