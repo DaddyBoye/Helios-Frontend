@@ -85,7 +85,7 @@ function App() {
             prevAirdrops.filter((visibleAirdrop) => visibleAirdrop.id !== airdrop.id)
           );
           resolve(null);
-        }, index * 500); // Adjusted delay to 500ms for a smoother effect
+        }, index * 2000); // Adjusted delay to 500ms for a smoother effect
       });
     }
 
@@ -112,6 +112,13 @@ function App() {
     opacity: isRemoving ? 0 : 1,
     transform: isRemoving ? 'translateY(-20px)' : 'translateY(0px)',
     config: { duration: 300 }, // Adjusted duration for fade-out effect
+  });
+
+  // Spring for slide-in effect when adding airdrops
+  const slideInSpring = useSpring({
+    transform: visibleAirdrops.length > 0 ? 'translateX(0)' : 'translateX(-100%)',
+    opacity: visibleAirdrops.length > 0 ? 1 : 0,
+    config: { tension: 280, friction: 60 }, // Adjust for a smooth slide-in
   });
 
   return (
@@ -155,7 +162,6 @@ function App() {
         </div>
         <ProgressBar progress={progress} />
       </div>
-
       <div className='bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full'>
         <p className='text-sm font-bold text-black pl-8 pt-5'>Unclaimed Airdrops</p>
         <div className='flex flex-col items-center justify-center'>
@@ -164,7 +170,7 @@ function App() {
               {visibleAirdrops.map((airdrop) => (
                 <animated.li
                   key={airdrop.id}
-                  style={fadeOutSpring} // Apply fade-out animation
+                  style={isRemoving ? fadeOutSpring : slideInSpring} // Apply slide-in or fade-out animation
                   className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
