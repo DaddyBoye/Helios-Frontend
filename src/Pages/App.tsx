@@ -13,6 +13,7 @@ interface Airdrop {
   id: number;
   value: number;
   timestamp: string;
+  index: number;
 }
 
 function App() {
@@ -57,9 +58,13 @@ function App() {
   });
 
   useEffect(() => {
-    // Set airdrops to visible state on mount
-    setVisibleAirdrops(airdrops);
-    setDisplayedAirdrops(totalAirdrops); // Initialize displayed airdrops
+    // Assign an index to each airdrop based on the order of addition
+    const airdropsWithIndex = airdrops.map((airdrop, idx) => ({
+      ...airdrop,
+      index: idx,
+    }));
+    setVisibleAirdrops(airdropsWithIndex);
+    setDisplayedAirdrops(totalAirdrops);
   }, [airdrops, totalAirdrops]);
 
   const handleConfirm = () => {
@@ -71,12 +76,13 @@ function App() {
     setPopupVisible(false);
   };
 
-  // Function to remove airdrops one by one with a delay
-  const removeAirdropsWithDelay = async () => {
-    const delay = 300; // Delay between removing each airdrop
+  // Function to remove airdrops one by one with a delay based on their index
+  const removeAirdropsWithIndexDelay = async () => {
+    const delayIncrement = 500; // Incremental delay in milliseconds for each airdrop
+
     for (let i = 0; i < visibleAirdrops.length; i++) {
       const airdropToRemove = visibleAirdrops[i];
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise(resolve => setTimeout(resolve, i * delayIncrement)); // Delay increases based on index
       setVisibleAirdrops((prevAirdrops) =>
         prevAirdrops.filter((airdrop) => airdrop.id !== airdropToRemove.id)
       );
@@ -87,13 +93,13 @@ function App() {
     try {
       if (telegramId) {
         await updateTotalAirdrops(telegramId); // Update totals
-        await removeAirdropsWithDelay(); // Remove airdrops one by one
+        await removeAirdropsWithIndexDelay(); // Remove airdrops with index-based delay
 
         // Trigger count-up after claim
         setClaimInitiated(true);
-        setDisplayedAirdrops(totalAirdrops); // Set the count to total airdrops
+        setDisplayedAirdrops(totalAirdrops);
 
-        await deleteAllUserAirdrops(telegramId); // Adjust this to remove airdrop from the backend if needed
+        await deleteAllUserAirdrops(telegramId); // Adjust this if needed to remove airdrop from the backend
       }
     } catch (error) {
       console.error('Error during claim process:', error);
