@@ -85,7 +85,7 @@ function App() {
             prevAirdrops.filter((visibleAirdrop) => visibleAirdrop.id !== airdrop.id)
           );
           resolve(null);
-        }, index * 2000); // Adjusted delay to 500ms for a smoother effect
+        }, index * 2000); // Adjusted delay for smooth removal
       });
     }
 
@@ -107,18 +107,18 @@ function App() {
     }
   };
 
-  // Animation for each airdrop fade-out
-  const fadeOutSpring = useSpring({
-    opacity: isRemoving ? 0 : 1,
-    transform: isRemoving ? 'translateY(-20px)' : 'translateY(0px)',
-    config: { duration: 300 }, // Adjusted duration for fade-out effect
+  // Animation for slide-in effect from the left
+  const slideInSpring = useSpring({
+    from: { transform: 'translateX(-100%)' }, // Start from off-screen (left)
+    to: { transform: 'translateX(0)' }, // Slide to its position
+    config: { tension: 280, friction: 60 }, // Adjust for a smooth slide-in
   });
 
-  // Spring for slide-in effect when adding airdrops
-  const slideInSpring = useSpring({
-    transform: visibleAirdrops.length > 0 ? 'translateX(0)' : 'translateX(-100%)',
-    opacity: visibleAirdrops.length > 0 ? 1 : 0,
-    config: { tension: 280, friction: 60 }, // Adjust for a smooth slide-in
+  // Animation for slide-out effect to the right
+  const slideOutSpring = useSpring({
+    from: { transform: 'translateX(0)' }, // Start at its position
+    to: { transform: isRemoving ? 'translateX(100%)' : 'translateX(0)' }, // Slide out to the right when removing
+    config: { duration: 500 }, // Adjust duration for slide-out
   });
 
   return (
@@ -170,7 +170,7 @@ function App() {
               {visibleAirdrops.map((airdrop) => (
                 <animated.li
                   key={airdrop.id}
-                  style={isRemoving ? fadeOutSpring : slideInSpring} // Apply slide-in or fade-out animation
+                  style={isRemoving ? slideOutSpring : slideInSpring} // Apply slide-in or slide-out animation
                   className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
