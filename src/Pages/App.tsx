@@ -19,8 +19,8 @@ interface Airdrop {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
-  const [displayedAirdrops, setDisplayedAirdrops] = useState(0); 
-  const [claimInitiated, setClaimInitiated] = useState(false); // Track if claim has been initiated
+  const [claimInitiated, setClaimInitiated] = useState(false); 
+  const [isRemoving, setIsRemoving] = useState(false); // Track if removal process is ongoing
 
   const {
     airdrops,
@@ -50,22 +50,19 @@ function App() {
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
 
-  // Animation spring for displayed airdrops (run only after claim is initiated)
+  // Animation spring for displayed airdrops
   const { number } = useSpring({
-    number: displayedAirdrops,
-    from: { number: claimInitiated ? 0 : displayedAirdrops }, // Only count up if claim initiated
-    config: { duration: 500 }, // Animation duration for smooth transition
+    number: totalAirdrops,
+    from: { number: claimInitiated ? 0 : totalAirdrops },
+    config: { duration: 500 },
   });
 
   useEffect(() => {
-    // Assign an index to each airdrop based on the order of addition
-    const airdropsWithIndex = airdrops.map((airdrop, idx) => ({
-      ...airdrop,
-      index: idx,
-    }));
-    setVisibleAirdrops(airdropsWithIndex);
-    setDisplayedAirdrops(totalAirdrops);
-  }, [airdrops, totalAirdrops]);
+    // Set visible airdrops on mount
+    if (!isRemoving) {
+      setVisibleAirdrops(airdrops);
+    }
+  }, [airdrops, isRemoving]);
 
   const handleConfirm = () => {
     claimFunction();
@@ -76,30 +73,36 @@ function App() {
     setPopupVisible(false);
   };
 
-  // Function to remove airdrops one by one with a delay based on their index
-  const removeAirdropsWithIndexDelay = async () => {
-    const delayIncrement = 500; // Incremental delay in milliseconds for each airdrop
+  const removeAirdropsWithDelay = async () => {
+    const sortedAirdrops = [...visibleAirdrops].sort(
+      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
 
-    for (let i = 0; i < visibleAirdrops.length; i++) {
-      const airdropToRemove = visibleAirdrops[i];
-      await new Promise(resolve => setTimeout(resolve, i * delayIncrement)); // Delay increases based on index
-      setVisibleAirdrops((prevAirdrops) =>
-        prevAirdrops.filter((airdrop) => airdrop.id !== airdropToRemove.id)
-      );
+    setIsRemoving(true); // Set removing state to true
+
+    for (const [index, airdrop] of sortedAirdrops.entries()) {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          setVisibleAirdrops((prevAirdrops) =>
+            prevAirdrops.filter((visibleAirdrop) => visibleAirdrop.id !== airdrop.id)
+          );
+          resolve(null); // Resolve promise after removal
+        }, index * 500); // Increase delay by 500ms for each airdrop
+      });
     }
+    // All airdrops removed, now call deleteAllUserAirdrops
+    if (telegramId) {
+      await deleteAllUserAirdrops(telegramId);
+    }
+    setIsRemoving(false); // Reset removing state
   };
 
   const claimFunction = async () => {
     try {
       if (telegramId) {
-        await updateTotalAirdrops(telegramId); // Update totals
-        await removeAirdropsWithIndexDelay(); // Remove airdrops with index-based delay
-
-        // Trigger count-up after claim
-        setClaimInitiated(true);
-        setDisplayedAirdrops(totalAirdrops);
-
-        await deleteAllUserAirdrops(telegramId); // Adjust this if needed to remove airdrop from the backend
+        await updateTotalAirdrops(telegramId);
+        await removeAirdropsWithDelay(); // Remove airdrops one by one
+        setClaimInitiated(true); // Trigger count-up after claim
       }
     } catch (error) {
       console.error('Error during claim process:', error);
