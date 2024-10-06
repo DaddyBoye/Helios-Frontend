@@ -13,13 +13,51 @@ interface Airdrop {
   id: number;
   value: number;
   timestamp: string;
-  index: number;
-  removing: boolean; // Add a removing property to each airdrop
+  removing: boolean;
+  adding: boolean;
 }
+
+const mockAirdrops: Airdrop[] = [
+  {
+    id: 1,
+    value: 100,
+    timestamp: new Date().toISOString(),
+    removing: false,
+    adding: true, // Mark as true to trigger the adding animation
+  },
+  {
+    id: 2,
+    value: 200,
+    timestamp: new Date().toISOString(),
+    removing: false,
+    adding: true,
+  },
+  {
+    id: 3,
+    value: 150,
+    timestamp: new Date().toISOString(),
+    removing: false,
+    adding: true,
+  },
+  {
+    id: 4,
+    value: 250,
+    timestamp: new Date().toISOString(),
+    removing: false,
+    adding: true,
+  },
+  {
+    id: 4,
+    value: 250,
+    timestamp: new Date().toISOString(),
+    removing: false,
+    adding: true,
+  },
+];
 
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
-  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
+  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>(mockAirdrops);
   const [claimInitiated, setClaimInitiated] = useState(false); 
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -59,8 +97,22 @@ function App() {
 
   useEffect(() => {
     if (!isRemoving) {
-      // Add a removing property to each airdrop when updating the visibleAirdrops state
-      setVisibleAirdrops(airdrops.map(airdrop => ({ ...airdrop, removing: false })));
+      setVisibleAirdrops(
+        airdrops.length > 0
+          ? airdrops.map(airdrop => ({
+              ...airdrop,
+              removing: false,
+              adding: true, // Trigger adding animation for new airdrops
+            }))
+          : visibleAirdrops // Keep mock data for local testing
+      );
+
+      // Reset 'adding' state after animation completes
+      setTimeout(() => {
+        setVisibleAirdrops(prevAirdrops =>
+          prevAirdrops.map(airdrop => ({ ...airdrop, adding: false }))
+        );
+      }, 5);
     }
   }, [airdrops, isRemoving]);
 
@@ -80,7 +132,7 @@ function App() {
       )
     );
 
-    await new Promise((resolve) => setTimeout(resolve, 220)); // Wait for slide-out animation to finish
+    await new Promise(resolve => setTimeout(resolve, 220)); // Wait for slide-out animation
     setVisibleAirdrops(prevAirdrops => prevAirdrops.filter(item => item.id !== airdrop.id));
   };
 
@@ -160,10 +212,15 @@ function App() {
                 <animated.li
                   key={airdrop.id}
                   style={{
-                    transform: airdrop.removing ? 'translateX(100%)' : 'translateX(0)',
-                    transition: 'transform 0.5s ease', // Smooth slide-out transition
+                    transform: airdrop.adding
+                      ? 'translateX(-100%)' // Slide in from left
+                      : airdrop.removing
+                      ? 'translateX(100%)' // Slide out to right
+                      : 'translateX(0)',   // Remain in place
+                    transition: 'transform 0.5s ease',
                   }}
                   className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
+
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
@@ -173,7 +230,7 @@ function App() {
               ))}
             </ul>
           ) : (
-            <p className='text-black font-bold pt-20'>No Unclaimed Airdrops</p>
+            <p className="text-sm text-gray-600">No unclaimed airdrops available</p>
           )}
         </div>
       </div>
