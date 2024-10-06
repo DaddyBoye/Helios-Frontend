@@ -60,33 +60,52 @@ function App() {
 
   useEffect(() => {
     if (!isRemoving) {
-      const newAirdrops = airdrops.filter(airdrop => 
-        !airdropsFromParent.some(existing => existing.id === airdrop.id)
+      // Filter out airdrops that are already visible or processed
+      const newAirdrops = airdrops.filter(
+        (airdrop) => !airdropsFromParent.some((existing) => existing.id === airdrop.id)
       );
   
       if (newAirdrops.length > 0) {
-        // Add new airdrops to the visible list with "adding" animation state
-        setVisibleAirdrops(prevAirdrops => [
-          ...prevAirdrops,
-          ...newAirdrops.map(airdrop => ({
-            ...airdrop,
-            adding: true,
-            removing: false,
-          })),
-        ]);
+        // Sort new airdrops by timestamp (earliest to latest)
+        const sortedAirdrops = [...newAirdrops].sort(
+          (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+        );
   
-        // Update the local state tracking airdrops from the parent
-        setAirdropsFromParent(airdrops);
-  
-        // Reset 'adding' state after the animation completes
-        setTimeout(() => {
-          setVisibleAirdrops(prevAirdrops =>
-            prevAirdrops.map(airdrop => ({ ...airdrop, adding: false }))
-          );
-        }, 50); // Adjust the duration to match the animation timing
+        // Add sorted airdrops to the visible list one by one with a delay
+        addAirdropsInOrder(sortedAirdrops);
       }
     }
   }, [airdrops, isRemoving, airdropsFromParent]);
+  
+  const addAirdropsInOrder = async (airdropsToAdd: Airdrop[]) => {
+    for (const airdrop of airdropsToAdd) {
+      // Check if the airdrop already exists in the visible list (avoid duplicates)
+      setVisibleAirdrops((prevAirdrops) => {
+        if (prevAirdrops.some(existing => existing.id === airdrop.id)) {
+          return prevAirdrops; // Skip if it's already visible
+        }
+        
+        // Add the airdrop to the visible list with "adding" animation state
+        return [
+          ...prevAirdrops,
+          { ...airdrop, adding: true, removing: false },
+        ];
+      });
+  
+      // Update the local state tracking airdrops from the parent
+      setAirdropsFromParent((prev) => [...prev, airdrop]);
+  
+      // Wait before showing the next airdrop
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Adjust delay as needed
+  
+      // Reset 'adding' state for the current airdrop
+      setVisibleAirdrops((prevAirdrops) =>
+        prevAirdrops.map((a) =>
+          a.id === airdrop.id ? { ...a, adding: false } : a
+        )
+      );
+    }
+  };  
 
   const handleConfirm = () => {
     claimFunction();
@@ -106,7 +125,7 @@ function App() {
     );
   
     // Wait for the slide-out animation to complete
-    await new Promise(resolve => setTimeout(resolve, 200)); // Adjust this timing for the smoothness of the animation
+    await new Promise(resolve => setTimeout(resolve, 160)); // Adjust this timing for the smoothness of the animation
   };
   
   const removeAirdropsWithDelay = async () => {
