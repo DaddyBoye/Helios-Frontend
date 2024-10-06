@@ -7,8 +7,8 @@ const StarryBackground: React.FC = () => {
     // Function to create stars
     const createStars = (numStars: number): JSX.Element[] => {
         const stars: JSX.Element[] = [];
-        const minSpeed = 100; // Slower minimum speed (100 seconds)
-        const maxSpeed = 150; // Slower maximum speed (150 seconds)
+        const minSpeed = 150; // Slower minimum speed (100 seconds)
+        const maxSpeed = 200; // Slower maximum speed (150 seconds)
 
         for (let i = 0; i < numStars; i++) {
             const isLargeStar = Math.random() < 0.1; // 10% of stars are large
