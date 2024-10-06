@@ -83,16 +83,23 @@ function App() {
     setPopupVisible(false);
   };
 
+  // Function to remove airdrops one by one with a delay
+  const removeAirdropsWithDelay = async () => {
+    const delay = 300; // Delay between removing each airdrop
+    for (let i = 0; i < visibleAirdrops.length; i++) {
+      const airdropToRemove = visibleAirdrops[i];
+      await new Promise(resolve => setTimeout(resolve, delay));
+      setVisibleAirdrops((prevAirdrops) =>
+        prevAirdrops.filter((airdrop) => airdrop.id !== airdropToRemove.id)
+      );
+    }
+  };
+
   const claimFunction = async () => {
     try {
       if (telegramId) {
-        // Get the first airdrop to claim
-        const airdropToClaim = visibleAirdrops[0];
         await updateTotalAirdrops(telegramId); // Assuming this updates totals
-        // Remove airdrop from the visible state
-        setVisibleAirdrops((prevAirdrops) =>
-          prevAirdrops.filter((airdrop) => airdrop.id !== airdropToClaim.id)
-        );
+        await removeAirdropsWithDelay(); // Remove airdrops one by one
         await deleteAllUserAirdrops(telegramId); // Adjust this to remove airdrop from the backend if needed
       }
     } catch (error) {
@@ -117,7 +124,7 @@ function App() {
       <div className='flex flex-row mb-10 z-10 items-center justify-center'>
         <img src={freshcoin} alt="" className='w-12 pr-0.5 h-12' />
         <p className='my-auto text-white font-bold text-4xl'>
-          <animated.span>{number.to(n => Math.floor(n))}</animated.span> {/* Display animated count */}
+          <animated.span>{number.to(n => Math.floor(n))}</animated.span> {/* Display animated count */} 
         </p>
       </div>
       <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12'>
