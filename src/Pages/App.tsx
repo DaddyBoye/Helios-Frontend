@@ -17,47 +17,9 @@ interface Airdrop {
   adding: boolean;
 }
 
-const mockAirdrops: Airdrop[] = [
-  {
-    id: 1,
-    value: 100,
-    timestamp: new Date().toISOString(),
-    removing: false,
-    adding: true, // Mark as true to trigger the adding animation
-  },
-  {
-    id: 2,
-    value: 200,
-    timestamp: new Date().toISOString(),
-    removing: false,
-    adding: true,
-  },
-  {
-    id: 3,
-    value: 150,
-    timestamp: new Date().toISOString(),
-    removing: false,
-    adding: true,
-  },
-  {
-    id: 4,
-    value: 250,
-    timestamp: new Date().toISOString(),
-    removing: false,
-    adding: true,
-  },
-  {
-    id: 4,
-    value: 250,
-    timestamp: new Date().toISOString(),
-    removing: false,
-    adding: true,
-  },
-];
-
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
-  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>(mockAirdrops);
+  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
   const [claimInitiated, setClaimInitiated] = useState(false); 
   const [isRemoving, setIsRemoving] = useState(false);
 
