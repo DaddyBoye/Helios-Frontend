@@ -85,7 +85,7 @@ function App() {
             prevAirdrops.filter((visibleAirdrop) => visibleAirdrop.id !== airdrop.id)
           );
           resolve(null);
-        }, index * 2000); // Adjusted delay for smooth removal
+        }, index * 500);
       });
     }
 
