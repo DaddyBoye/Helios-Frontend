@@ -53,7 +53,7 @@ function App() {
   const { number } = useSpring({
     number: displayedAirdrops,
     from: { number: claimInitiated ? 0 : displayedAirdrops }, // Only count up if claim initiated
-    config: { duration: 1000 }, // Animation duration for smooth transition
+    config: { duration: 500 }, // Animation duration for smooth transition
   });
 
   useEffect(() => {
