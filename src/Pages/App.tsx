@@ -14,6 +14,7 @@ interface Airdrop {
   value: number;
   timestamp: string;
   index: number;
+  removing: boolean; // Add a removing property to each airdrop
 }
 
 function App() {
@@ -58,7 +59,8 @@ function App() {
 
   useEffect(() => {
     if (!isRemoving) {
-      setVisibleAirdrops(airdrops);
+      // Add a removing property to each airdrop when updating the visibleAirdrops state
+      setVisibleAirdrops(airdrops.map(airdrop => ({ ...airdrop, removing: false })));
     }
   }, [airdrops, isRemoving]);
 
@@ -71,27 +73,28 @@ function App() {
     setPopupVisible(false);
   };
 
-  const removeAirdropsWithDelay = async () => {
-    const sortedAirdrops = [...visibleAirdrops].sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+  const removeAirdrop = async (airdrop: Airdrop) => {
+    setVisibleAirdrops(prevAirdrops =>
+      prevAirdrops.map(item =>
+        item.id === airdrop.id ? { ...item, removing: true } : item
+      )
     );
 
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Wait for slide-out animation to finish
+    setVisibleAirdrops(prevAirdrops => prevAirdrops.filter(item => item.id !== airdrop.id));
+  };
+
+  const removeAirdropsWithDelay = async () => {
     setIsRemoving(true);
 
-    for (const [index, airdrop] of sortedAirdrops.entries()) {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          setVisibleAirdrops((prevAirdrops) =>
-            prevAirdrops.filter((visibleAirdrop) => visibleAirdrop.id !== airdrop.id)
-          );
-          resolve(null);
-        }, index * 500);
-      });
+    for (const airdrop of visibleAirdrops) {
+      await removeAirdrop(airdrop); // Remove each airdrop individually
     }
 
     if (telegramId) {
       await deleteAllUserAirdrops(telegramId);
     }
+
     setIsRemoving(false);
   };
 
@@ -106,19 +109,6 @@ function App() {
       console.error('Error during claim process:', error);
     }
   };
-
-  // Animations with better control over individual items
-  const createAirdropAnimation = (index: number) => useSpring({
-    from: { transform: 'translateX(-100%)', opacity: 0 }, // Start from off-screen
-    to: { transform: 'translateX(0)', opacity: 1 }, // Slide to its position
-    config: { tension: 280, friction: 60, delay: index * 100 }, // Staggered animation for each airdrop
-  });
-
-  const removeAirdropAnimation = useSpring({
-    from: { opacity: 1 },
-    to: { opacity: isRemoving ? 0 : 1 },
-    config: { duration: 500 },
-  });
 
   return (
     <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
@@ -166,10 +156,13 @@ function App() {
         <div className='flex flex-col items-center justify-center'>
           {visibleAirdrops.length > 0 ? (
             <ul className='flex flex-col w-full items-center justify-center'>
-              {visibleAirdrops.map((airdrop, index) => (
+              {visibleAirdrops.map((airdrop) => (
                 <animated.li
                   key={airdrop.id}
-                  style={isRemoving ? removeAirdropAnimation : createAirdropAnimation(index)} // Apply animations
+                  style={{
+                    transform: airdrop.removing ? 'translateX(100%)' : 'translateX(0)',
+                    transition: 'transform 0.5s ease', // Smooth slide-out transition
+                  }}
                   className={`bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto`}>
                   <Hamster className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
