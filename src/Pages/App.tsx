@@ -19,7 +19,8 @@ interface Airdrop {
 
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
-  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
+  const [airdropsFromParent, setAirdropsFromParent] = useState<Airdrop[]>([]); // Stores airdrops passed from parent
+  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]); // Visible airdrops in the UI
   const [claimInitiated, setClaimInitiated] = useState(false); 
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -59,24 +60,33 @@ function App() {
 
   useEffect(() => {
     if (!isRemoving) {
-      setVisibleAirdrops(
-        airdrops.length > 0
-          ? airdrops.map(airdrop => ({
-              ...airdrop,
-              removing: false,
-              adding: true, // Trigger adding animation for new airdrops
-            }))
-          : visibleAirdrops // Keep mock data for local testing
+      const newAirdrops = airdrops.filter(airdrop => 
+        !airdropsFromParent.some(existing => existing.id === airdrop.id)
       );
-
-      // Reset 'adding' state after animation completes
-      setTimeout(() => {
-        setVisibleAirdrops(prevAirdrops =>
-          prevAirdrops.map(airdrop => ({ ...airdrop, adding: false }))
-        );
-      }, 50);
+  
+      if (newAirdrops.length > 0) {
+        // Add new airdrops to the visible list with "adding" animation state
+        setVisibleAirdrops(prevAirdrops => [
+          ...prevAirdrops,
+          ...newAirdrops.map(airdrop => ({
+            ...airdrop,
+            adding: true,
+            removing: false,
+          })),
+        ]);
+  
+        // Update the local state tracking airdrops from the parent
+        setAirdropsFromParent(airdrops);
+  
+        // Reset 'adding' state after the animation completes
+        setTimeout(() => {
+          setVisibleAirdrops(prevAirdrops =>
+            prevAirdrops.map(airdrop => ({ ...airdrop, adding: false }))
+          );
+        }, 500); // Adjust the duration to match the animation timing
+      }
     }
-  }, [airdrops, isRemoving]);
+  }, [airdrops, isRemoving, airdropsFromParent]);
 
   const handleConfirm = () => {
     claimFunction();
