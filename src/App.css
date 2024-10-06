@@ -166,3 +166,13 @@
     opacity: 0.5; /* Shadow fades slightly when the element rises */
   }
 }
+
+.airdrop {
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.airdrop.added {
+  transform: translateX(0); /* Slide in when added */
+}
+
