@@ -7,7 +7,7 @@ import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import { useSpring, animated } from 'react-spring'; // Import useSpring and animated from react-spring
-import '../App.css'
+import '../App.css';
 
 interface Airdrop {
   id: number;
@@ -18,8 +18,8 @@ interface Airdrop {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
-  const [displayedAirdrops, setDisplayedAirdrops] = useState(0); // State for displayed airdrops
-  const [newTotal, setNewTotal] = useState(0); // New total for updates
+  const [displayedAirdrops, setDisplayedAirdrops] = useState(0); 
+  const [claimInitiated, setClaimInitiated] = useState(false); // Track if claim has been initiated
 
   const {
     airdrops,
@@ -49,29 +49,17 @@ function App() {
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
 
-  // Animation spring for displayed airdrops
+  // Animation spring for displayed airdrops (run only after claim is initiated)
   const { number } = useSpring({
     number: displayedAirdrops,
-    from: { number: 0 },
+    from: { number: claimInitiated ? 0 : displayedAirdrops }, // Only count up if claim initiated
     config: { duration: 1000 }, // Animation duration for smooth transition
   });
 
   useEffect(() => {
-    // Set airdrops to visible state
+    // Set airdrops to visible state on mount
     setVisibleAirdrops(airdrops);
     setDisplayedAirdrops(totalAirdrops); // Initialize displayed airdrops
-
-    // Update the displayed count gradually when totalAirdrops changes
-    if (totalAirdrops !== displayedAirdrops) {
-      setNewTotal(totalAirdrops);
-      const incrementCount = async () => {
-        for (let count = displayedAirdrops + 1; count <= totalAirdrops; count++) {
-          setDisplayedAirdrops(count);
-          await new Promise(resolve => setTimeout(resolve, 50)); // Delay for smooth count-up
-        }
-      };
-      incrementCount();
-    }
   }, [airdrops, totalAirdrops]);
 
   const handleConfirm = () => {
@@ -98,8 +86,13 @@ function App() {
   const claimFunction = async () => {
     try {
       if (telegramId) {
-        await updateTotalAirdrops(telegramId); // Assuming this updates totals
+        await updateTotalAirdrops(telegramId); // Update totals
         await removeAirdropsWithDelay(); // Remove airdrops one by one
+
+        // Trigger count-up after claim
+        setClaimInitiated(true);
+        setDisplayedAirdrops(totalAirdrops); // Set the count to total airdrops
+
         await deleteAllUserAirdrops(telegramId); // Adjust this to remove airdrop from the backend if needed
       }
     } catch (error) {
@@ -124,7 +117,11 @@ function App() {
       <div className='flex flex-row mb-10 z-10 items-center justify-center'>
         <img src={freshcoin} alt="" className='w-12 pr-0.5 h-12' />
         <p className='my-auto text-white font-bold text-4xl'>
-          <animated.span>{number.to(n => Math.floor(n))}</animated.span> {/* Display animated count */} 
+          {claimInitiated ? (
+            <animated.span>{number.to(n => Math.floor(n))}</animated.span> // Display animated count if claim initiated
+          ) : (
+            totalAirdrops // Display the static total on mount
+          )}
         </p>
       </div>
       <div className='bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12'>
@@ -161,13 +158,11 @@ function App() {
                   <div className="my-auto">{new Date(airdrop.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
                 </li>
               ))}
-
             </ul>
           ) : (
             <p className='text-black font-bold pt-20'>No Unclaimed Airdrops</p>
           )}
         </div>
-        <p className='hidden'>{newTotal}</p>
       </div>
       {popupVisible && (
         <Popup
