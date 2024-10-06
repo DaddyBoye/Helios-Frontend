@@ -7,7 +7,7 @@ const StarryBackground: React.FC = () => {
     // Function to create stars
     const createStars = (numStars: number): JSX.Element[] => {
         const stars: JSX.Element[] = [];
-        const minSpeed = 150; // Slower minimum speed (100 seconds)
+        const minSpeed = 180; // Slower minimum speed (100 seconds)
         const maxSpeed = 200; // Slower maximum speed (150 seconds)
 
         for (let i = 0; i < numStars; i++) {

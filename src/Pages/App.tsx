@@ -80,7 +80,7 @@ function App() {
       )
     );
 
-    await new Promise((resolve) => setTimeout(resolve, 200)); // Wait for slide-out animation to finish
+    await new Promise((resolve) => setTimeout(resolve, 220)); // Wait for slide-out animation to finish
     setVisibleAirdrops(prevAirdrops => prevAirdrops.filter(item => item.id !== airdrop.id));
   };
 
