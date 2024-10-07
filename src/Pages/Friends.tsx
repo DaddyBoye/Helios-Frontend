@@ -20,7 +20,7 @@ const Friends: React.FC = () => {
   };
 
   return (
-    <div className="relative flex flex-col font-sans h-screen">
+    <div className="relative flex flex-col font-sans h-screen pb-20 overflow-y-auto">
       <StarryBackground />
         <div className="z-10">
           <div className="mt-10 flex flex-col">
