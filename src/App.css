@@ -192,3 +192,18 @@
     margin-bottom: 1rem;
   }
 }
+
+@keyframes zoomPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px 3px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px 5px rgba(255, 215, 0, 1);
+  }
+}
+
+.claim-button-animation {
+  animation: zoomPulse 1s ease-in-out infinite;
+}

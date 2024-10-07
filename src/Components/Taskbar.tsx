@@ -17,7 +17,7 @@ const Taskbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            `pl-2 w-16 pr-2 justify-center text-center text-xs flex flex-col ${
+            `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
               isActive ? 'text-[#FFD700]' : 'text-white'
             }`
           }
@@ -26,10 +26,18 @@ const Taskbar = () => {
             <>
               <img
                 src={isActive ? HomeOpen : Home}
-                className="w-6 mx-auto h-5"
+                className={`w-6 mx-auto h-5 transition-transform duration-200 ${
+                  isActive ? 'scale-110' : 'scale-100'
+                }`}
                 alt="Home Logo"
               />
-              Home
+              <span
+                className={`transition-transform duration-200 ${
+                  isActive ? 'text-sm' : 'text-xs'
+                }`}
+              >
+                Home
+              </span>
             </>
           )}
         </NavLink>
@@ -38,7 +46,7 @@ const Taskbar = () => {
         <NavLink
           to="/earn"
           className={({ isActive }) =>
-            `pl-2 w-16 pr-2 justify-center text-center text-xs flex flex-col ${
+            `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
               isActive ? 'text-[#FFD700]' : 'text-white'
             }`
           }
@@ -47,10 +55,18 @@ const Taskbar = () => {
             <>
               <img
                 src={isActive ? EarnOpen : Earn}
-                className="w-6 mx-auto h-5"
+                className={`w-6 mx-auto h-5 transition-transform duration-200 ${
+                  isActive ? 'scale-110' : 'scale-100'
+                }`}
                 alt="Earn Logo"
               />
-              Earn
+              <span
+                className={`transition-transform duration-200 ${
+                  isActive ? 'text-sm' : 'text-xs'
+                }`}
+              >
+                Earn
+              </span>
             </>
           )}
         </NavLink>
@@ -59,7 +75,7 @@ const Taskbar = () => {
         <NavLink
           to="/friends"
           className={({ isActive }) =>
-            `pl-2 w-16 pr-2 justify-center text-center text-xs flex flex-col ${
+            `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
               isActive ? 'text-[#FFD700]' : 'text-white'
             }`
           }
@@ -68,10 +84,18 @@ const Taskbar = () => {
             <>
               <img
                 src={isActive ? FriendsOpen : Friends}
-                className="w-6 mx-auto h-5"
+                className={`w-6 mx-auto h-5 transition-transform duration-200 ${
+                  isActive ? 'scale-110' : 'scale-100'
+                }`}
                 alt="Friends Logo"
               />
-              Friends
+              <span
+                className={`transition-transform duration-200 ${
+                  isActive ? 'text-sm' : 'text-xs'
+                }`}
+              >
+                Friends
+              </span>
             </>
           )}
         </NavLink>
@@ -80,7 +104,7 @@ const Taskbar = () => {
         <NavLink
           to="/airdrop"
           className={({ isActive }) =>
-            `pl-2 w-16 pr-2 justify-center text-center text-xs flex flex-col ${
+            `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
               isActive ? 'text-[#FFD700]' : 'text-white'
             }`
           }
@@ -89,10 +113,18 @@ const Taskbar = () => {
             <>
               <img
                 src={isActive ? AirdropOpen : Airdrop}
-                className="w-6 mx-auto h-5"
+                className={`w-6 mx-auto h-5 transition-transform duration-200 ${
+                  isActive ? 'scale-110' : 'scale-100'
+                }`}
                 alt="Airdrop Logo"
               />
-              Airdrop
+              <span
+                className={`transition-transform duration-200 ${
+                  isActive ? 'text-sm' : 'text-xs'
+                }`}
+              >
+                Airdrop
+              </span>
             </>
           )}
         </NavLink>

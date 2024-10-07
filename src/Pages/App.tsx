@@ -166,6 +166,8 @@ function App() {
     }
   };
 
+  const hasAirdropsToClaim = visibleAirdrops.length > 0;
+
   return (
     <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
       <StarryBackground />
@@ -201,7 +203,12 @@ function App() {
             <p className="font-bold text-sm">Current Airdrop Round</p>
           </div>
           <div className="my-auto pl-8">
-            <button onClick={() => setPopupVisible(true)} className="bg-yellow-500 p-2 pl-4 pr-4 rounded-lg">
+          <button
+              onClick={() => setPopupVisible(true)}
+              className={`bg-yellow-500 p-2 pl-4 pr-4 rounded-lg ${
+                hasAirdropsToClaim ? 'claim-button-animation' : ''
+              }`}
+            >
               Claim
             </button>
           </div>
@@ -211,7 +218,7 @@ function App() {
       </div>
       {/* Make this container grow to take up remaining space */}
       <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full">
-        <p id="bottom-container" className="text-sm font-bold text-black pl-8 pt-5">
+        <p className="text-sm font-bold text-black pl-8 pt-5">
           Unclaimed Airdrops
         </p>
         <div className="flex flex-col items-center justify-center">
@@ -245,7 +252,7 @@ function App() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-gray-600">No unclaimed airdrops available</p>
+            <p className="text-sm pt-28 font-bold text-gray-700">No unclaimed airdrops available</p>
           )}
         </div>
       </div>
