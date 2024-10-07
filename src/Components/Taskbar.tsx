@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom';
 const Taskbar = () => {
   return (
     <div className="taskbar">
-      <div className="p-4 bg-[#3D4549] pt-2 pb-2 h-16 justify-between flex flex-row">
+      <div className="p-4 bg-[#3D4549] h-16 flex flex-row justify-between items-center"> {/* Add items-center for vertical centering */}
         
         {/* Home */}
         <NavLink
