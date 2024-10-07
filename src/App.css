@@ -176,3 +176,19 @@
   transform: translateX(0); /* Slide in when added */
 }
 
+/* Global CSS or Tailwind */
+@media (max-width: 640px) {
+  .text-2xl {
+    font-size: 1.5rem; /* Adjust font size */
+  }
+  .w-16 {
+    width: 4rem; /* Adjust logo size */
+    height: 4rem;
+  }
+  .mt-8 {
+    margin-top: 2rem; /* Position elements higher */
+  }
+  .mb-6 {
+    margin-bottom: 1rem;
+  }
+}

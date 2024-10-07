@@ -18,9 +18,6 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
   const [isSocialMediaMenuOpen, setIsSocialMediaMenuOpen] = useState(false); // New state for SocialMediaShare menu
   const baseUrl = "https://t.me/HeeliossBot?start=";
 
-  // Animation state
-  const [isAnimating, setIsAnimating] = useState(false);
-
   // Fetch telegramId using the Telegram SDK
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe) {
@@ -74,28 +71,9 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
     config: { tension: 130, friction: 20 }, // Control animation speed
   });
 
-  // Define slide-down animation
-  const slideDownAnimation = useSpring({
-    transform: isShareMenuOpen ? 'translateY(100%)' : 'translateY(0%)', // Slide down effect
-    opacity: isShareMenuOpen ? 0 : 1, // Fade effect
-    config: { tension: 130, friction: 20 }, // Control animation speed
-  });
-
-  // Function to handle slide-down animation before closing the menu
-  const slideDown = () => {
-    setIsAnimating(true); // Set animating state to true
-    // Wait for the animation to complete before closing the menu
-    setTimeout(() => {
-      toggleShareMenu();
-      setIsAnimating(false); // Reset animating state
-    }, 300); // Adjust timeout duration to match animation duration
-  };
-
   // Handler to toggle the share menu
   const handleToggleShareMenu = () => {
     if (isShareMenuOpen) {
-      slideDown(); // Trigger slide down animation
-    } else {
       toggleShareMenu(); // Open the menu immediately if not open
     }
   };
@@ -109,7 +87,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
           {/* Share Menu with animation */}
           <animated.div
-            style={isAnimating ? slideDownAnimation : slideUpAnimation}
+            style={slideUpAnimation}
             className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl"
           >
             {alertMessage && (
