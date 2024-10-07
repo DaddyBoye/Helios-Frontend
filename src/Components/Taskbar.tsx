@@ -27,7 +27,7 @@ const Taskbar = () => {
               <img
                 src={isActive ? HomeOpen : Home}
                 className={`w-6 mx-auto h-5 transition-transform duration-200 ${
-                  isActive ? 'scale-110' : 'scale-100'
+                  isActive ? 'scale-110' : 'scale-90'
                 }`}
                 alt="Home Logo"
               />
@@ -85,7 +85,7 @@ const Taskbar = () => {
               <img
                 src={isActive ? FriendsOpen : Friends}
                 className={`w-6 mx-auto h-5 transition-transform duration-200 ${
-                  isActive ? 'scale-110' : 'scale-100'
+                  isActive ? 'scale-110' : 'scale-90'
                 }`}
                 alt="Friends Logo"
               />
@@ -114,7 +114,7 @@ const Taskbar = () => {
               <img
                 src={isActive ? AirdropOpen : Airdrop}
                 className={`w-6 mx-auto h-5 transition-transform duration-200 ${
-                  isActive ? 'scale-110' : 'scale-100'
+                  isActive ? 'scale-110' : 'scale-90'
                 }`}
                 alt="Airdrop Logo"
               />
