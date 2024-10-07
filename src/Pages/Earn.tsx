@@ -1,5 +1,4 @@
 import StarryBackground from '../Components/StarryBackground';
-
 const App = () => {
     return (
         <div className="relative h-screen ">

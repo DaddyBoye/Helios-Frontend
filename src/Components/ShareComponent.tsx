@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from '../icons/Helios.svg';
-import checkmark from '../icons/mdi_tick-circle.svg'
+import checkmark from '../icons/mdi_tick-circle.svg';
 import { QRCode } from 'react-qrcode-logo';
 import SocialMediaShare from '../Components/SocialMediaShare';
+import { useSpring, animated } from '@react-spring/web';
 
 interface ShareComponentProps {
   isShareMenuOpen: boolean;
@@ -16,6 +17,9 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [isSocialMediaMenuOpen, setIsSocialMediaMenuOpen] = useState(false); // New state for SocialMediaShare menu
   const baseUrl = "https://t.me/HeeliossBot?start=";
+
+  // Animation state
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Fetch telegramId using the Telegram SDK
   useEffect(() => {
@@ -63,42 +67,77 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
     setIsSocialMediaMenuOpen(prev => !prev); // Toggle menu visibility
   };
 
+  // Define slide-up animation using react-spring
+  const slideUpAnimation = useSpring({
+    transform: isShareMenuOpen ? 'translateY(0%)' : 'translateY(100%)', // Slide up effect
+    opacity: isShareMenuOpen ? 1 : 0, // Fade effect
+    config: { tension: 130, friction: 20 }, // Control animation speed
+  });
+
+  // Define slide-down animation
+  const slideDownAnimation = useSpring({
+    transform: isShareMenuOpen ? 'translateY(100%)' : 'translateY(0%)', // Slide down effect
+    opacity: isShareMenuOpen ? 0 : 1, // Fade effect
+    config: { tension: 130, friction: 20 }, // Control animation speed
+  });
+
+  // Function to handle slide-down animation before closing the menu
+  const slideDown = () => {
+    setIsAnimating(true); // Set animating state to true
+    // Wait for the animation to complete before closing the menu
+    setTimeout(() => {
+      toggleShareMenu();
+      setIsAnimating(false); // Reset animating state
+    }, 300); // Adjust timeout duration to match animation duration
+  };
+
+  // Handler to toggle the share menu
+  const handleToggleShareMenu = () => {
+    if (isShareMenuOpen) {
+      slideDown(); // Trigger slide down animation
+    } else {
+      toggleShareMenu(); // Open the menu immediately if not open
+    }
+  };
+
   return (
     <>
       {isShareMenuOpen && (
         <>
           {/* Overlay */}
-          <div className="fixed inset-0 bg-black opacity-50 z-10" onClick={toggleShareMenu}></div>
+          <div className="fixed inset-0 bg-black opacity-50 z-10" onClick={handleToggleShareMenu}></div>
 
-          {/* Share Menu */}
-          <div className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl">
-            { alertMessage &&(
+          {/* Share Menu with animation */}
+          <animated.div
+            style={isAnimating ? slideDownAnimation : slideUpAnimation}
+            className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl"
+          >
+            {alertMessage && (
               <div className="mb-4 mt-4 pl-2 text-sm p-1 text-white w-11/12 text-center rounded-md fixed flex flex-row bg-[#000000]/50 top-16 left-1/2 transform -translate-x-1/2">
-                <img src={checkmark} alt="" width={17} height={17}/><p className='pl-1 my-auto'>{alertMessage}</p>
+                <img src={checkmark} alt="" width={17} height={17} /><p className='pl-1 my-auto'>{alertMessage}</p>
               </div>
             )}
-
 
             <p className="text-lg font-bold mt-8 text-white mb-4">Invite a friend</p>
 
             {
-          referralLink ? (
-            <QRCode
-              value={referralLink || ''}  // Fallback to an empty string when referralLink is null
-              size={289}
-              qrStyle="dots"
-              eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
-              fgColor="#FAAD00"
-              bgColor="#194464"
-              logoImage={logo}
-              logoWidth={60}
-              logoHeight={60}
-              removeQrCodeBehindLogo={true}
-              />
-            ) : (
-              <p className="text-white">Generating QR Code...</p>
-            )
-          }
+              referralLink ? (
+                <QRCode
+                  value={referralLink || ''}  // Fallback to an empty string when referralLink is null
+                  size={289}
+                  qrStyle="dots"
+                  eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
+                  fgColor="#FAAD00"
+                  bgColor="#194464"
+                  logoImage={logo}
+                  logoWidth={60}
+                  logoHeight={60}
+                  removeQrCodeBehindLogo={true}
+                />
+              ) : (
+                <p className="text-white">Generating QR Code...</p>
+              )
+            }
 
             <button
               onClick={copyToClipboard}
@@ -116,7 +155,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
             {/* Close Share Menu Button */}
             <button
-              onClick={toggleShareMenu} // Use the prop function to close the main share menu
+              onClick={handleToggleShareMenu} // Use the new handler to close the main share menu
               className="text-white px-4 py-2 text-opacity-50 mb-4 mt-2 rounded-md w-11/12 hover:bg-red-600"
             >
               Close
@@ -126,7 +165,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
               isOpen={isSocialMediaMenuOpen}
               toggleMenu={toggleSocialMediaMenu} // Pass the correct function
             />
-          </div>
+          </animated.div>
         </>
       )}
     </>
