@@ -4,31 +4,28 @@ import logo from '../icons/Helios.svg';
 import checkmark from '../icons/mdi_tick-circle.svg';
 import { QRCode } from 'react-qrcode-logo';
 import SocialMediaShare from '../Components/SocialMediaShare';
-import { useSpring, animated } from '@react-spring/web';
 
 interface ShareComponentProps {
   isShareMenuOpen: boolean;
-  toggleShareMenu: () => void; // Renamed for clarity
+  toggleShareMenu: () => void;
 }
 
 const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggleShareMenu }) => {
   const [referralLink, setReferralLink] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [isSocialMediaMenuOpen, setIsSocialMediaMenuOpen] = useState(false); // New state for SocialMediaShare menu
+  const [isSocialMediaMenuOpen, setIsSocialMediaMenuOpen] = useState(false);
   const baseUrl = "https://t.me/HeeliossBot?start=";
 
-  // Fetch telegramId using the Telegram SDK
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe) {
       const userData = window.Telegram.WebApp.initDataUnsafe.user;
       if (userData) {
-        setTelegramId(userData.id); // Set the telegramId from the SDK
+        setTelegramId(userData.id);
       }
     }
   }, []);
 
-  // Fetch referral token from server when the telegramId is available
   useEffect(() => {
     if (!telegramId) return;
 
@@ -45,50 +42,34 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
     fetchReferralToken();
   }, [telegramId]);
 
-  // Function to copy the referral link
   const copyToClipboard = () => {
     if (referralLink) {
       navigator.clipboard.writeText(referralLink)
         .then(() => {
           setAlertMessage('Referral link copied to clipboard!');
-          setTimeout(() => setAlertMessage(null), 2000); // Clear alert after 2 seconds
+          setTimeout(() => setAlertMessage(null), 2000);
         })
         .catch(() => {
           setAlertMessage('Failed to copy the referral link.');
-          setTimeout(() => setAlertMessage(null), 2000); // Clear alert after 2 seconds
+          setTimeout(() => setAlertMessage(null), 2000);
         });
     }
   };
 
   const toggleSocialMediaMenu = () => {
-    setIsSocialMediaMenuOpen(prev => !prev); // Toggle menu visibility
-  };
-
-  // Define slide-up animation using react-spring
-  const slideUpAnimation = useSpring({
-    transform: isShareMenuOpen ? 'translateY(0%)' : 'translateY(100%)', // Slide up effect
-    opacity: isShareMenuOpen ? 1 : 0, // Fade effect
-    config: { tension: 130, friction: 20 }, // Control animation speed
-  });
-
-  // Handler to toggle the share menu
-  const handleToggleShareMenu = () => {
-    if (isShareMenuOpen) {
-      toggleShareMenu(); // Open the menu immediately if not open
-    }
+    setIsSocialMediaMenuOpen(prev => !prev);
   };
 
   return (
     <>
-      {isShareMenuOpen && (
-        <>
-          {/* Overlay */}
-          <div className="fixed inset-0 bg-black opacity-50 z-10" onClick={handleToggleShareMenu}></div>
+          <div 
+          className={`fixed inset-0 bg-black opacity-50 z-10 ${isShareMenuOpen ? 'block' : 'hidden'}`}
+          onClick={toggleShareMenu}>
+          </div>
 
-          {/* Share Menu with animation */}
-          <animated.div
-            style={slideUpAnimation}
-            className="fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl"
+          <div
+            className={`fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl
+            transition-transform duration-300 ease-in-out transform ${isShareMenuOpen ? 'translate-y-0' : 'translate-y-full'}`}
           >
             {alertMessage && (
               <div className="mb-4 mt-4 pl-2 text-sm p-1 text-white w-11/12 text-center rounded-md fixed flex flex-row bg-[#000000]/50 top-16 left-1/2 transform -translate-x-1/2">
@@ -98,55 +79,64 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
             <p className="text-lg font-bold mt-8 text-white mb-4">Invite a friend</p>
 
-            {
-              referralLink ? (
-                <QRCode
-                  value={referralLink || ''}  // Fallback to an empty string when referralLink is null
-                  size={289}
-                  qrStyle="dots"
-                  eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
-                  fgColor="#FAAD00"
-                  bgColor="#194464"
-                  logoImage={logo}
-                  logoWidth={60}
-                  logoHeight={60}
-                  removeQrCodeBehindLogo={true}
-                />
-              ) : (
-                <p className="text-white">Generating QR Code...</p>
-              )
-            }
+            {baseUrl ? (
+              <QRCode
+                value={referralLink || ''}
+                size={
+                  window.innerWidth >= 414
+                    ? 250  // Large phones (e.g., iPhone X, Pixel XL)
+                    : window.innerWidth >= 375
+                    ? 225  // Regular phones (e.g., iPhone 6/7/8)
+                    : 200  // Small phones (e.g., iPhone SE)
+                }
+                qrStyle="dots"
+                eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
+                fgColor="#FAAD00"
+                bgColor="#194464"
+                logoImage={logo}
+                logoWidth={window.innerWidth >= 414
+                  ? 40  // Large phones (e.g., iPhone X, Pixel XL)
+                  : window.innerWidth >= 375
+                  ? 35  // Regular phones (e.g., iPhone 6/7/8)
+                  : 30 }  // Dynamically resize logo
+                  logoHeight={window.innerWidth >= 414
+                    ? 40  // Large phones (e.g., iPhone X, Pixel XL)
+                    : window.innerWidth >= 375
+                    ? 35  // Regular phones (e.g., iPhone 6/7/8)
+                    : 30 }  // Dynamically resize logo
+                removeQrCodeBehindLogo={true}
+              />
+            ) : (
+              <p className="text-white">Generating QR Code...</p>
+            )}
 
             <button
               onClick={copyToClipboard}
-              className="bg-blue-500 text-white w-11/12 px-4 py-2 mt-4 rounded-md hover:bg-blue-600"
+              className="bg-blue-500 text-white w-11/12 px-4 py-2 mt-4 rounded-md hover:bg-blue-600 text-sm md:text-base"
             >
               Copy Link
             </button>
 
             <button
-              onClick={toggleSocialMediaMenu} // Use the new function for toggling social media share
-              className="bg-blue-500 mt-4 text-white px-4 py-2 rounded-md w-11/12 hover:bg-blue-600"
+              onClick={toggleSocialMediaMenu}
+              className="bg-blue-500 mt-4 text-white px-4 py-2 rounded-md w-11/12 hover:bg-blue-600 text-sm md:text-base"
             >
               {isSocialMediaMenuOpen ? 'Close Share Menu' : 'Share Referral'}
             </button>
 
-            {/* Close Share Menu Button */}
             <button
-              onClick={handleToggleShareMenu} // Use the new handler to close the main share menu
-              className="text-white px-4 py-2 text-opacity-50 mb-4 mt-2 rounded-md w-11/12 hover:bg-red-600"
+              onClick={toggleShareMenu}
+              className="text-white px-4 py-2 text-opacity-50 mb-4 mt-2 rounded-md w-11/12 hover:bg-red-600 text-sm md:text-base"
             >
               Close
             </button>
 
             <SocialMediaShare
               isOpen={isSocialMediaMenuOpen}
-              toggleMenu={toggleSocialMediaMenu} // Pass the correct function
+              toggleMenu={toggleSocialMediaMenu}
             />
-          </animated.div>
+          </div>
         </>
-      )}
-    </>
   );
 };
 

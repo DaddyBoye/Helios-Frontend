@@ -15,8 +15,8 @@ const Friends: React.FC = () => {
 
   // Toggle the share menu and taskbar visibility
   const toggleShareMenu = () => {
-    setIsShareMenuOpen(!isShareMenuOpen);
-    toggleTaskbar(isShareMenuOpen); // Hide taskbar when share menu is open
+    setIsShareMenuOpen(prev => !prev);
+    toggleTaskbar(isShareMenuOpen);
   };
 
   return (
