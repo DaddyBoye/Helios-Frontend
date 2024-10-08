@@ -26,7 +26,7 @@ const Friends: React.FC = () => {
           <div className="w-16 md:w-20 lg:w-24 mx-auto h-16 md:h-20 lg:h-24 bg-[#D9D9D9] rounded-full">
             <img src={friendsLogo} alt="Three Friends" className="w-full h-full object-cover rounded-full" />
           </div>
-          <p className="mx-auto text-2xl md:text-3xl lg:text-5xl pl-2 pr-2 font-bold text-white">
+          <p className="mx-auto text-2xl pt-5 md:text-3xl lg:text-5xl pl-2 pr-2 font-bold text-white">
             Invite friends, earn points
           </p>
         </div>

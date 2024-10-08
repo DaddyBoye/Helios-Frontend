@@ -1,7 +1,7 @@
 import ProgressBar from '../Components/ProgressBar';
 import mascot from '../images/MascotCircles.svg';
 import freshcoin from '../images/FreshCoin.svg';
-import Hamster from '../icons/Hamster';
+import Solis from '../icons/fdv 1.svg';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -96,7 +96,7 @@ function App() {
       setAirdropsFromParent((prev) => [...prev, airdrop]);
   
       // Wait before showing the next airdrop
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Adjust delay as needed
+      await new Promise((resolve) => setTimeout(resolve, 600)); // Adjust delay as needed
   
       // Reset 'adding' state for the current airdrop
       setVisibleAirdrops((prevAirdrops) =>
@@ -169,7 +169,7 @@ function App() {
   const hasAirdropsToClaim = visibleAirdrops.length > 0;
 
   return (
-    <div className="relative flex flex-col font-sans h-screen bg-gradient-to-b from-[#185C8D] to-[#1A1F20]">
+    <div className="relative flex flex-col font-sans h-screen ">
       <StarryBackground />
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -237,7 +237,7 @@ function App() {
                   }}
                   className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto"
                 >
-                  <Hamster className="w-6 h-6 mr-3 my-auto" />
+                  <img src={Solis} className="w-6 h-6 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
                   <div className="text-sm mr-2 my-auto">{airdrop.value}</div>

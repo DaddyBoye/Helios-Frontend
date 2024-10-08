@@ -1,5 +1,5 @@
 import Coin from '../images/dollar-coin.png';
-import Hamster from '../icons/Hamster';
+import Solis from '../icons/fdv 1.svg';
 import { useState, useEffect } from 'react';
 
 interface ProgressBarProps {
@@ -25,7 +25,7 @@ const ProgressBar = ({ progress }: ProgressBarProps) => {
           style={{ width: `${(progress / CYCLE_DURATION) * 100}%` }}
         ></div>
         <div className="z-40 absolute flex flex-row h-16 text-md my-auto p-3 pl-6">
-          <Hamster className="w-5 h-5 mr-3 my-auto" />
+          <img src={Solis} className="w-8 h-8 mr-3 my-auto" />
           <div className="flex my-auto text-sm flex-row gap-1">
             Mining...
           </div>
