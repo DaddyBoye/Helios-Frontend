@@ -49,7 +49,7 @@ const Earn = () => {
                     </div>
                 </div>
                 <h1 className='text-left pt-4 pl-4 text-lg'>Socials</h1>
-                <div className='p-2 pl-5 bg-[#194564]/ w-11/12 flex flex-col mx-auto rounded-2xl'>
+                <div className='p-2 pl-5 bg-[#194564]/80 w-11/12 flex flex-col mx-auto rounded-2xl'>
                     <div className='flex flex-row '>
                         <div className='bg-[#435B6D] rounded-xl flex items-center w-14 h-14 justify-center'>
                           <img src={Instagram} alt="" />
