@@ -16,8 +16,8 @@ export default {
             filter: 'drop-shadow(0 0 0 rgba(0,0,0,0))', // No shadow when normal
           },
           '50%': {
-            transform: 'scale(1.1) rotate(180deg)',
-            filter: 'drop-shadow(0 0 40px rgba(255, 255, 0, 1))', // Stronger glow effect
+            transform: 'scale(1.2) rotate(180deg)',
+            filter: 'drop-shadow(0 0 20px rgba(255, 255, 0, 1))', // Stronger glow effect
           },
         },
       },
