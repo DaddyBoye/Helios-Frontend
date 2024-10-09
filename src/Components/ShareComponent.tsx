@@ -77,12 +77,12 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             className={`fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl
             transition-transform duration-300 ease-in-out transform ${isShareMenuOpen ? 'translate-y-0' : 'translate-y-full'}`}
           >
-            {alertMessage && (
-              <div className="mb-4 mt-4 pl-2 text-sm p-1 text-white w-11/12 text-center rounded-md fixed flex flex-row bg-[#000000]/50 -top-20 left-1/2 transform -translate-x-1/2">
-                <img src={DarkSolis} alt="" width={17} height={17} /><p className='pl-1 my-auto'>{alertMessage}</p>
-              </div>
-            )}
-
+          { alertMessage &&(
+            <div className="mb-4 mt-4 pl-2 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 -top-20 left-1/2 transform -translate-x-1/2">
+              <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" /> {/* Increase image size here */}
+              <p className='pl-2 my-auto'>{alertMessage}</p>
+            </div>
+          )}
             <p className="text-lg font-bold mt-8 text-white mb-4">Invite a friend</p>
 
             {baseUrl ? (
