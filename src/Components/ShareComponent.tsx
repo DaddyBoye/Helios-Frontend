@@ -48,7 +48,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
         .then(() => {
           // Vibrate the device for a short duration (e.g., 100ms)
           if (navigator.vibrate) {
-            navigator.vibrate(200); // Adjust the duration as needed
+            navigator.vibrate(100); // Adjust the duration as needed
           }
   
           setAlertMessage('Referral link copied to clipboard!');
@@ -77,7 +77,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             className={`fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl
             transition-transform duration-300 ease-in-out transform ${isShareMenuOpen ? 'translate-y-0' : 'translate-y-full'}`}
           >
-          { alertMessage &&(
+          { alertMessage && (
             <div className="mb-4 mt-4 pl-2 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 -top-20 left-1/2 transform -translate-x-1/2">
               <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" /> {/* Increase image size here */}
               <p className='pl-2 my-auto'>{alertMessage}</p>
