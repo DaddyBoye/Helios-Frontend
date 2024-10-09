@@ -237,7 +237,7 @@ function App() {
                   }}
                   className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto"
                 >
-                  <img src={Solis} className="w-8 h-18 mr-3 my-auto" />
+                  <img src={Solis} className="w-18 h-18 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
                   <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
