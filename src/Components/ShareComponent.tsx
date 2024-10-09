@@ -103,12 +103,12 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
                 logoWidth={window.innerWidth >= 414
                   ? 40  // Large phones (e.g., iPhone X, Pixel XL)
                   : window.innerWidth >= 375
-                  ? 35  // Regular phones (e.g., iPhone 6/7/8)
+                  ? 36  // Regular phones (e.g., iPhone 6/7/8)
                   : 30 }  // Dynamically resize logo
                   logoHeight={window.innerWidth >= 414
                     ? 40  // Large phones (e.g., iPhone X, Pixel XL)
                     : window.innerWidth >= 375
-                    ? 35  // Regular phones (e.g., iPhone 6/7/8)
+                    ? 36  // Regular phones (e.g., iPhone 6/7/8)
                     : 30 }  // Dynamically resize logo
                 removeQrCodeBehindLogo={true}
               />
