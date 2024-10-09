@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import logo from '../icons/Helios.svg';
-import checkmark from '../icons/mdi_tick-circle.svg';
+import DarkSolis from '../images/Solisss.svg';
 import { QRCode } from 'react-qrcode-logo';
 import SocialMediaShare from '../Components/SocialMediaShare';
 
@@ -73,7 +73,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
           >
             {alertMessage && (
               <div className="mb-4 mt-4 pl-2 text-sm p-1 text-white w-11/12 text-center rounded-md fixed flex flex-row bg-[#000000]/50 -top-20 left-1/2 transform -translate-x-1/2">
-                <img src={checkmark} alt="" width={17} height={17} /><p className='pl-1 my-auto'>{alertMessage}</p>
+                <img src={DarkSolis} alt="" width={17} height={17} /><p className='pl-1 my-auto'>{alertMessage}</p>
               </div>
             )}
 
