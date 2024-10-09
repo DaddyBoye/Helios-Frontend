@@ -1,7 +1,7 @@
 import ProgressBar from '../Components/ProgressBar';
 import mascot from '../images/MascotCircles.svg';
-import freshcoin from '../images/FreshCoin.svg';
-import Solis from '../images/solis.svg';
+import freshcoin from '../images/Group 9.svg';
+import Solis from '../images/Solisss.svg';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';

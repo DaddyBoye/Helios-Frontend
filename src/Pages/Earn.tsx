@@ -8,7 +8,7 @@ import Instagram from '../icons/insta-removebg-preview 1.svg';
 import X from '../icons/x-removebg-preview 1.svg';
 import YouTube from '../icons/yt-removebg-preview 1.svg';
 import Telegram from '../icons/tg-removebg-preview 1.svg';
-import Solis from '../icons/fdv 1.svg';
+import Solis from '../icons/fdv 1 (1).svg';
 import Friends from '../icons/Friends Vector.svg';
 import User from '../icons/edeef 1.svg';
 import SlidingMenu from '../Components/SlidingMenu'; // Import SlidingMenu
