@@ -1,4 +1,3 @@
-// Earn.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import Helios3 from '../images/helios 3 mascot 32.jpeg';
@@ -11,7 +10,7 @@ import Telegram from '../icons/tg-removebg-preview 1.svg';
 import Solis from '../icons/fdv 1 (1).svg';
 import Friends from '../icons/Friends Vector.svg';
 import User from '../icons/edeef 1.svg';
-import SlidingMenu from '../Components/SlidingMenu'; // Import SlidingMenu
+import SlidingMenu from '../Components/SlidingMenu';
 
 interface Platform {
     icon: string;
@@ -41,9 +40,11 @@ interface CarouselImage {
     longDescription: string;
 }
 
+type SelectedItem = Platform | InviteTask | CarouselImage;
+
 const Earn = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null); // Track selected platform
+    const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
 
     const socialPlatforms: Platform[] = [
@@ -142,30 +143,10 @@ const Earn = () => {
         }
     }, [currentImageIndex]);
 
-    const handleImageClick = (imageInfo: CarouselImage) => {
-        const platform: Platform = {
-            icon: Instagram, // Use a default or derived icon
-            name: imageInfo.title,
-            text: imageInfo.description,
-            link: imageInfo.link,
-            image: imageInfo.image,
-            color: imageInfo.color,
-        };
-        setSelectedPlatform(platform);
+    const handleItemClick = (item: SelectedItem) => {
+        setSelectedItem(item);
     };
-    
-    const handleInviteClick = (task: InviteTask) => {
-        const defaultIcon = Instagram; // Set a default icon, e.g., Instagram
-        setSelectedPlatform({
-            name: task.title,
-            text: `Earn ${task.reward} by inviting friends!`,
-            link: task.link,
-            image: task.image,
-            icon: defaultIcon, // Add the icon property
-            color: task.color // Use the color from the invite task
-        });
-    };
-    
+
     const renderHeader = () => (
         <div className='flex flex-row items-center justify-between mt-4 m-2 bg-[#185C8D]/50 h-12 p-1 pl-2 rounded-lg'>
             <div className='flex flex-row items-center justify-center'>
@@ -190,11 +171,10 @@ const Earn = () => {
         </div>
     );
 
-
     const renderImageCarousel = () => (
         <div ref={carouselRef} className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar snap-x snap-mandatory'>
             {images.map((imageInfo, index) => (
-                <div key={index} className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center' onClick={() => handleImageClick(imageInfo)}>
+                <div key={index} className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center' onClick={() => handleItemClick(imageInfo)}>
                     <img src={imageInfo.image} alt={imageInfo.title} className="w-full h-full object-cover rounded-2xl" />
                     <div className="absolute inset-0 bg-gradient-to-b from-[#09161F] via-transparent to-[#09161F] rounded-2xl"></div>
                     <div className="absolute top-4 left-4 text-white">
@@ -214,7 +194,7 @@ const Earn = () => {
             <div className="p-1 pl-3 bg-[#194564]/80 w-11/12 flex flex-col mx-auto rounded-xl text-sm">
                 {socialPlatforms.map((platform, index) => (
                     <React.Fragment key={platform.name}>
-                        <div className="flex flex-row items-center py-1" onClick={() => setSelectedPlatform(platform)}>
+                        <div className="flex flex-row items-center py-1" onClick={() => handleItemClick(platform)}>
                             <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center">
                                 <img src={platform.icon} alt={platform.name} className="w-9 h-9" />
                             </div>
@@ -242,9 +222,8 @@ const Earn = () => {
           </div>
           <div className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar'>
             {inviteTasks.map((task, index) => (
-              <div key={index} className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0' onClick={() => handleInviteClick(task)}>
+              <div key={index} className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0' onClick={() => handleItemClick(task)}>
                 <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center mb-2">
-                  {/* You can replace this with the actual icon */}
                   <img src={Friends} alt="Invite icon" className="w-6 h-6" />
                 </div>
                 <p className="text-left text-sm font-bold mb-1">{task.title}</p>
@@ -253,24 +232,23 @@ const Earn = () => {
             ))}
           </div>
         </>
-      );
+    );
 
     return (
         <div className="relative font-sans h-full pb-20 flex flex-col overflow-y-auto">
             <StarryBackground />
             <div className="relative z-10 flex flex-col text-center text-white flex-grow">
-            {renderHeader()}
-            {renderImageCarousel()}
-            {renderSocialSection()}
-            {renderInviteTasksSection()}
-            
-            {/* Render Sliding Menu */}
-            {selectedPlatform && (
-                <SlidingMenu 
-                    selectedItem={selectedPlatform} 
-                    onClose={() => setSelectedPlatform(null)} 
-                />
-            )}
+                {renderHeader()}
+                {renderImageCarousel()}
+                {renderSocialSection()}
+                {renderInviteTasksSection()}
+                
+                {selectedItem && (
+                    <SlidingMenu 
+                        selectedItem={selectedItem} 
+                        onClose={() => setSelectedItem(null)} 
+                    />
+                )}
             </div>
         </div>
     );

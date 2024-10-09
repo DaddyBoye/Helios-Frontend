@@ -83,7 +83,9 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
               <p className='pl-2 my-auto'>{alertMessage}</p>
             </div>
           )}
-            <p className="text-lg font-bold mt-8 text-white mb-4">Invite a friend</p>
+
+          <div className='flex flex-col items-center gap-2 w-full'>
+            <p className="text-lg font-bold text-white">Invite a friend</p>
 
             {baseUrl ? (
               <QRCode
@@ -93,7 +95,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
                     ? 260  // Large phones (e.g., iPhone X, Pixel XL)
                     : window.innerWidth >= 375
                     ? 250  // Regular phones (e.g., iPhone 6/7/8)
-                    : 200  // Small phones (e.g., iPhone SE)
+                    : 225  // Small phones (e.g., iPhone SE)
                 }
                 qrStyle="dots"
                 eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
@@ -118,25 +120,25 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
             <button
               onClick={copyToClipboard}
-              className="bg-blue-500 text-white w-11/12 px-4 py-2 mt-4 rounded-md hover:bg-blue-600 text-sm md:text-base"
+              className="bg-blue-500 text-white w-11/12 px-4 py-2 rounded-md hover:bg-blue-600 text-base"
             >
               Copy Link
             </button>
 
             <button
               onClick={toggleSocialMediaMenu}
-              className="bg-blue-500 mt-4 text-white px-4 py-2 rounded-md w-11/12 hover:bg-blue-600 text-sm md:text-base"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md w-11/12 hover:bg-blue-600 text-base"
             >
               {isSocialMediaMenuOpen ? 'Close Share Menu' : 'Share Referral'}
             </button>
 
             <button
               onClick={toggleShareMenu}
-              className="text-white px-4 py-2 text-opacity-50 mb-4 mt-2 rounded-md w-11/12 hover:bg-red-600 text-sm md:text-base"
+              className="text-white px-4 py-2 text-opacity-50 rounded-md w-11/12 hover:bg-red-600 text-base"
             >
               Close
             </button>
-
+            </div>
             <SocialMediaShare
               isOpen={isSocialMediaMenuOpen}
               toggleMenu={toggleSocialMediaMenu}
