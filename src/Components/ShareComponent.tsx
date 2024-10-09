@@ -46,6 +46,11 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
     if (referralLink) {
       navigator.clipboard.writeText(referralLink)
         .then(() => {
+          // Vibrate the device for a short duration (e.g., 100ms)
+          if (navigator.vibrate) {
+            navigator.vibrate(200); // Adjust the duration as needed
+          }
+  
           setAlertMessage('Referral link copied to clipboard!');
           setTimeout(() => setAlertMessage(null), 2000);
         })
@@ -55,6 +60,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
         });
     }
   };
+  
 
   const toggleSocialMediaMenu = () => {
     setIsSocialMediaMenuOpen(prev => !prev);
