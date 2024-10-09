@@ -90,9 +90,9 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
                 value={referralLink || ''}
                 size={
                   window.innerWidth >= 414
-                    ? 250  // Large phones (e.g., iPhone X, Pixel XL)
+                    ? 260  // Large phones (e.g., iPhone X, Pixel XL)
                     : window.innerWidth >= 375
-                    ? 225  // Regular phones (e.g., iPhone 6/7/8)
+                    ? 250  // Regular phones (e.g., iPhone 6/7/8)
                     : 200  // Small phones (e.g., iPhone SE)
                 }
                 qrStyle="dots"
