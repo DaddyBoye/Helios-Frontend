@@ -27,15 +27,24 @@ const Friends: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [referralLink, setReferralLink] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
+  const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
   const baseUrl = "https://t.me/HeeliossBot?start=";
   const [friends, setFriends] = useState<Friend[]>([]); // Initially an empty array
 
   useEffect(() => {
-    if (window.Telegram?.WebApp?.initDataUnsafe) {
-      const userData = window.Telegram.WebApp.initDataUnsafe.user;
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+
+      const userData = tg.initDataUnsafe.user;
       if (userData) {
         setTelegramId(userData.id);
+        setTelegramUsername(userData.username);
+      } else {
+        console.error('No user data available');
       }
+    } else {
+      console.error('This app should be opened in Telegram');
     }
   }, []);
 
@@ -59,25 +68,31 @@ const Friends: React.FC = () => {
     if (!telegramId) return;
 
     const fetchFriends = async () => {
-        try {
-            const response = await axios.get(`https://server.therotrade.tech/api/referral/users/${telegramId}`);
-            console.log('API Response:', response.data); // Log the entire response
-            
-            const fetchedFriends = response.data.referrals.map((referral: any) => ({
-                id: referral.referredUserTelegramId,
-                name: referral.users.telegramUsername,
-                score: referral.users.totalAirdrops,
-                referralCount: referral.users.referralCount,
-                avatar: User,
-            }));
-
-            console.log('Fetched Friends:', fetchedFriends); // Log the processed friends
-            setFriends(fetchedFriends); // Update the state with the fetched friends
-        } catch (error) {
-            console.error('Error fetching friends:', error);
-            setFriends([]); // Set to an empty array if an error occurs
-        }
-    };
+      try {
+          console.log('Fetching friends for telegramId:', telegramId);
+          const response = await axios.get(`https://server.therotrade.tech/api/user/referral/users/${telegramId}`);
+          console.log('API Response:', response.data);
+  
+          if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
+              const fetchedFriends = response.data.referrals.map((referral: any) => ({
+                  id: referral.referredUserTelegramId,
+                  name: referral.users?.telegramUsername || 'Unknown',
+                  score: referral.users?.totalAirdrops || 0,
+                  referralCount: referral.users?.referralCount || 0,
+                  avatar: User,
+              }));
+  
+              console.log('Processed Friends:', fetchedFriends);
+              setFriends(fetchedFriends);
+          } else {
+              console.log('No referrals found in the response');
+              setFriends([]);
+          }
+      } catch (error) {
+          console.error('Error fetching friends:', error);
+          setFriends([]);
+      }
+  };
 
     fetchFriends();
 }, [telegramId]);
@@ -122,6 +137,9 @@ const Friends: React.FC = () => {
     toggleTaskbar(isShareMenuOpen);
   };
 
+  // Determine the height of the friends list based on the number of friends
+  const friendsHeight = friends.length === 1 ? 'h-17.5' : friends.length === 2 ? 'h-17.5' : 'h-48';
+
   return (
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
       <StarryBackground />
@@ -138,7 +156,7 @@ const Friends: React.FC = () => {
           <div className="mx-auto bg-red-200 mt-2 mb-2 rounded-full h-28 w-28 flex justify-center items-center">
             <img src={User} alt="" className="w-16 h-16" />
           </div>
-          <p className="text-white font-bold text-xl">Your Helios Username</p>
+          <p className="text-white font-bold text-xl">{telegramUsername}</p>
           <div className="mx-auto justify-between mt-2 w-6/12 px-2 bg-white/20 backdrop-blur-md rounded-2xl flex flex-row">
             <div className="flex flex-row">
               <img src={Solis} className="w-7 h-7" />
@@ -184,7 +202,7 @@ const Friends: React.FC = () => {
         <p className="text-white text-center">You have no referrals.</p>
     </div>
 ) : (
-    <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
+    <div className={`w-11/12 mx-auto border py-1.5 transition-height duration-300 ease-in-out ${friendsHeight} rounded-lg border-[#FAAD00] overflow-hidden`}>
         <div
             ref={friendsContainerRef}
             className={`transition-transform duration-500 ease-in-out`}
