@@ -217,7 +217,6 @@ const Friends: React.FC = () => {
           </div>
         ) : (
           <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden"
-          style={{ height: friends.length === 1 ? '20px' : friends.length === 2 ? '36px' : '48px' }}
           >
             <div
               ref={friendsContainerRef}
