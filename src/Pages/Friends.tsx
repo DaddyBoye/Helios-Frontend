@@ -27,11 +27,7 @@ const Friends: React.FC = () => {
   const [referralLink, setReferralLink] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const baseUrl = "https://t.me/HeeliossBot?start=";
-  const [friends, setFriends] = useState<Friend[]>([
-    { id: 1, name: 'iam_goddy', score: 132256, avatar: User },
-    { id: 2, name: 'john_doe', score: 125000, avatar: User },
-    { id: 3, name: 'jane_smith', score: 120000, avatar: User },
-  ]);
+  const [friends, setFriends] = useState<Friend[]>([]); // Initially an empty array
 
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe) {
@@ -58,15 +54,36 @@ const Friends: React.FC = () => {
     fetchReferralToken();
   }, [telegramId]);
 
+  useEffect(() => {
+    if (!telegramId) return;
+
+    const fetchFriends = async () => {
+      try {
+        const response = await axios.get(`https://server.therotrade.tech/api/user/referral/users/${telegramId}`);
+        const fetchedFriends = response.data.referrals.map((referral: any) => ({
+          id: referral.referredUserTelegramId,
+          name: referral.users.telegramUsername, // Assuming this structure from the API
+          score: referral.users.totalAirdrops,   // Assuming totalAirdrops is the score
+          avatar: User,  // Using the default avatar for now
+        }));
+
+        setFriends(fetchedFriends);
+      } catch (error) {
+        console.error('Error fetching friends:', error);
+        setFriends([]); // Set to empty array if error occurs
+      }
+    };
+
+    fetchFriends();
+  }, [telegramId]);
+
   const copyToClipboard = () => {
     if (referralLink) {
       navigator.clipboard.writeText(referralLink)
         .then(() => {
-          // Vibrate the device for a short duration (e.g., 100ms)
           if (navigator.vibrate) {
-            navigator.vibrate(100); // Adjust the duration as needed
+            navigator.vibrate(100); // Vibrate for a short duration
           }
-  
           setAlertMessage('Referral link copied to clipboard!');
           setTimeout(() => setAlertMessage(null), 3000);
         })
@@ -77,23 +94,20 @@ const Friends: React.FC = () => {
     }
   };
 
-  const friendsContainerRef = useRef<HTMLDivElement>(null); // Reference to the list container
-  const [scrollPosition, setScrollPosition] = useState(0); // Current scroll position
-  const itemHeight = 64; // Define the height of each friend item
-  const [scrollCount, setScrollCount] = useState(0); // Keep track of how many scrolls have happened
+  const friendsContainerRef = useRef<HTMLDivElement>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const itemHeight = 64;
+  const [scrollCount, setScrollCount] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Move the scroll position up by one item height
       setScrollPosition((prevPosition) => prevPosition + itemHeight);
       setScrollCount((prevCount) => prevCount + 1);
-
-      // Duplicate friends at the end after each movement
       setFriends((prevFriends) => {
-        const newFriends = [...prevFriends, ...prevFriends.slice(0, 3)]; // Add 3 duplicates at a time
+        const newFriends = [...prevFriends, ...prevFriends.slice(0, 3)];
         return newFriends;
       });
-    }, 5000); // Scroll every 5 seconds
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [scrollCount, itemHeight]);
@@ -107,12 +121,13 @@ const Friends: React.FC = () => {
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
       <StarryBackground />
       <div className="z-10 w-full h-full text-center bg-transparent pb-36">
-      {alertMessage && (
-        <div className="mb-4 mt-4 pl-2 z-20 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 top-4 left-1/2 transform -translate-x-1/2">
-          <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" />
-          <p className='pl-2 my-auto'>{alertMessage}</p>
-        </div>
-          )}
+        {alertMessage && (
+          <div className="mb-4 mt-4 pl-2 z-20 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 top-4 left-1/2 transform -translate-x-1/2">
+            <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" />
+            <p className='pl-2 my-auto'>{alertMessage}</p>
+          </div>
+        )}
+
         {/* Card with profile */}
         <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12">
           <div className="mx-auto bg-red-200 mt-2 mb-2 rounded-full h-28 w-28 flex justify-center items-center">
@@ -151,46 +166,53 @@ const Friends: React.FC = () => {
             </div>
           </div>
         </div>
-
+        
         {/* Friends List */}
         <div className="flex flex-row w-full justify-between px-7 pt-4 text-white">
           <p>Friends(2)</p>
           <p>Full List</p>
         </div>
 
-        {/* Friend items container */}
-        <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
-          <div
-            ref={friendsContainerRef}
-            className={`transition-transform duration-500 ease-in-out`}
-            style={{
-              transform: `translateY(-${scrollPosition}px)`,
-            }}
-          >
-            {friends.map((friend, index) => (
-              <div
-                key={`${friend.id}-${index}`}
-                className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
-              >
-                <div className="flex">
-                  <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
-                    <img src={friend.avatar} alt={friend.name} className="w-7 h-7" />
-                  </div>
-                  <div className="flex flex-col h-9 text-left my-auto pl-3">
-                    <p className="font-medium text-white text-sm">{friend.name}</p>
-                    <div className="flex items-center flex-row">
-                      <img src={UserOutline} alt="" className="h-4 w-4"/>
-                      <p className="text-white/50 my-auto pt-0.5 text-sm">+15</p>
+         {/* Conditional Rendering for Friends */}
+        {friends.length === 0 ? (
+          <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
+            <p className="text-white text-center items-center justify-center">You have no referrals.</p>
+          </div>
+
+        ) : (
+          <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
+            <div
+              ref={friendsContainerRef}
+              className={`transition-transform duration-500 ease-in-out`}
+              style={{
+                transform: `translateY(-${scrollPosition}px)`,
+              }}
+            >
+              {friends.map((friend, index) => (
+                <div
+                  key={`${friend.id}-${index}`}
+                  className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
+                >
+                  <div className="flex">
+                    <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
+                      <img src={friend.avatar} alt={friend.name} className="w-7 h-7" />
+                    </div>
+                    <div className="flex flex-col h-9 text-left my-auto pl-3">
+                      <p className="font-medium text-white text-sm">{friend.name}</p>
+                      <div className="flex items-center flex-row">
+                        <img src={UserOutline} alt="" className="h-4 w-4" />
+                        <p className="text-white/50 my-auto pt-0.5 text-sm">+15</p>
+                      </div>
                     </div>
                   </div>
+                  <div className='w-20'>
+                    <p className="text-left text-md mr-4 mt-1 text-white">{friend.score}</p>
+                  </div>
                 </div>
-                <div className='w-20'>
-                  <p className="text-left text-md mr-4 mt-1 text-white">{friend.score}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex flex-row w-full justify-between px-7 mt-5 text-white">
           <p>Referral Steps</p>
