@@ -69,26 +69,32 @@ const Friends: React.FC = () => {
 
     const fetchFriends = async () => {
       try {
+          console.log('Fetching friends for telegramId:', telegramId);
           const response = await axios.get(`https://server.therotrade.tech/api/user/referral/users/${telegramId}`);
-          console.log('API Response:', response.data); // Log the entire response
-          
-          const fetchedFriends = response.data.referrals.map((referral: any) => ({
-              id: referral.referredUserTelegramId,
-              name: referral.users.telegramUsername,
-              score: referral.users.totalAirdrops,
-              referralCount: referral.users.referralCount,
-              avatar: User,
-          }));
-
-          console.log('Fetched Friends:', fetchedFriends); // Log the processed friends
-          setFriends(fetchedFriends); // Update the state with the fetched friends
+          console.log('API Response:', response.data);
+  
+          if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
+              const fetchedFriends = response.data.referrals.map((referral: any) => ({
+                  id: referral.referredUserTelegramId,
+                  name: referral.users?.telegramUsername || 'Unknown',
+                  score: referral.users?.totalAirdrops || 0,
+                  referralCount: referral.users?.referralCount || 0,
+                  avatar: User,
+              }));
+  
+              console.log('Processed Friends:', fetchedFriends);
+              setFriends(fetchedFriends);
+          } else {
+              console.log('No referrals found in the response');
+              setFriends([]);
+          }
       } catch (error) {
           console.error('Error fetching friends:', error);
-          setFriends([]); // Set to an empty array if an error occurs
+          setFriends([]);
       }
   };
 
-  fetchFriends();
+    fetchFriends();
 }, [telegramId]);
 
   const copyToClipboard = () => {
@@ -130,9 +136,6 @@ const Friends: React.FC = () => {
     setIsShareMenuOpen((prev) => !prev);
     toggleTaskbar(isShareMenuOpen);
   };
-
-  // Determine the height of the friends list based on the number of friends
-  const friendsHeight = friends.length === 1 ? 'h-17.5' : friends.length === 2 ? 'h-17.5' : 'h-48';
 
   return (
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
@@ -196,7 +199,7 @@ const Friends: React.FC = () => {
         <p className="text-white text-center">You have no referrals.</p>
     </div>
 ) : (
-    <div className={`w-11/12 mx-auto border py-1.5 transition-height duration-300 ease-in-out ${friendsHeight} rounded-lg border-[#FAAD00] overflow-hidden`}>
+    <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
         <div
             ref={friendsContainerRef}
             className={`transition-transform duration-500 ease-in-out`}
