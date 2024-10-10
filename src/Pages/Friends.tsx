@@ -60,7 +60,7 @@ const Friends: React.FC = () => {
 
     const fetchFriends = async () => {
         try {
-            const response = await axios.get(`https://server.therotrade.tech/api/user/referral/users/${telegramId}`);
+            const response = await axios.get(`https://server.therotrade.tech/api/referral/users/${telegramId}`);
             console.log('API Response:', response.data); // Log the entire response
             
             const fetchedFriends = response.data.referrals.map((referral: any) => ({
