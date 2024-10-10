@@ -120,17 +120,18 @@ const Friends: React.FC = () => {
   const [scrollCount, setScrollCount] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setScrollPosition((prevPosition) => prevPosition + itemHeight);
-      setScrollCount((prevCount) => prevCount + 1);
-      setFriends((prevFriends) => {
-        const newFriends = [...prevFriends, ...prevFriends.slice(0, 3)];
-        return newFriends;
-      });
-    }, 5000);
+    if (friends.length >= 3) {
+      const interval = setInterval(() => {
+        setScrollPosition((prevPosition) => {
+          const newPosition = prevPosition + itemHeight;
+          return newPosition >= friends.length * itemHeight ? 0 : newPosition;
+        });
+        setScrollCount((prevCount) => prevCount + 1);
+      }, 5000);
 
-    return () => clearInterval(interval);
-  }, [scrollCount, itemHeight]);
+      return () => clearInterval(interval);
+    }
+  }, [friends, scrollCount, itemHeight]);
 
   const toggleShareMenu = () => {
     setIsShareMenuOpen((prev) => !prev);
@@ -202,9 +203,9 @@ const Friends: React.FC = () => {
     <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
         <div
             ref={friendsContainerRef}
-            className={`transition-transform duration-500 ease-in-out`}
+            className={`transition-transform duration-500 ease-in-out ${friends.length >= 3 ? '' : 'transform-none'}`}
             style={{
-                transform: `translateY(-${scrollPosition}px)`,
+              transform: friends.length >= 3 ? `translateY(-${scrollPosition}px)` : 'none',
             }}
         >
             {friends.map((friend, index) => (
