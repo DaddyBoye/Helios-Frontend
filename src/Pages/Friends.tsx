@@ -107,7 +107,7 @@ const Friends: React.FC = () => {
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
       <StarryBackground />
       <div className="z-10 w-full h-full text-center bg-transparent pb-36">
-      { alertMessage && (
+      {alertMessage && (
         <div className="mb-4 mt-4 pl-2 z-20 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 top-4 left-1/2 transform -translate-x-1/2">
           <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" />
           <p className='pl-2 my-auto'>{alertMessage}</p>
@@ -153,7 +153,7 @@ const Friends: React.FC = () => {
         </div>
 
         {/* Friends List */}
-        <div className="flex flex-row w-full justify-between px-7 pt-2 text-white">
+        <div className="flex flex-row w-full justify-between px-7 pt-4 text-white">
           <p>Friends(2)</p>
           <p>Full List</p>
         </div>
@@ -192,11 +192,11 @@ const Friends: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-row w-full justify-between px-7 pt-2 text-white">
+        <div className="flex flex-row w-full justify-between px-7 mt-5 text-white">
           <p>Referral Steps</p>
         </div>
 
-        {/* More friends */}
+        {/* Referral Steps */}
         <div className="w-11/12 px-2 bg-[#194564]/90 mx-auto py-2 rounded-xl flex flex-col">
           <div className="py-2 w-11/12 mx-auto">
             <div className='flex'>
