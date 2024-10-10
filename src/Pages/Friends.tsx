@@ -18,6 +18,7 @@ interface Friend {
   name: string;
   score: number;
   avatar: string;
+  referralCount: number;
 }
 
 const Friends: React.FC = () => {
@@ -60,13 +61,17 @@ const Friends: React.FC = () => {
     const fetchFriends = async () => {
         try {
             const response = await axios.get(`https://server.therotrade.tech/api/user/referral/users/${telegramId}`);
+            console.log('API Response:', response.data); // Log the entire response
+            
             const fetchedFriends = response.data.referrals.map((referral: any) => ({
-                id: referral.referredUserTelegramId, // Using the referred user's Telegram ID
-                name: referral.users.telegramUsername, // Get the username from the users relationship
-                score: referral.users.totalAirdrops, // Get the score from totalAirdrops
-                avatar: User,  // Placeholder for the avatar, can be replaced with actual avatar image if available
+                id: referral.referredUserTelegramId,
+                name: referral.users.telegramUsername,
+                score: referral.users.totalAirdrops,
+                referralCount: referral.users.referralCount,
+                avatar: User,
             }));
 
+            console.log('Fetched Friends:', fetchedFriends); // Log the processed friends
             setFriends(fetchedFriends); // Update the state with the fetched friends
         } catch (error) {
             console.error('Error fetching friends:', error);
@@ -176,7 +181,7 @@ const Friends: React.FC = () => {
          {/* Conditional Rendering for Friends */}
          {friends.length === 0 ? (
     <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
-        <p className="text-white text-center items-center justify-center">You have no referrals.</p>
+        <p className="text-white text-center">You have no referrals.</p>
     </div>
 ) : (
     <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
@@ -200,7 +205,7 @@ const Friends: React.FC = () => {
                             <p className="font-medium text-white text-sm">{friend.name}</p>
                             <div className="flex items-center flex-row">
                                 <img src={UserOutline} alt="" className="h-4 w-4" />
-                                <p className="text-white/50 my-auto pt-0.5 text-sm">+15</p>
+                                <p className="text-white/50 my-auto pt-0.5 text-sm">+{friend.referralCount}</p>
                             </div>
                         </div>
                     </div>
@@ -212,6 +217,7 @@ const Friends: React.FC = () => {
         </div>
     </div>
 )}
+
 
 
         <div className="flex flex-row w-full justify-between px-7 mt-5 text-white">
