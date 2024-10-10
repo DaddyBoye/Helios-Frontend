@@ -69,32 +69,26 @@ const Friends: React.FC = () => {
 
     const fetchFriends = async () => {
       try {
-          console.log('Fetching friends for telegramId:', telegramId);
           const response = await axios.get(`https://server.therotrade.tech/api/user/referral/users/${telegramId}`);
-          console.log('API Response:', response.data);
-  
-          if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
-              const fetchedFriends = response.data.referrals.map((referral: any) => ({
-                  id: referral.referredUserTelegramId,
-                  name: referral.users?.telegramUsername || 'Unknown',
-                  score: referral.users?.totalAirdrops || 0,
-                  referralCount: referral.users?.referralCount || 0,
-                  avatar: User,
-              }));
-  
-              console.log('Processed Friends:', fetchedFriends);
-              setFriends(fetchedFriends);
-          } else {
-              console.log('No referrals found in the response');
-              setFriends([]);
-          }
+          console.log('API Response:', response.data); // Log the entire response
+          
+          const fetchedFriends = response.data.referrals.map((referral: any) => ({
+              id: referral.referredUserTelegramId,
+              name: referral.users.telegramUsername,
+              score: referral.users.totalAirdrops,
+              referralCount: referral.users.referralCount,
+              avatar: User,
+          }));
+
+          console.log('Fetched Friends:', fetchedFriends); // Log the processed friends
+          setFriends(fetchedFriends); // Update the state with the fetched friends
       } catch (error) {
           console.error('Error fetching friends:', error);
-          setFriends([]);
+          setFriends([]); // Set to an empty array if an error occurs
       }
   };
 
-    fetchFriends();
+  fetchFriends();
 }, [telegramId]);
 
   const copyToClipboard = () => {
