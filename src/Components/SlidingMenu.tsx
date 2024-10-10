@@ -152,7 +152,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose }) => {
                         href={selectedItem.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
+                        className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
                     >
                         {isCarouselImage(selectedItem) ? `Join ${selectedItem.title}` : 
                          isPlatform(selectedItem) ? `Go to ${selectedItem.name}` :
