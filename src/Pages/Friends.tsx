@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef,useMemo } from 'react';
 import axios from 'axios';
 import ShareComponent from '../Components/ShareComponent';
 import { useOutletContext } from 'react-router-dom';
@@ -29,7 +29,13 @@ const Friends: React.FC = () => {
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
   const baseUrl = "https://t.me/HeeliossBot?start=";
-  const [friends, setFriends] = useState<Friend[]>([]); // Initially an empty array
+  const [friends, setFriends] = useState<Friend[]>([]);
+  const [displayedFriends, setDisplayedFriends] = useState<Friend[]>([]);
+  const friendsContainerRef = useRef<HTMLDivElement>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const itemHeight = 64; // height of each friend item in pixels
+  const visibleItems = 3; // number of items visible at once
+  const bufferItems = 2; // number of extra items to keep above and below
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -69,33 +75,36 @@ const Friends: React.FC = () => {
 
     const fetchFriends = async () => {
       try {
-          console.log('Fetching friends for telegramId:', telegramId);
-          const response = await axios.get(`https://server.therotrade.tech/api/referral/users/${telegramId}`);
-          console.log('API Response:', response.data);
-  
-          if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
-              const fetchedFriends = response.data.referrals.map((referral: any) => ({
-                  id: referral.referredUserTelegramId,
-                  name: referral.users?.telegramUsername || 'Unknown',
-                  score: referral.users?.totalAirdrops || 0,
-                  referralCount: referral.users?.referralCount || 0,
-                  avatar: User,
-              }));
-  
-              console.log('Processed Friends:', fetchedFriends);
-              setFriends(fetchedFriends);
-          } else {
-              console.log('No referrals found in the response');
-              setFriends([]);
-          }
-      } catch (error) {
-          console.error('Error fetching friends:', error);
+        console.log('Fetching friends for telegramId:', telegramId);
+        const response = await axios.get(`https://server.therotrade.tech/api/referral/users/${telegramId}`);
+        console.log('API Response:', response.data);
+
+        if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
+          const fetchedFriends = response.data.referrals.map((referral: any) => ({
+            id: referral.referredUserTelegramId,
+            name: referral.users?.telegramUsername || 'Unknown',
+            score: referral.users?.totalAirdrops || 0,
+            referralCount: referral.users?.referralCount || 0,
+            avatar: User,
+          }));
+
+          console.log('Processed Friends:', fetchedFriends);
+          setFriends(fetchedFriends);
+          setDisplayedFriends(fetchedFriends.concat(fetchedFriends));
+        } else {
+          console.log('No referrals found in the response');
           setFriends([]);
+          setDisplayedFriends([]);
+        }
+      } catch (error) {
+        console.error('Error fetching friends:', error);
+        setFriends([]);
+        setDisplayedFriends([]);
       }
-  };
+    };
 
     fetchFriends();
-}, [telegramId]);
+  }, [telegramId]);
 
   const copyToClipboard = () => {
     if (referralLink) {
@@ -114,24 +123,41 @@ const Friends: React.FC = () => {
     }
   };
 
-  const friendsContainerRef = useRef<HTMLDivElement>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const itemHeight = 64;
-  const [scrollCount, setScrollCount] = useState(0);
+  const containerHeight = useMemo(() => {
+    return Math.min(friends.length, visibleItems) * itemHeight;
+  }, [friends.length]);
+
 
   useEffect(() => {
-    if (friends.length >= 3) {
+    if (friends.length > visibleItems) {
       const interval = setInterval(() => {
         setScrollPosition((prevPosition) => {
           const newPosition = prevPosition + itemHeight;
-          return newPosition >= friends.length * itemHeight ? 0 : newPosition;
+          if (newPosition >= friends.length * itemHeight) {
+            // When we've scrolled through all friends, reset to start
+            return 0;
+          }
+          return newPosition;
         });
-        setScrollCount((prevCount) => prevCount + 1);
+
+        // Update displayed friends
+        setDisplayedFriends(() => {
+          const startIndex = Math.floor(scrollPosition / itemHeight);
+          const endIndex = startIndex + visibleItems + bufferItems * 2;
+          const newDisplayed = [...friends, ...friends].slice(startIndex, endIndex);
+          
+          // Ensure we always have enough items
+          while (newDisplayed.length < visibleItems + bufferItems * 2) {
+            newDisplayed.push(...friends);
+          }
+          
+          return newDisplayed;
+        });
       }, 5000);
 
       return () => clearInterval(interval);
     }
-  }, [friends, scrollCount, itemHeight]);
+  }, [friends, itemHeight, scrollPosition, visibleItems, bufferItems]);
 
   const toggleShareMenu = () => {
     setIsShareMenuOpen((prev) => !prev);
@@ -196,23 +222,27 @@ const Friends: React.FC = () => {
 
          {/* Conditional Rendering for Friends */}
          {friends.length === 0 ? (
-    <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
-        <p className="text-white text-center">You have no referrals.</p>
-    </div>
-) : (
-    <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
-        <div
-            ref={friendsContainerRef}
-            className={`transition-transform duration-500 ease-in-out ${friends.length >= 3 ? '' : 'transform-none'}`}
-            style={{
-              transform: friends.length >= 3 ? `translateY(-${scrollPosition}px)` : 'none',
-            }}
+        <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
+          <p className="text-white text-center">You have no referrals.</p>
+        </div>
+      ) : (
+        <div 
+          className="w-11/12 mx-auto border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden"
+          style={{ height: `${containerHeight}px` }}
         >
-            {friends.map((friend, index) => (
-                <div
-                    key={`${friend.id}-${index}`}
-                    className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
-                >
+          <div
+            ref={friendsContainerRef}
+            className={`transition-transform duration-500 ease-in-out ${friends.length > visibleItems ? '' : 'transform-none'}`}
+            style={{
+              transform: friends.length > visibleItems ? `translateY(-${scrollPosition}px)` : 'none',
+            }}
+          >
+            {displayedFriends.map((friend, index) => (
+              <div
+                key={`${friend.id}-${index}`}
+                className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
+                style={{ height: `${itemHeight}px` }}
+              >
                     <div className="flex">
                         <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
                             <img src={friend.avatar} alt={friend.name} className="w-7 h-7" />
