@@ -58,24 +58,24 @@ const Friends: React.FC = () => {
     if (!telegramId) return;
 
     const fetchFriends = async () => {
-      try {
-        const response = await axios.get(`https://server.therotrade.tech/api/user/referral/users/${telegramId}`);
-        const fetchedFriends = response.data.referrals.map((referral: any) => ({
-          id: referral.referredUserTelegramId,
-          name: referral.users.telegramUsername, // Assuming this structure from the API
-          score: referral.users.totalAirdrops,   // Assuming totalAirdrops is the score
-          avatar: User,  // Using the default avatar for now
-        }));
+        try {
+            const response = await axios.get(`https://server.therotrade.tech/api/user/referral/users/${telegramId}`);
+            const fetchedFriends = response.data.referrals.map((referral: any) => ({
+                id: referral.referredUserTelegramId, // Using the referred user's Telegram ID
+                name: referral.users.telegramUsername, // Get the username from the users relationship
+                score: referral.users.totalAirdrops, // Get the score from totalAirdrops
+                avatar: User,  // Placeholder for the avatar, can be replaced with actual avatar image if available
+            }));
 
-        setFriends(fetchedFriends);
-      } catch (error) {
-        console.error('Error fetching friends:', error);
-        setFriends([]); // Set to empty array if error occurs
-      }
+            setFriends(fetchedFriends); // Update the state with the fetched friends
+        } catch (error) {
+            console.error('Error fetching friends:', error);
+            setFriends([]); // Set to an empty array if an error occurs
+        }
     };
 
     fetchFriends();
-  }, [telegramId]);
+}, [telegramId]);
 
   const copyToClipboard = () => {
     if (referralLink) {
@@ -174,45 +174,45 @@ const Friends: React.FC = () => {
         </div>
 
          {/* Conditional Rendering for Friends */}
-        {friends.length === 0 ? (
-          <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
-            <p className="text-white text-center items-center justify-center">You have no referrals.</p>
-          </div>
-
-        ) : (
-          <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
-            <div
-              ref={friendsContainerRef}
-              className={`transition-transform duration-500 ease-in-out`}
-              style={{
+         {friends.length === 0 ? (
+    <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
+        <p className="text-white text-center items-center justify-center">You have no referrals.</p>
+    </div>
+) : (
+    <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
+        <div
+            ref={friendsContainerRef}
+            className={`transition-transform duration-500 ease-in-out`}
+            style={{
                 transform: `translateY(-${scrollPosition}px)`,
-              }}
-            >
-              {friends.map((friend, index) => (
+            }}
+        >
+            {friends.map((friend, index) => (
                 <div
-                  key={`${friend.id}-${index}`}
-                  className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
+                    key={`${friend.id}-${index}`}
+                    className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
                 >
-                  <div className="flex">
-                    <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
-                      <img src={friend.avatar} alt={friend.name} className="w-7 h-7" />
+                    <div className="flex">
+                        <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
+                            <img src={friend.avatar} alt={friend.name} className="w-7 h-7" />
+                        </div>
+                        <div className="flex flex-col h-9 text-left my-auto pl-3">
+                            <p className="font-medium text-white text-sm">{friend.name}</p>
+                            <div className="flex items-center flex-row">
+                                <img src={UserOutline} alt="" className="h-4 w-4" />
+                                <p className="text-white/50 my-auto pt-0.5 text-sm">+15</p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex flex-col h-9 text-left my-auto pl-3">
-                      <p className="font-medium text-white text-sm">{friend.name}</p>
-                      <div className="flex items-center flex-row">
-                        <img src={UserOutline} alt="" className="h-4 w-4" />
-                        <p className="text-white/50 my-auto pt-0.5 text-sm">+15</p>
-                      </div>
+                    <div className='w-20'>
+                        <p className="text-left text-md mr-4 mt-1 text-white">{friend.score}</p>
                     </div>
-                  </div>
-                  <div className='w-20'>
-                    <p className="text-left text-md mr-4 mt-1 text-white">{friend.score}</p>
-                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
+            ))}
+        </div>
+    </div>
+)}
+
 
         <div className="flex flex-row w-full justify-between px-7 mt-5 text-white">
           <p>Referral Steps</p>
