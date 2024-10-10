@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import ShareComponent from '../Components/ShareComponent';
 import { useOutletContext } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
 import User from '../images/edeef 1 (1).svg';
 import UserOutline from '../icons/Users Outline.svg';
 import Solis from '../images/Solisss.svg';
+import DarkSolis from '../images/Solisss.svg';
+import Copy from '../icons/Group 107.svg'
 
 interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void;
@@ -20,11 +23,60 @@ interface Friend {
 const Friends: React.FC = () => {
   const { toggleTaskbar } = useOutletContext<FriendsProps>();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [referralLink, setReferralLink] = useState<string | null>(null);
+  const [telegramId, setTelegramId] = useState<number | null>(null);
+  const baseUrl = "https://t.me/HeeliossBot?start=";
   const [friends, setFriends] = useState<Friend[]>([
     { id: 1, name: 'iam_goddy', score: 132256, avatar: User },
     { id: 2, name: 'john_doe', score: 125000, avatar: User },
     { id: 3, name: 'jane_smith', score: 120000, avatar: User },
   ]);
+
+  useEffect(() => {
+    if (window.Telegram?.WebApp?.initDataUnsafe) {
+      const userData = window.Telegram.WebApp.initDataUnsafe.user;
+      if (userData) {
+        setTelegramId(userData.id);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!telegramId) return;
+
+    const fetchReferralToken = async () => {
+      try {
+        const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
+        const referralToken = response.data.referralToken;
+        setReferralLink(`${baseUrl}${encodeURIComponent(referralToken)}`);
+      } catch (error) {
+        console.error('Error fetching referral token:', error);
+      }
+    };
+
+    fetchReferralToken();
+  }, [telegramId]);
+
+  const copyToClipboard = () => {
+    if (referralLink) {
+      navigator.clipboard.writeText(referralLink)
+        .then(() => {
+          // Vibrate the device for a short duration (e.g., 100ms)
+          if (navigator.vibrate) {
+            navigator.vibrate(100); // Adjust the duration as needed
+          }
+  
+          setAlertMessage('Referral link copied to clipboard!');
+          setTimeout(() => setAlertMessage(null), 2000);
+        })
+        .catch(() => {
+          setAlertMessage('Failed to copy the referral link.');
+          setTimeout(() => setAlertMessage(null), 2000);
+        });
+    }
+  };
+
   const friendsContainerRef = useRef<HTMLDivElement>(null); // Reference to the list container
   const [scrollPosition, setScrollPosition] = useState(0); // Current scroll position
   const itemHeight = 64; // Define the height of each friend item
@@ -55,6 +107,12 @@ const Friends: React.FC = () => {
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
       <StarryBackground />
       <div className="z-10 w-full h-full text-center bg-transparent pb-36">
+      { alertMessage && (
+            <div className="mb-4 mt-4 pl-2 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 -top-20 left-1/2 transform -translate-x-1/2">
+              <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" /> {/* Increase image size here */}
+              <p className='pl-2 my-auto'>{alertMessage}</p>
+            </div>
+          )}
         {/* Card with profile */}
         <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12">
           <div className="mx-auto bg-red-200 mt-2 mb-2 rounded-full h-28 w-28 flex justify-center items-center">
@@ -169,18 +227,25 @@ const Friends: React.FC = () => {
         </div>
       </div>
 
-      {/* Fixed invite button */}
-      <div className="fixed bottom-14 left-0 right-0 z-20 pb-4 pt-4 bg-gradient-to-t from-[#09161F] to-transparent">
+      {/* Fixed invite component */}
+      <div className="fixed bottom-14 justify-between flex left-0 right-0 z-20 pb-4 pt-4 bg-gradient-to-t from-[#09161F] to-transparent">
         <button
           className="mx-auto bg-[#DCAA19] rounded-2xl py-4 w-4/6 md:w-5/6 lg:w-1/2 block"
           onClick={toggleShareMenu}
         >
           <span className="text-base md:text-lg lg:text-xl">Invite a friend</span>
         </button>
+        <button
+          className="mx-auto bg-white rounded-2xl py-4 w-1/6 md:w-5/6 lg:w-1/2 flex justify-center items-center"
+          onClick={copyToClipboard}
+        >
+          <img src={Copy} alt="" />
+        </button>
+
       </div>
 
       {/* Share component */}
-      <ShareComponent isShareMenuOpen={isShareMenuOpen} toggleShareMenu={toggleShareMenu} />
+      <ShareComponent isShareMenuOpen={isShareMenuOpen} toggleShareMenu={toggleShareMenu} referralLink={referralLink ?? ''}/>
     </div>
   );
 };

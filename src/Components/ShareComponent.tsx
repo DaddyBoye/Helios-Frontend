@@ -1,66 +1,17 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import logo from '../icons/Helios.svg';
-import DarkSolis from '../images/Solisss.svg';
 import { QRCode } from 'react-qrcode-logo';
 import SocialMediaShare from '../Components/SocialMediaShare';
 
 interface ShareComponentProps {
   isShareMenuOpen: boolean;
   toggleShareMenu: () => void;
+  referralLink: string;
 }
 
-const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggleShareMenu }) => {
-  const [referralLink, setReferralLink] = useState<string | null>(null);
-  const [telegramId, setTelegramId] = useState<number | null>(null);
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggleShareMenu, referralLink }) => {
   const [isSocialMediaMenuOpen, setIsSocialMediaMenuOpen] = useState(false);
   const baseUrl = "https://t.me/HeeliossBot?start=";
-
-  useEffect(() => {
-    if (window.Telegram?.WebApp?.initDataUnsafe) {
-      const userData = window.Telegram.WebApp.initDataUnsafe.user;
-      if (userData) {
-        setTelegramId(userData.id);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!telegramId) return;
-
-    const fetchReferralToken = async () => {
-      try {
-        const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
-        const referralToken = response.data.referralToken;
-        setReferralLink(`${baseUrl}${encodeURIComponent(referralToken)}`);
-      } catch (error) {
-        console.error('Error fetching referral token:', error);
-      }
-    };
-
-    fetchReferralToken();
-  }, [telegramId]);
-
-  const copyToClipboard = () => {
-    if (referralLink) {
-      navigator.clipboard.writeText(referralLink)
-        .then(() => {
-          // Vibrate the device for a short duration (e.g., 100ms)
-          if (navigator.vibrate) {
-            navigator.vibrate(100); // Adjust the duration as needed
-          }
-  
-          setAlertMessage('Referral link copied to clipboard!');
-          setTimeout(() => setAlertMessage(null), 2000);
-        })
-        .catch(() => {
-          setAlertMessage('Failed to copy the referral link.');
-          setTimeout(() => setAlertMessage(null), 2000);
-        });
-    }
-  };
-  
 
   const toggleSocialMediaMenu = () => {
     setIsSocialMediaMenuOpen(prev => !prev);
@@ -77,13 +28,6 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             className={`fixed inset-x-0 bottom-0 h-[80%] bg-[#194464] p-4 z-20 flex flex-col items-center justify-center rounded-t-3xl
             transition-transform duration-300 ease-in-out transform ${isShareMenuOpen ? 'translate-y-0' : 'translate-y-full'}`}
           >
-          { alertMessage && (
-            <div className="mb-4 mt-4 pl-2 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 -top-20 left-1/2 transform -translate-x-1/2">
-              <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" /> {/* Increase image size here */}
-              <p className='pl-2 my-auto'>{alertMessage}</p>
-            </div>
-          )}
-
           <div className='flex flex-col items-center gap-2 w-full'>
             <p className="text-lg font-bold text-white">Invite a friend</p>
 
@@ -119,22 +63,15 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             )}
 
             <button
-              onClick={copyToClipboard}
-              className="bg-blue-500 text-white w-11/12 px-4 py-2 rounded-md hover:bg-blue-600 text-base"
-            >
-              Copy Link
-            </button>
-
-            <button
               onClick={toggleSocialMediaMenu}
-              className="bg-blue-500 text-white px-4 py-2 rounded-md w-11/12 hover:bg-blue-600 text-base"
+              className="bg-blue-500 text-white px-4 py-3 rounded-xl mt-2 w-11/12 hover:bg-blue-600 text-base"
             >
               {isSocialMediaMenuOpen ? 'Close Share Menu' : 'Share Referral'}
             </button>
 
             <button
               onClick={toggleShareMenu}
-              className="text-white px-4 py-2 text-opacity-50 rounded-md w-11/12 hover:bg-red-600 text-base"
+              className="text-white px-4 py-3 bg-red-500  text-opacity-80 rounded-xl w-11/12 hover:bg-red-600 text-base"
             >
               Close
             </button>
