@@ -68,11 +68,11 @@ const Friends: React.FC = () => {
           }
   
           setAlertMessage('Referral link copied to clipboard!');
-          setTimeout(() => setAlertMessage(null), 2000);
+          setTimeout(() => setAlertMessage(null), 3000);
         })
         .catch(() => {
           setAlertMessage('Failed to copy the referral link.');
-          setTimeout(() => setAlertMessage(null), 2000);
+          setTimeout(() => setAlertMessage(null), 3000);
         });
     }
   };
@@ -108,10 +108,10 @@ const Friends: React.FC = () => {
       <StarryBackground />
       <div className="z-10 w-full h-full text-center bg-transparent pb-36">
       { alertMessage && (
-            <div className="mb-4 mt-4 pl-2 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 -top-20 left-1/2 transform -translate-x-1/2">
-              <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" /> {/* Increase image size here */}
-              <p className='pl-2 my-auto'>{alertMessage}</p>
-            </div>
+        <div className="mb-4 mt-4 pl-2 z-20 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 top-4 left-1/2 transform -translate-x-1/2">
+          <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" />
+          <p className='pl-2 my-auto'>{alertMessage}</p>
+        </div>
           )}
         {/* Card with profile */}
         <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12">
@@ -239,7 +239,7 @@ const Friends: React.FC = () => {
           className="mx-auto bg-white rounded-2xl py-4 w-1/6 md:w-5/6 lg:w-1/2 flex justify-center items-center"
           onClick={copyToClipboard}
         >
-          <img src={Copy} alt="" />
+          <img src={Copy} alt="Copy icon" />
         </button>
 
       </div>
