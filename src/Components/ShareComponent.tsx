@@ -64,7 +64,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
 
             <button
               onClick={toggleSocialMediaMenu}
-              className="bg-blue-500 text-white px-4 py-2.5 rounded-xl mt-2 w-11/12 hover:bg-blue-600 text-base"
+              className="bg-blue-500 text-white px-4 py-2.5 rounded-xl mt-5 w-11/12 hover:bg-blue-600 text-base"
             >
               {isSocialMediaMenuOpen ? 'Close Share Menu' : 'Share Referral'}
             </button>
