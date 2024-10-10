@@ -40,8 +40,8 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             fgColor="#FAAD00"
             bgColor="#194464"
             logoImage={logo}
-            logoWidth={(window.innerWidth * 10) / (12 * 8)} // Logo width is 1/8 of the QR code size
-            logoHeight={(window.innerWidth * 10) / (12 * 8)} // Logo height is 1/8 of the QR code size
+            logoWidth={(window.innerWidth * 10) / (12 * 7.5)} // Logo width is 1/8 of the QR code size
+            logoHeight={(window.innerWidth * 10) / (12 * 7.5)} // Logo height is 1/8 of the QR code size
             removeQrCodeBehindLogo={true}
             />
             ) : (

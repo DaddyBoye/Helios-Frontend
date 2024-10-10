@@ -29,7 +29,7 @@ const Friends: React.FC = () => {
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
   const baseUrl = "https://t.me/HeeliossBot?start=";
-  const [friends, setFriends] = useState<Friend[]>([]); // Initially an empty array
+  const [friends, setFriends] = useState<Friend[]>([]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -114,25 +114,42 @@ const Friends: React.FC = () => {
     }
   };
 
+  const [displayedFriends, setDisplayedFriends] = useState<Friend[]>([]);
   const friendsContainerRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const itemHeight = 64;
-  const [scrollCount, setScrollCount] = useState(0);
+  const itemHeight = 64; // height of each friend item in pixels
 
+  useEffect(() => {
+    if (friends.length > 0) {
+      if (friends.length >= 3) {
+        // Duplicate the list if there are three or more friends
+        setDisplayedFriends([...friends, ...friends, ...friends, ...friends, ...friends]);
+      } else {
+        // Render without duplication if there are fewer than three friends
+        setDisplayedFriends([...friends]);
+      }
+    } else {
+      setDisplayedFriends([]); // Clear displayed friends if there are none
+    }
+  }, [friends]);
+  
   useEffect(() => {
     if (friends.length >= 3) {
       const interval = setInterval(() => {
         setScrollPosition((prevPosition) => {
           const newPosition = prevPosition + itemHeight;
-          return newPosition >= friends.length * itemHeight ? 0 : newPosition;
+          if (newPosition >= friends.length * itemHeight) {
+            // Reset scroll position to loop from the top
+            return 0;
+          }
+          return newPosition;
         });
-        setScrollCount((prevCount) => prevCount + 1);
       }, 5000);
-
+  
       return () => clearInterval(interval);
     }
-  }, [friends, scrollCount, itemHeight]);
-
+  }, [friends, itemHeight]);
+  
   const toggleShareMenu = () => {
     setIsShareMenuOpen((prev) => !prev);
     toggleTaskbar(isShareMenuOpen);
@@ -195,43 +212,45 @@ const Friends: React.FC = () => {
 
          {/* Conditional Rendering for Friends */}
          {friends.length === 0 ? (
-    <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
-        <p className="text-white text-center">You have no referrals.</p>
-    </div>
-) : (
-    <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden">
-        <div
-            ref={friendsContainerRef}
-            className={`transition-transform duration-500 ease-in-out ${friends.length >= 3 ? '' : 'transform-none'}`}
-            style={{
-              transform: friends.length >= 3 ? `translateY(-${scrollPosition}px)` : 'none',
-            }}
-        >
-            {friends.map((friend, index) => (
+          <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
+            <p className="text-white text-center">You have no referrals.</p>
+          </div>
+        ) : (
+          <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden"
+          style={{ height: friends.length === 1 ? '20px' : friends.length === 2 ? '36px' : '48px' }}
+          >
+            <div
+              ref={friendsContainerRef}
+              className="transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateY(-${scrollPosition}px)`,
+              }}
+            >
+              {displayedFriends.map((friend, index) => (
                 <div
-                    key={`${friend.id}-${index}`}
-                    className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
+                  key={`${friend.id}-${index}`}
+                  className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
                 >
-                    <div className="flex">
-                        <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
-                            <img src={friend.avatar} alt={friend.name} className="w-7 h-7" />
-                        </div>
-                        <div className="flex flex-col h-9 text-left my-auto pl-3">
-                            <p className="font-medium text-white text-sm">{friend.name}</p>
-                            <div className="flex items-center flex-row">
-                                <img src={UserOutline} alt="" className="h-4 w-4" />
-                                <p className="text-white/50 my-auto pt-0.5 text-sm">+{friend.referralCount}</p>
-                            </div>
-                        </div>
+                  <div className="flex">
+                    <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
+                      <img src={friend.avatar} alt={friend.name} className="w-7 h-7" />
                     </div>
-                    <div className='w-20'>
-                        <p className="text-left text-md mr-4 mt-1 text-white">{friend.score}</p>
+                    <div className="flex flex-col h-9 text-left my-auto pl-3">
+                      <p className="font-medium text-white text-sm">{friend.name}</p>
+                      <div className="flex items-center flex-row">
+                        <img src={UserOutline} alt="" className="h-4 w-4" />
+                        <p className="text-white/50 my-auto pt-0.5 text-sm">+{friend.referralCount}</p>
+                      </div>
                     </div>
+                  </div>
+                  <div className='w-20'>
+                    <p className="text-left text-md mr-4 mt-1 text-white">{friend.score}</p>
+                  </div>
                 </div>
-            ))}
-        </div>
-    </div>
-)}
+              ))}
+            </div>
+          </div>
+        )}
 
 
 
