@@ -190,7 +190,7 @@ const Friends: React.FC = () => {
         
         {/* Friends List */}
         <div className="flex flex-row w-full justify-between px-7 pt-4 text-white">
-          <p>Friends(2)</p>
+          <p>Friends({friends.length})</p>
           <p>Full List</p>
         </div>
 
