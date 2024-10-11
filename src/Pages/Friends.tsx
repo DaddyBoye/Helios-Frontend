@@ -123,7 +123,7 @@ const Friends: React.FC = () => {
     if (friends.length > 0) {
       if (friends.length >= 3) {
         // Duplicate the list if there are three or more friends
-        setDisplayedFriends([...friends, ...friends, ...friends, ...friends, ...friends]);
+        setDisplayedFriends([...friends, ...friends]);
       } else {
         // Render without duplication if there are fewer than three friends
         setDisplayedFriends([...friends]);
