@@ -206,7 +206,7 @@ const Friends: React.FC = () => {
 
         {/* Friends List */}
         <div className="flex flex-row w-full justify-between px-7 pt-4 text-white">
-          <p>Friends(2)</p>
+          <p>Friends({friends.length})</p>
           <p>Full List</p>
         </div>
 
@@ -217,7 +217,6 @@ const Friends: React.FC = () => {
           </div>
         ) : (
           <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden"
-          style={{ height: friends.length === 1 ? '20px' : friends.length === 2 ? '36px' : '48px' }}
           >
             <div
               ref={friendsContainerRef}
