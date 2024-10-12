@@ -43,20 +43,32 @@ const Layout = () => {
 
   const checkUserExists = async (telegramId: number) => {
     try {
-        const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
-        console.log(response.data); // Debugging line to check the response
-        // Check if user exists based on the API response
-        if (response.data.exists) {
-            setNewUser(false); // User exists, set newUser to false
+      const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
+      console.log('API Response:', response.data); // Detailed logging
+  
+      if (response.data.hasOwnProperty('exists')) {
+        if (response.data.exists === true) {
+          console.log('User exists');
+          setNewUser(false);
+        } else if (response.data.exists === false) {
+          console.log('User does not exist');
+          setNewUser(true);
         } else {
-            setNewUser(true); // User does not exist, set newUser to true
+          console.error('Unexpected "exists" value:', response.data.exists);
+          setError('Unexpected response from server');
+          setNewUser(null);
         }
+      } else {
+        console.error('Unexpected API response format:', response.data);
+        setError('Unexpected response from server');
+        setNewUser(null);
+      }
     } catch (error) {
-        console.error('Error checking user existence:', error);
-        setError('Failed to check user existence');
-        setNewUser(null); // Optional: Reset to null on error
+      console.error('Error checking user existence:', error);
+      setError('Failed to check user existence');
+      setNewUser(null);
     }
-};
+  };
 
   // Ensure at least 4 seconds of loading time
   useEffect(() => {
