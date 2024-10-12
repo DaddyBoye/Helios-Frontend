@@ -35,7 +35,6 @@ function App() {
     totalValue,
     referralToken,
     minerate,
-    newUser,
     updateTotalAirdrops,
     deleteAllUserAirdrops,
   } = useOutletContext<{
@@ -45,7 +44,6 @@ function App() {
     telegramUsername: string | null;
     totalAirdrops: number;
     progress: number;
-    newUser: boolean;
     airdropCount: number;
     totalValue: number;
     referralToken: string | null;
@@ -176,7 +174,7 @@ function App() {
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className="text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl">
-            {newUser}{telegramUsername}
+            {telegramUsername}
             <p className="hidden">{referralToken}</p>
           </h1>
         </div>

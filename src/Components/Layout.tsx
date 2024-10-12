@@ -19,11 +19,9 @@ interface User {
   firstName?: string;
   lastName?: string;
   referralToken?: string | null;
-  telegramUsername?: string | null;
 }
 
 const Layout = () => {
-  const [newUser, setNewUser] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
   const [airdrops, setAirdrops] = useState<Airdrop[]>([]);
@@ -41,19 +39,6 @@ const Layout = () => {
   const [error, setError] = useState<string | null>(null);
   const [loadingTimePassed, setLoadingTimePassed] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
-
-  const checkUserExists = async (telegramId: number) => {
-    try {
-      const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
-      if (response.data.exists) {
-        setNewUser(false); // Set newUser to false if the user exists
-      } else {
-        setNewUser(true); // Set newUser to true if the user does not exist
-      }
-    } catch (error) {
-      console.error('Error checking user existence:', error);
-    }
-  };
 
   // Ensure at least 4 seconds of loading time
   useEffect(() => {
@@ -83,6 +68,7 @@ const Layout = () => {
     };
   }, []);
 
+  // Fetch user data from Telegram WebApp and handle user creation
   useEffect(() => {
     const fetchUserData = async () => {
       if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
@@ -92,20 +78,22 @@ const Layout = () => {
         const userData = tg.initDataUnsafe.user;
 
         if (userData) {
+          const tokenAvailable = await waitForReferralToken();
+          const timezone = getUserTimezone();
+          await handleUserCreation(userData, tokenAvailable, timezone);
+
           setTelegramId(userData.id);
-          setTelegramUsername(userData.username || null);
-          await checkUserExists(userData.id);
+          setTelegramUsername(userData.username);
         } else {
           setError('No user data available');
         }
       } else {
         console.error('This app should be opened in Telegram');
-        setError('This app should be opened in Telegram');
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [referralToken]);
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
@@ -128,29 +116,13 @@ const Layout = () => {
     });
   };
 
-  useEffect(() => {
-    if (newUser !== null && telegramId) {
-      // Proceed with user creation or data fetching based on newUser status
-      if (newUser) {
-        handleUserCreation();
-      } else {
-        fetchAllData(telegramId);
-      }
-    }
-  }, [newUser, telegramId]);
-
-  const handleUserCreation = async () => {
-    if (!telegramId) return;
-
-    const tokenAvailable = await waitForReferralToken();
-    const timezone = getUserTimezone();
-    
+  const handleUserCreation = async (userData: any, tokenAvailable: boolean, timezone: string) => {
     try {
       const createdUser = await createUser({
-        telegramId,
-        telegramUsername,
-        firstName: window.Telegram?.WebApp.initDataUnsafe.user.first_name,
-        lastName: window.Telegram?.WebApp.initDataUnsafe.user.last_name,
+        telegramId: userData.id,
+        telegramUsername: userData.username,
+        firstName: userData.first_name,
+        lastName: userData.last_name,
         referralToken: tokenAvailable ? referralToken : null,
         timezone,
       });
@@ -293,7 +265,6 @@ const Layout = () => {
           airdropCount,
           totalValue,
           referralToken,
-          newUser,
           minerate,
           updateTotalAirdrops,
           deleteAllUserAirdrops
