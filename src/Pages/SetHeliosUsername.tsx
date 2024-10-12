@@ -5,10 +5,10 @@ import Profile from '../images/Mask group (1).svg';
 
 interface SetHeliosUsernameProps {
   telegramId: number | null;
-  onUsernameSet: () => void;
+  onToggle: () => void;
 }
 
-const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onUsernameSet }) => {
+const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onToggle }) => {
   const [heliosUsername, setHeliosUsername] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -21,6 +21,28 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onUse
 
     // Check availability if username is not empty
     if (username.trim()) {
+      // Check if the username is at least 5 characters long
+      if (username.length < 5) {
+        setError('Username must be at least 5 characters long');
+        setIsAvailable(null);
+        setSuccessMessage('');
+        return;
+    } else if (username.length > 15) { // Adjust to your preferred maximum length
+        setError('Username cannot exceed 15 characters');
+        setIsAvailable(null);
+        setSuccessMessage('');
+        return;
+    }
+
+      // Check for invalid characters
+      const invalidCharacters = /[^a-zA-Z0-9_]/; // Only allows letters, numbers, and underscores
+      if (invalidCharacters.test(username)) {
+        setError('Username can only contain letters, numbers, and underscores');
+        setIsAvailable(null); 
+        setSuccessMessage('');
+        return;
+      }
+
       try {
         const response = await fetch('https://server.therotrade.tech/api/check-username', {
           method: 'POST',
@@ -34,16 +56,21 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onUse
 
         if (response.ok) {
           setIsAvailable(data.available); // Assume API returns { available: true/false }
+          setError(''); // Clear any error message
         } else {
           setError(data.error || 'Failed to check username availability');
           setIsAvailable(null);
+          setSuccessMessage(''); // Clear success message
         }
       } catch (err) {
         setError('Error checking username availability. Please try again later.');
         setIsAvailable(null);
+        setSuccessMessage(''); // Clear success message
       }
     } else {
       setIsAvailable(null); // Reset availability if input is empty
+      setError(''); // Clear any error message
+      setSuccessMessage(''); // Clear any success message
     }
   };
 
@@ -52,11 +79,13 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onUse
 
     if (!heliosUsername.trim()) {
       setError('Username cannot be empty');
+      setSuccessMessage(''); // Clear success message
       return;
     }
 
     if (isAvailable === false) {
       setError('Username is already taken');
+      setSuccessMessage(''); // Clear success message
       return;
     }
 
@@ -77,12 +106,14 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onUse
 
       if (!response.ok) {
         setError(data.error || 'Failed to create Helios username');
+        setSuccessMessage(''); // Clear success message
       } else {
         setSuccessMessage(`Username "${data.heliosUsername}" created successfully!`);
-        onUsernameSet(); // Callback to notify that username has been set
+        onToggle(); // Call onToggle after successful creation
       }
     } catch (err) {
       setError('Error creating Helios username. Please try again later.');
+      setSuccessMessage(''); // Clear success message
     } finally {
       setIsSubmitting(false);
     }

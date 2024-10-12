@@ -4,7 +4,7 @@ import freshcoin from '../images/Group 9.svg';
 import Solis from '../images/Solisss.svg';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import { useSpring, animated } from 'react-spring';
 import SetHeliosUsername from './SetHeliosUsername';
@@ -24,6 +24,7 @@ function App() {
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]); // Visible airdrops in the UI
   const [claimInitiated, setClaimInitiated] = useState(false); 
   const [isRemoving, setIsRemoving] = useState(false);
+  const [showSetUsername, setShowSetUsername] = useState(false);
 
   const {
     airdrops,
@@ -173,14 +174,20 @@ function App() {
 
   const hasAirdropsToClaim = visibleAirdrops.length > 0;
 
-  const handleUsernameSet = () => {
-    toggleTaskbar(true);
-  };
+  useEffect(() => {
+    if (newUser === true || newUser === null) {
+      setShowSetUsername(true);
+      toggleTaskbar(false);
+    } else {
+      setShowSetUsername(false);
+      toggleTaskbar(true);
+    }
+  }, [newUser]);
 
-  if (newUser === true || newUser === null) {
-    toggleTaskbar(false);
-    return <SetHeliosUsername telegramId={telegramId} onUsernameSet={handleUsernameSet} />;
-  }
+  const toggleSetUsernameVisibility = useCallback(() => {
+    setShowSetUsername(false);
+    toggleTaskbar(true);
+  }, []);
 
   return (
     <div className="relative flex flex-col font-sans h-screen">
@@ -281,6 +288,12 @@ function App() {
           onConfirm={handleConfirm}
           onClose={handleClose}
           progress={progress}
+        />
+      )}
+      {showSetUsername && (
+        <SetHeliosUsername 
+          telegramId={telegramId} 
+          onToggle={toggleSetUsernameVisibility}
         />
       )}
     </div>
