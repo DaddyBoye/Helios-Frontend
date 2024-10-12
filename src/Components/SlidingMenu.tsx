@@ -35,7 +35,7 @@ interface SlidingMenuProps {
     onClose: () => void;
 }
 
-const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose }) => {
+const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
@@ -65,9 +65,9 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose }) => {
 
     const getMenuHeight = () => {
         if (isCarouselImage(selectedItem)) {
-            return 'h-full';
+            return 'max-h-[85%]';
         }
-        return 'max-h-4/5';
+        return 'max-h-[52%]';
     };
 
     return (
@@ -78,7 +78,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose }) => {
             onClick={handleClose}
         >
             <div
-                className={`fixed w-full bottom-0 overflow-y-auto rounded-t-3xl pb-10 transition-transform duration-300 ease-in-out transform ${
+                className={`fixed w-full bottom-0 overflow-y-auto rounded-t-3xl transition-transform duration-300 ease-in-out transform ${
                     isOpen ? 'translate-y-0' : 'translate-y-full'
                 } ${getMenuHeight()}`}
                 style={{ backgroundColor: selectedItem.color }}

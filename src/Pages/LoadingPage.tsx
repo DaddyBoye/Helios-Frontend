@@ -1,5 +1,4 @@
 import Helios from '../icons/HeliosLogo.svg';
-import UserProfile from '../Components/UserProfile';
 import '../App.css';
 
 const LoadingPage: React.FC = () => {
@@ -9,7 +8,6 @@ const LoadingPage: React.FC = () => {
         <img src={Helios} alt="Helios Logo" className="loading-element" />
         <div className="shadow"></div>
       </div>
-      <UserProfile />
     </div>
   );
 };

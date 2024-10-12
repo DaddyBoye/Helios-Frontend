@@ -46,7 +46,7 @@ const AnimatedActivityCards = () => {
             : isHighlighted && hasBeenAnimated
             ? 'bg-[#FFC213] scale-110'
             : 'bg-gradient-to-br from-[#334B5F] to-[#608FB0] scale-100'
-        } mining-card px-1 h-36 flex flex-col justify-around items-center py-4 rounded-2xl text-white`}
+        } mining-card w-1/5 h-36 flex flex-col justify-around items-center py-4 rounded-2xl text-white`}
       >
         <p className={isHighlighted ? 'text-white' : 'text-white'}>{title}</p>
         <img src={Icon} alt={`${title} Icon`} className="w-10 h-10" />

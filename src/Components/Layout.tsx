@@ -4,6 +4,8 @@ import LoadingPage from '../Pages/LoadingPage';
 import Taskbar from '../Components/Taskbar';
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import moment from 'moment-timezone';
+import { createUser } from '../utils/api';
 
 interface Airdrop {
   id: number;
@@ -11,10 +13,17 @@ interface Airdrop {
   timestamp: string;
 }
 
+interface User {
+  id: number;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  referralToken?: string | null;
+}
+
 const Layout = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
-
   const [airdrops, setAirdrops] = useState<Airdrop[]>([]);
   const [airdropsError, setAirdropsError] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
@@ -26,18 +35,20 @@ const Layout = () => {
   const [referralToken, setReferralToken] = useState<string | null>(null);
   const [minerate, setMinerate] = useState<number | null>(null);
   const [message, setMessage] = useState('');
+  const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 4000);
-
+  
     return () => {
-      clearTimeout(loadingTimeout);
-      setIsLoading(true);
+      clearTimeout(loadingTimeout); // Just clear the timeout without resetting isLoading
     };
   }, []);
 
+  // Fetch referral token from URL
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('referralToken');
@@ -56,32 +67,80 @@ const Layout = () => {
     };
   }, []);
 
+  // Fetch user data from Telegram WebApp and handle user creation
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+
+        const userData = tg.initDataUnsafe.user;
+
+        if (userData) {
+          const tokenAvailable = await waitForReferralToken();
+          const timezone = getUserTimezone();
+          await handleUserCreation(userData, tokenAvailable, timezone);
+
+          setTelegramId(userData.id);
+          setTelegramUsername(userData.username);
+        } else {
+          setError('No user data available');
+        }
+      } else {
+        console.error('This app should be opened in Telegram');
+      }
+    };
+
+    fetchUserData();
+  }, [referralToken]);
+
+  const getUserTimezone = () => {
+    const timezone = moment.tz.guess();
+    return timezone;
+  };
+
+  const waitForReferralToken = (): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (referralToken) {
+          clearInterval(interval);
+          resolve(true);
+        }
+      }, 1000);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        resolve(false);
+      }, 5000); // Max wait time
+    });
+  };
+
+  const handleUserCreation = async (userData: any, tokenAvailable: boolean, timezone: string) => {
+    try {
+      const createdUser = await createUser({
+        telegramId: userData.id,
+        telegramUsername: userData.username,
+        firstName: userData.first_name,
+        lastName: userData.last_name,
+        referralToken: tokenAvailable ? referralToken : null,
+        timezone,
+      });
+
+      setUser(createdUser);
+    } catch (err: any) {
+      setError(err.message);
+    } 
+  };
+
   useEffect(() => {
     if (!telegramId) return;
 
     const intervalId = setInterval(() => {
       fetchAllData(telegramId);
-    }, 1000); // Fetch data every second
+    }, 1000);
 
     return () => clearInterval(intervalId);
   }, [telegramId]);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-
-      const userData = tg.initDataUnsafe.user;
-      if (userData) {
-        setTelegramId(userData.id);
-        setTelegramUsername(userData.username);
-      } else {
-        console.error('No user data available');
-      }
-    } else {
-      console.error('This app should be opened in Telegram');
-    }
-  }, []);
 
   const fetchAllData = async (telegramId: number) => {
     try {
@@ -151,10 +210,10 @@ const Layout = () => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/airdrops/sum/update/${telegramId}`);
       console.log('Updated Total Airdrops:', response.data.newTotalAirdrops);
-      return response.data; // Return data if needed for further use
+      return response.data;
     } catch (error) {
       console.error('Error updating total airdrops:', error);
-      throw error; // Rethrow error for handling in the calling function
+      throw error;
     }
   };
 
@@ -166,7 +225,7 @@ const Layout = () => {
     } catch (error) {
       console.error('Error deleting airdrops:', error);
     }
-  };  
+  };
 
   const handleToggleTaskbar = (isVisible: boolean) => {
     setIsTaskbarVisible(isVisible);
@@ -197,6 +256,10 @@ const Layout = () => {
         }}
       />
       <p className='hidden'>{message}</p>
+      <div className='hidden'>
+            <h1>Welcome, {user?.firstName}!</h1>
+        </div>
+        if (error) return <div className="error hidden">{error}</div>;
     </>
   );
 };

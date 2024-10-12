@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
 import Helios3 from '../images/helios 3 mascot 32.jpeg';
 import Helios6 from '../images/helios 6 mascot 32.jpeg';
@@ -11,6 +12,10 @@ import Solis from '../icons/fdv 1 (1).svg';
 import Friends from '../icons/Friends Vector.svg';
 import User from '../icons/edeef 1.svg';
 import SlidingMenu from '../Components/SlidingMenu';
+
+interface EarnProps {
+    toggleTaskbar: (isVisible: boolean) => void;
+  }
 
 interface Platform {
     icon: string;
@@ -43,6 +48,7 @@ interface CarouselImage {
 type SelectedItem = Platform | InviteTask | CarouselImage;
 
 const Earn = () => {
+    const { toggleTaskbar } = useOutletContext<EarnProps>();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -145,6 +151,7 @@ const Earn = () => {
 
     const handleItemClick = (item: SelectedItem) => {
         setSelectedItem(item);
+        toggleTaskbar(false);
     };
 
     const renderHeader = () => (
@@ -244,11 +251,14 @@ const Earn = () => {
                 {renderInviteTasksSection()}
                 
                 {selectedItem && (
-                    <SlidingMenu 
-                        selectedItem={selectedItem} 
-                        onClose={() => setSelectedItem(null)} 
-                    />
-                )}
+                <SlidingMenu
+                    selectedItem={selectedItem} 
+                    onClose={() => {
+                        setSelectedItem(null);
+                        toggleTaskbar(true);  // This sets the taskbar to true when closing
+                    }} 
+                />
+            )}
             </div>
         </div>
     );
