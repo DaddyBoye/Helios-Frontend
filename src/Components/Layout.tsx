@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'; 
 import { Outlet } from 'react-router-dom';
 import LoadingPage from '../Pages/LoadingPage';
 import Taskbar from '../Components/Taskbar';
@@ -37,15 +37,15 @@ const Layout = () => {
   const [message, setMessage] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loadingTimePassed, setLoadingTimePassed] = useState(false);
 
+  // Ensure at least 4 seconds of loading time
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
-      setIsLoading(false);
+      setLoadingTimePassed(true);
     }, 4000);
-  
-    return () => {
-      clearTimeout(loadingTimeout); // Just clear the timeout without resetting isLoading
-    };
+
+    return () => clearTimeout(loadingTimeout);
   }, []);
 
   // Fetch referral token from URL
@@ -129,8 +129,21 @@ const Layout = () => {
       setUser(createdUser);
     } catch (err: any) {
       setError(err.message);
-    } 
+    } finally {
+      // Only set loading to false if both conditions are met
+      if (loadingTimePassed) {
+        setIsLoading(false);
+      }
+    }
   };
+
+  // Trigger when user is created successfully and after 4 seconds
+  useEffect(() => {
+    if (loadingTimePassed && user) {
+      setIsLoading(false);
+    }
+  }, [loadingTimePassed, user]);
+
 
   useEffect(() => {
     if (!telegramId) return;
