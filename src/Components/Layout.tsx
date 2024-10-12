@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'; 
+import { useEffect, useState, useCallback } from 'react'; 
 import { Outlet } from 'react-router-dom';
 import LoadingPage from '../Pages/LoadingPage';
 import Taskbar from '../Components/Taskbar';
@@ -45,13 +45,12 @@ const Layout = () => {
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-
-  const checkUserExists = async (telegramId: number) => {
+  const checkUserExists = useCallback(async (telegramId: number) => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
-      console.log('API Response:', response.data); // Detailed logging
-      
-      await delay(DELAY_MS);
+      console.log('API Response:', response.data);
+
+      await delay(DELAY_MS); // Add delay before setting state
 
       if (response.data.hasOwnProperty('exists')) {
         if (response.data.exists === true) {
@@ -72,10 +71,11 @@ const Layout = () => {
       }
     } catch (error) {
       console.error('Error checking user existence:', error);
+      await delay(DELAY_MS); // Add delay before setting error state
       setError('Failed to check user existence');
       setNewUser(null);
     }
-  };
+  }, []);
 
   // Ensure at least 4 seconds of loading time
   useEffect(() => {
