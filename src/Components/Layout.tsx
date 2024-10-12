@@ -309,7 +309,7 @@ const Layout = () => {
     setIsTaskbarVisible(isVisible);
   };
 
-  if (isLoading) {
+  if (isLoading && user && dataFetched) {
     return <LoadingPage />;
   }
 
