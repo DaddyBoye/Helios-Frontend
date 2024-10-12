@@ -129,17 +129,8 @@ const Layout = () => {
                     // Handle user creation and fetch additional data
                     await handleUserCreation(userData, tokenAvailable, timezone);
 
-                    // Fetch and set heliosUsername if exists
-                    try {
-                        const response = await axios.get(`https://server.therotrade.tech/api/user/helios-username/${userData.id}`);
-                        if (response.data?.heliosUsername) {
-                            setHeliosUsername(response.data.heliosUsername); // Set the Helios username in state
-                        } else {
-                            console.log('Helios username not found for user');
-                        }
-                    } catch (err) {
-                        console.error('Error fetching helios username:', err);
-                    }
+                    // Fetch Helios username
+                    await fetchHeliosUsername(userData.id);
                 } else {
                     console.error('Telegram ID is not available');
                 }
@@ -199,7 +190,7 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed ) {
+    if (loadingTimePassed && user && dataFetched) {
       setIsLoading(false);
     }
   }, [loadingTimePassed, user, dataFetched]);
@@ -215,8 +206,6 @@ const Layout = () => {
     return () => clearInterval(intervalId);
   }, [telegramId]);
 
-
-
   const fetchAllData = async (telegramId: number) => {
     try {
       await Promise.all([
@@ -231,6 +220,19 @@ const Layout = () => {
       console.error('Error fetching data:', error);
     }
   };
+
+  const fetchHeliosUsername = useCallback(async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/user/helios-username/${telegramId}`);
+      if (response.data?.heliosUsername) {
+        setHeliosUsername(response.data.heliosUsername); // Set the Helios username in state
+      } else {
+        console.log('Helios username not found for user');
+      }
+    } catch (err) {
+      console.error('Error fetching helios username:', err);
+    }
+  }, []); 
 
   const fetchUserMinerate = async (telegramId: number) => {
     try {
@@ -311,9 +313,13 @@ const Layout = () => {
     return <LoadingPage />;
   }
 
-  const handleUsernameSetupComplete = () => {
-    setNewUser(false); // Update newUser state when username setup is complete
+  const handleUsernameSetupComplete = async () => {
+    if (telegramId) {
+      await fetchHeliosUsername(telegramId); // Re-fetch the Helios username after setup
+    }
+    setNewUser(false);
   };
+    
 
   if (isLoading) {
     return <LoadingPage />;
@@ -350,7 +356,6 @@ const Layout = () => {
             <h1>Welcome, {user?.firstName}!</h1>
         </div>
         <div className="error hidden">{error}</div>
-        && user && dataFetched
     </>
   );
 };
