@@ -112,7 +112,7 @@ const Layout = () => {
       setTimeout(() => {
         clearInterval(interval);
         resolve(false);
-      }, 5000); // Max wait time
+      }, 3000); // Max wait time
     });
   };
 
