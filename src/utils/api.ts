@@ -4,7 +4,7 @@ const API_URL = 'https://server.therotrade.tech/api';
 
 interface UserData {
     telegramId: number;
-    telegramUsername?: string;
+    telegramUsername: string | null;
     firstName?: string;
     lastName?: string;
     referralToken?: string | null;
