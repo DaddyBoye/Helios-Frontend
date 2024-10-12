@@ -2,11 +2,11 @@ import StarryBackground from '../Components/StarryBackground';
 import Solis from '../icons/fdv 1 (1).svg';
 import Friends from '../icons/Friends Vector.svg';
 import User from '../icons/edeef 1.svg';
-import PickAxe from '../icons/hugeicons_mining-03.svg';
 import Arrow from '../icons/Arrow Vector.svg';
 import EiCheck from '../icons/ei_check.svg';
 import CompletedTimer from '../icons/basil_timer-outline.svg';
 import Timer from '../icons/basil_timer-outline (1).svg';
+import RoadmapCards from '../Components/RoadmapCards';
 
 const Airdrop = () => {
   return (
@@ -55,43 +55,14 @@ const Airdrop = () => {
         </div>
 
         {/* Mining Steps */}
-        <div className="flex flex-row px-1 gap-1.5 items-center justify-between">
+        <div className="flex flex-row justify-between items-center w-full">
           <img src={Arrow} alt="arrow" />
-
-          {/* Mining Card 1 */}
-          <div className="mining-card w-full h-36 flex flex-col justify-around items-center py-4 rounded-2xl text-white">
-            <p>Mining</p>
-            <img src={PickAxe} alt="PickAxe Icon" className="w-10 h-10" />
-            <p>Aug</p>
-          </div>
-
-          {/* Mining Card 2 */}
-          <div className="mining-card w-full h-36 flex flex-col justify-around items-center py-4 rounded-2xl text-white">
-            <p>Mining</p>
-            <img src={PickAxe} alt="PickAxe Icon" className="w-10 h-10" />
-            <p>Aug</p>
-          </div>
-
-          {/* Highlighted Mining Card */}
-          <div className="dominant-mining-card h-40 flex flex-col justify-between w-full bg-[#FFC213] py-6 px-2 rounded-xl border-2 backdrop-blur-md shadow-[5px_5px_15px_rgba(255,255,255,0.3)]">
-            <p>Mining</p>
-            <img src={PickAxe} alt="Pickaxe" className="w-10 h-10 mx-auto" />
-            <p>Aug</p>
-          </div>
-
-          {/* Mining Card 4 */}
-          <div className="mining-card w-full h-36 flex flex-col justify-around items-center py-4 rounded-2xl text-white">
-            <p>Mining</p>
-            <img src={PickAxe} alt="PickAxe Icon" className="w-10 h-10" />
-            <p>Aug</p>
-          </div>
-
+          <RoadmapCards/>
           <img src={Arrow} alt="arrow" className="rotate-180" />
         </div>
 
         {/* Horizontal Divider */}
         <hr className="border-t border-white/30 mx-5 my-5" />
-
         {/* Invite Section */}
         <div className="gap-2 flex-col flex">
           {/* Invite Link 1 */}
