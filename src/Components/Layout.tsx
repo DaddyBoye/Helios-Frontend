@@ -43,17 +43,14 @@ const Layout = () => {
 
   const checkUserExists = async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
-      if (response.data.exists) {
-        setNewUser(false);
-      } else {
-        setNewUser(true);
-      }
+        const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
+        console.log('User existence response:', response.data);
+        setNewUser(!response.data.exists); // Set to true if the user does not exist
     } catch (error) {
-      console.error('Error checking user existence:', error);
-      setError('Failed to check user existence');
+        console.error('Error checking user existence:', error);
+        setError('Failed to check user existence');
     }
-  };
+};
 
   // Ensure at least 4 seconds of loading time
   useEffect(() => {
@@ -85,39 +82,45 @@ const Layout = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      // Ensure the code runs in the correct environment
-      if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-  
-        const userData = tg.initDataUnsafe.user;
-  
-        if (userData) {
-          // Step 1: Check if the user exists in the database
-          await checkUserExists(userData.id);
-  
-          // Step 2: Wait for the referral token after confirming user existence
-          const tokenAvailable = await waitForReferralToken();
-  
-          // Step 3: Get the user's timezone
-          const timezone = getUserTimezone();
-  
-          // Step 4: Handle user creation
-          await handleUserCreation(userData, tokenAvailable, timezone);
-  
-          // Step 5: Set state variables after user creation
-          setTelegramId(userData.id);
-          setTelegramUsername(userData.username);
+        // Ensure the code runs in the correct environment
+        if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+
+            const userData = tg.initDataUnsafe.user;
+
+            if (userData) {
+                // Step 1: Set the Telegram ID and Username
+                setTelegramId(userData.id);
+                setTelegramUsername(userData.username);
+
+                // Step 2: Check if the user exists in the database
+                if (userData.id) {
+                    console.log("Checking existence for telegramId:", userData.id); // Log telegramId
+                    await checkUserExists(userData.id); // Check if user exists
+
+                    // Step 3: Wait for the referral token after confirming user existence
+                    const tokenAvailable = await waitForReferralToken();
+
+                    // Step 4: Get the user's timezone
+                    const timezone = getUserTimezone();
+
+                    // Step 5: Handle user creation
+                    await handleUserCreation(userData, tokenAvailable, timezone);
+                } else {
+                    console.error('Telegram ID is not available');
+                }
+            } else {
+                setError('No user data available');
+            }
         } else {
-          setError('No user data available');
+            console.error('This app should be opened in Telegram');
         }
-      } else {
-        console.error('This app should be opened in Telegram');
-      }
     };
-  
+
     fetchUserData();
-  }, [referralToken]);  
+}, [referralToken]);
+
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
@@ -164,7 +167,7 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched) {
+    if (loadingTimePassed ) {
       setIsLoading(false);
     }
   }, [loadingTimePassed, user, dataFetched]);
