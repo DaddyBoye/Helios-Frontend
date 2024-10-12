@@ -315,7 +315,6 @@ const Layout = () => {
 
   const handleUsernameSetupComplete = async () => {
     if (telegramId) {
-      await fetchHeliosUsername(telegramId); // Re-fetch the Helios username after setup
     }
     setNewUser(false);
   };
