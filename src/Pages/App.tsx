@@ -177,11 +177,9 @@ function App() {
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className="text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl">
           <div>
-          {newUser === null 
-    ? "Loading..." 
-    : newUser 
-        ? "The condition is true!" 
-        : "The condition is false!"}
+          {newUser === null && <p>Loading user data...</p>}
+{newUser === true && <p>The user is new!</p>}
+{newUser === false && <p>The user is not new.</p>}
 
     </div>{telegramUsername}
             <p className="hidden">{referralToken}</p>

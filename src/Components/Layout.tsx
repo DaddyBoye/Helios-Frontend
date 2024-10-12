@@ -44,11 +44,17 @@ const Layout = () => {
   const checkUserExists = async (telegramId: number) => {
     try {
         const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
-        console.log('User existence response:', response.data);
-        setNewUser(!response.data.exists); // Set to true if the user does not exist
+        console.log(response.data); // Debugging line to check the response
+        // Check if user exists based on the API response
+        if (response.data.exists) {
+            setNewUser(false); // User exists, set newUser to false
+        } else {
+            setNewUser(true); // User does not exist, set newUser to true
+        }
     } catch (error) {
         console.error('Error checking user existence:', error);
         setError('Failed to check user existence');
+        setNewUser(null); // Optional: Reset to null on error
     }
 };
 
