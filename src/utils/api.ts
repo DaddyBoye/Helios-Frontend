@@ -24,20 +24,3 @@ export const createUser = async (userData: UserData) => {
         }
     }
 };
-
-// Check if user exists by telegramId
-export const checkUserExists = async (telegramId: number) => {
-    try {
-        const response = await axios.get(`${API_URL}/user/${telegramId}`);
-        return response.data; // Returns user data if found
-    } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-            if (error.response?.status === 404) {
-                return null; // User not found
-            }
-            throw new Error(error.response?.data?.error || 'Error checking user');
-        } else {
-            throw new Error('Unexpected error occurred while checking user');
-        }
-    }
-};

@@ -254,8 +254,8 @@ const Earn = () => {
                 <SlidingMenu
                     selectedItem={selectedItem} 
                     onClose={() => {
-                        setSelectedItem(null);
                         toggleTaskbar(true);  // This sets the taskbar to true when closing
+                        setSelectedItem(null);
                     }} 
                 />
             )}

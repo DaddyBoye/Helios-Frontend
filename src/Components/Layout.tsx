@@ -6,6 +6,8 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import moment from 'moment-timezone';
 import { createUser } from '../utils/api';
+import { WelcomePage1 } from '../Pages/WelcomePage1';
+import { WelcomePage2 } from '../Pages/WelcomePage2';
 
 interface Airdrop {
   id: number;
@@ -39,12 +41,13 @@ const Layout = () => {
   const [error, setError] = useState<string | null>(null);
   const [loadingTimePassed, setLoadingTimePassed] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
+  const [welcomeStage, setWelcomeStage] = useState(0);
 
   // Ensure at least 4 seconds of loading time
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setLoadingTimePassed(true);
-    }, 4000);
+    }, 3000);
 
     return () => clearTimeout(loadingTimeout);
   }, []);
@@ -84,6 +87,7 @@ const Layout = () => {
 
           setTelegramId(userData.id);
           setTelegramUsername(userData.username);
+          checkUserExists(userData.id);
         } else {
           setError('No user data available');
         }
@@ -94,6 +98,20 @@ const Layout = () => {
 
     fetchUserData();
   }, [referralToken]);
+
+  const checkUserExists = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/users/${telegramId}`);
+      if (response.data.exists) {
+        console.log('User exists');
+      } else {
+        setWelcomeStage(1);
+      }
+    } catch (error) {
+      console.error('Error checking user existence:', error);
+      setWelcomeStage(1);
+    }
+  };
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
@@ -250,6 +268,14 @@ const Layout = () => {
     return <LoadingPage />;
   }
 
+  if (welcomeStage === 1) {
+    return <WelcomePage1 onNext={() => setWelcomeStage(2)} />;
+  }
+
+  if (welcomeStage === 2) {
+    return <WelcomePage2  />;
+  }
+
   return (
     <>
       {isTaskbarVisible && <Taskbar />}
@@ -274,7 +300,7 @@ const Layout = () => {
       <div className='hidden'>
             <h1>Welcome, {user?.firstName}!</h1>
         </div>
-        if (error) return <div className="error hidden">{error}</div>;
+        <div className="error hidden">{error}</div>
     </>
   );
 };
