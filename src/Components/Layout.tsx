@@ -21,6 +21,8 @@ interface User {
   referralToken?: string | null;
 }
 
+const DELAY_MS = 500;
+
 const Layout = () => {
   const [newUser, setNewUser] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,11 +43,16 @@ const Layout = () => {
   const [loadingTimePassed, setLoadingTimePassed] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
 
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+
   const checkUserExists = async (telegramId: number) => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
       console.log('API Response:', response.data); // Detailed logging
-  
+      
+      await delay(DELAY_MS);
+
       if (response.data.hasOwnProperty('exists')) {
         if (response.data.exists === true) {
           console.log('User exists');
