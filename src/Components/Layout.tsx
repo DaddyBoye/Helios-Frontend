@@ -22,6 +22,7 @@ interface User {
 }
 
 const Layout = () => {
+  const [newUser, setNewUser] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isTaskbarVisible, setIsTaskbarVisible] = useState(true);
   const [airdrops, setAirdrops] = useState<Airdrop[]>([]);
@@ -39,6 +40,20 @@ const Layout = () => {
   const [error, setError] = useState<string | null>(null);
   const [loadingTimePassed, setLoadingTimePassed] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
+
+  const checkUserExists = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
+      if (response.data.exists) {
+        setNewUser(false);
+      } else {
+        setNewUser(true);
+      }
+    } catch (error) {
+      console.error('Error checking user existence:', error);
+      setError('Failed to check user existence');
+    }
+  };
 
   // Ensure at least 4 seconds of loading time
   useEffect(() => {
@@ -68,20 +83,29 @@ const Layout = () => {
     };
   }, []);
 
-  // Fetch user data from Telegram WebApp and handle user creation
   useEffect(() => {
     const fetchUserData = async () => {
+      // Ensure the code runs in the correct environment
       if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
         const tg = window.Telegram.WebApp;
         tg.ready();
-
+  
         const userData = tg.initDataUnsafe.user;
-
+  
         if (userData) {
+          // Step 1: Check if the user exists in the database
+          await checkUserExists(userData.id);
+  
+          // Step 2: Wait for the referral token after confirming user existence
           const tokenAvailable = await waitForReferralToken();
+  
+          // Step 3: Get the user's timezone
           const timezone = getUserTimezone();
+  
+          // Step 4: Handle user creation
           await handleUserCreation(userData, tokenAvailable, timezone);
-
+  
+          // Step 5: Set state variables after user creation
           setTelegramId(userData.id);
           setTelegramUsername(userData.username);
         } else {
@@ -91,9 +115,9 @@ const Layout = () => {
         console.error('This app should be opened in Telegram');
       }
     };
-
+  
     fetchUserData();
-  }, [referralToken]);
+  }, [referralToken]);  
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
@@ -262,6 +286,7 @@ const Layout = () => {
           telegramUsername,
           totalAirdrops,
           progress,
+          newUser,
           airdropCount,
           totalValue,
           referralToken,
