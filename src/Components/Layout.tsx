@@ -43,6 +43,7 @@ const Layout = () => {
   const [error, setError] = useState<string | null>(null);
   const [loadingTimePassed, setLoadingTimePassed] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
+  const [heliosUsername, setHeliosUsername] = useState<string | null>(null);
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -78,11 +79,11 @@ const Layout = () => {
     }
   }, []);
 
-  // Ensure at least 4 seconds of loading time
+  // Ensure at least 3 seconds of loading time
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setLoadingTimePassed(true);
-    }, 4000);
+    }, 3000);
 
     return () => clearTimeout(loadingTimeout);
   }, []);
@@ -108,7 +109,6 @@ const Layout = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-        // Ensure the code runs in the correct environment
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
             const tg = window.Telegram.WebApp;
             tg.ready();
@@ -116,23 +116,30 @@ const Layout = () => {
             const userData = tg.initDataUnsafe.user;
 
             if (userData) {
-                // Step 1: Set the Telegram ID and Username
                 setTelegramId(userData.id);
                 setTelegramUsername(userData.username);
 
-                // Step 2: Check if the user exists in the database
                 if (userData.id) {
-                    console.log("Checking existence for telegramId:", userData.id); // Log telegramId
-                    await checkUserExists(userData.id); // Check if user exists
+                    console.log("Checking existence for telegramId:", userData.id);
+                    await checkUserExists(userData.id);
 
-                    // Step 3: Wait for the referral token after confirming user existence
                     const tokenAvailable = await waitForReferralToken();
-
-                    // Step 4: Get the user's timezone
                     const timezone = getUserTimezone();
 
-                    // Step 5: Handle user creation
+                    // Handle user creation and fetch additional data
                     await handleUserCreation(userData, tokenAvailable, timezone);
+
+                    // Fetch and set heliosUsername if exists
+                    try {
+                        const response = await axios.get(`https://server.therotrade.tech/api/user/helios-username/${userData.id}`);
+                        if (response.data?.heliosUsername) {
+                            setHeliosUsername(response.data.heliosUsername); // Set the Helios username in state
+                        } else {
+                            console.log('Helios username not found for user');
+                        }
+                    } catch (err) {
+                        console.error('Error fetching helios username:', err);
+                    }
                 } else {
                     console.error('Telegram ID is not available');
                 }
@@ -146,7 +153,6 @@ const Layout = () => {
 
     fetchUserData();
 }, [referralToken]);
-
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
@@ -208,6 +214,8 @@ const Layout = () => {
 
     return () => clearInterval(intervalId);
   }, [telegramId]);
+
+
 
   const fetchAllData = async (telegramId: number) => {
     try {
@@ -325,6 +333,7 @@ const Layout = () => {
           airdropsError,
           telegramId,
           telegramUsername,
+          heliosUsername,
           totalAirdrops,
           progress,
           newUser,

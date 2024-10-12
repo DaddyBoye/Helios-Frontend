@@ -11,6 +11,8 @@ import Copy from '../icons/Group 107.svg'
 
 interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void;
+  heliosUsername: string | null;
+  telegramId: number | null;
 }
 
 interface Friend {
@@ -22,31 +24,12 @@ interface Friend {
 }
 
 const Friends: React.FC = () => {
-  const { toggleTaskbar } = useOutletContext<FriendsProps>();
+  const { toggleTaskbar, heliosUsername, telegramId } = useOutletContext<FriendsProps>();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [referralLink, setReferralLink] = useState<string | null>(null);
-  const [telegramId, setTelegramId] = useState<number | null>(null);
-  const [telegramUsername, setTelegramUsername] = useState<string | null>(null);
   const baseUrl = "https://t.me/HeeliossBot?start=";
   const [friends, setFriends] = useState<Friend[]>([]);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
-      tg.ready();
-
-      const userData = tg.initDataUnsafe.user;
-      if (userData) {
-        setTelegramId(userData.id);
-        setTelegramUsername(userData.username);
-      } else {
-        console.error('No user data available');
-      }
-    } else {
-      console.error('This app should be opened in Telegram');
-    }
-  }, []);
 
   useEffect(() => {
     if (!telegramId) return;
@@ -170,7 +153,7 @@ const Friends: React.FC = () => {
           <div className="mx-auto bg-red-200 mt-2 mb-2 rounded-full h-28 w-28 flex justify-center items-center">
             <img src={User} alt="" className="w-16 h-16" />
           </div>
-          <p className="text-white font-bold text-xl">{telegramUsername}</p>
+          <p className="text-white font-bold text-xl">{heliosUsername}</p>
           <div className="mx-auto justify-between mt-2 w-6/12 px-2 bg-white/20 backdrop-blur-md rounded-2xl flex flex-row">
             <div className="flex flex-row">
               <img src={Solis} className="w-7 h-7" />

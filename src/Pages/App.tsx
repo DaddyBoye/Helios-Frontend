@@ -28,7 +28,7 @@ function App() {
     airdrops,
     airdropsError,
     telegramId,
-    telegramUsername,
+    heliosUsername,
     totalAirdrops,
     progress,
     airdropCount,
@@ -42,7 +42,7 @@ function App() {
     airdrops: Airdrop[];
     airdropsError: string | null;
     telegramId: number | null;
-    telegramUsername: string | null;
+    heliosUsername: string | null;
     totalAirdrops: number;
     progress: number;
     newUser: boolean;
@@ -181,7 +181,7 @@ function App() {
 {newUser === true && <p>The user is new!</p>}
 {newUser === false && <p>The user is not new.</p>}
 
-    </div>{telegramUsername}
+    </div>{heliosUsername}
             <p className="hidden">{referralToken}</p>
           </h1>
         </div>
