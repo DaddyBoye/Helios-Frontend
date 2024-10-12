@@ -24,7 +24,6 @@ function App() {
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]); // Visible airdrops in the UI
   const [claimInitiated, setClaimInitiated] = useState(false); 
   const [isRemoving, setIsRemoving] = useState(false);
-  const [usernameSet, setUsernameSet] = useState(false); // New state variable to track username status
 
   const {
     airdrops,
@@ -175,7 +174,6 @@ function App() {
   const hasAirdropsToClaim = visibleAirdrops.length > 0;
 
   const handleUsernameSet = () => {
-    setUsernameSet(true); // Set the username status to true
     toggleTaskbar(true);
   };
 
@@ -186,8 +184,6 @@ function App() {
 
   return (
     <div className="relative flex flex-col font-sans h-screen">
-      {usernameSet ? ( // Conditional rendering based on username set
-        <>
       <StarryBackground />
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -286,10 +282,6 @@ function App() {
           onClose={handleClose}
           progress={progress}
         />
-      )}
-         </>
-      ) : (
-        <SetHeliosUsername telegramId={telegramId} onUsernameSet={handleUsernameSet} />
       )}
     </div>
   );
