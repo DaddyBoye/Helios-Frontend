@@ -38,6 +38,7 @@ const Layout = () => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loadingTimePassed, setLoadingTimePassed] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false);
 
   // Ensure at least 4 seconds of loading time
   useEffect(() => {
@@ -139,10 +140,10 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user) {
+    if (loadingTimePassed && user && dataFetched) {
       setIsLoading(false);
     }
-  }, [loadingTimePassed, user]);
+  }, [loadingTimePassed, user, dataFetched]);
 
 
   useEffect(() => {
@@ -164,6 +165,7 @@ const Layout = () => {
         fetchTotalAirdrops(telegramId),
         fetchUserMinerate(telegramId),
       ]);
+      setDataFetched(true); // Mark that data fetching is complete
     } catch (error) {
       console.error('Error fetching data:', error);
     }
