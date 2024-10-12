@@ -7,6 +7,7 @@ import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import { useSpring, animated } from 'react-spring';
+import SetHeliosUsername from './SetHeliosUsername';
 import '../App.css';
 
 interface Airdrop {
@@ -23,6 +24,7 @@ function App() {
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]); // Visible airdrops in the UI
   const [claimInitiated, setClaimInitiated] = useState(false); 
   const [isRemoving, setIsRemoving] = useState(false);
+  const [usernameSet, setUsernameSet] = useState(false); // New state variable to track username status
 
   const {
     airdrops,
@@ -38,6 +40,7 @@ function App() {
     newUser,
     updateTotalAirdrops,
     deleteAllUserAirdrops,
+    toggleTaskbar
   } = useOutletContext<{
     airdrops: Airdrop[];
     airdropsError: string | null;
@@ -52,6 +55,7 @@ function App() {
     minerate: number | null;
     updateTotalAirdrops: (telegramId: number) => Promise<void>;
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
+    toggleTaskbar: (isVisible: boolean) => void;
   }>();
 
   const { number } = useSpring({
@@ -170,15 +174,26 @@ function App() {
 
   const hasAirdropsToClaim = visibleAirdrops.length > 0;
 
+  const handleUsernameSet = () => {
+    setUsernameSet(true); // Set the username status to true
+    toggleTaskbar(true);
+  };
+
+  if (newUser === true || newUser === null) {
+    toggleTaskbar(false);
+    return <SetHeliosUsername telegramId={telegramId} onUsernameSet={handleUsernameSet} />;
+  }
+
   return (
-    <div className="relative flex flex-col font-sans h-screen ">
+    <div className="relative flex flex-col font-sans h-screen">
+      {usernameSet ? ( // Conditional rendering based on username set
+        <>
       <StarryBackground />
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className="text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl">
           <div>
           {newUser === null && <p>Loading user data...</p>}
-{newUser === true && <p>The user is new!</p>}
 {newUser === false && <p>The user is not new.</p>}
 
     </div>{telegramUsername}
@@ -272,9 +287,12 @@ function App() {
           progress={progress}
         />
       )}
+         </>
+      ) : (
+        <SetHeliosUsername telegramId={telegramId} onUsernameSet={handleUsernameSet} />
+      )}
     </div>
   );
-  
 }
 
 export default App;
