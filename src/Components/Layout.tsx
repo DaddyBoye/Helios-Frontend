@@ -6,6 +6,7 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import moment from 'moment-timezone';
 import { createUser } from '../utils/api';
+import SetHeliosUsername from '../Pages/SetHeliosUsername';
 
 interface Airdrop {
   id: number;
@@ -300,6 +301,18 @@ const Layout = () => {
 
   if (isLoading) {
     return <LoadingPage />;
+  }
+
+  const handleUsernameSetupComplete = () => {
+    setNewUser(false); // Update newUser state when username setup is complete
+  };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
+  if (newUser === true || newUser === null) {
+    return <SetHeliosUsername telegramId={telegramId} onToggle={handleUsernameSetupComplete} />;
   }
 
   return (

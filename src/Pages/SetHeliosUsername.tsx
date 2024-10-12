@@ -8,6 +8,8 @@ interface SetHeliosUsernameProps {
   onToggle: () => void;
 }
 
+const MAX_USERNAME_LENGTH = 20;
+
 const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onToggle }) => {
   const [heliosUsername, setHeliosUsername] = useState('');
   const [error, setError] = useState('');
@@ -27,12 +29,13 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
         setIsAvailable(null);
         setSuccessMessage('');
         return;
-    } else if (username.length > 15) { // Adjust to your preferred maximum length
-        setError('Username cannot exceed 15 characters');
+      } else if (username.length >= MAX_USERNAME_LENGTH) {
+        // When the username is at maximum length
+        setError('');
         setIsAvailable(null);
-        setSuccessMessage('');
-        return;
-    }
+        setSuccessMessage(''); // Reset success message
+        // Availability check should be performed even when at max length
+      }
 
       // Check for invalid characters
       const invalidCharacters = /[^a-zA-Z0-9_]/; // Only allows letters, numbers, and underscores
@@ -109,7 +112,10 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
         setSuccessMessage(''); // Clear success message
       } else {
         setSuccessMessage(`Username "${data.heliosUsername}" created successfully!`);
-        onToggle(); // Call onToggle after successful creation
+        // Call onToggle after showing the success message for 2 seconds
+        setTimeout(() => {
+          onToggle();
+        }, 2000);
       }
     } catch (err) {
       setError('Error creating Helios username. Please try again later.');
@@ -122,7 +128,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
   return (
     <div className="set-username-page flex justify-center items-center h-screen bg-black/70 text-white">
       <StarryBackground />
-      <div className="bg-transparent z-10 h-full w-full text-black p-6 rounded-lg shadow-lg w-80">
+      <div className="bg-transparent z-10 h-full text-black p-6 rounded-lg shadow-lg w-80">
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className='my-auto'>
             <img src={Profile} alt="Profile" className='mx-auto w-20 h-20' />
@@ -133,13 +139,24 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
               value={heliosUsername}
               onChange={handleUsernameChange}
               className="p-2 bg-[#54616C] rounded-md w-full"
+              maxLength={MAX_USERNAME_LENGTH}
             />
             {error && <p className="text-red-500 text-sm">{error}</p>}
             {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
             {isAvailable !== null && (
-              <p className={`text-sm ${isAvailable ? 'text-green-500' : 'text-red-500'}`}>
-                {isAvailable ? 'Username is available!' : 'Username is already taken'}
-              </p>
+              <>
+                {heliosUsername.length >= MAX_USERNAME_LENGTH ? (
+                  isAvailable ? (
+                    <p className="text-green-500 text-sm">Maximum length reached, click continue to proceed.</p>
+                  ) : (
+                    <p className="text-red-500 text-sm">Maximum length reached, username not available.</p>
+                  )
+                ) : (
+                  <p className={`text-sm ${isAvailable ? 'text-green-500' : 'text-red-500'}`}>
+                    {isAvailable ? 'Username is available!' : 'Username is already taken'}
+                  </p>
+                )}
+              </>
             )}
           </div>
           <button
