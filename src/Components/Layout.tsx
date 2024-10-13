@@ -7,6 +7,7 @@ import { io } from 'socket.io-client';
 import moment from 'moment-timezone';
 import { createUser } from '../utils/api';
 import SetHeliosUsername from '../Pages/SetHeliosUsername';
+import WelcomePage from '../Pages/WelcomePage';
 
 interface Airdrop {
   id: number;
@@ -44,6 +45,7 @@ const Layout = () => {
   const [loadingTimePassed, setLoadingTimePassed] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
   const [heliosUsername, setHeliosUsername] = useState<string | null>(null);
+  const [showWelcomePage, setShowWelcomePage] = useState(true);
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -320,13 +322,20 @@ const Layout = () => {
     setNewUser(false);
   };
     
+  const handleSetWelcomePage = (value: boolean) => {
+    setShowWelcomePage(value);
+  };
 
   if (isLoading) {
     return <LoadingPage />;
   }
 
   if (newUser === true || newUser === null) {
-    return <SetHeliosUsername telegramId={telegramId} onToggle={handleUsernameSetupComplete} />;
+    return showWelcomePage ? (
+      <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
+    ) : (
+      <SetHeliosUsername telegramId={telegramId} onToggle={handleUsernameSetupComplete}/> // Username setup shown after the welcome page
+    );
   }
 
   return (

@@ -112,6 +112,8 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
         setSuccessMessage(''); // Clear success message
       } else {
         setSuccessMessage(`Username "${data.heliosUsername}" created successfully!`);
+        setError('');
+        setIsAvailable(null);
         // Call onToggle after showing the success message for 2 seconds
         setTimeout(() => {
           onToggle();
@@ -126,7 +128,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
   };
 
   return (
-    <div className="set-username-page flex justify-center items-center h-screen bg-black/70 text-white">
+    <div className="set-username-page flex justify-center font-sans items-center h-screen bg-black/70 text-white">
       <StarryBackground />
       <div className="bg-transparent z-10 h-full text-black p-6 rounded-lg shadow-lg w-80">
         <form onSubmit={handleSubmit} className="flex flex-col h-full">

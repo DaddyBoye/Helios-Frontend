@@ -35,7 +35,6 @@ function App() {
     totalValue,
     referralToken,
     minerate,
-    newUser,
     updateTotalAirdrops,
     deleteAllUserAirdrops,
   } = useOutletContext<{
@@ -45,7 +44,6 @@ function App() {
     heliosUsername: string | null;
     totalAirdrops: number;
     progress: number;
-    newUser: boolean;
     airdropCount: number;
     totalValue: number;
     referralToken: string | null;
@@ -176,12 +174,7 @@ function App() {
       <div className="relative flex items-center">
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <h1 className="text-center z-10 pt-10 font-bold text-[#DCAA19] font-sans text-2xl">
-          <div>
-{newUser === null && <p>Loading user data...</p>}
-{newUser === true && <p>The user is new!</p>}
-{newUser === false && <p>The user is not new.</p>}
-
-    </div>{heliosUsername}
+          {heliosUsername}
             <p className="hidden">{referralToken}</p>
           </h1>
         </div>
