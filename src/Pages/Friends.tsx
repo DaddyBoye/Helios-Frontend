@@ -59,7 +59,7 @@ const Friends: React.FC = () => {
           if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
               const fetchedFriends = response.data.referrals.map((referral: any) => ({
                   id: referral.referredUserTelegramId,
-                  name: referral.users?.telegramUsername || 'Unknown',
+                  name: referral.users?.heliosUsername || 'Unknown',
                   score: referral.users?.totalAirdrops || 0,
                   referralCount: referral.users?.referralCount || 0,
                   avatar: User,
