@@ -13,6 +13,7 @@ interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void;
   heliosUsername: string | null;
   telegramId: number | null;
+  friends: Friend [];
 }
 
 interface Friend {
@@ -24,12 +25,11 @@ interface Friend {
 }
 
 const Friends: React.FC = () => {
-  const { toggleTaskbar, heliosUsername, telegramId } = useOutletContext<FriendsProps>();
+  const { toggleTaskbar, heliosUsername, telegramId, friends } = useOutletContext<FriendsProps>();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [referralLink, setReferralLink] = useState<string | null>(null);
   const baseUrl = "https://t.me/HeeliossBot?start=";
-  const [friends, setFriends] = useState<Friend[]>([]);
 
   useEffect(() => {
     if (!telegramId) return;
@@ -46,39 +46,6 @@ const Friends: React.FC = () => {
 
     fetchReferralToken();
   }, [telegramId]);
-
-  useEffect(() => {
-    if (!telegramId) return;
-
-    const fetchFriends = async () => {
-      try {
-          console.log('Fetching friends for telegramId:', telegramId);
-          const response = await axios.get(`https://server.therotrade.tech/api/referral/users/${telegramId}`);
-          console.log('API Response:', response.data);
-  
-          if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
-              const fetchedFriends = response.data.referrals.map((referral: any) => ({
-                  id: referral.referredUserTelegramId,
-                  name: referral.users?.heliosUsername || 'Unknown',
-                  score: referral.users?.totalAirdrops || 0,
-                  referralCount: referral.users?.referralCount || 0,
-                  avatar: User,
-              }));
-  
-              console.log('Processed Friends:', fetchedFriends);
-              setFriends(fetchedFriends);
-          } else {
-              console.log('No referrals found in the response');
-              setFriends([]);
-          }
-      } catch (error) {
-          console.error('Error fetching friends:', error);
-          setFriends([]);
-      }
-  };
-
-    fetchFriends();
-}, [telegramId]);
 
   const copyToClipboard = () => {
     if (referralLink) {

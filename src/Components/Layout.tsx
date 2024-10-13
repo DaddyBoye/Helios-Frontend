@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import LoadingPage from '../Pages/LoadingPage';
 import Taskbar from '../Components/Taskbar';
 import axios from 'axios';
+import User from '../images/edeef 1 (1).svg';
 import { io } from 'socket.io-client';
 import moment from 'moment-timezone';
 import { createUser } from '../utils/api';
@@ -21,6 +22,14 @@ interface User {
   firstName?: string;
   lastName?: string;
   referralToken?: string | null;
+}
+
+interface Friend {
+  id: number;
+  name: string;
+  score: number;
+  avatar: string;
+  referralCount: number;
 }
 
 const DELAY_MS = 500;
@@ -46,8 +55,11 @@ const Layout = () => {
   const [dataFetched, setDataFetched] = useState(false);
   const [heliosUsername, setHeliosUsername] = useState<string | null>(null);
   const [showWelcomePage, setShowWelcomePage] = useState(true);
+  const [friends, setFriends] = useState<Friend[]>([]);
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+
 
   const checkUserExists = useCallback(async (telegramId: number) => {
     try {
@@ -307,6 +319,39 @@ const Layout = () => {
     }
   };
 
+  useEffect(() => {
+    if (!telegramId) return;
+
+    const fetchFriends = async () => {
+      try {
+          console.log('Fetching friends for telegramId:', telegramId);
+          const response = await axios.get(`https://server.therotrade.tech/api/referral/users/${telegramId}`);
+          console.log('API Response:', response.data);
+  
+          if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
+              const fetchedFriends = response.data.referrals.map((referral: any) => ({
+                  id: referral.referredUserTelegramId,
+                  name: referral.users?.heliosUsername || 'Unknown',
+                  score: referral.users?.totalAirdrops || 0,
+                  referralCount: referral.users?.referralCount || 0,
+                  avatar: User,
+              }));
+  
+              console.log('Processed Friends:', fetchedFriends);
+              setFriends(fetchedFriends);
+          } else {
+              console.log('No referrals found in the response');
+              setFriends([]);
+          }
+      } catch (error) {
+          console.error('Error fetching friends:', error);
+          setFriends([]);
+      }
+  };
+
+    fetchFriends();
+}, [telegramId]);
+
   const handleToggleTaskbar = (isVisible: boolean) => {
     setIsTaskbarVisible(isVisible);
   };
@@ -330,7 +375,7 @@ const Layout = () => {
     return <LoadingPage />;
   }
 
-  if (newUser === true || newUser === null) {
+  if (newUser === false) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (
@@ -352,6 +397,7 @@ const Layout = () => {
           totalAirdrops,
           progress,
           newUser,
+          friends,
           airdropCount,
           totalValue,
           referralToken,

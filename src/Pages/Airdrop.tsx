@@ -1,3 +1,4 @@
+import { useOutletContext } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
 import Solis from '../icons/fdv 1 (1).svg';
 import Friends from '../icons/Friends Vector.svg';
@@ -8,7 +9,22 @@ import CompletedTimer from '../icons/basil_timer-outline.svg';
 import Timer from '../icons/basil_timer-outline (1).svg';
 import RoadmapCards from '../Components/RoadmapCards';
 
+interface AirdropProps {
+  toggleTaskbar: (isVisible: boolean) => void;
+  friends: Friend[];
+  minerate: number | null;
+}
+
+interface Friend {
+  id: number;
+  name: string;
+  score: number;
+  avatar: string;
+  referralCount: number;
+}
+
 const Airdrop = () => {
+  const { minerate, friends } = useOutletContext<AirdropProps>();
   return (
     <div className="relative font-sans h-full pb-20">
       <StarryBackground />
@@ -21,7 +37,7 @@ const Airdrop = () => {
         <div className="flex flex-row items-center justify-between mx-auto bg-[#185C8D]/50 h-12 p-1 pl-2 rounded-lg ml-2 mr-2">
           <div className="flex flex-row items-center justify-center">
             <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
-            <p className="text-base ml-1">Earn</p>
+            <p className="text-base ml-1">Airdrop</p>
           </div>
 
           {/* User stats */}
@@ -29,11 +45,11 @@ const Airdrop = () => {
             <div className="flex flex-row items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
               <div className="flex flex-row items-center">
                 <img src={Solis} alt="Solis" className="w-6 h-6" />
-                <p className="ml-1 text-xs">10</p>
-              </div>
-              <div className="flex flex-row items-center">
-                <img src={Friends} alt="Friends" className="w-6 h-6" />
-                <p className="ml-1 text-xs">20</p>
+                <p className="ml-1 text-xs">{minerate}</p>
+                    </div>
+                    <div className="flex flex-row items-center">
+                        <img src={Friends} alt="Friends" className="w-6 h-6" />
+                        <p className="ml-1 text-xs">{friends.length}</p>
               </div>
             </div>
             <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#FFD700] mr-1 rounded-full p-0.5 flex items-center justify-center">

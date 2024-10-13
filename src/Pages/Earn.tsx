@@ -15,6 +15,16 @@ import SlidingMenu from '../Components/SlidingMenu';
 
 interface EarnProps {
     toggleTaskbar: (isVisible: boolean) => void;
+    friends: Friend[];
+    minerate: number | null;
+  }
+
+  interface Friend {
+    id: number;
+    name: string;
+    score: number;
+    avatar: string;
+    referralCount: number;
   }
 
 interface Platform {
@@ -48,7 +58,7 @@ interface CarouselImage {
 type SelectedItem = Platform | InviteTask | CarouselImage;
 
 const Earn = () => {
-    const { toggleTaskbar } = useOutletContext<EarnProps>();
+    const { toggleTaskbar, minerate, friends } = useOutletContext<EarnProps>();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -164,11 +174,11 @@ const Earn = () => {
                 <div className="flex flex-row items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
                     <div className="flex flex-row items-center">
                         <img src={Solis} alt="Solis" className="w-6 h-6 " />
-                        <p className="ml-1 text-xs">10</p>
+                        <p className="ml-1 text-xs">{minerate}</p>
                     </div>
                     <div className="flex flex-row items-center">
                         <img src={Friends} alt="Friends" className="w-6 h-6" />
-                        <p className="ml-1 text-xs">20</p>
+                        <p className="ml-1 text-xs">{friends.length}</p>
                     </div>
                 </div>
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#FFD700] mr-1 rounded-full p-0.5 flex items-center justify-center">
