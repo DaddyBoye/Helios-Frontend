@@ -195,11 +195,11 @@ const Friends: React.FC = () => {
 
          {/* Conditional Rendering for Friends */}
          {friends.length === 0 ? (
-          <div className='w-11/12 mx-auto flex items-center justify-center border py-8 rounded-lg border-[#FAAD00]'>
+          <div className='w-11/12 mx-auto flex items-center justify-center border bg-white/10 py-8 rounded-lg backdrop-blur-sm border-[#B4CADA]'>
             <p className="text-white text-center">You have no referrals.</p>
           </div>
         ) : (
-          <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg border-[#FAAD00] overflow-hidden"
+          <div className="w-11/12 mx-auto h-48 border py-1.5 rounded-lg bg-white/10 backdrop-blur-sm overflow-hidden"
           >
             <div
               ref={friendsContainerRef}
