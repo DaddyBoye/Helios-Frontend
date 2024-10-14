@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
 import Helios3 from '../images/helios 3 mascot 32.jpeg';
 import Helios6 from '../images/helios 6 mascot 32.jpeg';
@@ -66,8 +65,6 @@ const Earn = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
-
-    const navigate = useNavigate();
 
     const socialPlatforms: Platform[] = [
         { icon: Instagram, name: 'Instagram', text: 'Follow us on Instagram', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1},
@@ -241,14 +238,7 @@ const Earn = () => {
           </div>
           <div className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar'>
             {inviteTasks.map((task, index) => (
-              <div 
-                key={index} 
-                className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0'
-                onClick={() => {
-                    handleItemClick(task);
-                    navigate(task.link); // Navigate to the friends page
-                }}
-                >
+              <div key={index} className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0' onClick={() => handleItemClick(task)}>
                 <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center mb-2">
                   <img src={Friends} alt="Invite icon" className="w-6 h-6" />
                 </div>
