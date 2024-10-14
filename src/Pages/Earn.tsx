@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
 import Helios3 from '../images/helios 3 mascot 32.jpeg';
 import Helios6 from '../images/helios 6 mascot 32.jpeg';
@@ -66,6 +67,8 @@ const Earn = () => {
     const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
 
+    const navigate = useNavigate();
+
     const socialPlatforms: Platform[] = [
         { icon: Instagram, name: 'Instagram', text: 'Follow us on Instagram', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1},
         { icon: X, name: 'X', text: 'Follow our X account', link: 'https://www.x.com', image: X, color: '#1DA1F2', taskId: 2 },
@@ -74,11 +77,12 @@ const Earn = () => {
     ];
     
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '100 Solis', link: 'https://invitefriends.com/5', image: Friends, color: '#4CAF50', taskId: 1 },
-        { title: 'Invite 10 friends', reward: '250 Solis', link: 'https://invitefriends.com/10', image: Friends, color: '#2196F3', taskId: 1 },
-        { title: 'Invite 20 friends', reward: '600 Solis', link: 'https://invitefriends.com/20', image: Friends, color: '#FFC107', taskId: 1 },
-        { title: 'Invite 50 friends', reward: '2000 Solis', link: 'https://invitefriends.com/50', image: Friends, color: '#FF5722', taskId: 1 },
+        { title: 'Invite 5 friends', reward: '100 Solis', link: '/friends', image: Friends, color: '#4CAF50', taskId: 1 },
+        { title: 'Invite 10 friends', reward: '250 Solis', link: '/friends', image: Friends, color: '#2196F3', taskId: 1 },
+        { title: 'Invite 20 friends', reward: '600 Solis', link: '/friends', image: Friends, color: '#FFC107', taskId: 1 },
+        { title: 'Invite 50 friends', reward: '2000 Solis', link: '/friends', image: Friends, color: '#FF5722', taskId: 1 },
     ];
+    
     
     const images: CarouselImage[] = [
         { 
@@ -237,7 +241,14 @@ const Earn = () => {
           </div>
           <div className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar'>
             {inviteTasks.map((task, index) => (
-              <div key={index} className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0' onClick={() => handleItemClick(task)}>
+              <div 
+                key={index} 
+                className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0'
+                onClick={() => {
+                    handleItemClick(task);
+                    navigate(task.link); // Navigate to the friends page
+                }}
+                >
                 <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center mb-2">
                   <img src={Friends} alt="Invite icon" className="w-6 h-6" />
                 </div>
