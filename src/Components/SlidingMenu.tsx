@@ -46,8 +46,8 @@ interface SlidingMenuProps {
 
 const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId}) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [allowMarkCompletion, setAllowMarkCompletion] = useState(true);
-    const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const lastClickTimeRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (selectedItem) {
@@ -82,42 +82,41 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
     };
 
     const handleItemClick = (item: SelectedItem) => {
-        // Start timer when the social platform is clicked
-        if ('taskId' in item) { // Check if taskId exists
-            // Clear any existing timers to prevent multiple executions
-            if (timerRef.current) {
-                clearTimeout(timerRef.current);
+        if ('taskId' in item) {
+          const currentTime = Date.now();
+          lastClickTimeRef.current = currentTime;
+    
+          if (timerRef.current) {
+            clearTimeout(timerRef.current);
+          }
+    
+          timerRef.current = setTimeout(() => {
+            if (lastClickTimeRef.current === currentTime) {
+              markTaskAsCompleted(item.taskId, telegramId);
             }
-
-            // Reset the allowMarkCompletion flag
-            setAllowMarkCompletion(true);            
-
-            // Start a new timer
-            timerRef.current = setTimeout(() => {
-                if (allowMarkCompletion) {
-                    markTaskAsCompleted(item.taskId, telegramId);
-                }
-            }, 6000); // 6 seconds
+          }, 6000);
         }
-    };
+      };
     
     // Listen for visibility change (when user returns to the app)
     useEffect(() => {
         const handleVisibilityChange = () => {
-            if (!document.hidden) {
-                // When returning to the page, prevent marking the task as completed
-                setAllowMarkCompletion(false);
-                if (timerRef.current) {
-                    clearTimeout(timerRef.current); // Clear the timer
-                }
+          if (!document.hidden) {
+            const currentTime = Date.now();
+            if (lastClickTimeRef.current && currentTime - lastClickTimeRef.current < 6000) {
+              if (timerRef.current) {
+                clearTimeout(timerRef.current);
+              }
             }
+          }
         };
+    
         document.addEventListener('visibilitychange', handleVisibilityChange);
-        
+    
         return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
+          document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
-    }, []);
+      }, []);
 
     const markTaskAsCompleted = async (taskId: number, telegramId: string) => {
         try {
