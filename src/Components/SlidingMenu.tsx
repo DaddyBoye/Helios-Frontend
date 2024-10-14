@@ -46,6 +46,7 @@ interface SlidingMenuProps {
 
 const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId}) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [allowMarkCompletion, setAllowMarkCompletion] = useState(true);
     const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
     useEffect(() => {
@@ -87,10 +88,15 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
             if (timerRef.current) {
                 clearTimeout(timerRef.current);
             }
-    
+
+            // Reset the allowMarkCompletion flag
+            setAllowMarkCompletion(true);            
+
             // Start a new timer
             timerRef.current = setTimeout(() => {
-                markTaskAsCompleted(item.taskId, telegramId);
+                if (allowMarkCompletion) {
+                    markTaskAsCompleted(item.taskId, telegramId);
+                }
             }, 6000); // 6 seconds
         }
     };
@@ -98,14 +104,18 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
     // Listen for visibility change (when user returns to the app)
     useEffect(() => {
         const handleVisibilityChange = () => {
-        if (!document.hidden) {
-            clearTimeout(timerRef.current);
-        }
+            if (!document.hidden) {
+                // When returning to the page, prevent marking the task as completed
+                setAllowMarkCompletion(false);
+                if (timerRef.current) {
+                    clearTimeout(timerRef.current); // Clear the timer
+                }
+            }
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
         
         return () => {
-        document.removeEventListener('visibilitychange', handleVisibilityChange);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, []);
 
