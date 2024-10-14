@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import axios, { AxiosError } from 'axios';
 
 interface CarouselImage {
     image: string;
@@ -18,6 +19,7 @@ interface Platform {
     link: string;
     image: string;
     color: string;
+    taskId: number; // Add taskId
 }
 
 interface InviteTask {
@@ -26,6 +28,12 @@ interface InviteTask {
     link: string;
     image: string;
     color: string;
+    taskId: number; // Add taskId
+}
+
+interface ApiErrorResponse {
+    error: string;  // Adjust this based on your API's actual response structure
+    message: string;
 }
 
 type SelectedItem = CarouselImage | Platform | InviteTask;
@@ -33,10 +41,12 @@ type SelectedItem = CarouselImage | Platform | InviteTask;
 interface SlidingMenuProps {
     selectedItem: SelectedItem;
     onClose: () => void;
+    telegramId: string;
 }
 
-const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose}) => {
+const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId}) => {
     const [isOpen, setIsOpen] = useState(false);
+    const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
     useEffect(() => {
         if (selectedItem) {
@@ -68,6 +78,62 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose}) => {
             return 'max-h-[85%]';
         }
         return 'max-h-[52%]';
+    };
+
+    const handleItemClick = (item: SelectedItem) => {
+        // Start timer when the social platform is clicked
+        if ('taskId' in item) { // Check if taskId exists
+            // Clear any existing timers to prevent multiple executions
+            if (timerRef.current) {
+                clearTimeout(timerRef.current);
+            }
+    
+            // Start a new timer
+            timerRef.current = setTimeout(() => {
+                markTaskAsCompleted(item.taskId, telegramId);
+            }, 6000); // 6 seconds
+        }
+    };
+    
+    // Listen for visibility change (when user returns to the app)
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+        if (!document.hidden) {
+            clearTimeout(timerRef.current);
+        }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        
+        return () => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, []);
+
+    const markTaskAsCompleted = async (taskId: number, telegramId: string) => {
+        try {
+            // Call the backend API to update the task as completed
+            const response = await axios.patch(`https://server.therotrade.tech/api/users/complete-task/${telegramId}/${taskId}`);
+    
+            // Log success message
+            console.log(`Task ${taskId} completed for user ${telegramId}:`, response.data.message);
+        } catch (error) {
+            // Type assertion to specify the error type
+            const axiosError = error as AxiosError<ApiErrorResponse>;
+    
+            // Check if the error has a response from the server
+            if (axiosError.response) {
+                // Use the defined interface for the error response data
+                console.error('Failed to complete the task:', axiosError.response.data.message);
+            } else {
+                console.error('Error completing the task:', axiosError.message);
+            }
+        }
+    };
+
+    // Click handler function
+    const handlePlatformClick = (item: SelectedItem) => {
+        handleItemClick(item); // Call your existing function to handle the item click
+        window.open(item.link, '_blank'); // Open the platform link immediately
     };
 
     return (
@@ -153,6 +219,13 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose}) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
+                        onClick={(e) => {
+                            // Prevent default behavior only for non-platform items
+                            if (isPlatform(selectedItem)) {
+                                e.preventDefault(); // Only prevent default if it's a platform
+                                handlePlatformClick(selectedItem); // Handle the platform click logic
+                            }
+                        }}
                     >
                         {isCarouselImage(selectedItem) ? `Join ${selectedItem.title}` : 
                          isPlatform(selectedItem) ? `Go to ${selectedItem.name}` :

@@ -164,7 +164,6 @@ function App() {
     setIsRemoving(false);
   };
   
-
   const claimFunction = async () => {
     try {
       if (telegramId) {
@@ -189,7 +188,7 @@ function App() {
                 <p className='text-base ml-1 text-white'>Home</p>
             </div>
             <div className="relative flex my-auto h-6">
-                <div className="flex flex-row items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
+                <div className="flex flex-row text-white items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
                     <div className="flex flex-row items-center">
                         <img src={Solis} alt="Solis" className="w-6 h-6" />
                         <p className="ml-1 text-xs">{minerate}</p>

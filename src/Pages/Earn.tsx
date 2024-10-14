@@ -17,6 +17,7 @@ interface EarnProps {
     toggleTaskbar: (isVisible: boolean) => void;
     friends: Friend[];
     minerate: number | null;
+    telegramId: string;
   }
 
   interface Friend {
@@ -34,6 +35,7 @@ interface Platform {
     link: string;
     image: string;
     color: string;
+    taskId: number;
 }
 
 interface InviteTask {
@@ -42,6 +44,7 @@ interface InviteTask {
     link: string;
     image: string;
     color: string;
+    taskId: number;
 }
 
 interface CarouselImage {
@@ -58,23 +61,23 @@ interface CarouselImage {
 type SelectedItem = Platform | InviteTask | CarouselImage;
 
 const Earn = () => {
-    const { toggleTaskbar, minerate, friends } = useOutletContext<EarnProps>();
+    const { toggleTaskbar, minerate, friends, telegramId } = useOutletContext<EarnProps>();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
 
     const socialPlatforms: Platform[] = [
-        { icon: Instagram, name: 'Instagram', text: 'Follow us on Instagram', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C' },
-        { icon: X, name: 'X', text: 'Follow our X account', link: 'https://www.x.com', image: X, color: '#1DA1F2' },
-        { icon: YouTube, name: 'YouTube', text: 'Subscribe to our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000' },
-        { icon: Telegram, name: 'Telegram', text: 'Join us on Telegram', link: 'https://www.telegram.org', image: Telegram, color: '#0088CC' },
+        { icon: Instagram, name: 'Instagram', text: 'Follow us on Instagram', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1},
+        { icon: X, name: 'X', text: 'Follow our X account', link: 'https://www.x.com', image: X, color: '#1DA1F2', taskId: 2 },
+        { icon: YouTube, name: 'YouTube', text: 'Subscribe to our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000', taskId: 3 },
+        { icon: Telegram, name: 'Telegram', text: 'Join us on Telegram', link: 'https://www.telegram.org', image: Telegram, color: '#0088CC', taskId: 4 },
     ];
     
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '100 Solis', link: 'https://invitefriends.com/5', image: Friends, color: '#4CAF50' },
-        { title: 'Invite 10 friends', reward: '250 Solis', link: 'https://invitefriends.com/10', image: Friends, color: '#2196F3' },
-        { title: 'Invite 20 friends', reward: '600 Solis', link: 'https://invitefriends.com/20', image: Friends, color: '#FFC107' },
-        { title: 'Invite 50 friends', reward: '2000 Solis', link: 'https://invitefriends.com/50', image: Friends, color: '#FF5722' },
+        { title: 'Invite 5 friends', reward: '100 Solis', link: 'https://invitefriends.com/5', image: Friends, color: '#4CAF50', taskId: 1 },
+        { title: 'Invite 10 friends', reward: '250 Solis', link: 'https://invitefriends.com/10', image: Friends, color: '#2196F3', taskId: 1 },
+        { title: 'Invite 20 friends', reward: '600 Solis', link: 'https://invitefriends.com/20', image: Friends, color: '#FFC107', taskId: 1 },
+        { title: 'Invite 50 friends', reward: '2000 Solis', link: 'https://invitefriends.com/50', image: Friends, color: '#FF5722', taskId: 1 },
     ];
     
     const images: CarouselImage[] = [
@@ -87,17 +90,12 @@ const Earn = () => {
             benefits: [
                 "Compete for a grand prize of $30,000",
                 "Gain recognition in the Helios community",
-                "Improve your skills through challenging tasks",
-                "Network with top performers and industry experts"
             ],
             howTo: [
                 "Register for the Helios Challenge on our website",
                 "Complete daily tasks to earn points",
-                "Collaborate with team members on complex problems",
-                "Submit your final project before the deadline",
-                "Attend the live finale event for winners announcement"
             ],
-            longDescription: "The $30,000 Helios Challenge is our flagship competition designed to push the boundaries of innovation and creativity in the blockchain space. Over the course of 30 days, participants will engage in a series of increasingly complex tasks, ranging from smart contract development to decentralized application design. This challenge is not just about coding; it's about creating solutions that can revolutionize the way we interact with blockchain technology. Whether you're a seasoned developer or an enthusiastic newcomer, the Helios Challenge offers a platform to showcase your skills, learn from peers, and potentially walk away with a life-changing prize."
+            longDescription: "The $30,000 Helios Challenge is our flagship competition designed to push the boundaries of innovation and creativity in the blockchain space. Over the course of 30 days, participants will engage in a series of increasingly complex tasks, ranging from smart contract development to decentralized application design."
         },
         { 
             image: Helios6, 
@@ -261,14 +259,15 @@ const Earn = () => {
                 {renderInviteTasksSection()}
                 
                 {selectedItem && (
-                <SlidingMenu
-                    selectedItem={selectedItem} 
-                    onClose={() => {
-                        toggleTaskbar(true);  // This sets the taskbar to true when closing
-                        setSelectedItem(null);
-                    }} 
-                />
-            )}
+                    <SlidingMenu
+                        selectedItem={selectedItem}
+                        telegramId={telegramId} // Pass telegramId here
+                        onClose={() => {
+                            toggleTaskbar(true);
+                            setSelectedItem(null);
+                        }}
+                    />
+                )}
             </div>
         </div>
     );
