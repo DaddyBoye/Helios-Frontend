@@ -192,7 +192,7 @@ function App() {
             <p className="hidden">{referralToken}</p>
           </h1>
         </div>
-      <div className="flex flex-row mb-8 z-10 items-center justify-center">
+      <div className="flex flex-row mb-8 mt-3 z-10 items-center justify-center">
         <img src={freshcoin} alt="" className="w-12 pr-0.5 h-12" />
         <p className="my-auto text-white font-bold text-4xl">
           {claimInitiated ? (
@@ -227,7 +227,7 @@ function App() {
         <ProgressBar progress={progress} />
       </div>
       {/* Make this container grow to take up remaining space */}
-      <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full">
+      <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-32 text-white rounded-3xl z-10 w-full">
         <p className="text-sm font-bold text-black pl-8 pt-5">
           Available Offsets
         </p>
