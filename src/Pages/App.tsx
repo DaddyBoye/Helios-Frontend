@@ -192,7 +192,7 @@ function App() {
             <p className="hidden">{referralToken}</p>
           </h1>
         </div>
-      <div className="flex flex-row mb-8 mt-2 z-10 items-center justify-center">
+      <div className="flex flex-row mb-5 mt-2 z-10 items-center justify-center">
         <img src={freshcoin} alt="" className="w-12 pr-0.5 h-12" />
         <p className="my-auto text-white font-bold text-4xl">
           {claimInitiated ? (
