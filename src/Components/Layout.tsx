@@ -350,7 +350,7 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed ) {
+    if (loadingTimePassed && user && dataFetched) {
       setIsLoading(false);
     }
   }, [loadingTimePassed, user, dataFetched]);
