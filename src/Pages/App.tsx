@@ -1,12 +1,11 @@
 import ProgressBar from '../Components/ProgressBar';
 import Solis from '../icons/fdv 1 (1).svg';
-import Friends from '../icons/Friends Vector.svg';
-import User from '../icons/edeef 1.svg';
 import freshcoin from '../images/Group 9.svg';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
+import Header from '../Components/Header';
 import { useSpring, animated } from 'react-spring';
 import '../App.css';
 
@@ -179,32 +178,15 @@ function App() {
   const hasAirdropsToClaim = visibleAirdrops.length > 0;
 
   return (
-    <div className="relative flex flex-col font-sans h-screen ">
+    <div className="relative flex flex-col font-sans overflow-hidden h-screen ">
       <StarryBackground />
       <div className="relative flex items-center">
-      <div className='flex flex-row items-center justify-between w-full mt-4 m-2 bg-[#185C8D]/50 h-12 p-1 pl-2 rounded-lg'>
-            <div className='flex flex-row items-center justify-center'>
-                <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
-                <p className='text-base ml-1 text-white'>Home</p>
-            </div>
-            <div className="relative flex my-auto h-6">
-                <div className="flex flex-row text-white items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
-                    <div className="flex flex-row items-center">
-                        <img src={Solis} alt="Solis" className="w-6 h-6" />
-                        <p className="ml-1 text-xs">{minerate}</p>
-                    </div>
-                    <div className="flex flex-row items-center">
-                        <img src={Friends} alt="Friends" className="w-6 h-6" />
-                        <p className="ml-1 text-xs">{friends.length}</p>
-                    </div>
-                </div>
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#FFD700] mr-1 rounded-full p-0.5 flex items-center justify-center">
-                    <img src={User} alt="User" className="w-8 h-8 rounded-full object-cover" />
-                </div>
-            </div>
-        </div>
+      <Header
+          minerate={minerate}
+          friendsCount={friends.length}
+      />
       </div>
-      <div className="z-10 mt-2">
+      <div className="z-10 mt-16">
           <h1 className="text-center h-8 z-10 font-bold text-[#DCAA19] font-sans text-2xl">
           {heliosUsername}
             <p className="hidden">{referralToken}</p>
