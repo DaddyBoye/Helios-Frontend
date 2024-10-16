@@ -9,6 +9,7 @@ import moment from 'moment-timezone';
 import { createUser } from '../utils/api';
 import SetHeliosUsername from '../Pages/SetHeliosUsername';
 import WelcomePage from '../Pages/WelcomePage';
+import WelcomePopup from '../Components/WelcomePopup';
 
 interface Airdrop {
   id: number;
@@ -56,10 +57,9 @@ const Layout = () => {
   const [heliosUsername, setHeliosUsername] = useState<string | null>(null);
   const [showWelcomePage, setShowWelcomePage] = useState(true);
   const [friends, setFriends] = useState<Friend[]>([]);
+  const [showPopup, setShowPopup] = useState(false);
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-
 
   const checkUserExists = useCallback(async (telegramId: number) => {
     try {
@@ -204,7 +204,7 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched) {
+    if (loadingTimePassed ) {
       setIsLoading(false);
     }
   }, [loadingTimePassed, user, dataFetched]);
@@ -365,8 +365,13 @@ const Layout = () => {
       await fetchHeliosUsername(telegramId);
     }
     setNewUser(false);
+    setShowPopup(true);
   };
-    
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  };
+
   const handleSetWelcomePage = (value: boolean) => {
     setShowWelcomePage(value);
   };
@@ -383,6 +388,8 @@ const Layout = () => {
     );
   }
 
+  {showPopup && <WelcomePopup onClose={handlePopupClose} />}
+  
   return (
     <>
       {isTaskbarVisible && <Taskbar />}
