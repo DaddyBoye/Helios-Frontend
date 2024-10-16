@@ -176,7 +176,7 @@ const Earn = () => {
     );
 
     const renderImageCarousel = () => (
-        <div ref={carouselRef} className='flex gap-2 pl-3 overflow-x-auto pr-3 mt-16 hide-scrollbar snap-x snap-mandatory'>
+        <div ref={carouselRef} className='flex gap-2 pl-3 overflow-x-auto pr-3 mt-20 hide-scrollbar snap-x snap-mandatory'>
             {images.map((imageInfo, index) => (
                 <div key={index} className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center' onClick={() => handleItemClick(imageInfo)}>
                     <img src={imageInfo.image} alt={imageInfo.title} className="w-full h-full object-cover rounded-2xl" />
