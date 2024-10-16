@@ -227,7 +227,7 @@ function App() {
         <ProgressBar progress={progress} />
       </div>
       {/* Make this container grow to take up remaining space */}
-      <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-32 text-white rounded-3xl z-10 w-full">
+      <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-36 text-white rounded-3xl z-10 w-full">
         <p className="text-sm font-bold text-black pl-8 pt-5">
           Available Offsets
         </p>
