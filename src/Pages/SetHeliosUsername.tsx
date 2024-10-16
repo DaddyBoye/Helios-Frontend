@@ -16,7 +16,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
   const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
-  
+
   const handleUsernameChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const username = e.target.value;
     setHeliosUsername(username);
@@ -163,7 +163,6 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
           </div>
           <button
             type="submit"
-            onClick={onToggle}
             className="bg-yellow-500 mt-auto mb-20 text-white font-bold py-3 rounded-lg hover:bg-yellow-600 disabled:opacity-50"
             disabled={isSubmitting || isAvailable !== true} // Button is disabled unless the username is available
           >
