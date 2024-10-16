@@ -202,14 +202,6 @@ const Layout = () => {
     }
   };
 
-  // Trigger when user is created successfully and after 4 seconds
-  useEffect(() => {
-    if (loadingTimePassed ) {
-      setIsLoading(false);
-    }
-  }, [loadingTimePassed, user, dataFetched]);
-
-
   useEffect(() => {
     if (!telegramId) return;
 
@@ -360,12 +352,20 @@ const Layout = () => {
     return <LoadingPage />;
   }
 
+  // Trigger when user is created successfully and after 4 seconds
+  useEffect(() => {
+    if (loadingTimePassed && user && dataFetched) {
+      setIsLoading(false);
+    }
+  }, [loadingTimePassed, user, dataFetched]);
+
   const handleUsernameSetupComplete = async () => {
     if (telegramId) {
       await fetchHeliosUsername(telegramId);
     }
     setNewUser(false);
     setShowPopup(true);
+    handleToggleTaskbar(false);
   };
 
   const handlePopupClose = () => {
@@ -388,8 +388,6 @@ const Layout = () => {
     );
   }
 
-  {showPopup && <WelcomePopup onClose={handlePopupClose} />}
-  
   return (
     <>
       {isTaskbarVisible && <Taskbar />}
@@ -413,6 +411,7 @@ const Layout = () => {
           deleteAllUserAirdrops
         }}
       />
+      {showPopup && <WelcomePopup onClose={handlePopupClose} toggleTaskbar={handleToggleTaskbar} />}
       <p className='hidden'>{message}</p>
       <div className='hidden'>
             <h1>Welcome, {user?.firstName}!</h1>
