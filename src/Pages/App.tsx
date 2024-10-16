@@ -186,13 +186,13 @@ function App() {
           friendsCount={friends.length}
       />
       </div>
-      <div className="z-10 mt-16">
+      <div className="z-10 mt-20">
           <h1 className="text-center h-8 z-10 font-bold text-[#DCAA19] font-sans text-2xl">
           {heliosUsername}
             <p className="hidden">{referralToken}</p>
           </h1>
         </div>
-      <div className="flex flex-row mb-8 mt-3 z-10 items-center justify-center">
+      <div className="flex flex-row mb-8 mt-2 z-10 items-center justify-center">
         <img src={freshcoin} alt="" className="w-12 pr-0.5 h-12" />
         <p className="my-auto text-white font-bold text-4xl">
           {claimInitiated ? (
