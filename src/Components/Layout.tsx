@@ -348,13 +348,9 @@ const Layout = () => {
     setIsTaskbarVisible(isVisible);
   };
 
-  if (isLoading) {
-    return <LoadingPage />;
-  }
-
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched) {
+    if (loadingTimePassed ) {
       setIsLoading(false);
     }
   }, [loadingTimePassed, user, dataFetched]);
