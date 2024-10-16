@@ -34,32 +34,32 @@ const Airdrop = () => {
         <div className="p-2"></div>
 
         {/* Earn section */}
-        <div className="flex flex-row items-center justify-between mx-auto bg-[#185C8D]/50 h-12 p-1 pl-2 rounded-lg ml-2 mr-2">
-          <div className="flex flex-row items-center justify-center">
-            <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
-            <p className="text-base ml-1">Airdrop</p>
-          </div>
-
-          {/* User stats */}
-          <div className="relative flex my-auto h-6">
-            <div className="flex flex-row items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
-              <div className="flex flex-row items-center">
-                <img src={Solis} alt="Solis" className="w-6 h-6" />
-                <p className="ml-1 text-xs">{minerate}</p>
-                    </div>
-                    <div className="flex flex-row items-center">
-                        <img src={Friends} alt="Friends" className="w-6 h-6" />
-                        <p className="ml-1 text-xs">{friends.length}</p>
+        <div className='w-full backdrop-blur fixed pt-2 top-0 left-0 z-50 right-0 mx-auto'>
+          <div className='flex flex-row items-center w-11/12 justify-between mx-auto my-auto bg-[#185C8D]/50 h-12 p-1 pl-2 rounded-lg'>
+              <div className='flex flex-row items-center justify-center'>
+                  <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
+                  <p className='text-base ml-1'>Earn</p>
               </div>
-            </div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#FFD700] mr-1 rounded-full p-0.5 flex items-center justify-center">
-              <img src={User} alt="User" className="w-8 h-8 rounded-full object-cover" />
-            </div>
+              <div className="relative flex my-auto h-6">
+                  <div className="flex flex-row items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
+                      <div className="flex flex-row items-center">
+                          <img src={Solis} alt="Solis" className="w-6 h-6 " />
+                          <p className="ml-1 text-xs">{minerate}</p>
+                      </div>
+                      <div className="flex flex-row items-center">
+                          <img src={Friends} alt="Friends" className="w-6 h-6" />
+                          <p className="ml-1 text-xs">{friends.length}</p>
+                      </div>
+                  </div>
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#FFD700] mr-1 rounded-full p-0.5 flex items-center justify-center">
+                      <img src={User} alt="User" className="w-8 h-8 rounded-full object-cover" />
+                  </div>
+              </div>
           </div>
         </div>
 
         {/* Roadmap Header */}
-        <div className="py-1 px-8 bg-white mx-auto mt-2 rounded-2xl font-semibold text-black">
+        <div className="py-1 px-8 bg-white mx-auto mt-14 rounded-2xl font-semibold text-black">
           Roadmap
         </div>
 

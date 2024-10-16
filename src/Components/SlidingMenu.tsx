@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios, { AxiosError } from 'axios';
+import Solis from '../icons/fdv 1 (1).svg';
+import Friends from '../icons/Friends Vector.svg';
+import User from '../icons/edeef 1.svg';
 
 interface CarouselImage {
     image: string;
@@ -42,9 +45,18 @@ interface SlidingMenuProps {
     selectedItem: SelectedItem;
     onClose: () => void;
     telegramId: string;
+    friends: Friend[];
+    minerate: number | null;
 }
 
-const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId}) => {
+interface Friend {
+    id: number;
+    name: string;
+    score: number;
+    avatar: string;
+    referralCount: number;
+  }
+const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId, minerate, friends}) => {
     const [isOpen, setIsOpen] = useState(false);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const lastClickTimeRef = useRef<number | null>(null);
@@ -75,11 +87,8 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
     };
 
     const getMenuHeight = () => {
-        if (isCarouselImage(selectedItem)) {
-            return 'max-h-[85%]';
-        }
-        return 'max-h-[52%]';
-    };
+      return isCarouselImage(selectedItem) ? 'h-full' : 'max-h-[52%]';
+  };
 
     const handleItemClick = (item: SelectedItem) => {
         if ('taskId' in item) {
@@ -152,15 +161,43 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
             }`}
             onClick={handleClose}
         >
+
+            {/* Info header, render only for carousel images */}
+                {isCarouselImage(selectedItem) && (
+                    <div className='w-full backdrop-blur fixed pt-2 top-0 left-0 z-50 right-0 mx-auto'>
+                        <div className='flex flex-row items-center w-11/12 justify-between mx-auto my-auto bg-[#185C8D] h-12 p-1 pl-2 rounded-lg'>
+                            <div className='flex flex-row items-center justify-center'>
+                                <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
+                                <p className='text-base ml-1'>Earn</p>
+                            </div>
+                            <div className="relative flex my-auto h-6">
+                                <div className="flex flex-row items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
+                                    <div className="flex flex-row items-center">
+                                        <img src={Solis} alt="Solis" className="w-6 h-6 " />
+                                        <p className="ml-1 text-xs">{minerate}</p>
+                                    </div>
+                                    <div className="flex flex-row items-center">
+                                        <img src={Friends} alt="Friends" className="w-6 h-6" />
+                                        <p className="ml-1 text-xs">{friends.length}</p>
+                                    </div>
+                                </div>
+                                <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#FFD700] mr-1 rounded-full p-0.5 flex items-center justify-center">
+                                    <img src={User} alt="User" className="w-8 h-8 rounded-full object-cover" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             <div
-                className={`fixed w-full bottom-0 overflow-y-auto rounded-t-3xl transition-transform duration-300 ease-in-out transform ${
+                className={`fixed w-full bottom-0 overflow-y-auto transition-transform duration-300 ease-in-out transform ${
                     isOpen ? 'translate-y-0' : 'translate-y-full'
-                } ${getMenuHeight()}`}
+                } ${getMenuHeight()} scrollbar-hide`}
                 style={{ backgroundColor: selectedItem.color }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className='flex flex-col p-6 text-white'>
+                <div className='flex flex-col p-4 text-white'>
                     {/* Header */}
+                    {(isPlatform(selectedItem) || isInviteTask(selectedItem)) && (
                     <div className="flex justify-between items-center mb-3">
                         <h2 className="text-2xl font-bold">
                             {isCarouselImage(selectedItem) ? selectedItem.title : 
@@ -169,43 +206,85 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
                         </h2>
                         <button onClick={handleClose} className="text-3xl">&times;</button>
                     </div>
-
+                    )}
                     {/* Image and short description */}
+                    {(isPlatform(selectedItem) || isInviteTask(selectedItem)) && (
                     <div className="flex items-center mb-3">
                         <img src={selectedItem.image} className="w-20 h-20 object-cover rounded-full mr-2" />
                         <p className="text-lg text-left">
-                            {isCarouselImage(selectedItem) ? selectedItem.description : 
-                             isPlatform(selectedItem) ? selectedItem.text :
+                            {                             isPlatform(selectedItem) ? selectedItem.text :
                              isInviteTask(selectedItem) ? `Earn ${selectedItem.reward} by inviting friends!` : ''}
                         </p>
                     </div>
+                    )}
 
                     {isCarouselImage(selectedItem) && (
                         <>
-                            {/* Long description */}
-                            <div className="mb-3">
-                                <h3 className="text-xl font-semibold mb-2">About</h3>
-                                <p>{selectedItem.longDescription}</p>
-                            </div>
+                            {/* Carousel items */}
+                            <div className="flex flex-col gap-3 mb-44 mt-12">
+                                {/* Challenge */}
+                                <div
+                                  className="bg-cover bg-center rounded-xl p-4 relative"
+                                  style={{
+                                    backgroundImage: `url(${selectedItem.image})`,
+                                  }}
+                                >
+                                  <div className="absolute inset-0 bg-black bg-opacity-40 rounded-xl"></div> {/* Add overlay */}
+                                  <div className="relative z-10">
+                                    <div className="flex justify-between items-center mb-2">
+                                      <h3 className="text-white text-lg font-bold">LUCKY DRAW</h3>
+                                      <button className="bg-blue-700 text-white px-3 py-1 rounded-full text-sm">
+                                        LEARN MORE
+                                      </button>
+                                    </div>
+                                    <h2 className="text-white text-2xl font-bold mb-1">{selectedItem.title}</h2>
+                                    <p className="text-yellow-300 text-sm flex items-center">
+                                      {selectedItem.description}
+                                    </p>
+                                    <div className="flex space-x-2 mt-2">
+                                      <div className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs flex items-center">
+                                        <span className="mr-1">🎟️</span> Entry 10,000
+                                      </div>
+                                      <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs">
+                                        13-20 Oct
+                                      </div>
+                                      <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs flex items-center">
+                                        {`53,341`} {/* Use dynamic count */}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
 
-                            {/* Benefits */}
-                            <div className="mb-6">
-                                <h3 className="text-xl font-semibold mb-2">Benefits</h3>
-                                <ul className="list-disc list-inside">
-                                    {selectedItem.benefits.map((benefit, index) => (
-                                        <li key={index}>{benefit}</li>
+                                {/* Prize breakdown */}
+                                <div className="bg-blue-800 rounded-xl p-4">
+                                    <h3 className="text-white text-lg font-bold mb-2">1st prize</h3>
+                                    <div className="flex items-center">
+                                        <span className="text-white text-3xl font-bold mr-2">$1,200</span>
+                                        <span className="text-green-400 text-lg">in USDT</span>
+                                    </div>
+                                    {[
+                                        { range: '2nd - 6th', amount: 150 },
+                                        { range: '7th - 26th', amount: 30 },
+                                        { range: '27th - 476th', amount: 1 },
+                                    ].map((prize, index) => (
+                                        <div key={index} className="flex justify-between text-white mt-2">
+                                            <span>{prize.range} prize</span>
+                                            <span className="flex items-center">
+                                                ${prize.amount}
+                                                <span className="text-green-400 ml-1">🟢</span>
+                                            </span>
+                                        </div>
                                     ))}
-                                </ul>
-                            </div>
+                                    <p className="text-white mb-2">
+                                        <span className="text-yellow-400 text-lg mr-1">1 🎟️</span> = 1 chance to win
+                                    </p>
+                                </div>
 
-                            {/* How to participate */}
-                            <div className="mb-6">
-                                <h3 className="text-xl font-semibold mb-2">How to Participate</h3>
-                                <ol className="list-decimal list-inside">
-                                    {selectedItem.howTo.map((step, index) => (
-                                        <li key={index}>{step}</li>
-                                    ))}
-                                </ol>
+                                {/* Ticket information */}
+                                <div className="bg-blue-800 rounded-xl p-4 text-center">
+                                  <p>Hack Helios</p>
+                                  <p className='text-sm text-left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem quos velit, laudantium dolorum dolor ad odit architecto asperiores alias minima ullam mollitia est dolorem at aliquam labore aperiam, nesciunt qui?</p>
+                                </div>
                             </div>
                         </>
                     )}
@@ -223,25 +302,46 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
                     )}
 
                     {/* Call to Action */}
-                    <a
-                        href={selectedItem.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
-                        onClick={(e) => {
-                            // Prevent default behavior only for non-platform items
-                            if (isPlatform(selectedItem)) {
-                                e.preventDefault(); // Only prevent default if it's a platform
-                                handlePlatformClick(selectedItem); // Handle the platform click logic
-                            }
-                        }}
-                    >
-                        {isCarouselImage(selectedItem) ? `Join ${selectedItem.title}` : 
-                         isPlatform(selectedItem) ? `Go to ${selectedItem.name}` :
-                         isInviteTask(selectedItem) ? `Invite Friends` : ''}
-                    </a>
+                    {(isPlatform(selectedItem) || isInviteTask(selectedItem)) && (
+                        <a
+                            href={selectedItem.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
+                            onClick={(e) => {
+                                // Prevent default behavior only for platform items
+                                if (isPlatform(selectedItem)) {
+                                    e.preventDefault(); // Only prevent default if it's a platform
+                                    handlePlatformClick(selectedItem); // Handle the platform click logic
+                                }
+                            }}
+                        >
+                            {isPlatform(selectedItem) ? `Go to ${selectedItem.name}` :
+                                isInviteTask(selectedItem) ? `Invite Friends` : ''}
+                        </a>
+                    )}
                 </div>
             </div>
+            
+            {/* Action buttons, render only for carousel images */}
+            {isCarouselImage(selectedItem) && (
+                <div className="fixed bottom-0 left-0 right-0 mx-auto w-full justify-center p-4 bg-blue-900 flex flex-col space-y-3"
+                     onClick={(e) => {
+                     e.stopPropagation();  // Your actual button action
+                  }}
+                >
+                    <p className="text-white">
+                        Collect <span className="text-yellow-400">5,971 🎟️</span> more to enter the draw
+                    </p>
+                    <button className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm">
+                        JOIN DRAW 10,000 🎟️
+                    </button>
+
+                    <button className="w-full bg-blue-700 text-white py-3 rounded-xl font-bold text-sm" onClick={handleClose}>
+                        CLOSE
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import ProgressBar from '../Components/ProgressBar';
-import Solis from '../images/Solisss.svg';
+import Solis from '../icons/fdv 1 (1).svg';
 import Friends from '../icons/Friends Vector.svg';
 import User from '../icons/edeef 1.svg';
 import freshcoin from '../images/Group 9.svg';
@@ -223,21 +223,21 @@ function App() {
       <div className="bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12">
         <div className="flex flex-row pl-7 pr-6 pt-3 justify-between">
           <div className="flex flex-col">
-            <p className="font-bold text-lg">Mining Rate</p>
+            <p className="font-bold text-lg">Offset Rate</p>
             <div className="flex flex-row">
               <img src={freshcoin} alt="" className="w-5 my-auto pr-0.5 h-5" />
               <p className="text-md">{minerate}/hr</p>
             </div>
-            <p className="font-bold text-sm">Current Airdrop Round</p>
+            <p className="font-bold text-sm">Current Offset Round</p>
           </div>
-          <div className="my-auto pl-8">
+          <div className="my-auto ">
           <button
               onClick={() => setPopupVisible(true)}
-              className={`bg-yellow-500 p-2 pl-4 pr-4 rounded-lg ${
+              className={`bg-yellow-500 p-2 px-5 rounded-lg ${
                 hasAirdropsToClaim ? 'claim-button-animation' : ''
               }`}
             >
-              Claim
+              Reap
             </button>
           </div>
           <p className="hidden">{airdropsError}</p>
@@ -247,7 +247,7 @@ function App() {
       {/* Make this container grow to take up remaining space */}
       <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-20 text-white rounded-3xl z-10 w-full">
         <p className="text-sm font-bold text-black pl-8 pt-5">
-          Unclaimed Airdrops
+          Available Offsets
         </p>
         <div className="flex flex-col items-center justify-center">
           {visibleAirdrops.length > 0 ? (
@@ -280,7 +280,7 @@ function App() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm pt-28 font-bold text-gray-700">No unclaimed airdrops available</p>
+            <p className="text-sm pt-28 font-bold text-gray-700">No unreaped offsets available</p>
           )}
         </div>
       </div>

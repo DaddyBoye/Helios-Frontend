@@ -67,10 +67,10 @@ const Earn = () => {
     const carouselRef = useRef<HTMLDivElement>(null);
 
     const socialPlatforms: Platform[] = [
-        { icon: Instagram, name: 'Instagram', text: 'Follow us on Instagram', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1},
-        { icon: X, name: 'X', text: 'Follow our X account', link: 'https://www.x.com', image: X, color: '#1DA1F2', taskId: 2 },
-        { icon: YouTube, name: 'YouTube', text: 'Subscribe to our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000', taskId: 3 },
-        { icon: Telegram, name: 'Telegram', text: 'Join us on Telegram', link: 'https://www.telegram.org', image: Telegram, color: '#0088CC', taskId: 4 },
+        { icon: Instagram, name: 'Instagram', text: 'Follow Our jouney on Insta', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1},
+        { icon: X, name: 'X', text: 'Engage Helios on X', link: 'https://www.x.com', image: X, color: '#1DA1F2', taskId: 2 },
+        { icon: YouTube, name: 'YouTube', text: 'Subscribe to Our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000', taskId: 3 },
+        { icon: Telegram, name: 'Telegram', text: 'Join our Telegram community', link: 'https://www.telegram.org', image: Telegram, color: '#0088CC', taskId: 4 },
     ];
     
     const inviteTasks: InviteTask[] = [
@@ -84,19 +84,22 @@ const Earn = () => {
     const images: CarouselImage[] = [
         { 
             image: Helios3, 
-            title: "$30,000 Helios Challenge", 
-            description: "Participate in the Helios Challenge and stand a chance to win $30,000!", 
+            title: "Referral Quest", 
+            description: "Join the Referral Race for a Shot at $100", 
             link: 'https://challenge.com',
             color: '#FFC107',
             benefits: [
-                "Compete for a grand prize of $30,000",
-                "Gain recognition in the Helios community",
+                "$100 cash prize for the first to reach 100 rewards",
+                "15,000 Helios coins will also be awarded to the winner",
+                "1,000 Helios coins for all participants who meet the threshold",
             ],
             howTo: [
-                "Register for the Helios Challenge on our website",
-                "Complete daily tasks to earn points",
+                "Sign up on our website",
+                "Share your referral link with friends",
+                "Track your rewards in real-time",
+                "Be the first to hit 100 rewards and claim your prize!",
             ],
-            longDescription: "The $30,000 Helios Challenge is our flagship competition designed to push the boundaries of innovation and creativity in the blockchain space. Over the course of 30 days, participants will engage in a series of increasingly complex tasks, ranging from smart contract development to decentralized application design."
+            longDescription: "Compete in our exciting Referral Race and be the first to reach 100 rewards! The winner will snag $100 and 15,000 Helios coins. This is your chance to shine in the Helios ecosystem while driving engagement. "
         },
         { 
             image: Helios6, 
@@ -121,7 +124,7 @@ const Earn = () => {
         },
         { 
             image: Helios7, 
-            title: "Helios Hackathon", 
+            title: "Hack Helios", 
             description: "Get involved in the Helios Hackathon and win amazing rewards!", 
             link: 'https://hackathon.com',
             color: '#2196F3',
@@ -164,31 +167,33 @@ const Earn = () => {
     };
 
     const renderHeader = () => (
-        <div className='flex flex-row items-center justify-between mt-4 m-2 bg-[#185C8D]/50 h-12 p-1 pl-2 rounded-lg'>
-            <div className='flex flex-row items-center justify-center'>
-                <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
-                <p className='text-base ml-1'>Earn</p>
-            </div>
-            <div className="relative flex my-auto h-6">
-                <div className="flex flex-row items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
-                    <div className="flex flex-row items-center">
-                        <img src={Solis} alt="Solis" className="w-6 h-6 " />
-                        <p className="ml-1 text-xs">{minerate}</p>
-                    </div>
-                    <div className="flex flex-row items-center">
-                        <img src={Friends} alt="Friends" className="w-6 h-6" />
-                        <p className="ml-1 text-xs">{friends.length}</p>
-                    </div>
+        <div className='w-full backdrop-blur fixed pt-2 top-0 left-0 z-50 right-0 mx-auto'>
+            <div className='flex flex-row items-center w-11/12 justify-between mx-auto my-auto bg-[#185C8D]/70 h-12 p-1 pl-2 rounded-lg'>
+                <div className='flex flex-row items-center justify-center'>
+                    <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
+                    <p className='text-base ml-1'>Earn</p>
                 </div>
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#FFD700] mr-1 rounded-full p-0.5 flex items-center justify-center">
-                    <img src={User} alt="User" className="w-8 h-8 rounded-full object-cover" />
+                <div className="relative flex my-auto h-6">
+                    <div className="flex flex-row items-center justify-between gap-3 rounded-full pl-3 pr-14 py-0.5 bg-[#185C8D]/80">
+                        <div className="flex flex-row items-center">
+                            <img src={Solis} alt="Solis" className="w-6 h-6 " />
+                            <p className="ml-1 text-xs">{minerate}</p>
+                        </div>
+                        <div className="flex flex-row items-center">
+                            <img src={Friends} alt="Friends" className="w-6 h-6" />
+                            <p className="ml-1 text-xs">{friends.length}</p>
+                        </div>
+                    </div>
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#FFD700] mr-1 rounded-full p-0.5 flex items-center justify-center">
+                        <img src={User} alt="User" className="w-8 h-8 rounded-full object-cover" />
+                    </div>
                 </div>
             </div>
         </div>
     );
 
     const renderImageCarousel = () => (
-        <div ref={carouselRef} className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar snap-x snap-mandatory'>
+        <div ref={carouselRef} className='flex gap-2 pl-3 overflow-x-auto pr-3 mt-16 hide-scrollbar snap-x snap-mandatory'>
             {images.map((imageInfo, index) => (
                 <div key={index} className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center' onClick={() => handleItemClick(imageInfo)}>
                     <img src={imageInfo.image} alt={imageInfo.title} className="w-full h-full object-cover rounded-2xl" />
@@ -216,8 +221,8 @@ const Earn = () => {
                             </div>
                             <div className="flex flex-col pl-2 justify-between">
                                 <p className="text-left text-xs">{platform.text}</p>
-                                <p className="truncate w-40 text-white/50 text-xs">
-                                    Participate in our engagement program and increase your minerate by 20
+                                <p className="truncate text-left w-40 text-white/60 text-xs">
+                                   Engage for rewards
                                 </p>
                             </div>
                         </div>
@@ -261,6 +266,8 @@ const Earn = () => {
                 
                 {selectedItem && (
                     <SlidingMenu
+                        friends={friends}
+                        minerate={minerate}
                         selectedItem={selectedItem}
                         telegramId={telegramId} // Pass telegramId here
                         onClose={() => {
