@@ -262,7 +262,7 @@ function App() {
               ))}
             </ul>
           ) : (
-            <p className="text-sm pt-28 font-bold text-gray-700">No unreaped offsets available</p>
+            <p className="text-sm pt-20 font-bold text-gray-700">No unreaped offsets available</p>
           )}
         </div>
       </div>
