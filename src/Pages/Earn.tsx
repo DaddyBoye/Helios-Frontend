@@ -65,6 +65,7 @@ const Earn = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
+    const [hideHeader, setHideHeader] = useState(false);
 
     const socialPlatforms: Platform[] = [
         { icon: Instagram, name: 'Instagram', text: 'Follow Our jouney on Insta', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1},
@@ -164,10 +165,12 @@ const Earn = () => {
     const handleItemClick = (item: SelectedItem) => {
         setSelectedItem(item);
         toggleTaskbar(false);
+        setHideHeader(true);
+
     };
 
     const renderHeader = () => (
-        <div className='w-full backdrop-blur fixed pt-2 top-0 left-0 z-50 right-0 mx-auto'>
+        <div className='w-full backdrop-blur fixed pt-2 top-0 left-0 z-20 right-0 mx-auto'>
             <div className='flex flex-row items-center w-11/12 justify-between mx-auto my-auto bg-[#185C8D]/70 h-12 p-1 pl-2 rounded-lg'>
                 <div className='flex flex-row items-center justify-center'>
                     <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
@@ -259,7 +262,7 @@ const Earn = () => {
         <div className="relative font-sans h-full pb-20 flex flex-col overflow-y-auto">
             <StarryBackground />
             <div className="relative z-10 flex flex-col text-center text-white flex-grow">
-                {renderHeader()}
+                {!hideHeader && renderHeader()}
                 {renderImageCarousel()}
                 {renderSocialSection()}
                 {renderInviteTasksSection()}
@@ -273,6 +276,7 @@ const Earn = () => {
                         onClose={() => {
                             toggleTaskbar(true);
                             setSelectedItem(null);
+                            setHideHeader(false);
                         }}
                     />
                 )}

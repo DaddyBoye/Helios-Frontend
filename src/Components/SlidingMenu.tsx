@@ -87,7 +87,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
     };
 
     const getMenuHeight = () => {
-      return isCarouselImage(selectedItem) ? 'h-full' : 'max-h-[52%]';
+      return isCarouselImage(selectedItem) ? 'h-full' : 'max-h-[48%] rounded-t-2xl';
   };
 
     const handleItemClick = (item: SelectedItem) => {
@@ -331,7 +331,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
                   }}
                 >
                     <p className="text-white">
-                        Collect <span className="text-yellow-400">5,971 🎟️</span> more to enter the draw
+                        Collect <span className="text-yellow-400 text-sm">5,971 🎟️</span> more to enter the draw
                     </p>
                     <button className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm">
                         JOIN DRAW 10,000 🎟️
