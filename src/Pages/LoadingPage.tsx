@@ -21,7 +21,7 @@ const LoadingPage = () => {
   // useEffect for custom alert
   useEffect(() => {
     const alertTimeout = setTimeout(() => {
-      setCustomAlertMessage("Oops! The mighty Helios is taking a nap. Want to wake it up?");
+      setCustomAlertMessage("Oops! The mighty Helios is taking a nap. Want to wake him up?");
       setShowCustomAlert(true);
     }, 10000);
 
