@@ -74,10 +74,10 @@ const Earn = () => {
     ];
     
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '100 Solis', link: '/friends', image: Friends, color: '#4CAF50', taskId: 1 },
-        { title: 'Invite 10 friends', reward: '250 Solis', link: '/friends', image: Friends, color: '#2196F3', taskId: 1 },
-        { title: 'Invite 20 friends', reward: '600 Solis', link: '/friends', image: Friends, color: '#FFC107', taskId: 1 },
-        { title: 'Invite 50 friends', reward: '2000 Solis', link: '/friends', image: Friends, color: '#FF5722', taskId: 1 },
+        { title: 'Invite 5 friends', reward: '100 Solis', link: '', image: Friends, color: '#4CAF50', taskId: 1 },
+        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 1 },
+        { title: 'Invite 20 friends', reward: '600 Solis', link: '', image: Friends, color: '#FFC107', taskId: 1 },
+        { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 1 },
     ];
     
     

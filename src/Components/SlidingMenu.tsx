@@ -88,70 +88,75 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
       return isCarouselImage(selectedItem) ? 'h-full' : 'max-h-[48%] rounded-t-2xl';
   };
 
-    const handleItemClick = (item: SelectedItem) => {
-        if ('taskId' in item) {
-          const currentTime = Date.now();
-          lastClickTimeRef.current = currentTime;
-    
+// Function to handle item click, ensuring taskId exists
+const handleItemClick = (item: SelectedItem | CarouselImage) => {
+    const currentTime = Date.now();
+  
+    // Check if item has a taskId property
+    if ('taskId' in item) {
+      // Check if the user interacted again within 6 seconds
+      if (lastClickTimeRef.current && currentTime - lastClickTimeRef.current < 6000) {
+        console.log("User interacted again within 6 seconds, canceling task completion.");
+        return; // Stop further execution if within 6 seconds
+      }
+  
+      // Update the last click time
+      lastClickTimeRef.current = currentTime;
+  
+      // Set a timeout to mark task as completed after 6 seconds
+      timerRef.current = setTimeout(() => {
+        markTaskAsCompleted(item.taskId, telegramId);
+      }, 6000);
+    } else {
+      console.log("The item does not have a taskId, skipping task completion.");
+    }
+  };
+  
+  // Listen for visibility change (optional: cancel task if user returns within 6 seconds)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        const currentTime = Date.now();
+  
+        // Cancel the task if the user returned within 6 seconds
+        if (lastClickTimeRef.current && currentTime - lastClickTimeRef.current < 6000) {
+          console.log("User returned to the app within 6 seconds, canceling task completion.");
           if (timerRef.current) {
             clearTimeout(timerRef.current);
           }
-    
-          timerRef.current = setTimeout(() => {
-            if (lastClickTimeRef.current === currentTime) {
-              markTaskAsCompleted(item.taskId, telegramId);
-            }
-          }, 6000);
         }
-      };
-    
-    // Listen for visibility change (when user returns to the app)
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-          if (!document.hidden) {
-            const currentTime = Date.now();
-            if (lastClickTimeRef.current && currentTime - lastClickTimeRef.current < 6000) {
-              if (timerRef.current) {
-                clearTimeout(timerRef.current);
-              }
-            }
-          }
-        };
-    
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-        return () => {
-          document.removeEventListener('visibilitychange', handleVisibilityChange);
-        };
-      }, []);
-
-    const markTaskAsCompleted = async (taskId: number, telegramId: string) => {
-        try {
-            // Call the backend API to update the task as completed
-            const response = await axios.patch(`https://server.therotrade.tech/api/users/complete-task/${telegramId}/${taskId}`);
-    
-            // Log success message
-            console.log(`Task ${taskId} completed for user ${telegramId}:`, response.data.message);
-        } catch (error) {
-            // Type assertion to specify the error type
-            const axiosError = error as AxiosError<ApiErrorResponse>;
-    
-            // Check if the error has a response from the server
-            if (axiosError.response) {
-                // Use the defined interface for the error response data
-                console.error('Failed to complete the task:', axiosError.response.data.message);
-            } else {
-                console.error('Error completing the task:', axiosError.message);
-            }
-        }
+      }
     };
-
-    // Click handler function
-    const handlePlatformClick = (item: SelectedItem) => {
-        handleItemClick(item); // Call your existing function to handle the item click
-        window.open(item.link, '_blank'); // Open the platform link immediately
+  
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+  
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-
+  }, []);
+  
+  // Function to mark task as completed
+  const markTaskAsCompleted = async (taskId: number, telegramId: string) => {
+    try {
+      const response = await axios.patch(`https://server.therotrade.tech/api/users/complete-task/${telegramId}/${taskId}`);
+      console.log(`Task ${taskId} completed for user ${telegramId}:`, response.data.message);
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      if (axiosError.response) {
+        console.error('Failed to complete the task:', axiosError.response.data.message);
+      } else {
+        console.error('Error completing the task:', axiosError.message);
+      }
+    }
+  };
+  
+  // Click handler function
+  const handlePlatformClick = (item: SelectedItem | CarouselImage) => {
+    handleItemClick(item); // Call your existing function to handle the item click
+    window.open(item.link, '_blank'); // Open the platform link immediately
+  };
+  
+  
     return (
         <div
             className={`fixed inset-0 bg-black backdrop-blur transition-opacity duration-300 ease-in-out ${
@@ -190,7 +195,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
                     {(isPlatform(selectedItem) || isInviteTask(selectedItem)) && (
                     <div className="flex items-center mb-3">
                         <img src={selectedItem.image} className="w-20 h-20 object-cover rounded-full mr-2" />
-                        <p className="text-lg text-left">
+                        <p className="text-md text-left">
                             {                             isPlatform(selectedItem) ? selectedItem.text :
                              isInviteTask(selectedItem) ? `Earn ${selectedItem.reward} by inviting friends!` : ''}
                         </p>
@@ -270,13 +275,12 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
 
                     {isPlatform(selectedItem) && (
                         <div className="mb-3">
-                            <p>Follow us on {selectedItem.name} to stay updated with our latest news and events!</p>
                         </div>
                     )}
 
                     {isInviteTask(selectedItem) && (
                         <div className="mb-1">
-                            <p>Invite your friends and earn rewards! The more friends you invite, the more Solis you can earn.</p>
+                            <p></p>
                         </div>
                     )}
 

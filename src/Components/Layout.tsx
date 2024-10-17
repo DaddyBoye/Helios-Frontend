@@ -60,7 +60,7 @@ const Layout = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
+  
   const checkUserExists = useCallback(async (telegramId: number) => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
@@ -376,7 +376,7 @@ const Layout = () => {
     return <LoadingPage />;
   }
 
-  if (newUser === null || newUser === true) {
+  if (newUser === true || newUser === null) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (
