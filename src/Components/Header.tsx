@@ -10,8 +10,8 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ minerate, friendsCount }) => {
   return (
-    <div className='w-full backdrop-blur  text-white fixed pt-2 top-0 left-0 z-20 right-0 mx-auto'>
-      <div className='flex flex-row items-center w-11/12 justify-between mx-auto my-auto bg-[#185C8D]/70 h-12 p-1 pl-2 rounded-lg'>
+    <div className='w-full backdrop-blur text-white fixed pt-2 top-0 left-0 z-20 right-0 mx-auto'>
+      <div className='flex flex-row items-center w-11/12 justify-between mx-auto my-auto bg-[#185C8D]/70 h-14 p-1 pl-2 rounded-lg'>
         <div className='flex flex-row items-center justify-center'>
           <img src={Solis} alt="Solis" className="w-8 h-8 animate-spinZoomGlow" />
           <p className='text-base ml-1'>Helios</p>
