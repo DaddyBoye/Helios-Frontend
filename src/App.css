@@ -136,7 +136,6 @@
 
 .loading-element {
   position: relative;
-  animation: bounce 1.0s infinite ease-in-out;
   width: 220px; /* Set explicit width for img */
   height: auto;  /* Maintain aspect ratio */
 }
