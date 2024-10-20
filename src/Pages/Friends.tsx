@@ -25,7 +25,7 @@ interface FriendsProps {
   heliosUsername: string | null;
   telegramId: number | null;
   friends: Friend[];
-  userAvatarPath: string | null;  // Add this here
+  avatarPath: string | null;  // Add this here
 }
 
 interface Friend {
@@ -37,7 +37,7 @@ interface Friend {
 }
 
 const Friends: React.FC = () => {
-  const { toggleTaskbar, heliosUsername, telegramId, friends, userAvatarPath } = useOutletContext<FriendsProps>();
+  const { toggleTaskbar, heliosUsername, telegramId, friends, avatarPath } = useOutletContext<FriendsProps>();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [referralLink, setReferralLink] = useState<string | null>(null);
@@ -145,7 +145,7 @@ const Friends: React.FC = () => {
         {/* Card with profile */}
         <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12">
           <div className="mx-auto rounded-full h-28 w-28 flex justify-center items-center">
-            <img src={avatarMap[userAvatarPath || 'avatars/Some Bird.svg']} alt="Your Avatar" className="w-24 h-24" />
+            <img src={avatarMap[avatarPath || 'avatars/Some Bird.svg']} alt="Your Avatar" className="w-24 h-24" />
           </div>
           <p className="text-white font-bold text-xl">{heliosUsername}</p>
           <div className="mx-auto justify-between mt-2 w-6/12 px-2 bg-white/20 backdrop-blur-md rounded-2xl flex flex-row">
@@ -209,7 +209,7 @@ const Friends: React.FC = () => {
                 >
                   <div className="flex">
                     <div className="mx-auto mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
-                    <img src={avatarMap[friend.avatar] || SomeBird} alt={friend.name} className="w-7 h-7" />
+                    <img src={avatarMap[friend.avatar] || SomeBird} alt={friend.name} className="w-10 h-10" />
                     </div>
                     <div className="flex flex-col h-9 text-left my-auto pl-3">
                       <p className="font-medium text-white text-sm">{friend.name}</p>
