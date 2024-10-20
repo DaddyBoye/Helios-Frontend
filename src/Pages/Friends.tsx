@@ -250,17 +250,18 @@ const Friends: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-black bg-opacity-60 z-20 backdrop-blur-sm flex items-center justify-center"
           >
               <motion.div
                 initial={{ scale: 0.95, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 20 }}
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="bg-[#09161F] rounded-lg p-4 w-11/12 max-w-md max-h-[80vh] overflow-y-auto border border-white/20"
+                className="bg-[#09161F] rounded-lg p-4 w-11/12 max-w-md max-h-[76vh] mb-28 overflow-y-auto border border-white/20"
               >
+                
                 <h2 className="text-white text-lg font-semibold mb-4">Full Friends List</h2>
-                {friends.map((friend) => (
+               {friends.map((friend) => (
                   <div key={friend.id} className="friend-item py-2 bg-[#194564]/60 rounded-md flex justify-between mb-2 px-3 hover:bg-[#194564]/80 transition-colors duration-300">
                     <div className="flex items-center">
                       <img src={avatarMap[friend.avatar] || avatarMap['avatars/Some Bird.svg']} alt={friend.name} className="w-10 h-10 rounded-full mr-3" />
