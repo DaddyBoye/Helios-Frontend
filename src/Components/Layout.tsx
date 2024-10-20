@@ -159,26 +159,26 @@ const Layout = () => {
             // Handle user creation and fetch additional data
             await handleUserCreation(userData, tokenAvailable, timezone);
 
-            // Fetch Helios username and avatarPath concurrently
-            await Promise.all([
-              fetchHeliosUsername(userData.id),
-              fetchAvatarPath(userData.id),
-            ]);
+            // Fetch Helios username
+            await fetchHeliosUsername(userData.id);
 
-            // Check if the user has a Helios username or avatar
-            if (!heliosUsername ) {
-              setNewUser(true);  // Trigger new user flow if either is missing
+            // Fetch avatar path once the user exists
+            await fetchAvatarPath(userData.id);
+
+            // New logic to check if the user has a Helios username or avatar
+            if (!heliosUsername || !avatarPath) {
+              setNewUser(true); // Trigger new user flow if either is missing
             } else {
-              setNewUser(false);  // Proceed with normal flow if both are present
+              setNewUser(false); // Proceed with normal flow if both are present
             }
 
-            } else {
-              console.error('Telegram ID is not available');
-            }
           } else {
-          setError('No user data available');
+            console.error('Telegram ID is not available');
           }
         } else {
+          setError('No user data available');
+        }
+      } else {
         console.error('This app should be opened in Telegram');
       }
     };
@@ -381,10 +381,10 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched && heliosUsername && avatarPath) {
+    if (loadingTimePassed && user && dataFetched) {
       setIsLoading(false);
     }
-  }, [loadingTimePassed, user, dataFetched, heliosUsername, avatarPath]);
+  }, [loadingTimePassed, user, dataFetched]);
 
   const handleUsernameSetupComplete = async () => {
     if (telegramId) {
