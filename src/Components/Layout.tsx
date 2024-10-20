@@ -139,43 +139,51 @@ const Layout = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-        if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.ready();
+      if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.ready();
 
-            const userData = tg.initDataUnsafe.user;
+        const userData = tg.initDataUnsafe.user;
 
-            if (userData) {
-                setTelegramId(userData.id);
-                setTelegramUsername(userData.username);
+        if (userData) {
+          setTelegramId(userData.id);
+          setTelegramUsername(userData.username);
 
-                if (userData.id) {
-                    console.log("Checking existence for telegramId:", userData.id);
-                    await checkUserExists(userData.id);
+          if (userData.id) {
+            console.log("Checking existence for telegramId:", userData.id);
+            await checkUserExists(userData.id);
 
-                    const tokenAvailable = await waitForReferralToken();
-                    const timezone = getUserTimezone();
+            const tokenAvailable = await waitForReferralToken();
+            const timezone = getUserTimezone();
 
-                    // Handle user creation and fetch additional data
-                    await handleUserCreation(userData, tokenAvailable, timezone);
+            // Handle user creation and fetch additional data
+            await handleUserCreation(userData, tokenAvailable, timezone);
 
-                    // Fetch Helios username
-                    await fetchHeliosUsername(userData.id);
+            // Fetch Helios username
+            await fetchHeliosUsername(userData.id);
 
             // Fetch avatar path once the user exists
-            await fetchAvatarPath(userData.id); 
-          } else { 
-            console.error('Telegram ID is not available'); 
-          } 
-        } else { 
-          setError('No user data available'); 
-        } 
-      } else { 
-        console.error('This app should be opened in Telegram'); 
-      } 
-    }; 
-    fetchUserData(); 
-  }, [referralToken]);
+            await fetchAvatarPath(userData.id);
+
+            // New logic to check if the user has a Helios username or avatar
+            if (!heliosUsername || !avatarPath) {
+              setNewUser(true); // Trigger new user flow if either is missing
+            } else {
+              setNewUser(false); // Proceed with normal flow if both are present
+            }
+
+          } else {
+            console.error('Telegram ID is not available');
+          }
+        } else {
+          setError('No user data available');
+        }
+      } else {
+        console.error('This app should be opened in Telegram');
+      }
+    };
+    fetchUserData();
+  }, [referralToken, heliosUsername, avatarPath]);
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
