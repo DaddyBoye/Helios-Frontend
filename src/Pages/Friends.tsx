@@ -7,6 +7,7 @@ import UserOutline from '../icons/Users Outline.svg';
 import Solis from '../images/Solisss.svg';
 import DarkSolis from '../images/Solisss.svg';
 import Copy from '../icons/Group 107.svg';
+import { motion, AnimatePresence } from 'framer-motion';
 import Cat from '../images/Cat.svg';
 import Capybara from '../images/Capybara.svg';
 import Parrot from '../images/Parrot.svg';
@@ -41,6 +42,7 @@ const Friends: React.FC = () => {
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [referralLink, setReferralLink] = useState<string | null>(null);
+  const [isFullListOpen, setIsFullListOpen] = useState(false);
   const baseUrl = "https://t.me/HeeliossBot?start=";
 
   const avatarMap: { [key: string]: string } = {
@@ -132,6 +134,10 @@ const Friends: React.FC = () => {
     toggleTaskbar(isShareMenuOpen);
   };
 
+  const toggleFullList = () => {
+    setIsFullListOpen(!isFullListOpen);
+  };
+
   return (
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
       <StarryBackground />
@@ -181,10 +187,18 @@ const Friends: React.FC = () => {
           </div>
         </div>
 
-        {/* Friends List */}
+        {/* Friends List Header */}
         <div className="flex flex-row w-full justify-between px-7 pt-4 text-white">
-          <p>Friends({friends.length})</p>
-          <p>Full List</p>
+          <p className="text-white text-base">Friends ({friends.length})</p>
+          <button
+            onClick={toggleFullList}
+            className="bg-white/10 text-white text-sm py-1 mb-1 px-3 rounded-md hover:bg-white/20 transition-colors duration-300 flex items-center border border-white/30"
+          >
+            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            </svg>
+            Full List
+          </button>
         </div>
 
          {/* Conditional Rendering for Friends */}
@@ -228,7 +242,52 @@ const Friends: React.FC = () => {
           </div>
         )}
 
-
+        {/* Full List Modal */}
+        <AnimatePresence>
+          {isFullListOpen && (
+            <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
+          >
+              <motion.div
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                className="bg-[#09161F] rounded-lg p-4 w-11/12 max-w-md max-h-[80vh] overflow-y-auto border border-white/20"
+              >
+                <h2 className="text-white text-lg font-semibold mb-4">Full Friends List</h2>
+                {friends.map((friend) => (
+                  <div key={friend.id} className="friend-item py-2 bg-[#194564]/60 rounded-md flex justify-between mb-2 px-3 hover:bg-[#194564]/80 transition-colors duration-300">
+                    <div className="flex items-center">
+                      <img src={avatarMap[friend.avatar] || avatarMap['avatars/Some Bird.svg']} alt={friend.name} className="w-10 h-10 rounded-full mr-3" />
+                      <div>
+                        <p className="font-medium text-white">{friend.name}</p>
+                        <div className="flex items-center mt-0.5">
+                          <img src={UserOutline} alt="" className="h-3 w-3 mr-1.5" />
+                          <p className="text-white/70 text-xs">+{friend.referralCount} referrals</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <p className="text-white font-medium">{friend.score}</p>
+                      <img src={Solis} alt="Solis" className="w-4 h-4 ml-1.5" />
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={toggleFullList}
+                  className="mt-4 bg-white/10 text-white rounded-md py-2 px-4 w-full hover:bg-white/20 transition-colors duration-300 border border-white/30"
+                >
+                  Close
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="flex flex-row w-full justify-between px-7 mt-5 text-white">
           <p>Referral Steps</p>
