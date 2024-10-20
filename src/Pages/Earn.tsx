@@ -252,6 +252,7 @@ const Earn = () => {
                 {selectedItem && (
                     <SlidingMenu
                         friends={friends}
+                        avatarPath={avatarPath}
                         minerate={minerate}
                         selectedItem={selectedItem}
                         telegramId={telegramId} // Pass telegramId here
