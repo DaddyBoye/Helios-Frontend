@@ -373,7 +373,7 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched) {
+    if (loadingTimePassed ) {
       setIsLoading(false);
     }
   }, [loadingTimePassed, user, dataFetched]);
@@ -399,7 +399,7 @@ const Layout = () => {
     return <LoadingPage />;
   }
 
-  if (newUser === false) {
+  if (newUser === true || newUser === null) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (

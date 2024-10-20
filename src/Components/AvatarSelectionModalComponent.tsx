@@ -38,6 +38,7 @@ const avatars = [
 const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onClose, onSelectAvatar }) => {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [modalHeight, setModalHeight] = useState(0);
+  const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -66,14 +67,29 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
 
   const handleAvatarSelect = (avatarPath: string) => {
     setSelectedAvatar(avatarPath);
+    setShowAlert(false); // Hide alert if an avatar is selected
   };
 
   const handleConfirmSelection = () => {
     if (selectedAvatar) {
       onSelectAvatar(selectedAvatar);
       onClose();
+    } else {
+      setShowAlert(true);
     }
   };
+
+  // Hide alert after 3 seconds if it's visible
+  useEffect(() => {
+    if (showAlert) {
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 3000); // 3 seconds delay
+
+      // Cleanup the timeout if component unmounts or showAlert changes
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert]);
 
   if (!isOpen) return null;
 
@@ -85,7 +101,7 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
   return (
     <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-between z-50">
       <div
-        className="text-white p-5 rounded-lg shadow-lg w-80 max-h-[90vh] overflow-y-auto"
+        className="text-white p-5 rounded-lg shadow-lg max-h-[90vh] overflow-y-auto"
         style={{ marginTop: `${topMargin}px` }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -97,16 +113,24 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
               className="relative rounded-lg transition-colors duration-200"
               onClick={() => handleAvatarSelect(avatar.path)}
             >
-              <img src={avatar.image} alt={avatar.name} className="w-20 h-20" />
+              <img src={avatar.image} alt={avatar.name} className="w-fit h-24" />
               {selectedAvatar === avatar.path && (
-                <div className="absolute flex inset-0 bg-[#000000]/70 h-16 my-auto w-16 mx-auto rounded-full">
+                <div className="absolute flex inset-0 bg-[#000000]/70 h-24 my-auto w-18 mx-auto rounded-full">
                   <img src={Check} alt="" className="w-8 h-8 mx-auto my-auto" />
                 </div>
               )}
             </button>
           ))}
         </div>
+
+        {/* Custom alert message */}
+        {showAlert && (
+          <div className="bg-red-500 text-white text-sm p-3 rounded mt-4 text-center">
+            Please choose an avatar before proceeding.
+          </div>
+        )}
       </div>
+
       <button
         className="bg-yellow-500 text-white font-bold py-3 w-8/12 px-4 rounded-lg hover:bg-yellow-600 transition-colors duration-200"
         style={{ marginBottom: `${bottomMargin}px` }}
