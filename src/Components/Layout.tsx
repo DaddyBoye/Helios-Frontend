@@ -399,7 +399,7 @@ const Layout = () => {
     return <LoadingPage />;
   }
 
-  if (newUser === true || newUser === null) {
+  if (newUser === false) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (

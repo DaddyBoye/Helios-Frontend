@@ -32,18 +32,19 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             <p className="text-lg font-bold text-white">Invite a friend</p>
 
             {baseUrl ? (
-            <QRCode
-            value={referralLink || ''}
-            size={(window.innerWidth * 9) / 12} // QR code width is 10/12 of the screen width
-            qrStyle="dots"
-            eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
-            fgColor="#FAAD00"
-            bgColor="#194464"
-            logoImage={logo}
-            logoWidth={(window.innerWidth * 10) / (12 * 7.5)} // Logo width is 1/8 of the QR code size
-            logoHeight={(window.innerWidth * 10) / (12 * 7.5)} // Logo height is 1/8 of the QR code size
-            removeQrCodeBehindLogo={true}
-            />
+              <QRCode
+                value={referralLink || ''}
+                size={Math.min((window.innerWidth * 9) / 12, 300)} // QR code size is limited to a maximum of 300px
+                qrStyle="dots"
+                eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
+                fgColor="#FAAD00"
+                bgColor="#194464"
+                logoImage={logo}
+                logoWidth={Math.min((window.innerWidth * 10) / (12 * 7.5), 40)} // Logo width is also capped at a maximum of 40px
+                logoHeight={Math.min((window.innerWidth * 10) / (12 * 7.5), 40)} // Logo height is capped similarly
+                removeQrCodeBehindLogo={true}
+              />
+
             ) : (
               <p className="text-white">Generating QR Code...</p>
             )}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Cat from '../images/Cat.svg';
 import Capybara from '../images/Capybara.svg';
 import Parrot from '../images/Parrot.svg';
@@ -11,6 +11,7 @@ import Cheetah from '../images/Cheetah.svg';
 import Panther from '../images/Panther.svg';
 import SeriousDog from '../images/Serious Dog.svg';
 import SomeBird from '../images/Some Bird.svg';
+import Check from '../icons/formkit_check.svg';
 
 interface AvatarSelectionModalProps {
   isOpen: boolean;
@@ -34,7 +35,10 @@ const avatars = [
   { name: 'SomeBird', path: 'avatars/Some Bird.svg', image: SomeBird },
 ];
 
-const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onClose, onSelectAvatar, currentAvatar }) => {
+const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onClose, onSelectAvatar }) => {
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+  const [modalHeight, setModalHeight] = useState(0);
+
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -42,46 +46,74 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
       }
     };
 
+    const handleResize = () => {
+      setModalHeight(window.innerHeight);
+    };
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
+      window.addEventListener('resize', handleResize);
       document.body.style.overflow = 'hidden';
+      handleResize();
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('resize', handleResize);
       document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
 
+  const handleAvatarSelect = (avatarPath: string) => {
+    setSelectedAvatar(avatarPath);
+  };
+
+  const handleConfirmSelection = () => {
+    if (selectedAvatar) {
+      onSelectAvatar(selectedAvatar);
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
+  const contentHeight = 450; // Approximate height of the content (adjust as needed)
+  const availableSpace = modalHeight - contentHeight;
+  const topMargin = Math.max(16, availableSpace * 0.35); // Minimum 16px, maximum 30% of available space
+  const bottomMargin = Math.max(12, availableSpace * 0.2); // Minimum 10px, maximum 10% of available space
+
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div 
-        className="bg-[#1E1E1E] text-white p-5 rounded-lg shadow-lg w-80 max-h-[90vh] overflow-y-auto"
+    <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-between z-50">
+      <div
+        className="text-white p-5 rounded-lg shadow-lg w-80 max-h-[90vh] overflow-y-auto"
+        style={{ marginTop: `${topMargin}px` }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl text-[#FAAD00] font-bold mb-4">Choose your avatar</h2>
-        <div className="grid grid-cols-4 gap-4">
+        <h2 className="text-xl text-white text-center font-bold mb-4">Choose your avatar</h2>
+        <div className="grid grid-cols-4 gap-2">
           {avatars.map((avatar) => (
             <button
               key={avatar.name}
-              className={`rounded-lg ${
-                currentAvatar === avatar.path ? 'bg-yellow-500' : 'bg-[#54616C]'
-              } transition-colors duration-200 `}
-              onClick={() => onSelectAvatar(avatar.path)}
+              className="relative rounded-lg transition-colors duration-200"
+              onClick={() => handleAvatarSelect(avatar.path)}
             >
               <img src={avatar.image} alt={avatar.name} className="w-20 h-20" />
+              {selectedAvatar === avatar.path && (
+                <div className="absolute flex inset-0 bg-[#000000]/70 h-16 my-auto w-16 mx-auto rounded-full">
+                  <img src={Check} alt="" className="w-8 h-8 mx-auto my-auto" />
+                </div>
+              )}
             </button>
           ))}
         </div>
-        <button
-          className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg mt-4 w-full hover:bg-yellow-600 transition-colors duration-200"
-          onClick={onClose}
-        >
-          Close
-        </button>
       </div>
+      <button
+        className="bg-yellow-500 text-white font-bold py-3 w-8/12 px-4 rounded-lg hover:bg-yellow-600 transition-colors duration-200"
+        style={{ marginBottom: `${bottomMargin}px` }}
+        onClick={handleConfirmSelection}
+      >
+        Confirm
+      </button>
     </div>
   );
 };
