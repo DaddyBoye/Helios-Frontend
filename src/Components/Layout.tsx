@@ -1,14 +1,14 @@
 import { useEffect, useState, useCallback } from 'react'; 
-import { Outlet } from 'react-router-dom';
-import LoadingPage from '../Pages/LoadingPage';
-import Taskbar from '../Components/Taskbar';
-import axios from 'axios';
-import User from '../images/edeef 1 (1).svg';
-import { io } from 'socket.io-client';
-import moment from 'moment-timezone';
-import { createUser } from '../utils/api';
-import SetHeliosUsername from '../Pages/SetHeliosUsername';
-import WelcomePage from '../Pages/WelcomePage';
+import { Outlet } from 'react-router-dom'; 
+import LoadingPage from '../Pages/LoadingPage'; 
+import Taskbar from '../Components/Taskbar'; 
+import axios from 'axios'; 
+import UserAvatar from '../images/edeef 1 (1).svg';  // Default fallback avatar 
+import { io } from 'socket.io-client'; 
+import moment from 'moment-timezone'; 
+import { createUser } from '../utils/api'; 
+import SetHeliosUsername from '../Pages/SetHeliosUsername'; 
+import WelcomePage from '../Pages/WelcomePage'; 
 import WelcomePopup from '../Components/WelcomePopup';
 
 interface Airdrop {
@@ -17,12 +17,13 @@ interface Airdrop {
   timestamp: string;
 }
 
-interface User {
-  id: number;
-  username?: string;
-  firstName?: string;
-  lastName?: string;
-  referralToken?: string | null;
+interface User { 
+  id: number; 
+  username?: string; 
+  firstName?: string; 
+  lastName?: string; 
+  referralToken?: string | null; 
+  avatarPath?: string;  // Add avatar path to user data 
 }
 
 interface Friend {
@@ -58,9 +59,24 @@ const Layout = () => {
   const [showWelcomePage, setShowWelcomePage] = useState(true);
   const [friends, setFriends] = useState<Friend[]>([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [avatarPath, setAvatarPath] = useState<string | null>(null);
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-  
+
+  const fetchAvatarPath = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/user/avatar/${telegramId}`);
+      if (response.data?.avatarPath) {
+        setAvatarPath(response.data.avatarPath);  // Fetch avatarPath and set it in state
+      } else {
+        console.log('Avatar path not found for user');
+      }
+    } catch (error) {
+      console.error('Error fetching avatar path:', error);
+      setAvatarPath(UserAvatar);  // Set default avatar if fetch fails
+    }
+  };
+
   const checkUserExists = useCallback(async (telegramId: number) => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
@@ -145,19 +161,21 @@ const Layout = () => {
 
                     // Fetch Helios username
                     await fetchHeliosUsername(userData.id);
-                } else {
-                    console.error('Telegram ID is not available');
-                }
-            } else {
-                setError('No user data available');
-            }
-        } else {
-            console.error('This app should be opened in Telegram');
-        }
-    };
 
-    fetchUserData();
-}, [referralToken]);
+            // Fetch avatar path once the user exists
+            await fetchAvatarPath(userData.id); 
+          } else { 
+            console.error('Telegram ID is not available'); 
+          } 
+        } else { 
+          setError('No user data available'); 
+        } 
+      } else { 
+        console.error('This app should be opened in Telegram'); 
+      } 
+    }; 
+    fetchUserData(); 
+  }, [referralToken]);
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
@@ -326,7 +344,7 @@ const Layout = () => {
                   name: referral.users?.heliosUsername || 'Unknown',
                   score: referral.users?.totalAirdrops || 0,
                   referralCount: referral.users?.referralCount || 0,
-                  avatar: User,
+                  avatar: referral.users?.avatarPath,
               }));
   
               console.log('Processed Friends:', fetchedFriends);
@@ -403,6 +421,7 @@ const Layout = () => {
           totalValue,
           referralToken,
           minerate,
+          avatarPath,
           updateTotalAirdrops,
           deleteAllUserAirdrops
         }}

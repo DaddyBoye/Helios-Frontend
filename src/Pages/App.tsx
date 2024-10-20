@@ -44,6 +44,7 @@ function App() {
     totalValue,
     referralToken,
     minerate,
+    avatarPath,
     updateTotalAirdrops,
     deleteAllUserAirdrops,
   } = useOutletContext<{
@@ -58,6 +59,7 @@ function App() {
     totalValue: number;
     referralToken: string | null;
     minerate: number | null;
+    avatarPath: string | null;
     updateTotalAirdrops: (telegramId: number) => Promise<void>;
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
@@ -184,6 +186,7 @@ function App() {
       <Header
           minerate={minerate}
           friendsCount={friends.length}
+          avatarPath={avatarPath}
       />
       </div>
       <div className="z-10 mt-20">

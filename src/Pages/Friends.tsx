@@ -3,17 +3,29 @@ import axios from 'axios';
 import ShareComponent from '../Components/ShareComponent';
 import { useOutletContext } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
-import User from '../images/edeef 1 (1).svg';
 import UserOutline from '../icons/Users Outline.svg';
 import Solis from '../images/Solisss.svg';
 import DarkSolis from '../images/Solisss.svg';
-import Copy from '../icons/Group 107.svg'
+import Copy from '../icons/Group 107.svg';
+import Cat from '../images/Cat.svg';
+import Capybara from '../images/Capybara.svg';
+import Parrot from '../images/Parrot.svg';
+import Sheep from '../images/Sheep.svg';
+import Rooster from '../images/Rooster.svg';
+import Dog from '../images/Dog.svg';
+import Lion from '../images/Lion.svg';
+import Goat from '../images/Goat.svg';
+import Cheetah from '../images/Cheetah.svg';
+import Panther from '../images/Panther.svg';
+import SeriousDog from '../images/Serious Dog.svg';
+import SomeBird from '../images/Some Bird.svg';
 
 interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void;
   heliosUsername: string | null;
   telegramId: number | null;
-  friends: Friend [];
+  friends: Friend[];
+  userAvatarPath: string | null;  // Add this here
 }
 
 interface Friend {
@@ -25,11 +37,26 @@ interface Friend {
 }
 
 const Friends: React.FC = () => {
-  const { toggleTaskbar, heliosUsername, telegramId, friends } = useOutletContext<FriendsProps>();
+  const { toggleTaskbar, heliosUsername, telegramId, friends, userAvatarPath } = useOutletContext<FriendsProps>();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [referralLink, setReferralLink] = useState<string | null>(null);
   const baseUrl = "https://t.me/HeeliossBot?start=";
+
+  const avatarMap: { [key: string]: string } = {
+    'avatars/Cat.svg': Cat,
+    'avatars/Capybara.svg': Capybara,
+    'avatars/Parrot.svg': Parrot,
+    'avatars/Sheep.svg': Sheep,
+    'avatars/Rooster.svg': Rooster,
+    'avatars/Dog.svg': Dog,
+    'avatars/Lion.svg': Lion,
+    'avatars/Goat.svg': Goat,
+    'avatars/Cheetah.svg': Cheetah,
+    'avatars/Panther.svg': Panther,
+    'avatars/Serious Dog.svg': SeriousDog,
+    'avatars/Some Bird.svg': SomeBird,
+  };  
 
   useEffect(() => {
     if (!telegramId) return;
@@ -117,8 +144,8 @@ const Friends: React.FC = () => {
           )}
         {/* Card with profile */}
         <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12">
-          <div className="mx-auto bg-red-200 mt-2 mb-2 rounded-full h-28 w-28 flex justify-center items-center">
-            <img src={User} alt="" className="w-16 h-16" />
+          <div className="mx-auto rounded-full h-28 w-28 flex justify-center items-center">
+            <img src={avatarMap[userAvatarPath || 'avatars/Some Bird.svg']} alt="Your Avatar" className="w-24 h-24" />
           </div>
           <p className="text-white font-bold text-xl">{heliosUsername}</p>
           <div className="mx-auto justify-between mt-2 w-6/12 px-2 bg-white/20 backdrop-blur-md rounded-2xl flex flex-row">
@@ -182,7 +209,7 @@ const Friends: React.FC = () => {
                 >
                   <div className="flex">
                     <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
-                      <img src={friend.avatar} alt={friend.name} className="w-7 h-7" />
+                    <img src={avatarMap[friend.avatar] || SomeBird} alt={friend.name} className="w-7 h-7" />
                     </div>
                     <div className="flex flex-col h-9 text-left my-auto pl-3">
                       <p className="font-medium text-white text-sm">{friend.name}</p>

@@ -11,6 +11,7 @@ interface AirdropProps {
   toggleTaskbar: (isVisible: boolean) => void;
   friends: Friend[];
   minerate: number | null;
+  avatarPath: string | null;
 }
 
 interface Friend {
@@ -22,7 +23,7 @@ interface Friend {
 }
 
 const Airdrop = () => {
-  const { minerate, friends } = useOutletContext<AirdropProps>();
+  const { minerate, friends, avatarPath } = useOutletContext<AirdropProps>();
   return (
     <div className="relative font-sans h-full pb-20">
       <StarryBackground />
@@ -33,6 +34,7 @@ const Airdrop = () => {
           <Header
             minerate={minerate}
             friendsCount={friends.length}
+            avatarPath={avatarPath}
           />
 
         {/* Roadmap Header */}
