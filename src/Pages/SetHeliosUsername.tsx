@@ -1,7 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import '../App.css';
-import Profile from '../images/Mask group (1).svg';
+import AvatarSelectionModal from '../Components/AvatarSelectionModalComponent';
+import Pencil from '../icons/ic_outline-edit.svg';
+import Cat from '../images/Cat.svg';
+import Capybara from '../images/Capybara.svg';
+import Parrot from '../images/Parrot.svg';
+import Sheep from '../images/Sheep.svg';
+import Rooster from '../images/Rooster.svg';
+import Dog from '../images/Dog.svg';
+import Lion from '../images/Lion.svg';
+import Goat from '../images/Goat.svg';
+import Cheetah from '../images/Cheetah.svg';
+import Panther from '../images/Panther.svg';
+import SeriousDog from '../images/Serious Dog.svg';
+import SomeBird from '../images/Some Bird.svg';
 
 interface SetHeliosUsernameProps {
   telegramId: number | null;
@@ -10,12 +23,66 @@ interface SetHeliosUsernameProps {
 
 const MAX_USERNAME_LENGTH = 20;
 
+const avatars = [
+  { name: 'Cat', path: 'avatars/Cat.svg' },
+  { name: 'Capybara', path: 'avatars/Capybara.svg' },
+  { name: 'Parrot', path: 'avatars/Parrot.svg' },
+  { name: 'Sheep', path: 'avatars/Sheep.svg' },
+  { name: 'Rooster', path: 'avatars/Rooster.svg' },
+  { name: 'Dog', path: 'avatars/Dog.svg' },
+  { name: 'Lion', path: 'avatars/Lion.svg' },
+  { name: 'Goat', path: 'avatars/Goat.svg' },
+  { name: 'Cheetah', path: 'avatars/Cheetah.svg' },
+  { name: 'Panther', path: 'avatars/Panther.svg' },
+  { name: 'SeriousDog', path: 'avatars/Serious Dog.svg' },
+  { name: 'SomeBird', path: 'avatars/Some Bird.svg' },
+];
+
 const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onToggle }) => {
   const [heliosUsername, setHeliosUsername] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
+  const [currentAvatar, setCurrentAvatar] = useState(avatars[0].path);
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+
+  const getAvatarImage = (path: string) => {
+    switch (path) {
+      case 'avatars/Cat.svg':
+        return Cat;
+      case 'avatars/Capybara.svg':
+        return Capybara;
+      case 'avatars/Parrot.svg':
+        return Parrot;
+      case 'avatars/Sheep.svg':
+        return Sheep;
+      case 'avatars/Rooster.svg':
+        return Rooster;
+      case 'avatars/Dog.svg':
+        return Dog;
+      case 'avatars/Lion.svg':
+        return Lion;
+      case 'avatars/Goat.svg':
+        return Goat;
+      case 'avatars/Cheetah.svg':
+        return Cheetah;
+      case 'avatars/Panther.svg':
+        return Panther;
+      case 'avatars/Serious Dog.svg':
+        return SeriousDog;
+      case 'avatars/Some Bird.svg':
+        return SomeBird;
+      default:
+        return Cat; // Default image if path doesn't match
+    }
+  };  
+
+  useEffect(() => {
+    // Select a random avatar when the component mounts
+    const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)].path;
+    setCurrentAvatar(randomAvatar);
+  }, []);  
 
   const handleUsernameChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const username = e.target.value;
@@ -30,18 +97,16 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
         setSuccessMessage('');
         return;
       } else if (username.length >= MAX_USERNAME_LENGTH) {
-        // When the username is at maximum length
         setError('');
         setIsAvailable(null);
-        setSuccessMessage(''); // Reset success message
-        // Availability check should be performed even when at max length
+        setSuccessMessage('');
       }
 
       // Check for invalid characters
-      const invalidCharacters = /[^a-zA-Z0-9_]/; // Only allows letters, numbers, and underscores
+      const invalidCharacters = /[^a-zA-Z0-9_]/;
       if (invalidCharacters.test(username)) {
         setError('Username can only contain letters, numbers, and underscores');
-        setIsAvailable(null); 
+        setIsAvailable(null);
         setSuccessMessage('');
         return;
       }
@@ -58,22 +123,22 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
         const data = await response.json();
 
         if (response.ok) {
-          setIsAvailable(data.available); // Assume API returns { available: true/false }
-          setError(''); // Clear any error message
+          setIsAvailable(data.available);
+          setError('');
         } else {
           setError(data.error || 'Failed to check username availability');
           setIsAvailable(null);
-          setSuccessMessage(''); // Clear success message
+          setSuccessMessage('');
         }
       } catch (err) {
         setError('Error checking username availability. Please try again later.');
         setIsAvailable(null);
-        setSuccessMessage(''); // Clear success message
+        setSuccessMessage('');
       }
     } else {
-      setIsAvailable(null); // Reset availability if input is empty
-      setError(''); // Clear any error message
-      setSuccessMessage(''); // Clear any success message
+      setIsAvailable(null);
+      setError('');
+      setSuccessMessage('');
     }
   };
 
@@ -81,15 +146,15 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
     e.preventDefault();
 
     if (!heliosUsername.trim()) {
-      setError('Username cannot be empty');
-      setSuccessMessage(''); // Clear success message
-      return;
+        setError('Username cannot be empty');
+        setSuccessMessage('');
+        return;
     }
 
     if (isAvailable === false) {
-      setError('Username is already taken');
-      setSuccessMessage(''); // Clear success message
-      return;
+        setError('Username is already taken');
+        setSuccessMessage('');
+        return;
     }
 
     setIsSubmitting(true);
@@ -97,35 +162,45 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
     setSuccessMessage('');
 
     try {
-      const response = await fetch('https://server.therotrade.tech/api/username', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ telegramId, heliosUsername }),
-      });
+        // Send a request to update the Helios username and avatar in the database
+        const response = await fetch('https://server.therotrade.tech/api/user/avatar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                telegramId,
+                avatarPath: currentAvatar,
+            }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!response.ok) {
-        setError(data.error || 'Failed to create Helios username');
-        setSuccessMessage(''); // Clear success message
-      } else {
-        setSuccessMessage(`Username "${data.heliosUsername}" created successfully!`);
-        setError('');
-        setIsAvailable(null);
-        // Call onToggle after showing the success message for 2 seconds
-        setTimeout(() => {
-          onToggle();
-        }, 2000);
-      }
+        if (!response.ok) {
+            setError(data.error || 'Failed to update user avatar');
+            setSuccessMessage('');
+        } else {
+            setSuccessMessage('Avatar and username updated successfully!');
+            setError('');
+            setIsAvailable(null);
+
+            // Call onToggle after showing the success message for 2 seconds
+            setTimeout(() => {
+                onToggle();
+            }, 2000);
+        }
     } catch (err) {
-      setError('Error creating Helios username. Please try again later.');
-      setSuccessMessage(''); // Clear success message
+        setError('Error updating user avatar. Please try again later.');
+        setSuccessMessage('');
     } finally {
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
-  };
+};
+
+const handleAvatarSelect = (newAvatar: string) => {
+  setCurrentAvatar(newAvatar);
+  setIsAvatarModalOpen(false);
+};
 
   return (
     <div className="set-username-page flex justify-center font-sans items-center h-screen bg-black/70 text-white">
@@ -133,7 +208,21 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
       <div className="bg-transparent z-10 h-full text-black p-6 rounded-lg shadow-lg w-80">
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className='my-auto'>
-            <img src={Profile} alt="Profile" className='mx-auto w-20 h-20' />
+            <div className="relative">
+              <img
+                src={getAvatarImage(currentAvatar)}
+                alt="Profile"
+                className="mx-auto w-24 h-24 cursor-pointer"
+                onClick={() => setIsAvatarModalOpen(true)}
+              />
+              <div
+                className='bg-gradient-to-r from-[#54616C]/70 to-[#FFFFFF]/70 backdrop-blur-md flex items-center justify-center w-fit px-2 rounded-2xl py-1 mx-auto -mt-3 cursor-pointer'
+                onClick={() => setIsAvatarModalOpen(true)}
+              >
+                <p className='text-white text-xs font-semibold'>EDIT</p>
+                <img src={Pencil} alt="" className='w-4 h-4'/>
+              </div>
+            </div>
             <h2 className="text-xl text-[#FAAD00] font-bold mt-4">Set Helios Username</h2>
             <input
               type="text"
@@ -164,12 +253,18 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
           <button
             type="submit"
             className="bg-yellow-500 mt-auto mb-20 text-white font-bold py-3 rounded-lg hover:bg-yellow-600 disabled:opacity-50"
-            disabled={isSubmitting || isAvailable !== true} // Button is disabled unless the username is available
+            disabled={isSubmitting || isAvailable !== true}
           >
             {isSubmitting ? 'Creating...' : 'Continue'}
           </button>
         </form>
       </div>
+      <AvatarSelectionModal
+        isOpen={isAvatarModalOpen}
+        onClose={() => setIsAvatarModalOpen(false)}
+        onSelectAvatar={handleAvatarSelect}
+        currentAvatar={currentAvatar}
+      />
     </div>
   );
 };
