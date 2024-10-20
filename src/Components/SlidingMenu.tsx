@@ -45,6 +45,7 @@ interface SlidingMenuProps {
     telegramId: string;
     friends: Friend[];
     minerate: number | null;
+    avatarPath: string | null;
 }
 
 interface Friend {
@@ -54,7 +55,7 @@ interface Friend {
     avatar: string;
     referralCount: number;
   }
-const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId, minerate, friends}) => {
+const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId, minerate, friends, avatarPath}) => {
     const [isOpen, setIsOpen] = useState(false);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const lastClickTimeRef = useRef<number | null>(null);
@@ -170,6 +171,7 @@ const handleItemClick = (item: SelectedItem | CarouselImage) => {
                     <Header
                         minerate={minerate}
                         friendsCount={friends.length}
+                        avatarPath={avatarPath}
                     />
                 )}
             <div
