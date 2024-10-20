@@ -34,14 +34,14 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
             {baseUrl ? (
               <QRCode
                 value={referralLink || ''}
-                size={Math.min((window.innerWidth * 9) / 12, 300)} // QR code size is limited to a maximum of 300px
+                size={Math.min((window.innerWidth * 9) / 12, 400)} // QR code size is limited to a maximum of 300px
                 qrStyle="dots"
                 eyeRadius={[{ outer: 5, inner: 0 }, { outer: 5, inner: 0 }, { outer: 5, inner: 0 }]}
                 fgColor="#FAAD00"
                 bgColor="#194464"
                 logoImage={logo}
-                logoWidth={Math.min((window.innerWidth * 10) / (12 * 7.5), 40)} // Logo width is also capped at a maximum of 40px
-                logoHeight={Math.min((window.innerWidth * 10) / (12 * 7.5), 40)} // Logo height is capped similarly
+                logoWidth={Math.min((window.innerWidth * 10) / (12 * 7.5), 42)} // Logo width is also capped at a maximum of 40px
+                logoHeight={Math.min((window.innerWidth * 10) / (12 * 7.5), 42)} // Logo height is capped similarly
                 removeQrCodeBehindLogo={true}
               />
 
