@@ -166,7 +166,7 @@ const Layout = () => {
             ]);
 
             // Check if the user has a Helios username or avatar
-            if (!heliosUsername || !avatarPath) {
+            if (!heliosUsername ) {
               setNewUser(true);  // Trigger new user flow if either is missing
             } else {
               setNewUser(false);  // Proceed with normal flow if both are present
