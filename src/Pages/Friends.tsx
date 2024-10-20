@@ -208,7 +208,7 @@ const Friends: React.FC = () => {
                   className="friend-item py-1 bg-[#194564]/80 w-11/12 mx-auto rounded-lg flex justify-between mb-2"
                 >
                   <div className="flex">
-                    <div className="mx-auto bg-red-200 mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
+                    <div className="mx-auto mt-1 mb-1 ml-2 rounded-full h-10 w-10 flex justify-center items-center">
                     <img src={avatarMap[friend.avatar] || SomeBird} alt={friend.name} className="w-7 h-7" />
                     </div>
                     <div className="flex flex-col h-9 text-left my-auto pl-3">
