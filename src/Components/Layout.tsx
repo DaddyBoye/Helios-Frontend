@@ -329,6 +329,11 @@ const Layout = () => {
     }
   };
 
+  // Callback to update avatar path
+  const updateAvatarPath = (newAvatarPath: string) => {
+    setAvatarPath(newAvatarPath);
+  };
+
   useEffect(() => {
     if (!telegramId) return;
 
@@ -398,7 +403,7 @@ const Layout = () => {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (
-      <SetHeliosUsername telegramId={telegramId} onToggle={handleUsernameSetupComplete}/> // Username setup shown after the welcome page
+      <SetHeliosUsername telegramId={telegramId} onToggle={handleUsernameSetupComplete} onUpdateAvatarPath={updateAvatarPath}/> // Username setup shown after the welcome page
     );
   }
 

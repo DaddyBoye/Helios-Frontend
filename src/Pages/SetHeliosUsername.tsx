@@ -19,6 +19,7 @@ import SomeBird from '../images/Some Bird.svg';
 interface SetHeliosUsernameProps {
   telegramId: number | null;
   onToggle: () => void;
+  onUpdateAvatarPath: (newAvatarPath: string) => void; // Update here
 }
 
 const MAX_USERNAME_LENGTH = 20;
@@ -38,7 +39,7 @@ const avatars = [
   { name: 'SomeBird', path: 'avatars/Some Bird.svg' },
 ];
 
-const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onToggle }) => {
+const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onToggle, onUpdateAvatarPath }) => {
   const [heliosUsername, setHeliosUsername] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -183,6 +184,9 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
             setSuccessMessage('Avatar and username updated successfully!');
             setError('');
             setIsAvailable(null);
+
+            // Call the callback to update the avatar path in Layout
+            onUpdateAvatarPath(currentAvatar);
 
             // Call onToggle after showing the success message for 2 seconds
             setTimeout(() => {
