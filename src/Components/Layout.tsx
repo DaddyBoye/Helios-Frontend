@@ -159,26 +159,19 @@ const Layout = () => {
             // Handle user creation and fetch additional data
             await handleUserCreation(userData, tokenAvailable, timezone);
 
-            // Fetch Helios username
-            await fetchHeliosUsername(userData.id);
+            // Fetch Helios username and avatarPath concurrently
+            await Promise.all([
+              fetchHeliosUsername(userData.id),
+              fetchAvatarPath(userData.id),
+            ]);
 
-            // Fetch avatar path once the user exists
-            await fetchAvatarPath(userData.id);
-
-            // New logic to check if the user has a Helios username or avatar
-            if (!heliosUsername || !avatarPath) {
-              setNewUser(true); // Trigger new user flow if either is missing
             } else {
-              setNewUser(false); // Proceed with normal flow if both are present
+              console.error('Telegram ID is not available');
             }
-
           } else {
-            console.error('Telegram ID is not available');
+          setError('No user data available');
           }
         } else {
-          setError('No user data available');
-        }
-      } else {
         console.error('This app should be opened in Telegram');
       }
     };
@@ -257,7 +250,8 @@ const Layout = () => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/user/helios-username/${telegramId}`);
       if (response.data?.heliosUsername) {
-        setHeliosUsername(response.data.heliosUsername); // Set the Helios username in state
+        setHeliosUsername(response.data.heliosUsername);
+        setNewUser(false);
       } else {
         console.log('Helios username not found for user');
       }
@@ -381,10 +375,10 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched) {
+    if (loadingTimePassed && user && dataFetched && heliosUsername && avatarPath) {
       setIsLoading(false);
     }
-  }, [loadingTimePassed, user, dataFetched]);
+  }, [loadingTimePassed, user, dataFetched, heliosUsername, avatarPath]);
 
   const handleUsernameSetupComplete = async () => {
     if (telegramId) {
