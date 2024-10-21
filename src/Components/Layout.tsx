@@ -253,6 +253,7 @@ const Layout = () => {
         setHeliosUsername(response.data.heliosUsername);
         setNewUser(false);
       } else {
+        setNewUser(true);
         console.log('Helios username not found for user');
       }
     } catch (err) {
