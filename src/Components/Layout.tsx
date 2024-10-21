@@ -70,16 +70,16 @@ const Layout = () => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
       console.log('API Response:', response.data);
-
+  
       await delay(DELAY_MS); // Add delay before setting state
-
+  
       if (response.data.hasOwnProperty('exists')) {
         if (response.data.exists === true) {
           console.log('User exists');
-          setNewUser(false);
+          setNewUser(false); // Temporarily set to false, will be checked again after username and avatar are fetched
         } else if (response.data.exists === false) {
           console.log('User does not exist');
-          setNewUser(true);
+          setNewUser(true); // User doesn't exist, so trigger new user flow
         } else {
           console.error('Unexpected "exists" value:', response.data.exists);
           setError('Unexpected response from server');
@@ -96,7 +96,7 @@ const Layout = () => {
       setError('Failed to check user existence');
       setNewUser(null);
     }
-  }, []);
+  }, []);  
 
   // Ensure at least 3 seconds of loading time
   useEffect(() => {
@@ -167,13 +167,16 @@ const Layout = () => {
     fetchUserData();
   }, [referralToken]);
 
-// Effect to update newUser after fetching username and avatar
+// Effect to update newUser after fetching user existence, username, and avatar
 useEffect(() => {
-  if (heliosUsernameFetched && avatarPathFetched && newUser !== false) {
-    // Set newUser to false only if both username and avatar are fetched and valid
-    setNewUser(!(heliosUsername && avatarPath));
+  if (heliosUsernameFetched && avatarPathFetched) {
+    // If checkUserExists indicates new user or heliosUsername or avatarPath is missing, set newUser to true
+    if (newUser !== false || !heliosUsername || !avatarPath) {
+      setNewUser(true); // Trigger new user flow
+    }
   }
-}, [heliosUsernameFetched, avatarPathFetched, heliosUsername, avatarPath]);
+}, [heliosUsernameFetched, avatarPathFetched, heliosUsername, avatarPath, newUser]);
+
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
