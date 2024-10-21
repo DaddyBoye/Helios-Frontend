@@ -165,7 +165,15 @@ const Layout = () => {
       }
     };
     fetchUserData();
-  }, [referralToken, heliosUsername, avatarPath]);
+  }, [referralToken]);
+
+// Effect to update newUser after fetching username and avatar
+useEffect(() => {
+  if (heliosUsernameFetched && avatarPathFetched && newUser !== false) {
+    // Set newUser to false only if both username and avatar are fetched and valid
+    setNewUser(!(heliosUsername && avatarPath));
+  }
+}, [heliosUsernameFetched, avatarPathFetched, heliosUsername, avatarPath]);
 
   const getUserTimezone = () => {
     const timezone = moment.tz.guess();
@@ -240,15 +248,12 @@ const Layout = () => {
       const response = await axios.get(`https://server.therotrade.tech/api/user/helios-username/${telegramId}`);
       if (response.data?.heliosUsername) {
         setHeliosUsername(response.data.heliosUsername);
-        setNewUser(false);  // Set newUser to false since a username was found
       } else {
-        setNewUser(true);  // No username found, so user is considered new
       }
       setHeliosUsernameFetched(true);  // Mark it as fetched
     } catch (err) {
       console.error('Error fetching helios username:', err);
-      setHeliosUsernameFetched(true);  // Mark it as fetched even on error
-      setNewUser(true);  // Treat as new user if fetch fails
+      setHeliosUsernameFetched(true); 
     }
   }, []);
   
@@ -257,18 +262,15 @@ const Layout = () => {
       const response = await axios.get(`https://server.therotrade.tech/api/user/avatar/${telegramId}`);
       if (response.data?.avatarPath) {
         setAvatarPath(response.data.avatarPath);
-        setNewUser(false);  // Set newUser to false since avatar path was found
       } else {
         console.log('Avatar path not found for user');
-        setNewUser(true);  // No avatar path found, so user is considered new
         setAvatarPath(UserAvatar);  // Set default avatar
       }
       setAvatarPathFetched(true);  // Mark it as fetched
     } catch (error) {
       console.error('Error fetching avatar path:', error);
       setAvatarPath(UserAvatar);  // Set default avatar on error
-      setAvatarPathFetched(true);  // Mark it as fetched even on error
-      setNewUser(true);  // Treat as new user if fetch fails
+      setAvatarPathFetched(true);  
     }
   };   
   
