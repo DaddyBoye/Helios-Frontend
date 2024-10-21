@@ -55,6 +55,7 @@ interface Friend {
     avatar: string;
     referralCount: number;
   }
+
 const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId, minerate, friends, avatarPath}) => {
     const [isOpen, setIsOpen] = useState(false);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -210,32 +211,34 @@ const handleItemClick = (item: SelectedItem | CarouselImage) => {
                             <div className="flex flex-col gap-3 mb-44 mt-12">
                                 {/* Challenge */}
                                 <div
-                                  className="bg-cover bg-center rounded-xl p-4 relative"
+                                  className="bg-cover bg-center rounded-xl relative"
                                   style={{
                                     backgroundImage: `url(${selectedItem.image})`,
                                   }}
                                 >
                                   <div className="absolute inset-0 bg-black bg-opacity-40 rounded-xl"></div> {/* Add overlay */}
                                   <div className="relative z-10">
-                                    <div className="flex justify-between items-center mb-2">
-                                      <h3 className="text-white text-lg font-bold">LUCKY DRAW</h3>
-                                      <button className="bg-blue-700 text-white px-3 py-1 rounded-full text-sm">
+                                    <div className="flex justify-between px-3 pt-3 h-28 mb-2">
+                                    <h2 className="text-white text-lg font-bold mb-1">Weekly Challenge</h2>
+                                      <button className="bg-blue-700 text-white px-3 mb-auto py-0.5 rounded-full text-xs">
                                         LEARN MORE
                                       </button>
                                     </div>
-                                    <h2 className="text-white text-2xl font-bold mb-1">{selectedItem.title}</h2>
-                                    <p className="text-yellow-300 text-sm flex items-center">
-                                      {selectedItem.description}
-                                    </p>
-                                    <div className="flex space-x-2 mt-2">
-                                      <div className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs flex items-center">
-                                        <span className="mr-1">🎟️</span> Entry 10,000
-                                      </div>
-                                      <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs">
-                                        13-20 Oct
-                                      </div>
-                                      <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs flex items-center">
-                                        {`53,341`} {/* Use dynamic count */}
+                                    <div className='bg-black/30 rounded-b-xl backdrop-blur-sm py-2 px-2'>
+                                    <h2 className="text-white text-sm font-bold text-left">{selectedItem.title}</h2>
+                                      <p className="text-white/50 text-xs flex items-center">
+                                        {selectedItem.description}
+                                      </p>
+                                      <div className="flex space-x-2 mt-2">
+                                        <div className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs flex items-center">
+                                          <span className="mr-1">🎟️</span> Entry 10,000
+                                        </div>
+                                        <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs">
+                                          13-20 Oct
+                                        </div>
+                                        <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs flex items-center">
+                                          {`53,341`} {/* Use dynamic count */}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>

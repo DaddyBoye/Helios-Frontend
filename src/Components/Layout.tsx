@@ -60,22 +60,11 @@ const Layout = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const [avatarPath, setAvatarPath] = useState<string | null>(null);
+  const [heliosUsernameFetched, setHeliosUsernameFetched] = useState(false);
+  const [avatarPathFetched, setAvatarPathFetched] = useState(false);
+
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-  const fetchAvatarPath = async (telegramId: number) => {
-    try {
-      const response = await axios.get(`https://server.therotrade.tech/api/user/avatar/${telegramId}`);
-      if (response.data?.avatarPath) {
-        setAvatarPath(response.data.avatarPath);  // Fetch avatarPath and set it in state
-      } else {
-        console.log('Avatar path not found for user');
-      }
-    } catch (error) {
-      console.error('Error fetching avatar path:', error);
-      setAvatarPath(UserAvatar);  // Set default avatar if fetch fails
-    }
-  };
 
   const checkUserExists = useCallback(async (telegramId: number) => {
     try {
@@ -251,16 +240,33 @@ const Layout = () => {
       const response = await axios.get(`https://server.therotrade.tech/api/user/helios-username/${telegramId}`);
       if (response.data?.heliosUsername) {
         setHeliosUsername(response.data.heliosUsername);
-        setNewUser(false);
-      } else {
-        setNewUser(true);
-        console.log('Helios username not found for user');
       }
+      // Regardless of response data, mark it as fetched
+      setHeliosUsernameFetched(true);
     } catch (err) {
       console.error('Error fetching helios username:', err);
+      setHeliosUsernameFetched(true);  // Still mark it as fetched even on error
     }
-  }, []); 
-
+  }, []);
+  
+  const fetchAvatarPath = async (telegramId: number) => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/user/avatar/${telegramId}`);
+      if (response.data?.avatarPath) {
+        setAvatarPath(response.data.avatarPath);
+      } else {
+        console.log('Avatar path not found for user');
+        setAvatarPath(UserAvatar);  // Set default avatar if fetch fails
+      }
+      // Mark the avatar path as fetched regardless of result
+      setAvatarPathFetched(true);
+    } catch (error) {
+      console.error('Error fetching avatar path:', error);
+      setAvatarPath(UserAvatar);  // Set default avatar on error
+      setAvatarPathFetched(true);  // Still mark it as fetched even on error
+    }
+  };  
+  
   const fetchUserMinerate = async (telegramId: number) => {
     try {
       const response = await axios.get(`https://server.therotrade.tech/api/users/minerate/${telegramId}`);
@@ -376,10 +382,11 @@ const Layout = () => {
 
   // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched && heliosUsername && avatarPath) {
-      setIsLoading(false);
+    if (loadingTimePassed && user && dataFetched && heliosUsernameFetched && avatarPathFetched) {
+      setIsLoading(false);  // Loading stops once all essential and additional data is fetched (or attempted)
     }
-  }, [loadingTimePassed, user, dataFetched, heliosUsername, avatarPath]);
+  }, [loadingTimePassed, user, dataFetched, heliosUsernameFetched, avatarPathFetched]);
+  
 
   const handleUsernameSetupComplete = async () => {
     if (telegramId) {
