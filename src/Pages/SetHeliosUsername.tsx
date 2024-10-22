@@ -163,25 +163,45 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
     setSuccessMessage('');
 
     try {
-        // Send a request to update the Helios username and avatar in the database
-        const response = await fetch('https://server.therotrade.tech/api/user/avatar', {
+        // First API call to update the Helios username
+        const usernameResponse = await fetch('https://server.therotrade.tech/api/username', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                telegramId,
-                avatarPath: currentAvatar,
+                telegramId,       // Send the telegramId
+                heliosUsername,   // Send the new username
             }),
         });
 
-        const data = await response.json();
+        const usernameData = await usernameResponse.json();
 
-        if (!response.ok) {
-            setError(data.error || 'Failed to update user avatar');
+        if (!usernameResponse.ok) {
+            setError(usernameData.error || 'Failed to update username');
+            setSuccessMessage('');
+            return;  // Exit early if username update fails
+        }
+
+        // If username update succeeds, proceed to avatar update
+        const avatarResponse = await fetch('https://server.therotrade.tech/api/user/avatar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                telegramId,        // Send the telegramId
+                avatarPath: currentAvatar, // Send the avatar path
+            }),
+        });
+
+        const avatarData = await avatarResponse.json();
+
+        if (!avatarResponse.ok) {
+            setError(avatarData.error || 'Failed to update avatar');
             setSuccessMessage('');
         } else {
-            setSuccessMessage('Avatar and username updated successfully!');
+            setSuccessMessage('Username and avatar updated successfully!');
             setError('');
             setIsAvailable(null);
 
@@ -193,8 +213,9 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
                 onToggle();
             }, 2000);
         }
+
     } catch (err) {
-        setError('Error updating user avatar. Please try again later.');
+        setError('Error updating username and avatar. Please try again later.');
         setSuccessMessage('');
     } finally {
         setIsSubmitting(false);
