@@ -168,9 +168,10 @@ function App() {
   const claimFunction = async () => {
     try {
       if (telegramId) {
+        setClaimInitiated(true); // Start the animation
         await updateTotalAirdrops(telegramId);
         await removeAirdropsWithDelay();
-        setClaimInitiated(true);
+        setClaimInitiated(false); // End the animation
       }
     } catch (error) {
       console.error('Error during claim process:', error);
