@@ -11,7 +11,7 @@ interface ShareComponentProps {
 
 const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggleShareMenu, referralLink }) => {
   const [isSocialMediaMenuOpen, setIsSocialMediaMenuOpen] = useState(false);
-  const baseUrl = "https://t.me/HeeliossBot?start=";
+  const baseUrl = "https://t.me/HeeliossBot/Helios?startapp=";
 
   const toggleSocialMediaMenu = () => {
     setIsSocialMediaMenuOpen(prev => !prev);

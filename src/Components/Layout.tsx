@@ -106,15 +106,6 @@ const Layout = () => {
     return () => clearTimeout(loadingTimeout);
   }, []);
 
-  // Fetch referral token from URL
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('referralToken');
-    if (token) {
-      setReferralToken(token);
-    }
-  }, []);
-
   useEffect(() => {
     const socket = io('https://server.therotrade.tech');
     socket.on('progressUpdate', (newProgress) => {
@@ -132,6 +123,11 @@ const Layout = () => {
         tg.ready();
 
         const userData = tg.initDataUnsafe.user;
+        const startParam = tg.initDataUnsafe.start_param;  // Retrieve the referral token here
+  
+        if (startParam) {
+          setReferralToken(startParam);  // Store referral token
+        }
 
         if (userData) {
           setTelegramId(userData.id);

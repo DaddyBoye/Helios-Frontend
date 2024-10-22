@@ -43,7 +43,7 @@ const Friends: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [referralLink, setReferralLink] = useState<string | null>(null);
   const [isFullListOpen, setIsFullListOpen] = useState(false);
-  const baseUrl = "https://t.me/HeeliossBot?start=";
+  const baseUrl = "https://t.me/HeeliossBot/Helios?startapp=";
 
   const avatarMap: { [key: string]: string } = {
     'avatars/Cat.svg': Cat,

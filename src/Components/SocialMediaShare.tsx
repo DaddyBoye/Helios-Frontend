@@ -14,7 +14,7 @@ interface SocialMediaShareProps {
 const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu }) => {
   const [referralLink, setReferralLink] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
-  const baseUrl = "https://t.me/HeeliossBot?start=";
+  const baseUrl = "https://t.me/HeeliossBot/Helios?startapp=";
 
   // Fetch telegramId using the Telegram SDK
   useEffect(() => {
