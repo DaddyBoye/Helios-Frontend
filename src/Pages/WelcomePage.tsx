@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import HeliosWarrior from '../images/Helios Warrior.svg';
 import '../App.css';
@@ -8,12 +8,19 @@ interface WelcomePageProps {
 }
 
 const WelcomePage: React.FC<WelcomePageProps> = ({ onContinue }) => {
+  // Preload the HeliosWarrior image
+  useEffect(() => {
+    const img = new Image();
+    img.src = HeliosWarrior;
+  }, []);
+
   return (
     <div className="flex flex-col font-sans h-screen bg-black/70 text-white">
       <StarryBackground />
       <div className="flex flex-col flex-grow z-10 text-center items-center justify-between py-8">
         <div className="w-full">
-          <img src={HeliosWarrior} alt="Warrior" className="mx-auto w-7/12" />
+          {/* Lazy load the image */}
+          <img src={HeliosWarrior} alt="Warrior" className="mx-auto w-7/12" loading="lazy" />
           <h1 className="text-xl text-[#FAAD00] font-bold mb-4">Welcome to Helios</h1>
           <p className="text-sm w-10/12 mx-auto text-center">
             The kingdom of the sun god Helios. A realm of endless possibilities, where golden skies and boundless horizons inspire greatness in all who enter.
