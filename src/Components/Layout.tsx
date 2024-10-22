@@ -171,7 +171,7 @@ const Layout = () => {
 useEffect(() => {
   if (heliosUsernameFetched && avatarPathFetched) {
     // If checkUserExists indicates new user or heliosUsername or avatarPath is missing, set newUser to true
-    if (newUser !== false || !heliosUsername || !avatarPath) {
+    if (newUser !== false || !heliosUsername || !avatarPath || heliosUsername === null) {
       setNewUser(true); // Trigger new user flow
     }
   }
