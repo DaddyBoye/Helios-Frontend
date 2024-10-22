@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 import LoadingPage from '../Pages/LoadingPage'; 
 import Taskbar from '../Components/Taskbar'; 
 import axios from 'axios'; 
-import UserAvatar from '../images/edeef 1 (1).svg';  // Default fallback avatar 
 import { io } from 'socket.io-client'; 
 import moment from 'moment-timezone'; 
 import { createUser } from '../utils/api'; 
@@ -171,7 +170,7 @@ const Layout = () => {
 useEffect(() => {
   if (heliosUsernameFetched && avatarPathFetched) {
     // If checkUserExists indicates new user or heliosUsername or avatarPath is missing, set newUser to true
-    if (newUser !== false || !heliosUsername || !avatarPath || avatarPath === null) {
+    if (newUser !== false || !heliosUsername || !avatarPath ) {
       setNewUser(true); // Trigger new user flow
     }
   }
@@ -267,12 +266,10 @@ useEffect(() => {
         setAvatarPath(response.data.avatarPath);
       } else {
         console.log('Avatar path not found for user');
-        setAvatarPath(UserAvatar);  // Set default avatar
       }
       setAvatarPathFetched(true);  // Mark it as fetched
     } catch (error) {
       console.error('Error fetching avatar path:', error);
-      setAvatarPath(UserAvatar);  // Set default avatar on error
       setAvatarPathFetched(true);  
     }
   };   
