@@ -11,6 +11,7 @@ interface CarouselImage {
     benefits: string[];
     howTo: string[];
     longDescription: string;
+    taskId: number;
 }
 
 interface Platform {
@@ -20,7 +21,8 @@ interface Platform {
     link: string;
     image: string;
     color: string;
-    taskId: number; // Add taskId
+    taskId: number; 
+    points: number;
 }
 
 interface InviteTask {
@@ -29,7 +31,9 @@ interface InviteTask {
     link: string;
     image: string;
     color: string;
-    taskId: number; // Add taskId
+    taskId: number; 
+    referralThreshold: number;
+    points: number;
 }
 
 interface ApiErrorResponse {
@@ -57,13 +61,19 @@ interface Friend {
   }
 
 const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId, minerate, friends, avatarPath}) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const lastClickTimeRef = useRef<number | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [taskStatus, setTaskStatus] = useState({
+      isCompleted: false,
+      canClaim: false,
+      loading: false
+  });
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastClickTimeRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (selectedItem) {
             setIsOpen(true);
+            checkTaskStatus(selectedItem.taskId);
         } else {
             setIsOpen(false);
         }
@@ -73,6 +83,46 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
         setIsOpen(false);
         setTimeout(onClose, 300);
     };
+
+    // Check if the task is completed for the user
+    const checkTaskStatus = async (taskId: number) => {
+      try {
+          const response = await axios.get(`https://server.therotrade.tech/api/users/check-task/${telegramId}/${taskId}`);
+          const totalReferrals = friends.reduce((sum, friend) => sum + friend.referralCount, 0);
+          
+          setTaskStatus({
+              isCompleted: response.data.completed,
+              canClaim: totalReferrals >= (selectedItem as InviteTask).referralThreshold && !response.data.completed,
+              loading: false
+          });
+      } catch (error) {
+          console.error('Error checking task status:', error);
+      }
+  };
+
+// Claim reward and update airdrops
+const handleClaimReward = async () => {
+  try {
+      setTaskStatus(prev => ({ ...prev, loading: true }));
+
+      // Replace with the new API call to increase airdrops
+      await axios.post(`https://server.therotrade.tech/api/airdrops/increase/${telegramId}`, {
+          taskPoints: (selectedItem as Platform | InviteTask).points // Assuming task points are stored in the selectedItem
+      });
+
+      // Patch to mark the task as complete
+      await axios.patch(`https://server.therotrade.tech/api/users/complete-task/${telegramId}/${(selectedItem as Platform | InviteTask).taskId}`);
+
+      setTaskStatus({
+          isCompleted: true,
+          canClaim: false,
+          loading: false
+      });
+  } catch (error) {
+      console.error('Error claiming reward:', error);
+      setTaskStatus(prev => ({ ...prev, loading: false }));
+  }
+};
 
     const isCarouselImage = (item: SelectedItem): item is CarouselImage => {
         return 'benefits' in item && 'howTo' in item && 'longDescription' in item;
@@ -194,15 +244,46 @@ const handleItemClick = (item: SelectedItem | CarouselImage) => {
                         <button onClick={handleClose} className="text-3xl">&times;</button>
                     </div>
                     )}
-                    {/* Image and short description */}
+                    {/* Platform/Task Content */}
                     {(isPlatform(selectedItem) || isInviteTask(selectedItem)) && (
-                    <div className="flex items-center mb-3">
-                        <img src={selectedItem.image} className="w-20 h-20 object-cover rounded-full mr-2" />
-                        <p className="text-md text-left">
-                            {                             isPlatform(selectedItem) ? selectedItem.text :
-                             isInviteTask(selectedItem) ? `Earn ${selectedItem.reward} by inviting friends!` : ''}
-                        </p>
-                    </div>
+                        <>
+                            <div className="flex items-center mb-3">
+                                <img src={selectedItem.image} className="w-20 h-20 object-cover rounded-full mr-2" alt="" />
+                                <p className="text-md text-left">
+                                    {isPlatform(selectedItem) ? selectedItem.text : `Earn ${selectedItem.reward} by inviting friends!`}
+                                </p>
+                            </div>
+                            
+                            {!taskStatus.isCompleted && !taskStatus.canClaim && (
+                                <a
+                                    href={selectedItem.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 flex items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
+                                    onClick={(e) => {
+                                        if (isPlatform(selectedItem)) {
+                                            e.preventDefault();
+                                            handlePlatformClick(selectedItem);
+                                        }
+                                    }}
+                                >
+                                    {isPlatform(selectedItem) ? `Go to ${selectedItem.name}` : 'Invite Friends'}
+                                </a>
+                            )}
+
+                            {(taskStatus.canClaim || taskStatus.isCompleted) && (
+                                <button
+                                    className={`w-full ${taskStatus.isCompleted ? 'bg-green-500' : 'bg-yellow-500'} 
+                                              text-${taskStatus.isCompleted ? 'white' : 'black'} 
+                                              py-3 rounded-xl font-bold text-sm mb-5`}
+                                    onClick={handleClaimReward}
+                                    disabled={taskStatus.loading || taskStatus.isCompleted}
+                                >
+                                    {taskStatus.isCompleted ? 'COMPLETED' : 
+                                     taskStatus.loading ? 'CLAIMING...' : 'CLAIM REWARD'}
+                                </button>
+                            )}
+                        </>
                     )}
 
                     {isCarouselImage(selectedItem) && (
@@ -276,37 +357,6 @@ const handleItemClick = (item: SelectedItem | CarouselImage) => {
                                 </div>
                             </div>
                         </>
-                    )}
-
-                    {isPlatform(selectedItem) && (
-                        <div className="mb-3">
-                        </div>
-                    )}
-
-                    {isInviteTask(selectedItem) && (
-                        <div className="mb-1">
-                            <p></p>
-                        </div>
-                    )}
-
-                    {/* Call to Action */}
-                    {(isPlatform(selectedItem) || isInviteTask(selectedItem)) && (
-                        <a
-                            href={selectedItem.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
-                            onClick={(e) => {
-                                // Prevent default behavior only for platform items
-                                if (isPlatform(selectedItem)) {
-                                    e.preventDefault(); // Only prevent default if it's a platform
-                                    handlePlatformClick(selectedItem); // Handle the platform click logic
-                                }
-                            }}
-                        >
-                            {isPlatform(selectedItem) ? `Go to ${selectedItem.name}` :
-                                isInviteTask(selectedItem) ? `Invite Friends` : ''}
-                        </a>
                     )}
                 </div>
             </div>

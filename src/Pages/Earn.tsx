@@ -34,6 +34,7 @@ interface Platform {
     image: string;
     color: string;
     taskId: number;
+    points: number;
 }
 
 interface InviteTask {
@@ -43,6 +44,8 @@ interface InviteTask {
     image: string;
     color: string;
     taskId: number;
+    referralThreshold: number;
+    points: number;
 }
 
 interface CarouselImage {
@@ -54,6 +57,7 @@ interface CarouselImage {
     benefits: string[];
     howTo: string[];
     longDescription: string;
+    taskId: number;
 }
 
 type SelectedItem = Platform | InviteTask | CarouselImage;
@@ -67,24 +71,25 @@ const Earn = () => {
     const preloadedImages = usePreloadedImages();
 
     const socialPlatforms: Platform[] = [
-        { icon: Instagram, name: 'Instagram', text: 'Follow Our jouney on Insta', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1},
-        { icon: X, name: 'X', text: 'Engage Helios on X', link: 'https://www.x.com', image: X, color: '#1DA1F2', taskId: 2 },
-        { icon: YouTube, name: 'YouTube', text: 'Subscribe to Our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000', taskId: 3 },
-        { icon: Telegram, name: 'Telegram', text: 'Join our Telegram community', link: 'https://www.telegram.org', image: Telegram, color: '#0088CC', taskId: 4 },
+        { icon: Instagram, name: 'Instagram', text: 'Follow Our jouney on Insta', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1, points: 100 },
+        { icon: X, name: 'X', text: 'Engage Helios on X', link: 'https://www.x.com', image: X, color: '#1DA1F2', taskId: 2, points: 100 },
+        { icon: YouTube, name: 'YouTube', text: 'Subscribe to Our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000', taskId: 3, points: 100 },
+        { icon: Telegram, name: 'Telegram', text: 'Join our Telegram community', link: 'https://www.telegram.org', image: Telegram, color: '#0088CC', taskId: 4, points: 100 },
     ];
     
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '100 Solis', link: '', image: Friends, color: '#4CAF50', taskId: 1 },
-        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 1 },
-        { title: 'Invite 20 friends', reward: '600 Solis', link: '', image: Friends, color: '#FFC107', taskId: 1 },
-        { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 1 },
+        { title: 'Invite 5 friends', reward: '100 Solis', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 2, points: 100  },
+        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 200  },
+        { title: 'Invite 20 friends', reward: '600 Solis', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 15, points: 300  },
+        { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 20, points: 400  },
     ];
     
     
     const images: CarouselImage[] = [
         { 
             image: preloadedImages[0],  // Helios3
-            title: "Referral Quest", 
+            title: "Referral Quest",
+            taskId: 20, 
             description: "Join the Referral Race for a Shot at $100", 
             link: 'https://challenge.com',
             color: '#FFC107',
@@ -104,6 +109,7 @@ const Earn = () => {
         { 
             image: preloadedImages[1],  // Helios 6
             title: "$15,000 Prize Pool", 
+            taskId: 30, 
             description: "Join our event and compete for a share of the $15,000 prize pool.", 
             link: 'https://prizepool.com',
             color: '#4CAF50',
@@ -125,6 +131,7 @@ const Earn = () => {
         { 
             image: preloadedImages[2],  // Helios 7
             title: "Hack Helios", 
+            taskId: 40, 
             description: "Get involved in the Helios Hackathon and win amazing rewards!", 
             link: 'https://hackathon.com',
             color: '#2196F3',
