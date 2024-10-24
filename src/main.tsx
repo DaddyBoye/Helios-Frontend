@@ -1,4 +1,5 @@
 import React from 'react';
+import { PreloaderProvider } from './Components/PreloaderProvider';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import App from './Pages/App';
@@ -10,14 +11,16 @@ import Layout from '../src/Components/Layout';
 
 const RootComponent = () => {
   return (<Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<App />} /> {/* Default route */}
-            <Route path="airdrop" element={<Airdrop />} />
-            <Route path="earn" element={<Earn />} />
-            <Route path="friends" element={<Friends />} />
-          </Route>
-        </Routes>
+        <PreloaderProvider>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<App />} /> {/* Default route */}
+              <Route path="airdrop" element={<Airdrop />} />
+              <Route path="earn" element={<Earn />} />
+              <Route path="friends" element={<Friends />} />
+            </Route>
+          </Routes>
+        </PreloaderProvider>
       </Router>
   );
 };

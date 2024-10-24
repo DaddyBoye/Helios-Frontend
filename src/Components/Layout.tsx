@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'; 
-import { Outlet } from 'react-router-dom'; 
+import { Outlet } from 'react-router-dom';
 import LoadingPage from '../Pages/LoadingPage'; 
 import Taskbar from '../Components/Taskbar'; 
 import axios from 'axios'; 
@@ -61,7 +61,8 @@ const Layout = () => {
   const [avatarPath, setAvatarPath] = useState<string | null>(null);
   const [heliosUsernameFetched, setHeliosUsernameFetched] = useState(false);
   const [avatarPathFetched, setAvatarPathFetched] = useState(false);
-
+  const [referralLink, setReferralLink] = useState<string | null>(null);
+  const baseUrl = "https://t.me/HeeliossBot/Helios?startapp=";
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -101,7 +102,7 @@ const Layout = () => {
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setLoadingTimePassed(true);
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(loadingTimeout);
   }, []);
@@ -185,12 +186,12 @@ useEffect(() => {
           clearInterval(interval);
           resolve(true);
         }
-      }, 1000);
+      }, 500);
 
       setTimeout(() => {
         clearInterval(interval);
         resolve(false);
-      }, 3000); // Max wait time
+      }, 1500); // Max wait time
     });
   };
 
@@ -240,6 +241,22 @@ useEffect(() => {
       console.error('Error fetching data:', error);
     }
   };
+
+  useEffect(() => {
+    if (!telegramId) return;
+
+    const fetchReferralToken = async () => {
+      try {
+        const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
+        const userReferralToken = response.data.referralToken;
+        setReferralLink(`${baseUrl}${encodeURIComponent(userReferralToken)}`);
+      } catch (error) {
+        console.error('Error fetching referral token:', error);
+      }
+    };
+
+    fetchReferralToken();
+  }, [telegramId]);
 
   const fetchHeliosUsername = useCallback(async (telegramId: number) => {
     try {
@@ -383,9 +400,8 @@ useEffect(() => {
     setIsTaskbarVisible(isVisible);
   };
 
-  // Trigger when user is created successfully and after 4 seconds
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched && heliosUsernameFetched && avatarPathFetched) {
+    if (loadingTimePassed && dataFetched && heliosUsernameFetched && avatarPathFetched) {
       setIsLoading(false);  // Loading stops once all essential and additional data is fetched (or attempted)
     }
   }, [loadingTimePassed, user, dataFetched, heliosUsernameFetched, avatarPathFetched]);
@@ -423,27 +439,27 @@ useEffect(() => {
   return (
     <>
       {isTaskbarVisible && <Taskbar />}
-      <Outlet
-        context={{
-          toggleTaskbar: handleToggleTaskbar,
-          airdrops,
-          airdropsError,
-          telegramId,
-          telegramUsername,
-          heliosUsername,
-          totalAirdrops,
-          progress,
-          newUser,
-          friends,
-          airdropCount,
-          totalValue,
-          referralToken,
-          minerate,
-          avatarPath,
-          updateTotalAirdrops,
-          deleteAllUserAirdrops
-        }}
-      />
+        <Outlet
+          context={{
+            toggleTaskbar: handleToggleTaskbar,
+            airdrops,
+            airdropsError,
+            telegramId,
+            telegramUsername,
+            heliosUsername,
+            totalAirdrops,
+            progress,
+            newUser,
+            friends,
+            airdropCount,
+            totalValue,
+            minerate,
+            avatarPath,
+            referralLink,
+            updateTotalAirdrops,
+            deleteAllUserAirdrops
+          }}
+        />
       {showPopup && <WelcomePopup onClose={handlePopupClose} toggleTaskbar={handleToggleTaskbar} />}
       <p className='hidden'>{message}</p>
       <div className='hidden'>

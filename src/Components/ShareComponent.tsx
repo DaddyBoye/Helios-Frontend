@@ -11,7 +11,6 @@ interface ShareComponentProps {
 
 const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggleShareMenu, referralLink }) => {
   const [isSocialMediaMenuOpen, setIsSocialMediaMenuOpen] = useState(false);
-  const baseUrl = "https://t.me/HeeliossBot/Helios?startapp=";
 
   const toggleSocialMediaMenu = () => {
     setIsSocialMediaMenuOpen(prev => !prev);
@@ -31,7 +30,7 @@ const ShareComponent: React.FC<ShareComponentProps> = ({ isShareMenuOpen, toggle
           <div className='flex flex-col items-center gap-2 w-full'>
             <p className="text-lg font-bold text-white">Invite a friend</p>
 
-            {baseUrl ? (
+            {referralLink ? (
               <QRCode
                 value={referralLink || ''}
                 size={Math.min((window.innerWidth * 9) / 12, 400)} // QR code size is limited to a maximum of 300px

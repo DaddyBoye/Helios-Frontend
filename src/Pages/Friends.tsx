@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import ShareComponent from '../Components/ShareComponent';
 import { useOutletContext } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
@@ -24,8 +23,8 @@ import SomeBird from '../images/Some Bird.svg';
 interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void;
   heliosUsername: string | null;
-  telegramId: number | null;
   friends: Friend[];
+  referralLink: string | null;
   avatarPath: string | null;  // Add this here
 }
 
@@ -38,12 +37,10 @@ interface Friend {
 }
 
 const Friends: React.FC = () => {
-  const { toggleTaskbar, heliosUsername, telegramId, friends, avatarPath } = useOutletContext<FriendsProps>();
+  const { toggleTaskbar, heliosUsername, friends, referralLink, avatarPath } = useOutletContext<FriendsProps>();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [referralLink, setReferralLink] = useState<string | null>(null);
   const [isFullListOpen, setIsFullListOpen] = useState(false);
-  const baseUrl = "https://t.me/HeeliossBot/Helios?startapp=";
 
   const avatarMap: { [key: string]: string } = {
     'avatars/Cat.svg': Cat,
@@ -59,22 +56,6 @@ const Friends: React.FC = () => {
     'avatars/Serious Dog.svg': SeriousDog,
     'avatars/Some Bird.svg': SomeBird,
   };  
-
-  useEffect(() => {
-    if (!telegramId) return;
-
-    const fetchReferralToken = async () => {
-      try {
-        const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
-        const referralToken = response.data.referralToken;
-        setReferralLink(`${baseUrl}${encodeURIComponent(referralToken)}`);
-      } catch (error) {
-        console.error('Error fetching referral token:', error);
-      }
-    };
-
-    fetchReferralToken();
-  }, [telegramId]);
 
   const copyToClipboard = () => {
     if (referralLink) {

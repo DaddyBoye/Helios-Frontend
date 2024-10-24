@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { usePreloadedImages } from '../Components/PreloaderProvider';
 import StarryBackground from '../Components/StarryBackground';
 import Header from '../Components/Header';
-import Helios3 from '../images/helios 3 mascot 32.jpeg';
-import Helios6 from '../images/helios 6 mascot 32.jpeg';
-import Helios7 from '../images/helios 7 mascot 32.jpeg';
 import Instagram from '../icons/insta-removebg-preview 1.svg';
 import X from '../icons/x-removebg-preview 1.svg';
 import YouTube from '../icons/yt-removebg-preview 1.svg';
@@ -66,6 +64,7 @@ const Earn = () => {
     const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
     const [hideHeader, setHideHeader] = useState(false);
+    const preloadedImages = usePreloadedImages();
 
     const socialPlatforms: Platform[] = [
         { icon: Instagram, name: 'Instagram', text: 'Follow Our jouney on Insta', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1},
@@ -84,7 +83,7 @@ const Earn = () => {
     
     const images: CarouselImage[] = [
         { 
-            image: Helios3, 
+            image: preloadedImages[0],  // Helios3
             title: "Referral Quest", 
             description: "Join the Referral Race for a Shot at $100", 
             link: 'https://challenge.com',
@@ -103,7 +102,7 @@ const Earn = () => {
             longDescription: "Compete in our exciting Referral Race and be the first to reach 100 rewards! The winner will snag $100 and 15,000 Helios coins. This is your chance to shine in the Helios ecosystem while driving engagement. "
         },
         { 
-            image: Helios6, 
+            image: preloadedImages[1],  // Helios 6
             title: "$15,000 Prize Pool", 
             description: "Join our event and compete for a share of the $15,000 prize pool.", 
             link: 'https://prizepool.com',
@@ -124,7 +123,7 @@ const Earn = () => {
             longDescription: "The $15,000 Prize Pool event is a fast-paced, high-energy competition designed to foster innovation in decentralized finance (DeFi). Over two exhilarating weeks, participants will work on creating novel DeFi solutions that address real-world financial challenges. This event is not just about the substantial prize money; it's an opportunity to gain visibility in the DeFi space, receive valuable feedback from experts, and potentially secure funding for your project. Whether you're focusing on yield farming, decentralized exchanges, or innovative lending protocols, this is your chance to make a lasting impact on the future of finance."
         },
         { 
-            image: Helios7, 
+            image: preloadedImages[2],  // Helios 7
             title: "Hack Helios", 
             description: "Get involved in the Helios Hackathon and win amazing rewards!", 
             link: 'https://hackathon.com',

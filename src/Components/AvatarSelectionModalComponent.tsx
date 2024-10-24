@@ -21,53 +21,72 @@ interface AvatarSelectionModalProps {
 }
 
 const avatars = [
-  { name: 'Cat', path: 'avatars/Cat.svg', image: Cat },
-  { name: 'Capybara', path: 'avatars/Capybara.svg', image: Capybara },
-  { name: 'Parrot', path: 'avatars/Parrot.svg', image: Parrot },
-  { name: 'Sheep', path: 'avatars/Sheep.svg', image: Sheep },
-  { name: 'Rooster', path: 'avatars/Rooster.svg', image: Rooster },
-  { name: 'Dog', path: 'avatars/Dog.svg', image: Dog },
-  { name: 'Lion', path: 'avatars/Lion.svg', image: Lion },
-  { name: 'Goat', path: 'avatars/Goat.svg', image: Goat },
-  { name: 'Cheetah', path: 'avatars/Cheetah.svg', image: Cheetah },
-  { name: 'Panther', path: 'avatars/Panther.svg', image: Panther },
-  { name: 'SeriousDog', path: 'avatars/Serious Dog.svg', image: SeriousDog },
-  { name: 'SomeBird', path: 'avatars/Some Bird.svg', image: SomeBird },
+  { name: 'Cat', path: 'avatars/Cat.svg', clientPath: Cat },
+  { name: 'Capybara', path: 'avatars/Capybara.svg', clientPath: Capybara },
+  { name: 'Parrot', path: 'avatars/Parrot.svg', clientPath: Parrot },
+  { name: 'Sheep', path: 'avatars/Sheep.svg', clientPath: Sheep },
+  { name: 'Rooster', path: 'avatars/Rooster.svg', clientPath: Rooster },
+  { name: 'Dog', path: 'avatars/Dog.svg', clientPath: Dog },
+  { name: 'Lion', path: 'avatars/Lion.svg', clientPath: Lion },
+  { name: 'Goat', path: 'avatars/Goat.svg', clientPath: Goat },
+  { name: 'Cheetah', path: 'avatars/Cheetah.svg', clientPath: Cheetah },
+  { name: 'Panther', path: 'avatars/Panther.svg', clientPath: Panther },
+  { name: 'SeriousDog', path: 'avatars/Serious Dog.svg', clientPath: SeriousDog },
+  { name: 'SomeBird', path: 'avatars/Some Bird.svg', clientPath: SomeBird },
 ];
 
 const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onClose, onSelectAvatar }) => {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [modalHeight, setModalHeight] = useState(0);
-  const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
+  const [showAlert, setShowAlert] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [loadingError, setLoadingError] = useState(false);
 
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    const handleResize = () => {
-      setModalHeight(window.innerHeight);
-    };
-
     if (isOpen) {
+      // Preload all images in parallel when modal opens
+      Promise.all(
+        avatars.map(
+          avatar =>
+            new Promise<void>((resolve, reject) => {
+              const img = new Image();
+              img.onload = () => resolve();
+              img.onerror = () => reject();
+              img.src = avatar.clientPath;
+            })
+        )
+      ).then(() => {
+        setIsLoaded(true);
+        setLoadingError(false);
+      }).catch(() => {
+        setIsLoaded(true);
+        setLoadingError(true); // Handle loading error
+      });
+
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') onClose();
+      };
+
+      const handleResize = () => {
+        setModalHeight(window.innerHeight);
+      };
+
       document.addEventListener('keydown', handleEscape);
       window.addEventListener('resize', handleResize);
       document.body.style.overflow = 'hidden';
       handleResize();
-    }
 
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      window.removeEventListener('resize', handleResize);
-      document.body.style.overflow = 'unset';
-    };
+      return () => {
+        document.removeEventListener('keydown', handleEscape);
+        window.removeEventListener('resize', handleResize);
+        document.body.style.overflow = 'unset';
+      };
+    }
   }, [isOpen, onClose]);
 
   const handleAvatarSelect = (avatarPath: string) => {
     setSelectedAvatar(avatarPath);
-    setShowAlert(false); // Hide alert if an avatar is selected
+    setShowAlert(false);
   };
 
   const handleConfirmSelection = () => {
@@ -79,24 +98,21 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
     }
   };
 
-  // Hide alert after 3 seconds if it's visible
   useEffect(() => {
     if (showAlert) {
       const timer = setTimeout(() => {
         setShowAlert(false);
-      }, 3000); // 3 seconds delay
-
-      // Cleanup the timeout if component unmounts or showAlert changes
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [showAlert]);
 
   if (!isOpen) return null;
 
-  const contentHeight = 450; // Approximate height of the content (adjust as needed)
+  const contentHeight = 450;
   const availableSpace = modalHeight - contentHeight;
-  const topMargin = Math.max(16, availableSpace * 0.35); // Minimum 16px, maximum 30% of available space
-  const bottomMargin = Math.max(12, availableSpace * 0.2); // Minimum 10px, maximum 10% of available space
+  const topMargin = Math.max(16, availableSpace * 0.35);
+  const bottomMargin = Math.max(12, availableSpace * 0.2);
 
   return (
     <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-between z-50">
@@ -106,24 +122,36 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl text-white text-center font-bold mb-4">Choose your avatar</h2>
-        <div className="grid grid-cols-4 gap-2">
-          {avatars.map((avatar) => (
-            <button
-              key={avatar.name}
-              className="relative rounded-lg transition-colors duration-200"
-              onClick={() => handleAvatarSelect(avatar.path)}
-            >
-              <img src={avatar.image} alt={avatar.name} className="w-fit h-24" />
-              {selectedAvatar === avatar.path && (
-                <div className="absolute flex inset-0 bg-[#000000]/70 h-24 my-auto w-18 mx-auto rounded-full">
-                  <img src={Check} alt="" className="w-8 h-8 mx-auto my-auto" />
+        {!isLoaded ? (
+          <div className="text-center text-white">Loading avatars...</div>
+        ) : loadingError ? (
+          <div className="text-red-500 text-center">Error loading avatars</div>
+        ) : (
+          <div className="grid grid-cols-4 gap-2">
+            {avatars.map((avatar) => (
+              <button
+                key={avatar.name}
+                className="relative rounded-lg transition-colors duration-200"
+                onClick={() => handleAvatarSelect(avatar.path)}
+              >
+                <div className="w-24 h-24 flex items-center justify-center">
+                  <img
+                    src={avatar.clientPath}
+                    alt={avatar.name}
+                    className="w-fit h-24"
+                    loading="eager"
+                  />
                 </div>
-              )}
-            </button>
-          ))}
-        </div>
+                {selectedAvatar === avatar.path && (
+                  <div className="absolute flex inset-0 bg-black/75 h-24 my-auto w-18 mx-auto rounded-full">
+                    <img src={Check} alt="" className='w-10 h-10 mx-auto my-auto' />
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
 
-        {/* Custom alert message */}
         {showAlert && (
           <div className="bg-red-500 text-white text-sm p-3 rounded mt-4 text-center">
             Please choose an avatar before proceeding.
