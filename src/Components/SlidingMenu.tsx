@@ -84,21 +84,31 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegr
         setTimeout(onClose, 300);
     };
 
-    // Check if the task is completed for the user
     const checkTaskStatus = async (taskId: number) => {
       try {
-          const response = await axios.get(`https://server.therotrade.tech/api/users/check-task/${telegramId}/${taskId}`);
+          const response = await axios.get(`https://server.therotrade.tech/api/users/task-status/${telegramId}/${taskId}`);
           const totalReferrals = friends.reduce((sum, friend) => sum + friend.referralCount, 0);
-          
-          setTaskStatus({
-              isCompleted: response.data.completed,
-              canClaim: totalReferrals >= (selectedItem as InviteTask).referralThreshold && !response.data.completed,
-              loading: false
-          });
+    
+          // Check if the task was not found for the user
+          if (response.data.message === 'Task not found for this user') {
+              setTaskStatus({
+                  isCompleted: false, // Task is not completed
+                  canClaim: false, // No claiming since the task is not done
+                  loading: false
+              });
+          } else {
+              // Task is found, process as usual
+              setTaskStatus({
+                  isCompleted: response.data.completed,
+                  canClaim: totalReferrals >= (selectedItem as InviteTask).referralThreshold && !response.data.completed,
+                  loading: false
+              });
+          }
       } catch (error) {
           console.error('Error checking task status:', error);
+          setTaskStatus(prev => ({ ...prev, loading: false }));
       }
-  };
+    };    
 
 // Claim reward and update airdrops
 const handleClaimReward = async () => {
