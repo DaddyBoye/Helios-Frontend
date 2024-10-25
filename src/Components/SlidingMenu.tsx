@@ -3,151 +3,174 @@ import axios, { AxiosError } from 'axios';
 import Header from './Header';
 
 interface CarouselImage {
-    image: string;
-    title: string;
-    description: string;
-    link: string;
-    color: string;
-    benefits: string[];
-    howTo: string[];
-    longDescription: string;
-    taskId: number;
+  image: string;
+  title: string;
+  description: string;
+  link: string;
+  color: string;
+  benefits: string[];
+  howTo: string[];
+  longDescription: string;
+  taskId: number;
 }
 
 interface Platform {
-    icon: string;
-    name: string;
-    text: string;
-    link: string;
-    image: string;
-    color: string;
-    taskId: number; 
-    points: number;
+  icon: string;
+  name: string;
+  text: string;
+  link: string;
+  image: string;
+  color: string;
+  taskId: number;
+  points: number;
 }
 
 interface InviteTask {
-    title: string;
-    reward: string;
-    link: string;
-    image: string;
-    color: string;
-    taskId: number; 
-    referralThreshold: number;
-    points: number;
+  title: string;
+  reward: string;
+  link: string;
+  image: string;
+  color: string;
+  taskId: number;
+  referralThreshold: number;
+  points: number;
 }
 
 interface ApiErrorResponse {
-    error: string;  // Adjust this based on your API's actual response structure
-    message: string;
+  error: string;
+  message: string;
 }
 
 type SelectedItem = CarouselImage | Platform | InviteTask;
 
 interface SlidingMenuProps {
-    selectedItem: SelectedItem;
-    onClose: () => void;
-    telegramId: string;
-    friends: Friend[];
-    minerate: number | null;
-    avatarPath: string | null;
+  selectedItem: SelectedItem;
+  onClose: () => void;
+  telegramId: string;
+  friends: Friend[];
+  minerate: number | null;
+  avatarPath: string | null;
 }
 
 interface Friend {
-    id: number;
-    name: string;
-    score: number;
-    avatar: string;
-    referralCount: number;
-  }
+  id: number;
+  name: string;
+  score: number;
+  avatar: string;
+  referralCount: number;
+}
 
-const SlidingMenu: React.FC<SlidingMenuProps> = ({ selectedItem, onClose, telegramId, minerate, friends, avatarPath}) => {
+const SlidingMenu: React.FC<SlidingMenuProps> = ({
+  selectedItem,
+  onClose,
+  telegramId,
+  minerate,
+  friends,
+  avatarPath
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [taskStatus, setTaskStatus] = useState({
-      isCompleted: false,
-      canClaim: false,
-      loading: false
+    isCompleted: false,
+    canClaim: false,
+    hasClaimedReward: false,
+    loading: false
   });
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const lastClickTimeRef = useRef<number | null>(null);
 
-    useEffect(() => {
-        if (selectedItem) {
-            setIsOpen(true);
-            checkTaskStatus(selectedItem.taskId);
-        } else {
-            setIsOpen(false);
-        }
-    }, [selectedItem]);
+  useEffect(() => {
+    if (selectedItem) {
+      setIsOpen(true);
+      checkTaskStatus(selectedItem.taskId);
+    } else {
+      setIsOpen(false);
+    }
+  }, [selectedItem]);
 
-    const handleClose = () => {
-        setIsOpen(false);
-        setTimeout(onClose, 300);
-    };
+  const handleClose = () => {
+    setIsOpen(false);
+    setTimeout(onClose, 300);
+  };
 
-    const checkTaskStatus = async (taskId: number) => {
-      try {
-          const response = await axios.get(`https://server.therotrade.tech/api/users/task-status/${telegramId}/${taskId}`);
-          const totalReferrals = friends.reduce((sum, friend) => sum + friend.referralCount, 0);
-    
-          // Check if the task was not found for the user
-          if (response.data.message === 'Task not found for this user') {
-              setTaskStatus({
-                  isCompleted: false, // Task is not completed
-                  canClaim: false, // No claiming since the task is not done
-                  loading: false
-              });
-          } else {
-              // Task is found, process as usual
-              setTaskStatus({
-                  isCompleted: response.data.completed,
-                  canClaim: totalReferrals >= (selectedItem as InviteTask).referralThreshold && !response.data.completed,
-                  loading: false
-              });
-          }
-      } catch (error) {
-          console.error('Error checking task status:', error);
-          setTaskStatus(prev => ({ ...prev, loading: false }));
-      }
-    };    
+  const checkTaskStatus = async (taskId: number) => {
+    try {
+      const response = await axios.get(
+        `https://server.therotrade.tech/api/users/task-status/${telegramId}/${taskId}`
+      );
+      const totalReferrals = friends.reduce(
+        (sum, friend) => sum + friend.referralCount,
+        0
+      );
 
-// Claim reward and update airdrops
-const handleClaimReward = async () => {
-  try {
-      setTaskStatus(prev => ({ ...prev, loading: true }));
-
-      // Replace with the new API call to increase airdrops
-      await axios.post(`https://server.therotrade.tech/api/airdrops/increase/${telegramId}`, {
-          taskPoints: (selectedItem as Platform | InviteTask).points // Assuming task points are stored in the selectedItem
-      });
-
-      // Patch to mark the task as complete
-      await axios.patch(`https://server.therotrade.tech/api/users/complete-task/${telegramId}/${(selectedItem as Platform | InviteTask).taskId}`);
-
-      setTaskStatus({
-          isCompleted: true,
+      if (response.data.message === 'Task not found for this user') {
+        setTaskStatus({
+          isCompleted: false,
           canClaim: false,
+          hasClaimedReward: false,
           loading: false
+        });
+      } else {
+        // Updated to also check if the reward has been claimed
+        setTaskStatus({
+          isCompleted: response.data.completed,
+          canClaim:
+            totalReferrals >= (selectedItem as InviteTask).referralThreshold &&
+            !response.data.completed,
+          hasClaimedReward: response.data.claimed, // Assuming 'claimed' comes from the API
+          loading: false
+        });
+      }
+    } catch (error) {
+      console.error('Error checking task status:', error);
+      setTaskStatus((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
+  const handleClaimReward = async () => {
+    try {
+      setTaskStatus((prev) => ({ ...prev, loading: true }));
+  
+      // Extract the task ID from the selected item
+      const taskId = (selectedItem as Platform | InviteTask).taskId;
+  
+      // Send request to increase airdrops and mark the task as completed
+      const response = await axios.post(
+        `https://server.therotrade.tech/api/airdrops/increase/${telegramId}/${taskId}`, // Include taskId in the URL
+        {
+          taskPoints: (selectedItem as Platform | InviteTask).points,
+        }
+      );
+  
+      // Optionally handle the response if needed
+      console.log(response.data); // Log the response
+  
+      setTaskStatus({
+        isCompleted: true,
+        canClaim: false,
+        hasClaimedReward: true, // Mark reward as claimed
+        loading: false,
       });
-  } catch (error) {
+    } catch (error) {
       console.error('Error claiming reward:', error);
-      setTaskStatus(prev => ({ ...prev, loading: false }));
-  }
-};
+      setTaskStatus((prev) => ({ ...prev, loading: false }));
+    }
+  };
+  
 
-    const isCarouselImage = (item: SelectedItem): item is CarouselImage => {
-        return 'benefits' in item && 'howTo' in item && 'longDescription' in item;
-    };
+  const isCarouselImage = (item: SelectedItem): item is CarouselImage => {
+    return 'benefits' in item && 'howTo' in item && 'longDescription' in item;
+  };
 
-    const isPlatform = (item: SelectedItem): item is Platform => {
-        return 'icon' in item && 'text' in item;
-    };
+  const isPlatform = (item: SelectedItem): item is Platform => {
+    return 'icon' in item && 'text' in item;
+  };
 
-    const isInviteTask = (item: SelectedItem): item is InviteTask => {
-        return 'reward' in item;
-    };
+  const isInviteTask = (item: SelectedItem): item is InviteTask => {
+    return 'reward' in item;
+  };
 
-    const getMenuHeight = () => {
-      return isCarouselImage(selectedItem) ? 'h-full' : 'max-h-[48%] rounded-t-2xl';
+  const getMenuHeight = () => {
+    return isCarouselImage(selectedItem) ? 'h-full' : 'max-h-[48%] rounded-t-2xl';
   };
 
 // Function to handle item click, ensuring taskId exists
@@ -256,46 +279,57 @@ const handleItemClick = (item: SelectedItem | CarouselImage) => {
                     )}
                     {/* Platform/Task Content */}
                     {(isPlatform(selectedItem) || isInviteTask(selectedItem)) && (
-                        <>
-                            <div className="flex items-center mb-3">
-                                <img src={selectedItem.image} className="w-20 h-20 object-cover rounded-full mr-2" alt="" />
-                                <p className="text-md text-left">
-                                    {isPlatform(selectedItem) ? selectedItem.text : `Earn ${selectedItem.reward} by inviting friends!`}
-                                </p>
-                            </div>
-                            
-                            {!taskStatus.isCompleted && !taskStatus.canClaim && (
-                                <a
-                                    href={selectedItem.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 flex items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
-                                    onClick={(e) => {
-                                        if (isPlatform(selectedItem)) {
-                                            e.preventDefault();
-                                            handlePlatformClick(selectedItem);
-                                        }
-                                    }}
-                                >
-                                    {isPlatform(selectedItem) ? `Go to ${selectedItem.name}` : 'Invite Friends'}
-                                </a>
-                            )}
+                      <>
+                        <div className="flex items-center mb-3">
+                          <img
+                            src={selectedItem.image}
+                            className="w-20 h-20 object-cover rounded-full mr-2"
+                            alt=""
+                          />
+                          <p className="text-md text-left">
+                            {isPlatform(selectedItem)
+                              ? selectedItem.text
+                              : `Earn ${selectedItem.reward} by inviting friends!`}
+                          </p>
+                        </div>
 
-                            {(taskStatus.canClaim || taskStatus.isCompleted) && (
-                                <button
-                                    className={`w-full ${taskStatus.isCompleted ? 'bg-green-500' : 'bg-yellow-500'} 
-                                              text-${taskStatus.isCompleted ? 'white' : 'black'} 
-                                              py-3 rounded-xl font-bold text-sm mb-5`}
-                                    onClick={handleClaimReward}
-                                    disabled={taskStatus.loading || taskStatus.isCompleted}
-                                >
-                                    {taskStatus.isCompleted ? 'COMPLETED' : 
-                                     taskStatus.loading ? 'CLAIMING...' : 'CLAIM REWARD'}
-                                </button>
-                            )}
-                        </>
+                        {/* Button rendering logic */}
+                        {!taskStatus.isCompleted && !taskStatus.canClaim && (
+                          <a
+                            href={selectedItem.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 flex items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
+                            onClick={(e) => {
+                              if (isPlatform(selectedItem)) {
+                                e.preventDefault();
+                                handlePlatformClick(selectedItem);
+                              }
+                            }}
+                          >
+                            {isPlatform(selectedItem) ? `Go to ${selectedItem.name}` : 'Invite Friends'}
+                          </a>
+                        )}
+
+                        {/* Show claim button only if task is completed and reward not claimed */}
+                        {taskStatus.isCompleted && !taskStatus.hasClaimedReward && (
+                          <button
+                            className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm mb-5"
+                            onClick={handleClaimReward}
+                            disabled={taskStatus.loading}
+                          >
+                            {taskStatus.loading ? 'CLAIMING...' : 'CLAIM REWARD'}
+                          </button>
+                        )}
+
+                        {/* If task and reward both completed */}
+                        {taskStatus.isCompleted && taskStatus.hasClaimedReward && (
+                          <button className="w-full bg-green-500 text-white py-3 rounded-xl font-bold text-sm mb-5" disabled>
+                            COMPLETED
+                          </button>
+                        )}
+                      </>
                     )}
-
                     {isCarouselImage(selectedItem) && (
                         <>
                             {/* Carousel items */}
