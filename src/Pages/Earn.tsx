@@ -62,8 +62,15 @@ interface CarouselImage {
 
 type SelectedItem = Platform | InviteTask | CarouselImage;
 
+interface TaskStatus {
+    task_id: number;
+    completed: boolean;
+    claimed: boolean;
+}
+
 const Earn = () => {
     const { toggleTaskbar, minerate, friends, telegramId, avatarPath } = useOutletContext<EarnProps>();
+    const [taskStatuses, setTaskStatuses] = useState<TaskStatus[]>([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -84,7 +91,44 @@ const Earn = () => {
         { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 20, points: 400  },
     ];
     
+    // Fetch task statuses on mount
+    useEffect(() => {
+        const fetchTaskStatuses = async () => {
+            try {
+                const response = await fetch(`https://server.therotrade.tech/api/users/task-statuses/${telegramId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setTaskStatuses(data);
+                }
+            } catch (error) {
+                console.error('Error fetching task statuses:', error);
+            }
+        };
+
+        if (telegramId) {
+            fetchTaskStatuses();
+        }
+    }, [telegramId]);  
     
+    const isTaskCompleted = (taskId: number) => {
+        return taskStatuses.some(status => status.task_id === taskId && status.completed);
+    };
+
+    const getTaskStyle = (taskId: number) => {
+        const completed = isTaskCompleted(taskId);
+        return {
+            opacity: completed ? 0.7 : 1,
+            position: 'relative' as const,
+            cursor: completed ? 'default' : 'pointer',
+        };
+    };
+
+    const CompletedBadge = () => (
+        <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+            Completed
+        </div>
+    );
+
     const images: CarouselImage[] = [
         { 
             image: preloadedImages[0],  // Helios3
@@ -172,7 +216,6 @@ const Earn = () => {
         setSelectedItem(item);
         toggleTaskbar(false);
         setHideHeader(true);
-
     };
 
     const renderHeader = () => (
@@ -204,45 +247,62 @@ const Earn = () => {
                 <h1 className='text-left ml-2 text-md'>Socials</h1>
             </div>
             <div className="p-1 pl-3 bg-[#194564]/80 w-11/12 flex flex-col mx-auto rounded-xl text-sm">
-                {socialPlatforms.map((platform, index) => (
-                    <React.Fragment key={platform.name}>
-                        <div className="flex flex-row items-center py-1" onClick={() => handleItemClick(platform)}>
-                            <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center">
-                                <img src={platform.icon} alt={platform.name} className="w-9 h-9" />
+                {socialPlatforms.map((platform, index) => {
+                    const completed = isTaskCompleted(platform.taskId);
+                    return (
+                        <React.Fragment key={platform.name}>
+                            <div 
+                                className="flex flex-row items-center py-1 relative" 
+                                style={getTaskStyle(platform.taskId)}
+                                onClick={() => !completed && handleItemClick(platform)}
+                            >
+                                <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center">
+                                    <img src={platform.icon} alt={platform.name} className="w-9 h-9" />
+                                </div>
+                                <div className="flex flex-col pl-2 justify-between">
+                                    <p className="text-left text-xs">{platform.text}</p>
+                                    <p className="truncate text-left w-40 text-white/60 text-xs">
+                                        {completed ? 'Task completed' : 'Engage for rewards'}
+                                    </p>
+                                </div>
+                                {completed && <CompletedBadge />}
                             </div>
-                            <div className="flex flex-col pl-2 justify-between">
-                                <p className="text-left text-xs">{platform.text}</p>
-                                <p className="truncate text-left w-40 text-white/60 text-xs">
-                                   Engage for rewards
-                                </p>
-                            </div>
-                        </div>
-                        {index < socialPlatforms.length - 1 && (
-                            <hr className="border-t border-white/30 my-1 ml-12" />
-                        )}
-                    </React.Fragment>
-                ))}
+                            {index < socialPlatforms.length - 1 && (
+                                <hr className="border-t border-white/30 my-1 ml-12" />
+                            )}
+                        </React.Fragment>
+                    );
+                })}
             </div>
         </>
     );
 
     const renderInviteTasksSection = () => (
         <>
-          <div className='flex flex-row items-center pt-5 pl-5 pb-1'>
-            <img src={Friends} alt="Friends icon" className='w-6 h-6' />
-            <h1 className='text-left ml-2 text-md'>Invite Tasks</h1>
-          </div>
-          <div className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar'>
-            {inviteTasks.map((task, index) => (
-              <div key={index} className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0' onClick={() => handleItemClick(task)}>
-                <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center mb-2">
-                  <img src={Friends} alt="Invite icon" className="w-6 h-6" />
-                </div>
-                <p className="text-left text-sm font-bold mb-1">{task.title}</p>
-                <p className="text-left text-xs text-white/70">Reward: {task.reward}</p>
-              </div>
-            ))}
-          </div>
+            <div className='flex flex-row items-center pt-5 pl-5 pb-1'>
+                <img src={Friends} alt="Friends icon" className='w-6 h-6' />
+                <h1 className='text-left ml-2 text-md'>Invite Tasks</h1>
+            </div>
+            <div className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar'>
+                {inviteTasks.map((task, index) => {
+                    const completed = isTaskCompleted(task.taskId);
+                    return (
+                        <div 
+                            key={index} 
+                            className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0 relative' 
+                            style={getTaskStyle(task.taskId)}
+                            onClick={() => !completed && handleItemClick(task)}
+                        >
+                            <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center mb-2">
+                                <img src={Friends} alt="Invite icon" className="w-6 h-6" />
+                            </div>
+                            <p className="text-left text-sm font-bold mb-1">{task.title}</p>
+                            <p className="text-left text-xs text-white/70">Reward: {task.reward}</p>
+                            {completed && <CompletedBadge />}
+                        </div>
+                    );
+                })}
+            </div>
         </>
     );
 
