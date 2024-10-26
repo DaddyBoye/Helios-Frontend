@@ -198,7 +198,6 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
     const status = taskStatuses.find(s => s.task_id === task.taskId);
     const progress = friends.length;
     const remaining = Math.max(0, task.referralThreshold - progress);
-    const progressPercentage = Math.min(100, (progress / task.referralThreshold) * 100);
 
     if (status?.completed && status?.claimed) {
       return (
@@ -209,40 +208,21 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
               You've successfully completed this task and claimed your reward of {task.reward}.
             </p>
           </div>
-          <div className="mt-4">
-            <h4 className="font-bold mb-2">Task Details</h4>
-            <p className="text-sm text-white/70">
-              You invited {progress} friends, exceeding the goal of {task.referralThreshold} friends.
-            </p>
-          </div>
         </div>
       );
     }
 
     if (progress >= task.referralThreshold && (!status?.completed || !status?.claimed)) {
       return (
-        <div className="p-4">
-          <div className="bg-yellow-500/20 rounded-lg p-4 mb-4">
+        <div className="px-4">
+          <div className="bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl px-4 py-2 mb-4">
             <h3 className="text-yellow-500 font-bold mb-2">Ready to Claim!</h3>
             <p className="text-sm text-white/70">
-              Congratulations! You've met the requirements to claim your reward.
-            </p>
-          </div>
-          
-          <div className="mb-4">
-            <div className="w-full bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-yellow-500 h-2 rounded-full" 
-                style={{ width: `${progressPercentage}%` }}
-              />
-            </div>
-            <p className="text-sm mt-2 text-white/70">
-              {progress}/{task.referralThreshold} friends invited
+              Congratulations! You've met the threshold to claim your reward.
             </p>
           </div>
 
           <div className="mt-4">
-            <h4 className="font-bold mb-2">Reward Available</h4>
             <p className="text-sm text-white/70 mb-4">
               {task.reward} is waiting for you!
             </p>
@@ -259,23 +239,11 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
     }
 
     return (
-      <div className="p-4">
-        <div className="bg-blue-500/20 rounded-lg p-4 mb-4">
-          <h3 className="text-blue-500 font-bold mb-2">Task In Progress</h3>
+      <div className="px-4">
+        <div className="bg-blue-500/20 rounded-lg px-4 mb-4">
+          <h3 className="text-white font-bold mb-2">Task In Progress</h3>
           <p className="text-sm text-white/70">
             Keep going! Invite {remaining} more {remaining === 1 ? 'friend' : 'friends'} to claim your reward.
-          </p>
-        </div>
-
-        <div className="mb-4">
-          <div className="w-full bg-gray-700 rounded-full h-2">
-            <div 
-              className="bg-blue-500 h-2 rounded-full" 
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
-          <p className="text-sm mt-2 text-white/70">
-            {progress}/{task.referralThreshold} friends invited
           </p>
         </div>
 
@@ -292,13 +260,6 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
               Copy
             </button>
           </div>
-        </div>
-
-        <div className="mt-4">
-          <h4 className="font-bold mb-2">Reward</h4>
-          <p className="text-sm text-white/70">
-            Complete this task to earn {task.reward}
-          </p>
         </div>
       </div>
     );

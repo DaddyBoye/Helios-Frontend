@@ -86,9 +86,9 @@ const Earn = () => {
     
     const inviteTasks: InviteTask[] = [
         { title: 'Invite 5 friends', reward: '100 Solis', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 1, points: 100  },
-        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 200  },
-        { title: 'Invite 20 friends', reward: '600 Solis', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 15, points: 300  },
-        { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 20, points: 400  },
+        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 500  },
+        { title: 'Invite 20 friends', reward: '600 Solis', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 1000  },
+        { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 10000  },
     ];
     
     // Fetch task statuses on mount
@@ -346,12 +346,12 @@ const Earn = () => {
                                 {getInviteTaskStatus(task)}
                             </p>
                             {completed && (
-                                <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                                <div className="absolute top-3 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
                                     Completed
                                 </div>
                             )}
                             {claimable && !completed && (
-                                <div className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                                <div className="absolute top-3 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
                                     Claimable
                                 </div>
                             )}
