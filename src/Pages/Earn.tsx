@@ -114,6 +114,37 @@ const Earn = () => {
         return taskStatuses.some(status => status.task_id === taskId && status.completed);
     };
 
+    const isTaskClaimable = (task: InviteTask) => {
+        const status = taskStatuses.find(status => status.task_id === task.taskId);
+        // Check if task is not already completed and claimed
+        if (!status?.completed || !status?.claimed) {
+            // Check if friend count meets the threshold
+            return friends.length >= task.referralThreshold;
+        }
+        return false;
+    };
+
+    const getInviteTaskStyle = (task: InviteTask) => {
+        const status = taskStatuses.find(status => status.task_id === task.taskId);
+        const completed = status?.completed && status?.claimed;
+        const claimable = isTaskClaimable(task);
+
+        return {
+            opacity: completed ? 0.7 : 1,
+            position: 'relative' as const,
+            cursor: (completed || (!completed && !claimable)) ? 'default' : 'pointer',
+            backgroundColor: claimable ? 'rgba(34, 197, 94, 0.2)' : 'rgba(25, 69, 100, 0.8)',
+        };
+    };
+
+    const getInviteTaskStatus = (task: InviteTask) => {
+        const status = taskStatuses.find(status => status.task_id === task.taskId);
+        if (status?.completed && status?.claimed) {
+            return 'Completed';
+        }
+        return `${friends.length}/${task.referralThreshold} friends`;
+    };
+
     const getTaskStyle = (taskId: number) => {
         const completed = isTaskCompleted(taskId);
         return {
@@ -213,6 +244,16 @@ const Earn = () => {
     }, [currentImageIndex]);
 
     const handleItemClick = (item: SelectedItem) => {
+        if ('referralThreshold' in item) {
+            // It's an invite task
+            const status = taskStatuses.find(status => status.task_id === item.taskId);
+            if (status?.completed && status?.claimed) return; // Don't open if completed and claimed
+            if (!isTaskClaimable(item)) return; // Don't open if not claimable
+        } else {
+            // It's a social task
+            if (isTaskCompleted(item.taskId)) return;
+        }
+        
         setSelectedItem(item);
         toggleTaskbar(false);
         setHideHeader(true);
@@ -285,20 +326,35 @@ const Earn = () => {
             </div>
             <div className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar'>
                 {inviteTasks.map((task, index) => {
-                    const completed = isTaskCompleted(task.taskId);
+                    const status = taskStatuses.find(status => status.task_id === task.taskId);
+                    const completed = status?.completed && status?.claimed;
+                    const claimable = isTaskClaimable(task);
+                    
                     return (
                         <div 
                             key={index} 
-                            className='w-5/12 bg-[#194564]/80 rounded-xl p-3 flex flex-col justify-between shrink-0 relative' 
-                            style={getTaskStyle(task.taskId)}
-                            onClick={() => !completed && handleItemClick(task)}
+                            className='w-5/12 rounded-xl p-3 flex flex-col justify-between shrink-0 relative transition-all duration-300' 
+                            style={getInviteTaskStyle(task)}
+                            onClick={() => handleItemClick(task)}
                         >
                             <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center mb-2">
                                 <img src={Friends} alt="Invite icon" className="w-6 h-6" />
                             </div>
                             <p className="text-left text-sm font-bold mb-1">{task.title}</p>
                             <p className="text-left text-xs text-white/70">Reward: {task.reward}</p>
-                            {completed && <CompletedBadge />}
+                            <p className="text-left text-xs mt-1 text-white/70">
+                                {getInviteTaskStatus(task)}
+                            </p>
+                            {completed && (
+                                <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                                    Completed
+                                </div>
+                            )}
+                            {claimable && !completed && (
+                                <div className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                                    Claimable
+                                </div>
+                            )}
                         </div>
                     );
                 })}
