@@ -356,7 +356,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                     backgroundImage: `url(${selectedItem.image})`,
                                   }}
                                 >
-                                  <div className="absolute inset-0 bg-black bg-opacity-40 rounded-xl"></div> {/* Add overlay */}
+                                  <div className="absolute inset-0 bg-gradient-to-b from-[#09161F] via-transparent to-[#09161F] rounded-lg"></div>
                                   <div className="relative z-10">
                                     <div className="flex justify-between px-3 pt-3 h-28 mb-2">
                                     <h2 className="text-white text-lg font-bold mb-1">Weekly Challenge</h2>
@@ -366,7 +366,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                     </div>
                                     <div className='bg-black/30 rounded-b-xl backdrop-blur-sm py-2 px-2'>
                                     <h2 className="text-white text-sm font-bold text-left">{selectedItem.title}</h2>
-                                      <p className="text-white/50 text-xs flex items-center">
+                                      <p className="text-white/50 text-xs flex text-left">
                                         {selectedItem.description}
                                       </p>
                                       <div className="flex space-x-2 mt-2">
@@ -374,7 +374,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                           <span className="mr-1">🎟️</span> Entry 10,000
                                         </div>
                                         <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs">
-                                          13-20 Oct
+                                          13-20 Nov
                                         </div>
                                         <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs flex items-center">
                                           {`53,341`} {/* Use dynamic count */}
@@ -386,17 +386,19 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
 
                                 {/* Prize breakdown */}
                                 <div className="bg-blue-800 rounded-xl p-4">
-                                    <h3 className="text-white text-lg font-bold mb-2">1st prize</h3>
-                                    <div className="flex items-center">
-                                        <span className="text-white text-3xl font-bold mr-2">$1,200</span>
-                                        <span className="text-green-400 text-lg">in USDT</span>
+                                    <div className='flex justify-between mt-2 mb-4'>
+                                      <div className="text-white text-lg font-bold ">1st prize</div>
+                                      <div className="flex">
+                                          <span className="text-green-400 text-xs mt-auto mb-1 mr-1">in USDT</span>
+                                          <span className="text-white text-xl font-bold mr-2">$1,200</span>
+                                      </div>
                                     </div>
                                     {[
                                         { range: '2nd - 6th', amount: 150 },
                                         { range: '7th - 26th', amount: 30 },
                                         { range: '27th - 476th', amount: 1 },
                                     ].map((prize, index) => (
-                                        <div key={index} className="flex justify-between text-white mt-2">
+                                        <div key={index} className="flex justify-between text-sm text-white mt-2 mb-2">
                                             <span>{prize.range} prize</span>
                                             <span className="flex items-center">
                                                 ${prize.amount}
@@ -404,7 +406,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                             </span>
                                         </div>
                                     ))}
-                                    <p className="text-white mb-2">
+                                    <p className="text-white mb-2 hidden">
                                         <span className="text-yellow-400 text-lg mr-1">1 🎟️</span> = 1 chance to win
                                     </p>
                                 </div>
@@ -412,7 +414,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                 {/* Ticket information */}
                                 <div className="bg-blue-800 rounded-xl p-4 text-center">
                                   <p>Hack Helios</p>
-                                  <p className='text-sm text-left'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem quos velit, laudantium dolorum dolor ad odit architecto asperiores alias minima ullam mollitia est dolorem at aliquam labore aperiam, nesciunt qui?</p>
+                                  <p className='text-sm text-left text-center'>{selectedItem.longDescription}</p>
                                 </div>
                             </div>
                         </>

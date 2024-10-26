@@ -86,7 +86,7 @@ const Earn = () => {
     
     const inviteTasks: InviteTask[] = [
         { title: 'Invite 5 friends', reward: '100 Solis', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 1, points: 100  },
-        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 500  },
+        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 2, points: 500  },
         { title: 'Invite 20 friends', reward: '600 Solis', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 1000  },
         { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 10000  },
     ];
@@ -167,7 +167,7 @@ const Earn = () => {
             taskId: 20, 
             description: "Join the Referral Race for a Shot at $100", 
             link: 'https://challenge.com',
-            color: '#FFC107',
+            color: 'transparent',
             benefits: [
                 "$100 cash prize for the first to reach 100 rewards",
                 "15,000 Helios coins will also be awarded to the winner",
@@ -187,7 +187,7 @@ const Earn = () => {
             taskId: 30, 
             description: "Join our event and compete for a share of the $15,000 prize pool.", 
             link: 'https://prizepool.com',
-            color: '#4CAF50',
+            color: 'transparent',
             benefits: [
                 "Multiple prizes totaling $15,000",
                 "Showcase your project to potential investors",
@@ -209,7 +209,7 @@ const Earn = () => {
             taskId: 40, 
             description: "Get involved in the Helios Hackathon and win amazing rewards!", 
             link: 'https://hackathon.com',
-            color: '#2196F3',
+            color: 'transparent',
             benefits: [
                 "Win cutting-edge tech gadgets and crypto prizes",
                 "Get your project featured on Helios platforms",
