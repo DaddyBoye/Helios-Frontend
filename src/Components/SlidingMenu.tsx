@@ -97,10 +97,8 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
       const response = await axios.get(
         `https://server.therotrade.tech/api/users/task-status/${telegramId}/${taskId}`
       );
-      const totalReferrals = friends.reduce(
-        (sum, friend) => sum + friend.referralCount,
-        0
-      );
+
+      const friendsCount = friends.length; 
 
       if (response.data.message === 'Task not found for this user') {
         setTaskStatus({
@@ -114,7 +112,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
         setTaskStatus({
           isCompleted: response.data.completed,
           canClaim:
-            totalReferrals >= (selectedItem as InviteTask).referralThreshold &&
+          friendsCount >= (selectedItem as InviteTask).referralThreshold &&
             !response.data.completed,
           hasClaimedReward: response.data.claimed, // Assuming 'claimed' comes from the API
           loading: false
