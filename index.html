@@ -11,6 +11,10 @@
     <script type="module" src="/src/main.tsx"></script>
     <script>
       window.Telegram.WebApp.expand();
+      window.Telegram.WebApp.isVerticalSwipesEnabled = false;
+      window.Telegram.WebApp.ready()
+      window.Telegram.WebApp.expand()
+      window.Telegram.WebApp.disableVerticalSwipes()
     </script>
   </body>
 </html>
