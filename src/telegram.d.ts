@@ -1,6 +1,9 @@
 declare global {
     interface TelegramWebApp {
-        ready: () => void; // Add the ready method
+        ready: () => void;
+        expand: () => void;
+        enableClosingConfirmation: () => void;
+        disableClosingConfirmation: () => void;
         initDataUnsafe: {
             user: {
                 id: number;
