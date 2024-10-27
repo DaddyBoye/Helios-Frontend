@@ -58,6 +58,14 @@ interface CarouselImage {
     howTo: string[];
     longDescription: string;
     taskId: number;
+    shortCallToAction: string;
+    status: 'Ongoing' | 'Upcoming' | 'completed';
+    statusColor: string;
+    startDateDay: number;
+    startDateMonth: string;
+    endDateDay: number;
+    endDateMonth: string;
+    playerCount: string;
 }
 
 type SelectedItem = Platform | InviteTask | CarouselImage;
@@ -85,8 +93,8 @@ const Earn = () => {
     ];
     
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '100 Solis', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 1, points: 100  },
-        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 2, points: 500  },
+        { title: 'Invite 5 friends', reward: '100 Solis', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 100  },
+        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 500  },
         { title: 'Invite 20 friends', reward: '600 Solis', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 1000  },
         { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 10000  },
     ];
@@ -164,7 +172,15 @@ const Earn = () => {
         { 
             image: preloadedImages[0],  // Helios3
             title: "Referral Quest",
-            taskId: 20, 
+            startDateDay: 21,
+            startDateMonth: 'Oct',
+            endDateDay: 31,
+            endDateMonth: 'Oct',
+            taskId: 20,
+            status: 'Ongoing',
+            playerCount: "12K",
+            statusColor: '#3B82F6',
+            shortCallToAction: "Join the race for a chance at $100",
             description: "Join the Referral Race for a Shot at $100", 
             link: 'https://challenge.com',
             color: 'transparent',
@@ -184,7 +200,15 @@ const Earn = () => {
         { 
             image: preloadedImages[1],  // Helios 6
             title: "$15,000 Prize Pool", 
-            taskId: 30, 
+            startDateDay: 30,
+            startDateMonth: 'Nov',
+            endDateDay: 14,
+            endDateMonth: 'Dec',
+            taskId: 30,
+            status: 'Upcoming',
+            statusColor: '#FBBF24',
+            playerCount: "24K",
+            shortCallToAction: "Join the competition",
             description: "Join our event and compete for a share of the $15,000 prize pool.", 
             link: 'https://prizepool.com',
             color: 'transparent',
@@ -207,6 +231,14 @@ const Earn = () => {
             image: preloadedImages[2],  // Helios 7
             title: "Hack Helios", 
             taskId: 40, 
+            startDateDay: 15,
+            startDateMonth: 'Oct',
+            endDateDay: 29,
+            endDateMonth: 'Oct',
+            status: 'completed',
+            playerCount: "8K",
+            statusColor: '#34D399',
+            shortCallToAction: "Join the hackathon to win amazing prizes",
             description: "Get involved in the Helios Hackathon and win amazing rewards!", 
             link: 'https://hackathon.com',
             color: 'transparent',
@@ -273,8 +305,25 @@ const Earn = () => {
                 <div key={index} className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center' onClick={() => handleItemClick(imageInfo)}>
                     <img src={imageInfo.image} alt={imageInfo.title} className="w-full h-full object-cover rounded-2xl" />
                     <div className="absolute inset-0 bg-gradient-to-b from-[#09161F] via-transparent to-[#09161F] rounded-2xl"></div>
-                    <div className="absolute top-4 left-4 text-white">
-                        <p className="text-lg font-bold">{imageInfo.title}</p>
+                    <div className='absolute top-3 left-3 w-full justify-between flex'> 
+                        <div className='bg-yellow-500 px-2 py-1 rounded-2xl text-xs text-black'
+                        style={{backgroundColor: imageInfo.statusColor}}
+                        >
+                        <p >{imageInfo.status}</p>
+                        </div>
+                        <div className="absolute right-5">
+                            <div className="flex items-center gap-1.5 bg-gray-900/50 backdrop-blur px-3 py-1.5 rounded-xl border border-gray-700/50"
+                            style={{borderColor: imageInfo.statusColor}}
+                            >
+                            <span className="text-yellow-500 font-bold text-lg leading-none">{imageInfo.endDateDay}</span>
+                            <div className="w-px h-4 bg-gray-700/50"></div>
+                            <span className="text-yellow-500/80 text-xs uppercase tracking-wider">{imageInfo.endDateMonth}</span>
+                        </div>
+                        </div>
+                    </div>
+                    <div className="absolute text-left bottom-2 left-3 text-white">
+                        <div className="text-md font-semibold">{imageInfo.title}</div>
+                        <p className='text-sm'>{imageInfo.shortCallToAction}</p>
                     </div>
                 </div>
             ))}

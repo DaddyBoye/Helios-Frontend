@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios, { AxiosError } from 'axios';
 import Header from './Header';
+import Friends from '../icons/Friends Vector.svg';
 
 interface CarouselImage {
   image: string;
@@ -12,6 +13,14 @@ interface CarouselImage {
   howTo: string[];
   longDescription: string;
   taskId: number;
+  shortCallToAction: string;
+  status: 'Ongoing' | 'Upcoming' | 'completed';
+  statusColor: string;
+  startDateDay: number;
+  startDateMonth: string;
+  endDateDay: number;
+  endDateMonth: string;
+  playerCount: string;
 }
 
 interface Platform {
@@ -373,11 +382,17 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                         <div className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs flex items-center">
                                           <span className="mr-1">🎟️</span> Entry 10,000
                                         </div>
-                                        <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs">
-                                          13-20 Nov
-                                        </div>
-                                        <div className="bg-gray-700 text-white px-2 py-1 rounded-full text-xs flex items-center">
-                                          {`53,341`} {/* Use dynamic count */}
+                                        <div className="">
+                            <div className="flex items-center gap-1.5 bg-gray-900/50 backdrop-blur px-3 py-1.5 rounded-xl border border-gray-700/50"
+                            style={{borderColor: selectedItem.statusColor}}
+                            >
+                            <span className="text-yellow-500 font-bold text-lg leading-none">{selectedItem.endDateDay}</span>
+                            <div className="w-px h-4 bg-gray-700/50"></div>
+                            <span className="text-yellow-500/80 text-xs uppercase tracking-wider">{selectedItem.endDateMonth}</span>
+                        </div>
+                        </div>
+                                        <div className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm flex items-center">
+                                          <img src={Friends} alt="Users Icon" className='mr-1'/>{selectedItem.playerCount}
                                         </div>
                                       </div>
                                     </div>
@@ -385,7 +400,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                 </div>
 
                                 {/* Prize breakdown */}
-                                <div className="bg-blue-800 rounded-xl p-4">
+                                <div className="bg-[#1B27AA] rounded-xl p-4">
                                     <div className='flex justify-between mt-2 mb-4'>
                                       <div className="text-white text-lg font-bold ">1st prize</div>
                                       <div className="flex">
@@ -412,7 +427,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                 </div>
 
                                 {/* Ticket information */}
-                                <div className="bg-blue-800 rounded-xl p-4 text-center">
+                                <div className="bg-[#1B27AA] rounded-xl p-4 text-center">
                                   <p>Hack Helios</p>
                                   <p className='text-sm text-left text-center'>{selectedItem.longDescription}</p>
                                 </div>
