@@ -1,3 +1,23 @@
+// First, let's declare the types for the Telegram WebApp
+// Create a new file: src/types/telegram-webapp.d.ts
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp: TelegramWebApp;
+    };
+  }
+}
+
+interface TelegramWebApp {
+  expand(): void;
+  close(): void;
+  ready(): void;
+  MainButton: TelegramMainButton;
+  BackButton: TelegramBackButton;
+  // Add other WebApp methods and properties as needed
+}
+
+// In your main.tsx file:
 import React, { useEffect } from 'react';
 import { PreloaderProvider } from './Components/PreloaderProvider';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -17,12 +37,20 @@ const RootComponent = () => {
       // Expand the app to full height
       tg.expand();
 
-      // Enable closing confirmation alert
-      tg.enableClosingConfirmation();
+      // Since enableClosingConfirmation and disableClosingConfirmation 
+      // aren't standard WebApp methods, we can use a different approach
+      // to handle closing confirmation
+      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        e.preventDefault();
+        e.returnValue = ''; // This shows a browser confirmation dialog
+      };
 
-      // Clean up: Disable closing confirmation on component unmount
+      // Add the event listener
+      window.addEventListener('beforeunload', handleBeforeUnload);
+
+      // Clean up
       return () => {
-        tg.disableClosingConfirmation();
+        window.removeEventListener('beforeunload', handleBeforeUnload);
       };
     }
   }, []);
@@ -32,7 +60,7 @@ const RootComponent = () => {
       <PreloaderProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<App />} /> {/* Default route */}
+            <Route index element={<App />} />
             <Route path="airdrop" element={<Airdrop />} />
             <Route path="earn" element={<Earn />} />
             <Route path="friends" element={<Friends />} />
