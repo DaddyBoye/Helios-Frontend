@@ -22,7 +22,7 @@ interface User {
   firstName?: string; 
   lastName?: string; 
   referralToken?: string | null; 
-  avatarPath?: string;  // Add avatar path to user data 
+  avatarPath?: string; 
 }
 
 interface Friend {
@@ -405,7 +405,16 @@ useEffect(() => {
       setIsLoading(false);  // Loading stops once all essential and additional data is fetched (or attempted)
     }
   }, [loadingTimePassed, user, dataFetched, heliosUsernameFetched, avatarPathFetched]);
-  
+
+  const fetchReferralToken = async () => {
+    try {
+      const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
+      const userReferralToken = response.data.referralToken;
+      setReferralLink(`${baseUrl}${encodeURIComponent(userReferralToken)}`);
+    } catch (error) {
+      console.error('Error fetching referral token:', error);
+    }
+  };
 
   const handleUsernameSetupComplete = async () => {
     if (telegramId) {
@@ -414,6 +423,7 @@ useEffect(() => {
     setNewUser(false);
     setShowPopup(true);
     handleToggleTaskbar(false);
+    fetchReferralToken();
   };
 
   const handlePopupClose = () => {
