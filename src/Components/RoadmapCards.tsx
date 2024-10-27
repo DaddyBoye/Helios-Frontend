@@ -42,10 +42,10 @@ const AnimatedActivityCards = () => {
         key={index}
         className={`transition-transform duration-300 ease-in-out transform ${
           isActive
-            ? 'bg-[#FFC213] w-1/4 text-md scale-120'
+            ? 'bg-[#FFC213] w-1/4 text-md scale-110'
             : isHighlighted && hasBeenAnimated
             ? 'bg-[#FFC213] scale-110'
-            : 'bg-gradient-to-br from-[#334B5F] to-[#608FB0] text-sm scale-100'
+            : 'bg-gradient-to-br from-[#184261] to-[#184261] text-sm scale-100'
         } mining-card w-1/5 h-36 flex flex-col justify-around items-center py-4 rounded-2xl text-white`}
       >
         <p className={isHighlighted ? 'text-white' : 'text-white'}>{title}</p>
