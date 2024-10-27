@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PreloaderProvider } from './Components/PreloaderProvider';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
@@ -10,18 +10,34 @@ import './index.css';
 import Layout from '../src/Components/Layout';
 
 const RootComponent = () => {
-  return (<Router>
-        <PreloaderProvider>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<App />} /> {/* Default route */}
-              <Route path="airdrop" element={<Airdrop />} />
-              <Route path="earn" element={<Earn />} />
-              <Route path="friends" element={<Friends />} />
-            </Route>
-          </Routes>
-        </PreloaderProvider>
-      </Router>
+  useEffect(() => {
+    const tg = window.Telegram.WebApp;
+
+    // Expand the app to full height
+    tg.expand();
+
+    // Enable closing confirmation alert
+    tg.enableClosingConfirmation();
+
+    // Clean up: Disable closing confirmation on component unmount if needed
+    return () => {
+      tg.disableClosingConfirmation();
+    };
+  }, []);
+
+  return (
+    <Router>
+      <PreloaderProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<App />} /> {/* Default route */}
+            <Route path="airdrop" element={<Airdrop />} />
+            <Route path="earn" element={<Earn />} />
+            <Route path="friends" element={<Friends />} />
+          </Route>
+        </Routes>
+      </PreloaderProvider>
+    </Router>
   );
 };
 
