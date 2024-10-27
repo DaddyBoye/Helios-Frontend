@@ -11,18 +11,20 @@ import Layout from '../src/Components/Layout';
 
 const RootComponent = () => {
   useEffect(() => {
-    const tg = window.Telegram.WebApp;
+    // Check if Telegram WebApp exists
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      // Expand the app to full height
+      tg.expand();
 
-    // Expand the app to full height
-    tg.expand();
+      // Enable closing confirmation alert
+      tg.enableClosingConfirmation();
 
-    // Enable closing confirmation alert
-    tg.enableClosingConfirmation();
-
-    // Clean up: Disable closing confirmation on component unmount if needed
-    return () => {
-      tg.disableClosingConfirmation();
-    };
+      // Clean up: Disable closing confirmation on component unmount
+      return () => {
+        tg.disableClosingConfirmation();
+      };
+    }
   }, []);
 
   return (
