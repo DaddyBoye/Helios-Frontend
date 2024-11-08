@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://server.therotrade.tech/api';
+const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 interface UserData {
     telegramId: number;
@@ -14,7 +14,7 @@ interface UserData {
 export const createUser = async (userData: UserData) => {
     try {
         console.log("Sending user data to API:", userData);
-        const response = await axios.post(`${API_URL}/user`, userData);
+        const response = await axios.post(`${VITE_SERVER_URL}/user`, userData);
         return response.data;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
