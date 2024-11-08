@@ -9,8 +9,6 @@ interface CarouselImage {
   description: string;
   link: string;
   color: string;
-  benefits: string[];
-  howTo: string[];
   longDescription: string;
   taskId: number;
   shortCallToAction: string;
@@ -136,7 +134,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
   };
 
   const isCarouselImage = (item: SelectedItem): item is CarouselImage => {
-    return 'benefits' in item && 'howTo' in item && 'longDescription' in item;
+    return 'longDescription' in item;
   };
 
   const isPlatform = (item: SelectedItem): item is Platform => {

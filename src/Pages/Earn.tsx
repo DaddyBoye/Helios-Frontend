@@ -54,8 +54,6 @@ interface CarouselImage {
     description: string;
     link: string;
     color: string;
-    benefits: string[];
-    howTo: string[];
     longDescription: string;
     taskId: number;
     shortCallToAction: string;
@@ -186,17 +184,6 @@ const Earn = () => {
             description: "Join the Referral Race for a Shot at $100", 
             link: 'https://challenge.com',
             color: 'transparent',
-            benefits: [
-                "$100 cash prize for the first to reach 100 rewards",
-                "15,000 Helios coins will also be awarded to the winner",
-                "1,000 Helios coins for all participants who meet the threshold",
-            ],
-            howTo: [
-                "Sign up on our website",
-                "Share your referral link with friends",
-                "Track your rewards in real-time",
-                "Be the first to hit 100 rewards and claim your prize!",
-            ],
             longDescription: "Compete in our exciting Referral Race and be the first to reach 100 rewards! The winner will snag $100 and 15,000 Helios coins. This is your chance to shine in the Helios ecosystem while driving engagement. "
         },
         { 
@@ -214,19 +201,6 @@ const Earn = () => {
             description: "Join our event and compete for a share of the $15,000 prize pool.", 
             link: 'https://prizepool.com',
             color: 'transparent',
-            benefits: [
-                "Multiple prizes totaling $15,000",
-                "Showcase your project to potential investors",
-                "Receive mentorship from industry leaders",
-                "Get featured on our platform and partner networks"
-            ],
-            howTo: [
-                "Sign up for the competition on our website",
-                "Form a team or join as an individual",
-                "Attend our kickoff webinar for guidelines",
-                "Develop your project over the 2-week period",
-                "Present your work to our panel of judges"
-            ],
             longDescription: "The $15,000 Prize Pool event is a fast-paced, high-energy competition designed to foster innovation in decentralized finance (DeFi). Over two exhilarating weeks, participants will work on creating novel DeFi solutions that address real-world financial challenges. This event is not just about the substantial prize money; it's an opportunity to gain visibility in the DeFi space, receive valuable feedback from experts, and potentially secure funding for your project. Whether you're focusing on yield farming, decentralized exchanges, or innovative lending protocols, this is your chance to make a lasting impact on the future of finance."
         },
         { 
@@ -244,19 +218,6 @@ const Earn = () => {
             description: "Get involved in the Helios Hackathon and win amazing rewards!", 
             link: 'https://hackathon.com',
             color: 'transparent',
-            benefits: [
-                "Win cutting-edge tech gadgets and crypto prizes",
-                "Get your project featured on Helios platforms",
-                "Receive development grants for promising ideas",
-                "Connect with leading blockchain companies for potential collaborations"
-            ],
-            howTo: [
-                "Register your team on the Helios Hackathon portal",
-                "Choose from our list of challenge statements",
-                "Participate in pre-hackathon workshops",
-                "Develop your solution during the 48-hour hackathon",
-                "Present your prototype to our judging panel"
-            ],
             longDescription: "The Helios Hackathon is an intense 48-hour coding marathon where creativity meets blockchain technology. This event brings together developers, designers, and blockchain enthusiasts from around the world to tackle some of the most pressing challenges in the crypto space. From scalability solutions to novel applications of smart contracts, the Helios Hackathon is where groundbreaking ideas come to life. With expert mentors on hand, a supportive community, and the chance to win amazing prizes, this hackathon is not just a competition—it's a launchpad for the next big innovations in blockchain technology. Whether you're a seasoned blockchain developer or a curious newcomer, the Helios Hackathon offers an unparalleled opportunity to learn, create, and potentially kickstart your career in the world of decentralized technologies."
         }
     ];   
@@ -348,7 +309,7 @@ const Earn = () => {
                                 style={getTaskStyle(platform.taskId)}
                                 onClick={() => !completed && handleItemClick(platform)}
                             >
-                                <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center">
+                                <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center">
                                     <img src={platform.icon} alt={platform.name} className="w-9 h-9" />
                                 </div>
                                 <div className="flex flex-col pl-2 justify-between">
