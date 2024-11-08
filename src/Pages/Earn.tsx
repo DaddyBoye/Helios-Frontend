@@ -9,6 +9,7 @@ import YouTube from '../icons/yt-removebg-preview 1.svg';
 import Telegram from '../icons/tg-removebg-preview 1.svg';
 import Friends from '../icons/Friends Vector.svg';
 import SlidingMenu from '../Components/SlidingMenu';
+import Solis from '../images/solis.svg';
 
 interface EarnProps {
     toggleTaskbar: (isVisible: boolean) => void;
@@ -86,17 +87,17 @@ const Earn = () => {
     const preloadedImages = usePreloadedImages();
 
     const socialPlatforms: Platform[] = [
-        { icon: Instagram, name: 'Instagram', text: 'Follow Our jouney on Insta', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1, points: 100 },
-        { icon: X, name: 'X', text: 'Engage Helios on X', link: 'https://www.x.com', image: X, color: '#1DA1F2', taskId: 2, points: 100 },
-        { icon: YouTube, name: 'YouTube', text: 'Subscribe to Our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000', taskId: 3, points: 100 },
-        { icon: Telegram, name: 'Telegram', text: 'Join our Telegram community', link: 'https://www.telegram.org', image: Telegram, color: '#0088CC', taskId: 4, points: 100 },
+        { icon: Telegram, name: 'Telegram', text: 'Join our Telegram community', link: 'https://t.me/HeliosBotChannel', image: Telegram, color: '#0088CC', taskId: 4, points: 200 },
+        { icon: Instagram, name: 'Instagram', text: 'Follow Our jouney on Insta', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1, points: 150 },
+        { icon: X, name: 'X', text: 'Engage Helios on X', link: 'https://x.com/heliosbot_', image: X, color: '#1DA1F2', taskId: 2, points: 200 },
+        { icon: YouTube, name: 'YouTube', text: 'Subscribe to Our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000', taskId: 3, points: 150 },
     ];
     
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '100 Solis', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 100  },
-        { title: 'Invite 10 friends', reward: '250 Solis', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 500  },
-        { title: 'Invite 20 friends', reward: '600 Solis', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 1000  },
-        { title: 'Invite 50 friends', reward: '2000 Solis', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 10000  },
+        { title: 'Invite 5 friends', reward: '100', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 100  },
+        { title: 'Invite 10 friends', reward: '250', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 500  },
+        { title: 'Invite 20 friends', reward: '600', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 1000  },
+        { title: 'Invite 50 friends', reward: '2000', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 10000  },
     ];
     
     // Fetch task statuses on mount
@@ -300,32 +301,41 @@ const Earn = () => {
                 <h1 className='text-left ml-2 text-md'>Socials</h1>
             </div>
             <div className="p-1 pl-3 bg-[#194564]/80 w-11/12 flex flex-col mx-auto rounded-xl text-sm">
-                {socialPlatforms.map((platform, index) => {
+                 {socialPlatforms.map((platform, index) => {
                     const completed = isTaskCompleted(platform.taskId);
-                    return (
-                        <React.Fragment key={platform.name}>
-                            <div 
-                                className="flex flex-row items-center py-1 relative" 
+                        return (
+                            <React.Fragment key={platform.name}>
+                            <div
+                                className="flex flex-row items-center py-1 relative"
                                 style={getTaskStyle(platform.taskId)}
                                 onClick={() => !completed && handleItemClick(platform)}
                             >
                                 <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center">
-                                    <img src={platform.icon} alt={platform.name} className="w-9 h-9" />
+                                <img src={platform.icon} alt={platform.name} className="w-9 h-9" />
                                 </div>
-                                <div className="flex flex-col pl-2 justify-between">
-                                    <p className="text-left text-xs">{platform.text}</p>
+                                <div className="flex flex-row items-center justify-between flex-1 pl-2">
+                                <div className="flex flex-col">
+
+                                    <p className="text-left truncate text-left w-36 text-xs">{platform.text}</p>
                                     <p className="truncate text-left w-40 text-white/60 text-xs">
-                                        {completed ? 'Task completed' : 'Engage for rewards'}
+                                    {completed ? 'Task completed' : 'Engage for rewards'}
                                     </p>
+                                </div>
+                                {!completed && (
+                                    <div className=" px-2 py-1 rounded-md text-white text-xs flex items-center">
+                                        <span className='my-auto font-semibold text-sm'>{platform.points}</span>
+                                        <img src={Solis} alt="Reward icon" className="w-8 h-8" />
+                                    </div>
+                                )}
                                 </div>
                                 {completed && <CompletedBadge />}
                             </div>
                             {index < socialPlatforms.length - 1 && (
                                 <hr className="border-t border-white/30 my-1 ml-12" />
                             )}
-                        </React.Fragment>
-                    );
-                })}
+                            </React.Fragment>
+                        );
+                    })}
             </div>
         </>
     );
@@ -353,7 +363,10 @@ const Earn = () => {
                                 <img src={Friends} alt="Invite icon" className="w-6 h-6" />
                             </div>
                             <p className="text-left text-sm font-bold mb-1">{task.title}</p>
-                            <p className="text-left text-xs text-white/70">Reward: {task.reward}</p>
+                            <div className='flex items-center'>
+                                <p className="text-left text-xs font-bold text-white/70">Reward: {task.reward}</p>
+                                <img src={Solis} alt="Solis" className='w-9 h-9' />
+                            </div>
                             <p className="text-left text-xs mt-1 text-white/70">
                                 {getInviteTaskStatus(task)}
                             </p>
