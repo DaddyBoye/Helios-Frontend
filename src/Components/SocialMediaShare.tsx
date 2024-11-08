@@ -11,10 +11,13 @@ interface SocialMediaShareProps {
   toggleMenu: () => void;
 }
 
+const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const VITE_TELEGRAM_URL = import.meta.env.VITE_TELEGRAM_URL;
+
 const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu }) => {
   const [referralLink, setReferralLink] = useState<string | null>(null);
   const [telegramId, setTelegramId] = useState<number | null>(null);
-  const baseUrl = "https://t.me/HeeliossBot/Helios?startapp=";
+  const baseUrl = VITE_TELEGRAM_URL;
 
   // Fetch telegramId using the Telegram SDK
   useEffect(() => {
@@ -32,7 +35,7 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu 
 
     const fetchReferralToken = async () => {
       try {
-        const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
+        const response = await axios.get(`${VITE_SERVER_URL}/api/user/referral-token/${telegramId}`);
         const referralToken = response.data.referralToken;
         setReferralLink(`${baseUrl}${encodeURIComponent(referralToken)}`);
       } catch (error) {

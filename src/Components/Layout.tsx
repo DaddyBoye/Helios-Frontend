@@ -35,6 +35,9 @@ interface Friend {
 
 const DELAY_MS = 500;
 
+const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const VITE_TELEGRAM_URL = import.meta.env.VITE_TELEGRAM_URL;
+
 const Layout = () => {
   const [newUser, setNewUser] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,13 +65,13 @@ const Layout = () => {
   const [heliosUsernameFetched, setHeliosUsernameFetched] = useState(false);
   const [avatarPathFetched, setAvatarPathFetched] = useState(false);
   const [referralLink, setReferralLink] = useState<string | null>(null);
-  const baseUrl = "https://t.me/HeeliossBot/Helios?startapp=";
+  const baseUrl = VITE_TELEGRAM_URL;
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const checkUserExists = useCallback(async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/user/exists/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/user/exists/${telegramId}`);
       console.log('API Response:', response.data);
   
       await delay(DELAY_MS); // Add delay before setting state
@@ -108,7 +111,7 @@ const Layout = () => {
   }, []);
 
   useEffect(() => {
-    const socket = io('https://server.therotrade.tech');
+    const socket = io(`${VITE_SERVER_URL}`);
     socket.on('progressUpdate', (newProgress) => {
       setProgress(newProgress);
     });
@@ -247,7 +250,7 @@ useEffect(() => {
 
     const fetchReferralToken = async () => {
       try {
-        const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
+        const response = await axios.get(`${VITE_SERVER_URL}/api/user/referral-token/${telegramId}`);
         const userReferralToken = response.data.referralToken;
         setReferralLink(`${baseUrl}${encodeURIComponent(userReferralToken)}`);
       } catch (error) {
@@ -260,7 +263,7 @@ useEffect(() => {
 
   const fetchHeliosUsername = useCallback(async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/user/helios-username/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/user/helios-username/${telegramId}`);
       if (response.data?.heliosUsername) {
         setHeliosUsername(response.data.heliosUsername);
       } else {
@@ -274,7 +277,7 @@ useEffect(() => {
   
   const fetchAvatarPath = async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/user/avatar/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/user/avatar/${telegramId}`);
       if (response.data?.avatarPath) {
         setAvatarPath(response.data.avatarPath);
       } else {
@@ -289,7 +292,7 @@ useEffect(() => {
   
   const fetchUserMinerate = async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/users/minerate/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/users/minerate/${telegramId}`);
       setMinerate(response.data.minerate);
     } catch (error) {
       console.error('Error fetching minerate:', error);
@@ -298,7 +301,7 @@ useEffect(() => {
 
   const fetchAirdropCount = async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/count/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/count/${telegramId}`);
       setAirdropCount(response.data.count);
     } catch (error) {
       console.error('Error fetching airdrop count:', error);
@@ -307,7 +310,7 @@ useEffect(() => {
 
   const fetchTotalValue = async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/sum/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/sum/${telegramId}`);
       setTotalValue(response.data.totalValue);
     } catch (error) {
       console.error('Error fetching total airdrop value:', error);
@@ -317,7 +320,7 @@ useEffect(() => {
   const fetchUserAirdrops = async (telegramId: number) => {
     setAirdropsError(null);
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/${telegramId}`);
       setAirdrops(response.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -330,7 +333,7 @@ useEffect(() => {
 
   const fetchTotalAirdrops = async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/total/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/total/${telegramId}`);
       setTotalAirdrops(response.data.totalAirdrops);
     } catch (error) {
       console.error('Error fetching total airdrops:', error);
@@ -339,7 +342,7 @@ useEffect(() => {
 
   const updateTotalAirdrops = async (telegramId: number) => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/airdrops/sum/update/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/sum/update/${telegramId}`);
       console.log('Updated Total Airdrops:', response.data.newTotalAirdrops);
       return response.data;
     } catch (error) {
@@ -350,7 +353,7 @@ useEffect(() => {
 
   const deleteAllUserAirdrops = async (telegramId: number) => {
     try {
-      const response = await axios.delete(`https://server.therotrade.tech/api/airdrops/delete/${telegramId}`);
+      const response = await axios.delete(`${VITE_SERVER_URL}/api/airdrops/delete/${telegramId}`);
       setMessage(response.data.message);
       await fetchUserAirdrops(telegramId);
     } catch (error) {
@@ -369,7 +372,7 @@ useEffect(() => {
     const fetchFriends = async () => {
       try {
           console.log('Fetching friends for telegramId:', telegramId);
-          const response = await axios.get(`https://server.therotrade.tech/api/referral/users/${telegramId}`);
+          const response = await axios.get(`${VITE_SERVER_URL}/api/referral/users/${telegramId}`);
           console.log('API Response:', response.data);
   
           if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
@@ -401,14 +404,14 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    if (loadingTimePassed ) {
+    if (loadingTimePassed && dataFetched && heliosUsernameFetched && avatarPathFetched) {
       setIsLoading(false);  // Loading stops once all essential and additional data is fetched (or attempted)
     }
   }, [loadingTimePassed, user, dataFetched, heliosUsernameFetched, avatarPathFetched]);
 
   const fetchReferralToken = async () => {
     try {
-      const response = await axios.get(`https://server.therotrade.tech/api/user/referral-token/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER_URL}/api/user/referral-token/${telegramId}`);
       const userReferralToken = response.data.referralToken;
       setReferralLink(`${baseUrl}${encodeURIComponent(userReferralToken)}`);
     } catch (error) {
@@ -438,7 +441,7 @@ useEffect(() => {
     return <LoadingPage />;
   }
 
-  if (newUser === false) {
+  if (newUser === true || newUser === null) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (

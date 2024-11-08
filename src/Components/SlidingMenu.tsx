@@ -75,6 +75,8 @@ interface Friend {
   referralCount: number;
 }
 
+const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
 const SlidingMenu: React.FC<SlidingMenuProps> = ({
   selectedItem,
   onClose,
@@ -100,7 +102,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
 
   const fetchTaskStatuses = async () => {
     try {
-      const response = await fetch(`https://server.therotrade.tech/api/users/task-statuses/${telegramId}`);
+      const response = await fetch(`${VITE_SERVER_URL}/api/users/task-statuses/${telegramId}`);
       if (response.ok) {
         const data = await response.json();
         setTaskStatuses(data);
@@ -119,7 +121,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
     setIsLoading(true);
     try {
       const response = await axios.post(
-        `https://server.therotrade.tech/api/airdrops/increase/${telegramId}/${taskId}`,
+        `${VITE_SERVER_URL}/api/airdrops/increase/${telegramId}/${taskId}`,
         {
           taskPoints: (selectedItem as Platform | InviteTask).points,
         }
@@ -185,7 +187,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
 
   const markTaskAsCompleted = async (taskId: number, telegramId: string) => {
     try {
-      const response = await axios.patch(`https://server.therotrade.tech/api/users/complete-task/${telegramId}/${taskId}`);
+      const response = await axios.patch(`${VITE_SERVER_URL}/api/users/complete-task/${telegramId}/${taskId}`);
       console.log(`Task ${taskId} completed for user ${telegramId}:`, response.data.message);
       await fetchTaskStatuses(); // Refresh task statuses after completion
     } catch (error) {

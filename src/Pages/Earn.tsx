@@ -76,6 +76,8 @@ interface TaskStatus {
     claimed: boolean;
 }
 
+const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+
 const Earn = () => {
     const { toggleTaskbar, minerate, friends, telegramId, avatarPath } = useOutletContext<EarnProps>();
     const [taskStatuses, setTaskStatuses] = useState<TaskStatus[]>([]);
@@ -103,7 +105,7 @@ const Earn = () => {
     useEffect(() => {
         const fetchTaskStatuses = async () => {
             try {
-                const response = await fetch(`https://server.therotrade.tech/api/users/task-statuses/${telegramId}`);
+                const response = await fetch(`${VITE_SERVER_URL}/api/users/task-statuses/${telegramId}`);
                 if (response.ok) {
                     const data = await response.json();
                     setTaskStatuses(data);
