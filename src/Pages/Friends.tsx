@@ -7,6 +7,8 @@ import Solis from '../images/Solisss.svg';
 import DarkSolis from '../images/Solisss.svg';
 import Copy from '../icons/Group 107.svg';
 import { motion, AnimatePresence } from 'framer-motion';
+import FriendsIcon from '../icons/Friends Vector.svg';
+import FreshCoin from '../images/Group 9.svg';
 import Cat from '../images/Cat.svg';
 import Capybara from '../images/Capybara.svg';
 import Parrot from '../images/Parrot.svg';
@@ -19,13 +21,21 @@ import Cheetah from '../images/Cheetah.svg';
 import Panther from '../images/Panther.svg';
 import SeriousDog from '../images/Serious Dog.svg';
 import SomeBird from '../images/Some Bird.svg';
+import badge1 from '../icons/badgeschecked/badge 1.svg';
+import badge10 from '../icons/badgeschecked/badge 10.svg';
+import badge11 from '../icons/badgeschecked/badge 11.svg';
+import badge12 from '../icons/badgeschecked/badge 12.svg';
+import badge13 from '../icons/badgeschecked/badge 13.svg';
+import badge14 from '../icons/badgeschecked/badge 14.svg';
 
 interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void;
   heliosUsername: string | null;
   friends: Friend[];
   referralLink: string | null;
-  avatarPath: string | null;  // Add this here
+  avatarPath: string | null;
+  totalAirdrops: number;
+  minerate: number | null;
 }
 
 interface Friend {
@@ -37,7 +47,7 @@ interface Friend {
 }
 
 const Friends: React.FC = () => {
-  const { toggleTaskbar, heliosUsername, friends, referralLink, avatarPath } = useOutletContext<FriendsProps>();
+  const { toggleTaskbar, heliosUsername, friends, totalAirdrops, minerate, referralLink, avatarPath } = useOutletContext<FriendsProps>();
   const [isShareMenuOpen, setIsShareMenuOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [isFullListOpen, setIsFullListOpen] = useState(false);
@@ -119,6 +129,25 @@ const Friends: React.FC = () => {
     setIsFullListOpen(!isFullListOpen);
   };
 
+  // Helper function to format number
+  const formatNumber = (number: number) => {
+    if (number >= 1_000_000) {
+      return (number / 1_000_000).toFixed(1) + "m";
+    } else if (number >= 1_000) {
+      return (number / 1_000).toFixed(1) + "k";
+    }
+    return number.toString();
+  };
+
+  const getBadgeByMinerate = (minerate: number | null) => {
+    if (minerate === null) return badge1;
+    if (minerate >= 200) return badge14;
+    if (minerate >= 150) return badge13;
+    if (minerate >= 100) return badge12;
+    if (minerate >= 50) return badge11;
+    if (minerate >= 20) return badge10;
+  };
+
   return (
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
       <StarryBackground />
@@ -130,40 +159,31 @@ const Friends: React.FC = () => {
         </div>
           )}
         {/* Card with profile */}
-        <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12">
-          <div className="mx-auto rounded-full h-28 w-28 flex justify-center items-center">
-            <img src={avatarMap[avatarPath || 'avatars/Some Bird.svg']} alt="Your Avatar" className="w-24 h-24" />
-          </div>
-          <p className="text-white font-bold text-xl">{heliosUsername}</p>
+        <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12 pb-4">
+            <div className="relative mx-auto rounded-full h-28 w-28 flex justify-center items-center">
+              <img src={avatarMap[avatarPath || 'avatars/Some Bird.svg']} alt="Your Avatar" className="w-24 h-24" />
+              {/* Render badge if there's a valid badge for the minerate */}
+              {(
+                <img
+                  src={getBadgeByMinerate(minerate)}
+                  alt="Badge"
+                  className="absolute top-16 left-2 w-10 h-10"
+                />
+              )}
+            </div>
+          <p className="text-white font-bold text-xl">{heliosUsername} jfjffm</p>
           <div className="mx-auto justify-between mt-2 w-6/12 px-2 bg-white/20 backdrop-blur-md rounded-2xl flex flex-row">
             <div className="flex flex-row">
               <img src={Solis} className="w-7 h-7" />
-              <p className="my-auto font-bold text-white">10</p>
+              <p className="my-auto font-bold text-white">{minerate}</p>
             </div>
             <div className="flex flex-row">
-              <img src={Solis} className="w-7 h-7" />
-              <p className="my-auto font-bold text-white">10</p>
+              <img src={FriendsIcon} className="w-5.5 h-5.5 my-auto" />
+              <p className="my-auto font-bold text-white">{Friends.length}</p>
             </div>
             <div className="flex flex-row">
-              <img src={Solis} className="w-7 h-7" />
-              <p className="my-auto font-bold text-white">10</p>
-            </div>
-          </div>
-          <div className="flex flex-row justify-between px-4 pb-4 pt-4 items-center w-full">
-            <div className="bg-[#475c6d] rounded-lg">
-              <img src={Solis} className="w-10" />
-            </div>
-            <div className="bg-[#608FB0] rounded-lg">
-              <img src={Solis} className="w-10" />
-            </div>
-            <div className="bg-[#FAAD00] rounded-lg">
-              <img src={Solis} className="w-10" />
-            </div>
-            <div className="bg-[#185C8D] rounded-lg">
-              <img src={Solis} className="w-10" />
-            </div>
-            <div className="bg-[#17334D] rounded-lg">
-              <img src={Solis} className="w-10" />
+              <img src={FreshCoin} className="w-4 h-4 my-auto" />
+              <p className="my-auto font-bold text-white">{formatNumber(totalAirdrops)}</p>
             </div>
           </div>
         </div>
