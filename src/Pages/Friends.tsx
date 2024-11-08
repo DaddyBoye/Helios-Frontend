@@ -171,8 +171,8 @@ const Friends: React.FC = () => {
                 />
               )}
             </div>
-          <p className="text-white font-bold text-xl">{heliosUsername} jfjffm</p>
-          <div className="mx-auto justify-between mt-2 w-6/12 px-2 bg-white/20 backdrop-blur-md rounded-2xl flex flex-row">
+          <p className="text-white font-bold text-xl">{heliosUsername}</p>
+          <div className="mx-auto justify-between mt-2 w-fit gap-3 px-2 bg-white/20 backdrop-blur-md rounded-2xl flex flex-row">
             <div className="flex flex-row">
               <img src={Solis} className="w-7 h-7" />
               <p className="my-auto font-bold text-white">{minerate}</p>
