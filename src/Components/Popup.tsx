@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import HeliosHead from '../images/helios 2 mascot 1.svg';
 
 interface PopupProps {
   airdropCount: number;
   totalValue: number;
   onConfirm: () => void;
   onClose: () => void;
-  progress: number; // Add progress prop
+  progress: number;
 }
 
 const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose, progress }) => {
@@ -37,7 +36,6 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={handleBackgroundClick}>
       <div className="bg-gray-200 rounded-lg p-8 w-96 shadow-lg" onClick={handlePopupClick}>
-        <img src={HeliosHead} alt="Helios" className="w-24 h-24 mx-auto -mt-28" />
         <h2 className="text-xl font-bold mb-4">Claim Airdrops</h2>
         {airdropCount > 0 ? (
           <>

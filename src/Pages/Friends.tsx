@@ -179,7 +179,7 @@ const Friends: React.FC = () => {
             </div>
             <div className="flex flex-row">
               <img src={FriendsIcon} className="w-5.5 h-5.5 my-auto" />
-              <p className="my-auto font-bold text-white">{Friends.length}</p>
+              <p className="my-auto font-bold text-white">{friends.length}</p>
             </div>
             <div className="flex flex-row">
               <img src={FreshCoin} className="w-4 h-4 my-auto" />
