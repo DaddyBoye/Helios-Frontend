@@ -6,7 +6,8 @@ import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import Header from '../Components/Header';
-import { useSpring, animated } from 'react-spring';
+import SlotCounter from 'react-slot-counter';
+import { animated } from 'react-spring';
 import '../App.css';
 
 interface Airdrop {
@@ -28,8 +29,7 @@ interface Friend {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [airdropsFromParent, setAirdropsFromParent] = useState<Airdrop[]>([]); // Stores airdrops passed from parent
-  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]); // Visible airdrops in the UI
-  const [claimInitiated, setClaimInitiated] = useState(false); 
+  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
   const [isRemoving, setIsRemoving] = useState(false);
 
   const {
@@ -63,12 +63,6 @@ function App() {
     updateTotalAirdrops: (telegramId: number) => Promise<void>;
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
-
-  const { number } = useSpring({
-    number: totalAirdrops,
-    from: { number: claimInitiated ? 0 : totalAirdrops },
-    config: { duration: 500 },
-  });
 
   useEffect(() => {
     if (!isRemoving) {
@@ -168,10 +162,8 @@ function App() {
   const claimFunction = async () => {
     try {
       if (telegramId) {
-        setClaimInitiated(true); // Start the animation
         await updateTotalAirdrops(telegramId);
         await removeAirdropsWithDelay();
-        setClaimInitiated(false); // End the animation
       }
     } catch (error) {
       console.error('Error during claim process:', error);
@@ -199,11 +191,8 @@ function App() {
       <div className="flex flex-row mb-5 mt-2 z-10 items-center justify-center">
         <img src={freshcoin} alt="" className="w-12 pr-0.5 h-12" />
         <p className="my-auto text-white font-bold text-4xl">
-          {claimInitiated ? (
-            <animated.span>{number.to((n) => Math.floor(n))}</animated.span>
-          ) : (
-            totalAirdrops
-          )}
+          <SlotCounter 
+          value= {totalAirdrops} duration={2}/>
         </p>
       </div>
       <div className="bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12">
@@ -228,7 +217,7 @@ function App() {
           </div>
           <p className="hidden">{airdropsError}</p>
         </div>
-        <ProgressBar progress={progress} />
+        <ProgressBar progress={progress ?? 0} minerate={minerate ?? 0} />
       </div>
       {/* Make this container grow to take up remaining space */}
       <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-36 text-white rounded-3xl z-10 w-full">

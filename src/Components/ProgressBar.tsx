@@ -1,12 +1,15 @@
 import Coin from '../images/dollar-coin.png';
 import Solis from '../icons/fdv 1 (1).svg';
 import { useState, useEffect } from 'react';
+import SlotCounter from 'react-slot-counter';
 
 interface ProgressBarProps {
   progress: number;
+  minerate: number;
 }
 
-const ProgressBar = ({ progress }: ProgressBarProps) => {
+
+const ProgressBar = ({ progress, minerate }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 60;
 
@@ -27,10 +30,12 @@ const ProgressBar = ({ progress }: ProgressBarProps) => {
         <div className="z-40 absolute flex flex-row h-16 text-md my-auto p-3 pl-6">
           <img src={Solis} className="w-8 h-8 mr-3 my-auto animate-spinZoomGlow"/>
           <div className="flex my-auto text-sm flex-row gap-1">
-            Mining...
+            Offsetting...
           </div>
           <img src={Coin} className="my-auto w-4 mr-0.5 h-4 ml-3" alt="Coin" />
-          <p className="text-sm w-10 mr-1 my-auto">123</p>
+            <p className="text-sm w-12 mr-1 my-auto">
+              <SlotCounter value={(progress / minerate * 100).toFixed(0)} speed={4} />
+            </p>
           <p id="timer" className="text-sm my-auto">
             {minutes}m:{seconds < 10 ? `0${seconds}` : seconds}s
           </p>
