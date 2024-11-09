@@ -29,7 +29,8 @@ interface Friend {
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
   const [airdropsFromParent, setAirdropsFromParent] = useState<Airdrop[]>([]); // Stores airdrops passed from parent
-  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]);
+  const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]); // Visible airdrops in the UI
+  const [claimInitiated, setClaimInitiated] = useState(false); 
   const [isRemoving, setIsRemoving] = useState(false);
 
   const {
@@ -162,6 +163,7 @@ function App() {
   const claimFunction = async () => {
     try {
       if (telegramId) {
+        setClaimInitiated(true); // Start the animation
         await updateTotalAirdrops(telegramId);
         await removeAirdropsWithDelay();
       }
@@ -191,8 +193,11 @@ function App() {
       <div className="flex flex-row mb-5 mt-2 z-10 items-center justify-center">
         <img src={freshcoin} alt="" className="w-12 pr-0.5 h-12" />
         <p className="my-auto text-white font-bold text-4xl">
-          <SlotCounter 
-          value= {totalAirdrops} duration={2}/>
+          {claimInitiated ? (
+            <SlotCounter value={totalAirdrops} duration={1} />
+          ) : (
+            totalAirdrops
+          )}
         </p>
       </div>
       <div className="bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12">
