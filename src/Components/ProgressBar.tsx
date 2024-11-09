@@ -33,7 +33,7 @@ const ProgressBar = ({ progress, minerate }: ProgressBarProps) => {
           </div>
           <img src={Coin} className="my-auto w-4 mr-0.5 h-4 ml-3" alt="Coin" />
             <p className="text-sm w-12 mr-1 my-auto">
-              {(progress / minerate * 100).toFixed(2)}
+              {(progress / 60 * minerate).toFixed(2)}
             </p>
           <p id="timer" className="text-sm my-auto">
             {minutes}m:{seconds < 10 ? `0${seconds}` : seconds}s
