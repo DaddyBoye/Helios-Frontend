@@ -6,8 +6,7 @@ import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import Header from '../Components/Header';
-import SlotCounter from 'react-slot-counter';
-import { animated } from 'react-spring';
+import { useSpring, animated } from 'react-spring';
 import '../App.css';
 
 interface Airdrop {
@@ -64,6 +63,12 @@ function App() {
     updateTotalAirdrops: (telegramId: number) => Promise<void>;
     deleteAllUserAirdrops: (telegramId: number) => Promise<void>;
   }>();
+
+  const { number } = useSpring({
+    number: totalAirdrops,
+    from: { number: claimInitiated ? 0 : totalAirdrops },
+    config: { duration: 500 },
+  });
 
   useEffect(() => {
     if (!isRemoving) {
@@ -166,6 +171,7 @@ function App() {
         setClaimInitiated(true); // Start the animation
         await updateTotalAirdrops(telegramId);
         await removeAirdropsWithDelay();
+        setClaimInitiated(false); // End the animation
       }
     } catch (error) {
       console.error('Error during claim process:', error);
@@ -194,7 +200,7 @@ function App() {
         <img src={freshcoin} alt="" className="w-12 pr-0.5 h-12" />
         <p className="my-auto text-white font-bold text-4xl">
           {claimInitiated ? (
-            <SlotCounter value={totalAirdrops} duration={1} />
+            <animated.span>{number.to((n) => Math.floor(n))}</animated.span>
           ) : (
             totalAirdrops
           )}
