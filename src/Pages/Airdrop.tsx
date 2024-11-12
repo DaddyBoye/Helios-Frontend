@@ -22,8 +22,47 @@ interface Friend {
   referralCount: number;
 }
 
+const inviteLinks = [
+  {
+    title: 'Share your invite links',
+    description: 'Get a free play pass for each friend',
+    textColor: 'text-white/50',
+    icon: EiCheck,
+    time: '10hr/min',
+  },
+  {
+    title: 'Refer more friends',
+    description: 'Earn bonus rewards for each referral',
+    textColor: 'text-white/50',
+    icon: EiCheck,
+    time: '8hr/min',
+  },
+  {
+    title: 'Unlock special bonuses',
+    description: 'Share your link and unlock VIP features',
+    textColor: 'text-[#FFC213]/50',
+    icon: CompletedTimer,
+    time: '10hr/min',
+  },
+  {
+    title: 'Limited-time offer',
+    description: 'Refer now to get double rewards',
+    textColor: 'text-white/50',
+    icon: Timer,
+    time: '12hr/min',
+  },
+  {
+    title: 'Exclusive invite benefits',
+    description: 'Invite friends and gain premium access',
+    textColor: 'text-white/50',
+    icon: Timer,
+    time: '15hr/min',
+  },
+];
+
 const Airdrop = () => {
   const { minerate, friends, avatarPath } = useOutletContext<AirdropProps>();
+  
   return (
     <div className="relative font-sans h-full pb-20">
       <StarryBackground />
@@ -31,11 +70,11 @@ const Airdrop = () => {
       {/* Main container */}
       <div className="relative z-10 text-center flex flex-col text-white">
         <div className="p-2"></div>
-          <Header
-            minerate={minerate}
-            friendsCount={friends.length}
-            avatarPath={avatarPath}
-          />
+        <Header
+          minerate={minerate}
+          friendsCount={friends.length}
+          avatarPath={avatarPath}
+        />
 
         {/* Roadmap Header */}
         <div className="py-1 px-8 bg-white mx-auto mt-14 rounded-2xl font-semibold text-black">
@@ -49,7 +88,6 @@ const Airdrop = () => {
           <div className="bg-white w-2 h-2 mx-auto rounded-full"></div>
         </div>
 
-        {/* Mining Steps */}
         <div className="flex flex-row justify-between items-center w-full">
           <img src={Arrow} alt="arrow" />
           <RoadmapCards/>
@@ -58,107 +96,29 @@ const Airdrop = () => {
 
         {/* Horizontal Divider */}
         <hr className="border-t border-white/30 mx-5 my-5" />
+
         {/* Invite Section */}
         <div className="gap-2 flex-col flex">
-          {/* Invite Link 1 */}
-          <div className="w-11/12 mx-auto justify-between px-2 text-md flex flex-row">
-            <div>
-              <div className="flex flex-row">
-                <div className="w-2 h-2 bg-white mr-2 rounded-full my-auto"></div>
-                <p className="font-light text-sm">Share your invite links</p>
-              </div>
-              <div className="flex flex-row pl-1 text-sm">
-                <div className="h-9 rounded-xl w-0.5 bg-white mr-2"></div>
-                <div className="flex flex-col text-xs">
-                  <p className="my-auto font-light text-left text-white/50">
-                    Get a free play pass for each friend
-                  </p>
-                  <p className="text-white/50 font-light text-left">10hr/min</p>
+          {inviteLinks.map((link, index) => (
+            <div key={index} className="w-11/12 mx-auto justify-between px-2 text-md flex flex-row">
+              <div>
+                <div className={`flex flex-row ${link.textColor === 'text-[#FFC213]/50' ? 'text-[#FFC213]' : ''}`}>
+                  <div className="w-2 h-2 bg-white mr-2 rounded-full my-auto"></div>
+                  <p className="font-light text-sm">{link.title}</p>
+                </div>
+                <div className="flex flex-row pl-1 text-sm">
+                  <div className="h-9 w-0.5 bg-white mr-2"></div>
+                  <div className="flex flex-col text-xs">
+                    <p className={`my-auto font-light text-left ${link.textColor}`}>
+                      {link.description}
+                    </p>
+                    <p className={`${link.textColor} font-light text-left`}>{link.time}</p>
+                  </div>
                 </div>
               </div>
+              <img src={link.icon} alt="Icon" className="pb-5" />
             </div>
-            <img src={EiCheck} alt="Check" className="pb-5" />
-          </div>
-
-          {/* Invite Link 2 */}
-          <div className="w-11/12 mx-auto justify-between px-2 text-md flex flex-row">
-            <div>
-              <div className="flex flex-row">
-                <div className="w-2 h-2 bg-white mr-2 rounded-full my-auto"></div>
-                <p className="font-light text-sm">Share your invite links</p>
-              </div>
-              <div className="flex flex-row pl-1 text-sm">
-                <div className="h-9 w-0.5 bg-white mr-2"></div>
-                <div className="flex flex-col text-xs">
-                  <p className="my-auto font-light text-left text-white/50">
-                    Get a free play pass for each friend
-                  </p>
-                  <p className="text-white/50 font-light text-left">10hr/min</p>
-                </div>
-              </div>
-            </div>
-            <img src={EiCheck} alt="Check" className="pb-5" />
-          </div>
-
-          {/* Invite Link 3 (Highlighted) */}
-          <div className="w-11/12 mx-auto justify-between px-2 text-md flex flex-row">
-            <div>
-              <div className="flex flex-row text-[#FFC213]">
-                <div className="w-2 h-2 bg-white mr-2 rounded-full my-auto"></div>
-                <p className="font-light text-sm">Share your invite links</p>
-              </div>
-              <div className="flex flex-row pl-1 text-sm">
-                <div className="h-9 w-0.5 bg-white mr-2"></div>
-                <div className="flex flex-col text-xs">
-                  <p className="my-auto font-light text-left text-[#FFC213]/50">
-                    Get a free play pass for each friend
-                  </p>
-                  <p className="text-[#FFC213]/50 font-light text-left">10hr/min</p>
-                </div>
-              </div>
-            </div>
-            <img src={CompletedTimer} alt="Completed Timer" className="pb-5" />
-          </div>
-
-          {/* Invite Link 4 */}
-          <div className="w-11/12 mx-auto justify-between px-2 text-md flex flex-row">
-            <div>
-              <div className="flex flex-row">
-                <div className="w-2 h-2 bg-white mr-2 rounded-full my-auto"></div>
-                <p className="font-light text-sm my-auto">Share your invite links</p>
-              </div>
-              <div className="flex flex-row pl-1 text-sm">
-                <div className="h-9 w-0.5 bg-white mr-2"></div>
-                <div className="flex flex-col text-xs">
-                  <p className="my-auto font-light text-left text-white/50">
-                    Get a free play pass for each friend
-                  </p>
-                  <p className="text-white/50 font-light text-left">10hr/min</p>
-                </div>
-              </div>
-            </div>
-            <img src={Timer} alt="Timer" className="pb-5" />
-          </div>
-
-          {/* Invite Link 5 */}
-          <div className="w-11/12 mx-auto justify-between px-2 text-md flex flex-row">
-            <div>
-              <div className="flex flex-row">
-                <div className="w-2 h-2 bg-white mr-2 rounded-full my-auto"></div>
-                <p className="font-light text-sm my-auto">Share your invite links</p>
-              </div>
-              <div className="flex flex-row pl-1 text-sm">
-                <div className="h-9 w-0.5 bg-white mr-2"></div>
-                <div className="flex flex-col text-xs">
-                  <p className="my-auto font-light text-left text-white/50">
-                    Get a free play pass for each friend
-                  </p>
-                  <p className="text-white/50 font-light text-left">10hr/min</p>
-                </div>
-              </div>
-            </div>
-            <img src={Timer} alt="Timer" className="pb-5" />
-          </div>
+          ))}
         </div>
       </div>
     </div>
