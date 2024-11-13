@@ -59,7 +59,7 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
           </div>
         ) : (
           <div className="space-y-4 text-center">
-            <Timer className="w-6 h-6 text-gray-400 mx-auto" />
+            <Timer className="w-10 h-10 text-gray-400 mx-auto" />
             <div>
               <h2 className="font-bold text-gray-300">No Offsetts Available</h2>
               <p className="text-sm text-gray-400">
