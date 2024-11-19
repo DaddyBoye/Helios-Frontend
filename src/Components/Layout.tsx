@@ -73,9 +73,9 @@ const Layout = () => {
     try {
       const response = await axios.get(`${VITE_SERVER_URL}/api/user/exists/${telegramId}`);
       console.log('API Response:', response.data);
-  
+
       await delay(DELAY_MS); // Add delay before setting state
-  
+
       if (response.data.hasOwnProperty('exists')) {
         if (response.data.exists === true) {
           console.log('User exists');
@@ -128,7 +128,7 @@ const Layout = () => {
 
         const userData = tg.initDataUnsafe.user;
         const startParam = tg.initDataUnsafe.start_param;  // Retrieve the referral token here
-  
+
         if (startParam) {
           setReferralToken(startParam);  // Store referral token
         }
@@ -274,7 +274,7 @@ useEffect(() => {
       setHeliosUsernameFetched(true); 
     }
   }, []);
-  
+
   const fetchAvatarPath = async (telegramId: number) => {
     try {
       const response = await axios.get(`${VITE_SERVER_URL}/api/user/avatar/${telegramId}`);
@@ -289,7 +289,7 @@ useEffect(() => {
       setAvatarPathFetched(true);  
     }
   };   
-  
+
   const fetchUserMinerate = async (telegramId: number) => {
     try {
       const response = await axios.get(`${VITE_SERVER_URL}/api/users/minerate/${telegramId}`);
@@ -374,7 +374,7 @@ useEffect(() => {
           console.log('Fetching friends for telegramId:', telegramId);
           const response = await axios.get(`${VITE_SERVER_URL}/api/referral/users/${telegramId}`);
           console.log('API Response:', response.data);
-  
+
           if (response.data && response.data.referrals && Array.isArray(response.data.referrals)) {
               const fetchedFriends = response.data.referrals.map((referral: any) => ({
                   id: referral.referredUserTelegramId,
@@ -383,7 +383,7 @@ useEffect(() => {
                   referralCount: referral.users?.referralCount || 0,
                   avatar: referral.users?.avatarPath,
               }));
-  
+
               console.log('Processed Friends:', fetchedFriends);
               setFriends(fetchedFriends);
           } else {
@@ -404,7 +404,7 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    if (loadingTimePassed ) {
+    if (loadingTimePassed && user && heliosUsernameFetched && avatarPathFetched) {
       setIsLoading(false);  // Loading stops once all essential and additional data is fetched (or attempted)
     }
   }, [loadingTimePassed, user, dataFetched, heliosUsernameFetched, avatarPathFetched]);
@@ -441,7 +441,7 @@ useEffect(() => {
     return <LoadingPage />;
   }
 
-  if (newUser === false) {
+  if (newUser === true || newUser === null) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (
