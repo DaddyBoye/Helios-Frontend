@@ -39,7 +39,7 @@ const avatars = [
   { name: 'SomeBird', path: 'avatars/Some Bird.svg' },
 ];
 
-const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+//const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onToggle, onUpdateAvatarPath }) => {
   const [heliosUsername, setHeliosUsername] = useState('');
@@ -115,7 +115,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
       }
 
       try {
-        const response = await fetch(`${VITE_SERVER_URL}/api/check-username`, {
+        const response = await fetch(`https://server.therotrade.tech/api/check-username`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
 
     try {
         // First API call to update the Helios username
-        const usernameResponse = await fetch(`${VITE_SERVER_URL}/api/username`, {
+        const usernameResponse = await fetch(`https://server.therotrade.tech/api/username`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
         }
 
         // If username update succeeds, proceed to avatar update
-        const avatarResponse = await fetch(`${VITE_SERVER_URL}/api/user/avatar`, {
+        const avatarResponse = await fetch(`https://server.therotrade.tech/api/user/avatar`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
