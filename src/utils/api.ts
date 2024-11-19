@@ -14,7 +14,7 @@ interface UserData {
 export const createUser = async (userData: UserData) => {
     try {
         console.log("Sending user data to API:", userData);
-        const response = await axios.post(`${VITE_SERVER_URL}/user`, userData);
+        const response = await axios.post(`${VITE_SERVER_URL}/api/user`, userData);
         return response.data;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
