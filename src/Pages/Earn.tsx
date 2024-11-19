@@ -87,7 +87,7 @@ const Earn = () => {
     const preloadedImages = usePreloadedImages();
 
     const socialPlatforms: Platform[] = [
-        { icon: Telegram, name: 'Telegram', text: 'Join our Telegram community', link: 'https://t.me/HeliosBotChannel', image: Telegram, color: '#0088CC', taskId: 4, points: 200 },
+        { icon: Telegram, name: 'Telegram', text: 'Join our Telegram community', link: 'https://t.me/HeliosApp', image: Telegram, color: '#0088CC', taskId: 4, points: 200 },
         { icon: Instagram, name: 'Instagram', text: 'Follow Our jouney on Insta', link: 'https://www.instagram.com', image: Instagram, color: '#E1306C', taskId: 1, points: 150 },
         { icon: X, name: 'X', text: 'Engage Helios on X', link: 'https://x.com/heliosbot_', image: X, color: '#1DA1F2', taskId: 2, points: 200 },
         { icon: YouTube, name: 'YouTube', text: 'Subscribe to Our YouTube', link: 'https://www.youtube.com', image: YouTube, color: '#FF0000', taskId: 3, points: 150 },
