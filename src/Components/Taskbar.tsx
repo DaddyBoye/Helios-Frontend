@@ -9,7 +9,7 @@ import Airdrop from '../icons/mingcute_airdrop-fill.svg';
 import EcoOpen from '../icons/EcoOpen.svg';
 import Eco from '../icons/Eco.svg';
 import { NavLink } from 'react-router-dom';
-import Rectangle from '../icons/Rectangle.svg';
+import Rectangle from '../icons/Rectangle 67.png';
 
 const Taskbar = () => {
   return (
