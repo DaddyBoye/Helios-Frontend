@@ -31,9 +31,6 @@ function Eco() {
           friendsCount={friends.length}
           avatarPath={avatarPath}
         />
-
-
-
         </div>
     </div>
   );

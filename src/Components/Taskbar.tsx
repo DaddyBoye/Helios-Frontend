@@ -9,13 +9,13 @@ import Airdrop from '../icons/mingcute_airdrop-fill.svg';
 import EcoOpen from '../icons/EcoOpen.svg';
 import Eco from '../icons/Eco.svg';
 import { NavLink } from 'react-router-dom';
-import Rectangle from '../icons/Rectangle 67.png';
+import Rectangle from '../icons/Rectangle 67 (3).png';
 
 const Taskbar = () => {
   return (
-    <div className="taskbar" style={{ backgroundImage: `url(${Rectangle})`, backgroundSize: 'cover' }}>
+    <div className="taskbar">
+      <img src={Rectangle} alt="" className='absolute'/>
       <div className="p-4 h-16 flex flex-row justify-between items-center"> {/* Add items-center for vertical centering */}
-        
         {/* Home */}
         <NavLink
           to="/"
@@ -35,7 +35,7 @@ const Taskbar = () => {
                 alt="Home Logo"
               />
               <span
-                className={`transition-transform duration-200 ${
+                className={`transition-transform z-50 duration-200 ${
                   isActive ? 'text-sm' : 'text-xs'
                 }`}
               >
@@ -64,7 +64,7 @@ const Taskbar = () => {
                 alt="Earn Logo"
               />
               <span
-                className={`transition-transform duration-200 ${
+                className={`transition-transform z-50 duration-200 ${
                   isActive ? 'text-sm' : 'text-xs'
                 }`}
               >
@@ -74,31 +74,31 @@ const Taskbar = () => {
           )}
         </NavLink>
   
-{/* Eco Tab */}
-<NavLink
-  to="/eco"
-  className={({ isActive }) =>
-    `relative flex flex-col justify-center items-center ${
-      isActive ? 'text-[#FFD700]' : 'text-white'
-    }`
-  }
->
-  {({ isActive }) => (
-    <div
-      className={` bg-gradient-to-r from-[#5A7FB8] to-[#2A3C4E] w-12 h-12 shadow-2xl flex rounded-full items-center justify-center transition-transform duration-300 ${
-      isActive ? 'scale-105 -mt-20' : 'scale-90 -mt-16'
-      }`}
-    >
-      <img
-      src={isActive ? EcoOpen : Eco}
-      className={`w-6 h-6 transition-transform duration-200 ${
-        isActive ? 'scale-110' : 'scale-110'
-      }`}
-      alt="Eco Logo"
-      />
-    </div>
-  )}
-</NavLink>
+        {/* Eco Tab */}
+        <NavLink
+          to="/eco"
+          className={({ isActive }) =>
+            `relative flex flex-col justify-center items-center ${
+              isActive ? 'text-[#FFD700]' : 'text-white'
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <div
+              className={` bg-gradient-to-r from-[#5A7FB8] to-[#2A3C4E] w-12 h-12 shadow-2xl flex rounded-full items-center justify-center transition-transform duration-300 ${
+              isActive ? 'scale-120 -mt-16' : 'scale-105 -mt-14'
+              }`}
+            >
+              <img
+              src={isActive ? EcoOpen : Eco}
+              className={`w-6 h-6 transition-transform duration-200 ${
+                isActive ? 'scale-110' : 'scale-110'
+              }`}
+              alt="Eco Logo"
+              />
+            </div>
+          )}
+        </NavLink>
 
 
         {/* Friends */}
@@ -120,7 +120,7 @@ const Taskbar = () => {
                 alt="Friends Logo"
               />
               <span
-                className={`transition-transform duration-200 ${
+                className={`transition-transform z-50 duration-200 ${
                   isActive ? 'text-sm' : 'text-xs'
                 }`}
               >
@@ -149,7 +149,7 @@ const Taskbar = () => {
                 alt="Airdrop Logo"
               />
               <span
-                className={`transition-transform duration-200 ${
+                className={`transition-transform z-50 duration-200 ${
                   isActive ? 'text-sm' : 'text-xs'
                 }`}
               >

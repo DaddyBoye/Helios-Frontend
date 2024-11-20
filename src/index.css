@@ -5,20 +5,20 @@
 @tailwind utilities;
 
 @layer components {
-    /* .btn-primary {
-        @apply py-1.5 px-3 text-center bg-blue-700 rounded-md text-white;
-    } */
+  /* .btn-primary {
+    @apply py-1.5 px-3 text-center bg-blue-700 rounded-md text-white;
+  } */
   }
 body {
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
 /* index.css */
 .taskbar {
-    position: fixed;
-    bottom: 0;
-    width: 102%;
-    color: white;
-    text-align: center;
-    margin-left: -4px;
-    z-index: 1000; /* Ensure it stays on top */
-  }
+  position: fixed;
+  bottom: 0;
+  width: 102%;
+  color: white;
+  text-align: center;
+  margin-left: -4px;
+  z-index: 1000; /* Ensure it stays on top */
+}
