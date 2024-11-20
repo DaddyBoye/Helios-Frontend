@@ -6,12 +6,15 @@ import Home from '../icons/teenyicons_home-solid.svg';
 import Earn from '../icons/ph_coins-fill.svg';
 import FriendsOpen from '../icons/fa-solid_user-friends.svg';
 import Airdrop from '../icons/mingcute_airdrop-fill.svg';
+import EcoOpen from '../icons/EcoOpen.svg';
+import Eco from '../icons/Eco.svg';
 import { NavLink } from 'react-router-dom';
+import Rectangle from '../icons/Rectangle.svg';
 
 const Taskbar = () => {
   return (
-    <div className="taskbar">
-      <div className="p-4 bg-[#3D4549] h-16 flex flex-row justify-between items-center"> {/* Add items-center for vertical centering */}
+    <div className="taskbar" style={{ backgroundImage: `url(${Rectangle})`, backgroundSize: 'cover' }}>
+      <div className="p-4 h-16 flex flex-row justify-between items-center"> {/* Add items-center for vertical centering */}
         
         {/* Home */}
         <NavLink
@@ -70,6 +73,33 @@ const Taskbar = () => {
             </>
           )}
         </NavLink>
+  
+{/* Eco Tab */}
+<NavLink
+  to="/eco"
+  className={({ isActive }) =>
+    `relative flex flex-col justify-center items-center ${
+      isActive ? 'text-[#FFD700]' : 'text-white'
+    }`
+  }
+>
+  {({ isActive }) => (
+    <div
+      className={` bg-gradient-to-r from-[#5A7FB8] to-[#2A3C4E] w-12 h-12 shadow-2xl flex rounded-full items-center justify-center transition-transform duration-300 ${
+      isActive ? 'scale-105 -mt-20' : 'scale-90 -mt-16'
+      }`}
+    >
+      <img
+      src={isActive ? EcoOpen : Eco}
+      className={`w-6 h-6 transition-transform duration-200 ${
+        isActive ? 'scale-110' : 'scale-110'
+      }`}
+      alt="Eco Logo"
+      />
+    </div>
+  )}
+</NavLink>
+
 
         {/* Friends */}
         <NavLink

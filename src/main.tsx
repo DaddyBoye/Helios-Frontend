@@ -6,6 +6,7 @@ import App from './Pages/App';
 import Airdrop from './Pages/Airdrop';
 import Earn from './Pages/Earn';
 import Friends from './Pages/Friends';
+import Eco from './Pages/Eco';
 import './index.css';
 import Layout from '../src/Components/Layout';
 
@@ -36,6 +37,7 @@ const RootComponent = () => {
             <Route path="airdrop" element={<Airdrop />} />
             <Route path="earn" element={<Earn />} />
             <Route path="friends" element={<Friends />} />
+            <Route path="eco" element={<Eco />} />
           </Route>
         </Routes>
       </PreloaderProvider>

@@ -16,8 +16,9 @@ body {
 .taskbar {
     position: fixed;
     bottom: 0;
-    width: 100%;
+    width: 102%;
     color: white;
     text-align: center;
+    margin-left: -4px;
     z-index: 1000; /* Ensure it stays on top */
   }
