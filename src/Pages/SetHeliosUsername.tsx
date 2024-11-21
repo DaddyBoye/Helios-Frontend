@@ -50,7 +50,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [currentAvatar, setCurrentAvatar] = useState(avatars[0].path);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
-  const [showAvatarAlert, setShowAvatarAlert] = useState(true);
+  const [showAvatarAlert, setShowAvatarAlert] = useState(false);
 
   const getAvatarImage = (path: string) => {
     switch (path) {
@@ -84,14 +84,28 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
   };  
 
   useEffect(() => {
-    // Select a random avatar and display the alert
-    const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)].path;
-    setCurrentAvatar(randomAvatar);
+    const randomizeAvatar = async () => {
+      // Select a random avatar
+      const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)].path;
+      setCurrentAvatar(randomAvatar);
 
-    // Hide the alert after 5 seconds
-    const timer = setTimeout(() => setShowAvatarAlert(false), 5000);
-    return () => clearTimeout(timer); // Cleanup timer
-  }, []); 
+      // Wait for the avatar to be set
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      // Show the alert 1 second after the avatar has been randomized successfully
+      const alertTimer = setTimeout(() => setShowAvatarAlert(true), 1000);
+
+      // Hide the alert after 5 seconds
+      const hideAlertTimer = setTimeout(() => setShowAvatarAlert(false), 6000);
+
+      return () => {
+        clearTimeout(alertTimer); // Cleanup alert timer
+        clearTimeout(hideAlertTimer); // Cleanup hide alert timer
+      };
+    };
+
+    randomizeAvatar();
+  }, []);
 
   const handleUsernameChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const username = e.target.value;
