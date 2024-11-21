@@ -107,7 +107,7 @@ const Taskbar = () => {
             className={`shadow-2xl flex rounded-full items-center ml-1 justify-center transition-transform duration-300 ${
               isActive
                 ? 'scale-125 -mt-16 bg-gradient-to-r from-[#5A7FB8] to-[#2A3C4E]'
-                : 'scale-110 -mt-14 bg-gradient-to-r from-[#A4E786] to-[#2E7D32]'
+                : 'scale-110 -mt-16 bg-gradient-to-r from-[#A4E786] to-[#2E7D32]'
             }`}
           >
           <img
