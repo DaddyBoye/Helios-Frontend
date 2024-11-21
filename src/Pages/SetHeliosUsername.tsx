@@ -15,6 +15,7 @@ import Cheetah from '../images/Cheetah.svg';
 import Panther from '../images/Panther.svg';
 import SeriousDog from '../images/Serious Dog.svg';
 import SomeBird from '../images/Some Bird.svg';
+import Solis from '../icons/fdv 1 (1).svg';
 
 interface SetHeliosUsernameProps {
   telegramId: number | null;
@@ -49,6 +50,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [currentAvatar, setCurrentAvatar] = useState(avatars[0].path);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [showAvatarAlert, setShowAvatarAlert] = useState(true);
 
   const getAvatarImage = (path: string) => {
     switch (path) {
@@ -82,10 +84,14 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
   };  
 
   useEffect(() => {
-    // Select a random avatar when the component mounts
+    // Select a random avatar and display the alert
     const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)].path;
     setCurrentAvatar(randomAvatar);
-  }, []);  
+
+    // Hide the alert after 5 seconds
+    const timer = setTimeout(() => setShowAvatarAlert(false), 5000);
+    return () => clearTimeout(timer); // Cleanup timer
+  }, []); 
 
   const handleUsernameChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const username = e.target.value;
@@ -233,6 +239,19 @@ const handleAvatarSelect = (newAvatar: string) => {
     <div className="set-username-page flex justify-center font-sans items-center h-screen bg-black/70 text-white">
       <StarryBackground />
       <div className="bg-transparent z-10 h-full text-black p-6 rounded-lg shadow-lg w-80">
+      {showAvatarAlert && ( // Show alert
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-black/60 to-gray-700/50 backdrop-blur-lg text-white px-4 py-3 rounded-xl shadow-lg w-11/12 max-w-md flex items-center space-x-3">
+          <img
+            src={Solis}
+            alt="Random avatar icon"
+            className="w-7 h-7 animate-spinZoomGlow"
+          />
+          <p className="text-sm font-medium">
+            A random avatar has been selected! You can change it by clicking the image.
+          </p>
+        </div>
+      )}
+
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className='my-auto'>
             <div className="relative">
