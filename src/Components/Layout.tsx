@@ -404,7 +404,7 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    if (loadingTimePassed ) {
+    if (loadingTimePassed && user && dataFetched && heliosUsernameFetched && avatarPathFetched) {
       setIsLoading(false);  // Loading stops once all essential and additional data is fetched (or attempted)
     }
   }, [loadingTimePassed, user, dataFetched, heliosUsernameFetched, avatarPathFetched]);
@@ -441,7 +441,7 @@ useEffect(() => {
     return <LoadingPage />;
   }
 
-  if (newUser === true || newUser === null ) {
+  if (newUser === true || newUser === null) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (

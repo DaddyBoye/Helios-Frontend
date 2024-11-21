@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import HomeOpen from '../icons/HomeOpen.svg';
 import AirdropOpen from '../icons/Group.svg';
 import Friends from '../icons/Friends.svg';
@@ -12,6 +13,20 @@ import { NavLink } from 'react-router-dom';
 import Rectangle from '../icons/Rectangle 67 (3).png';
 
 const Taskbar = () => {
+  const [iconSize, setIconSize] = useState(window.innerWidth * (1 / 12)); // Initial size: 2/12 of screen width
+
+  useEffect(() => {
+    const handleResize = () => {
+      const newSize = window.innerWidth * (2 / 12); // Recalculate size on window resize
+      setIconSize(newSize);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Set size initially based on current screen width
+
+    return () => window.removeEventListener('resize', handleResize); // Cleanup listener
+  }, []);
+  
   return (
     <div className="taskbar">
       <img src={Rectangle} alt="" className='absolute'/>
@@ -83,22 +98,29 @@ const Taskbar = () => {
             }`
           }
         >
-          {({ isActive }) => (
-            <div
-              className={` bg-gradient-to-r from-[#5A7FB8] to-[#2A3C4E] w-12 h-12 shadow-2xl flex rounded-full items-center justify-center transition-transform duration-300 ${
-              isActive ? 'scale-120 -mt-16' : 'scale-105 -mt-14'
-              }`}
-            >
-              <img
-              src={isActive ? EcoOpen : Eco}
-              className={`w-6 h-6 transition-transform duration-200 ${
-                isActive ? 'scale-110' : 'scale-110'
-              }`}
-              alt="Eco Logo"
-              />
-            </div>
-          )}
-        </NavLink>
+        {({ isActive }) => (
+          <div
+            style={{
+              width: iconSize,
+              height: iconSize,
+            }}
+            className={`shadow-2xl flex rounded-full items-center ml-1 justify-center transition-transform duration-300 ${
+              isActive
+                ? 'scale-125 -mt-16 bg-gradient-to-r from-[#5A7FB8] to-[#2A3C4E]'
+                : 'scale-110 -mt-14 bg-gradient-to-r from-[#A4E786] to-[#2E7D32]'
+            }`}
+          >
+          <img
+            src={isActive ? EcoOpen : Eco}
+            style={{ width: iconSize * 0.5, height: iconSize * 0.5 }} // Dynamically scale the icon size
+            className={`transition-transform duration-200 ${
+              isActive ? 'scale-120' : 'scale-110'
+            }`}
+            alt="Eco Logo"
+          />
+        </div>
+      )}
+    </NavLink>
 
 
         {/* Friends */}
