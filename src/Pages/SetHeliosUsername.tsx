@@ -96,7 +96,7 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
       const alertTimer = setTimeout(() => setShowAvatarAlert(true), 1000);
 
       // Hide the alert after 5 seconds
-      const hideAlertTimer = setTimeout(() => setShowAvatarAlert(false), 6000);
+      const hideAlertTimer = setTimeout(() => setShowAvatarAlert(false), 8000);
 
       return () => {
         clearTimeout(alertTimer); // Cleanup alert timer
@@ -249,22 +249,37 @@ const handleAvatarSelect = (newAvatar: string) => {
   setIsAvatarModalOpen(false);
 };
 
+// Preload the icon before rendering the alert
+useEffect(() => {
+  const image = new Image();
+  image.src = Solis;
+  image.onload = handleIconLoad; // Mark the icon as loaded when it's ready
+}, []);
+
+const [isIconLoaded, setIsIconLoaded] = useState(false);
+
+// Function to handle when the icon has loaded
+const handleIconLoad = () => {
+  setIsIconLoaded(true);
+};
+
   return (
     <div className="set-username-page flex justify-center font-sans items-center h-screen bg-black/70 text-white">
       <StarryBackground />
       <div className="bg-transparent z-10 h-full text-black p-6 rounded-lg shadow-lg w-80">
-      {showAvatarAlert && ( // Show alert
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-black/60 to-gray-700/50 backdrop-blur-lg text-white px-4 py-3 rounded-xl shadow-lg w-11/12 max-w-md flex items-center space-x-3">
-          <img
-            src={Solis}
-            alt="Random avatar icon"
-            className="w-7 h-7 animate-spinZoomGlow"
-          />
-          <p className="text-sm font-medium">
-            A random avatar has been selected! You can change it by clicking the image.
-          </p>
-        </div>
-      )}
+      {showAvatarAlert && isIconLoaded && (
+  <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-black/60 to-gray-700/50 backdrop-blur-lg text-white px-4 py-3 rounded-xl shadow-lg w-11/12 max-w-md flex items-center space-x-3">
+    <img
+      src={Solis}
+      alt="Random avatar icon"
+      className="w-7 h-7 animate-spinZoomGlow"
+      onLoad={handleIconLoad} // Call the handler when the image loads
+    />
+    <p className="text-sm font-medium">
+      A random avatar has been selected! You can change it by clicking the image.
+    </p>
+  </div>
+)}
 
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className='my-auto'>
