@@ -108,8 +108,9 @@ const SetHeliosUsername: React.FC<SetHeliosUsernameProps> = ({ telegramId, onTog
   }, []);
 
   const handleUsernameChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const username = e.target.value;
-    setHeliosUsername(username);
+  // Remove spaces from the input
+  const username = e.target.value.replace(/\s+/g, '');
+  setHeliosUsername(username);
 
     // Check availability if username is not empty
     if (username.trim()) {
