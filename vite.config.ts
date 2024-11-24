@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import path from "path"
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 
@@ -27,5 +28,11 @@ export default defineConfig({
   server: {
     port: process.env.PORT ? parseInt(process.env.PORT) : 5173,
     host: true,
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      '@/components': path.resolve(__dirname, './src/components'),
+    },
   },
 });

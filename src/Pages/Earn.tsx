@@ -75,7 +75,7 @@ interface TaskStatus {
     claimed: boolean;
 }
 
-const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const VITE_SERVER2_URL = import.meta.env.VITE_SERVER2_URL;
 
 const Earn = () => {
     const { toggleTaskbar, minerate, friends, telegramId, avatarPath } = useOutletContext<EarnProps>();
@@ -104,7 +104,7 @@ const Earn = () => {
     useEffect(() => {
         const fetchTaskStatuses = async () => {
             try {
-                const response = await fetch(`${VITE_SERVER_URL}/api/users/task-statuses/${telegramId}`);
+                const response = await fetch(`${VITE_SERVER2_URL}/api/users/task-statuses/${telegramId}`);
                 if (response.ok) {
                     const data = await response.json();
                     setTaskStatuses(data);

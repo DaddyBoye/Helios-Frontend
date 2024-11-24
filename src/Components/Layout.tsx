@@ -36,6 +36,7 @@ interface Friend {
 const DELAY_MS = 500;
 
 const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const VITE_SERVER2_URL = import.meta.env.VITE_SERVER2_URL;
 const VITE_TELEGRAM_URL = import.meta.env.VITE_TELEGRAM_URL;
 
 const Layout = () => {
@@ -71,7 +72,7 @@ const Layout = () => {
 
   const checkUserExists = useCallback(async (telegramId: number) => {
     try {
-      const response = await axios.get(`${VITE_SERVER_URL}/api/user/exists/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER2_URL}/api/user/exists/${telegramId}`);
       console.log('API Response:', response.data);
 
       await delay(DELAY_MS); // Add delay before setting state
@@ -263,7 +264,7 @@ useEffect(() => {
 
   const fetchHeliosUsername = useCallback(async (telegramId: number) => {
     try {
-      const response = await axios.get(`${VITE_SERVER_URL}/api/user/helios-username/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER2_URL}/api/user/helios-username/${telegramId}`);
       if (response.data?.heliosUsername) {
         setHeliosUsername(response.data.heliosUsername);
       } else {
@@ -277,7 +278,7 @@ useEffect(() => {
 
   const fetchAvatarPath = async (telegramId: number) => {
     try {
-      const response = await axios.get(`${VITE_SERVER_URL}/api/user/avatar/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER2_URL}/api/user/avatar/${telegramId}`);
       if (response.data?.avatarPath) {
         setAvatarPath(response.data.avatarPath);
       } else {
@@ -301,7 +302,7 @@ useEffect(() => {
 
   const fetchAirdropCount = async (telegramId: number) => {
     try {
-      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/count/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER2_URL}/api/airdrops/count/${telegramId}`);
       setAirdropCount(response.data.count);
     } catch (error) {
       console.error('Error fetching airdrop count:', error);
@@ -310,7 +311,7 @@ useEffect(() => {
 
   const fetchTotalValue = async (telegramId: number) => {
     try {
-      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/sum/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER2_URL}/api/airdrops/sum/${telegramId}`);
       setTotalValue(response.data.totalValue);
     } catch (error) {
       console.error('Error fetching total airdrop value:', error);
@@ -320,7 +321,7 @@ useEffect(() => {
   const fetchUserAirdrops = async (telegramId: number) => {
     setAirdropsError(null);
     try {
-      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER2_URL}/api/airdrops/${telegramId}`);
       setAirdrops(response.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -333,7 +334,7 @@ useEffect(() => {
 
   const fetchTotalAirdrops = async (telegramId: number) => {
     try {
-      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/total/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER2_URL}/api/airdrops/total/${telegramId}`);
       setTotalAirdrops(response.data.totalAirdrops);
     } catch (error) {
       console.error('Error fetching total airdrops:', error);
@@ -342,7 +343,7 @@ useEffect(() => {
 
   const updateTotalAirdrops = async (telegramId: number) => {
     try {
-      const response = await axios.get(`${VITE_SERVER_URL}/api/airdrops/sum/update/${telegramId}`);
+      const response = await axios.get(`${VITE_SERVER2_URL}/api/airdrops/sum/update/${telegramId}`);
       console.log('Updated Total Airdrops:', response.data.newTotalAirdrops);
       return response.data;
     } catch (error) {
@@ -353,7 +354,7 @@ useEffect(() => {
 
   const deleteAllUserAirdrops = async (telegramId: number) => {
     try {
-      const response = await axios.delete(`${VITE_SERVER_URL}/api/airdrops/delete/${telegramId}`);
+      const response = await axios.delete(`${VITE_SERVER2_URL}/api/airdrops/delete/${telegramId}`);
       setMessage(response.data.message);
       await fetchUserAirdrops(telegramId);
     } catch (error) {
@@ -404,7 +405,7 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    if (loadingTimePassed && user && dataFetched && heliosUsernameFetched && avatarPathFetched) {
+    if (loadingTimePassed ) {
       setIsLoading(false);  // Loading stops once all essential and additional data is fetched (or attempted)
     }
   }, [loadingTimePassed, user, dataFetched, heliosUsernameFetched, avatarPathFetched]);
@@ -441,7 +442,7 @@ useEffect(() => {
     return <LoadingPage />;
   }
 
-  if (newUser === true || newUser === null) {
+  if (newUser === false) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
     ) : (

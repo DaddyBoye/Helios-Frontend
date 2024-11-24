@@ -22,6 +22,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+
+    /* Path Aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    /* Types */
     "typeRoots": ["./node_modules/@types", "./src"],
     "types": ["node", "react", "react-dom", "vite/client"]
   },
