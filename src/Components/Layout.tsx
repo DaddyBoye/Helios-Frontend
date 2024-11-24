@@ -251,7 +251,7 @@ useEffect(() => {
 
     const fetchReferralToken = async () => {
       try {
-        const response = await axios.get(`${VITE_SERVER_URL}/api/user/referral-token/${telegramId}`);
+        const response = await axios.get(`${VITE_SERVER2_URL}/api/user/referral-token/${telegramId}`);
         const userReferralToken = response.data.referralToken;
         setReferralLink(`${baseUrl}${encodeURIComponent(userReferralToken)}`);
       } catch (error) {
