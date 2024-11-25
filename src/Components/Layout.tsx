@@ -83,6 +83,21 @@ const Layout = () => {
     sendMessageToServer2();
   }, []);
 
+  useEffect(() => {
+    const sendMessageToServer = async () => {
+      try {
+        const response = await axios.post(`${VITE_SERVER_URL}/api/test-message`, {
+          message: 'Hello from Layout component!',
+        });
+        console.log('Message sent to server:', response.data);
+      } catch (error) {
+        console.error('Error sending message to server:', error);
+      }
+    };
+
+    sendMessageToServer();
+  }, []);
+
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const checkUserExists = useCallback(async (telegramId: number) => {
