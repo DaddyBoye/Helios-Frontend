@@ -11,7 +11,7 @@ interface SocialMediaShareProps {
   toggleMenu: () => void;
 }
 
-const VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const VITE_SERVER2_URL = import.meta.env.VITE_SERVER2_URL;
 const VITE_TELEGRAM_URL = import.meta.env.VITE_TELEGRAM_URL;
 
 const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu }) => {
@@ -35,7 +35,7 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu 
 
     const fetchReferralToken = async () => {
       try {
-        const response = await axios.get(`${VITE_SERVER_URL}/api/user/referral-token/${telegramId}`);
+        const response = await axios.get(`${VITE_SERVER2_URL}/api/user/referral-token/${telegramId}`);
         const referralToken = response.data.referralToken;
         setReferralLink(`${baseUrl}${encodeURIComponent(referralToken)}`);
       } catch (error) {
