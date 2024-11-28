@@ -122,7 +122,7 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl text-white text-center font-bold mb-4">Choose your avatar</h2>
-        {isLoaded ? (
+        {!isLoaded ? (
         <div className="text-center text-lg text-gray-400 animate-pulse">
         Summoning avatars...
       </div>
