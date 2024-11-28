@@ -122,16 +122,22 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl text-white text-center font-bold mb-4">Choose your avatar</h2>
-        {!isLoaded ? (
-          <div className="text-center text-white">Loading avatars...</div>
-        ) : loadingError ? (
-          <div className="text-red-500 text-center">Error loading avatars</div>
+        {isLoaded ? (
+        <div className="text-center text-lg text-gray-400 animate-pulse">
+        Summoning avatars...
+      </div>
+    ) : loadingError ? (
+      <div className="text-red-500 text-center bg-red-950/30 p-4 rounded-md">
+        Oops! Avatar portal is down
+      </div>
         ) : (
           <div className="grid grid-cols-4 gap-2">
             {avatars.map((avatar) => (
               <button
                 key={avatar.name}
-                className="relative rounded-lg transition-colors duration-200"
+                className={`relative rounded-lg transition-transform duration-200 ${
+                  selectedAvatar === avatar.path ? 'scale-110' : ''
+                }`}
                 onClick={() => handleAvatarSelect(avatar.path)}
               >
                 <div className="w-24 h-24 flex items-center justify-center">
@@ -143,7 +149,7 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
                   />
                 </div>
                 {selectedAvatar === avatar.path && (
-                  <div className="absolute flex inset-0 bg-black/75 h-24 my-auto w-18 mx-auto rounded-full">
+                  <div className="absolute flex inset-0 bg-black/75 ml-2 h-28 w-20 rounded-full">
                     <img src={Check} alt="" className='w-10 h-10 mx-auto my-auto' />
                   </div>
                 )}
