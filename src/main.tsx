@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { PreloaderProvider } from './Components/PreloaderProvider';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import App from './Pages/App';
@@ -9,6 +8,7 @@ import Friends from './Pages/Friends';
 import Eco from './Pages/Eco';
 import './index.css';
 import Layout from '../src/Components/Layout';
+import './registerSW'
 
 const RootComponent = () => {
   useEffect(() => {
@@ -30,7 +30,6 @@ const RootComponent = () => {
 
   return (
     <Router>
-      <PreloaderProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<App />} /> {/* Default route */}
@@ -40,7 +39,6 @@ const RootComponent = () => {
             <Route path="eco" element={<Eco />} />
           </Route>
         </Routes>
-      </PreloaderProvider>
     </Router>
   );
 };
