@@ -24,41 +24,35 @@ interface Friend {
 
 const inviteLinks = [
   {
-    title: 'Share your invite links',
-    description: 'Get a free play pass for each friend',
+    title: 'Debut',
+    description: 'Kickstart your journey with our first product release',
     textColor: 'text-white/50',
     icon: EiCheck,
-    time: '10hr/min',
+    time: 'November',
   },
   {
-    title: 'Refer more friends',
-    description: 'Earn bonus rewards for each referral',
-    textColor: 'text-white/50',
-    icon: EiCheck,
-    time: '8hr/min',
-  },
-  {
-    title: 'Unlock special bonuses',
-    description: 'Share your link and unlock VIP features',
+    title: 'Mining',
+    description: 'Explore and earn rewards through mining activities',
     textColor: 'text-[#FFC213]/50',
     icon: CompletedTimer,
-    time: '10hr/min',
+    time: 'December',
   },
   {
-    title: 'Limited-time offer',
-    description: 'Refer now to get double rewards',
+    title: 'Minting',
+    description: 'Unlock exclusive features through token minting',
     textColor: 'text-white/50',
     icon: Timer,
-    time: '12hr/min',
+    time: 'February',
   },
   {
-    title: 'Exclusive invite benefits',
-    description: 'Invite friends and gain premium access',
+    title: 'Trading',
+    description: 'Engage in seamless trading experiences',
     textColor: 'text-white/50',
     icon: Timer,
-    time: '15hr/min',
+    time: 'June',
   },
 ];
+
 
 const Airdrop = () => {
   const { minerate, friends, avatarPath } = useOutletContext<AirdropProps>();
