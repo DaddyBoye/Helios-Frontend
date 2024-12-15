@@ -448,18 +448,18 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
             {/* Dynamic call-to-action message */}
             <div className="text-center">
                 {selectedItem.status === 'Ongoing' && (
-                    <p className="text-white text-sm tracking-wide leading-relaxed">
+                    <p className="text-white text-md tracking-wide leading-relaxed">
                         Log your progress to participate in the <span className="font-bold text-yellow-300">{selectedItem.title}</span>! 🌍
                     </p>
                 )}
                 {selectedItem.status === 'Upcoming' && (
-                    <p className="text-white text-sm tracking-wide leading-relaxed">
+                    <p className="text-white text-md tracking-wide leading-relaxed">
                         Get ready for the <span className="font-bold text-yellow-300">{selectedItem.title}</span> starting on{' '}
                         <span className="text-green-300">{selectedItem.startDateDay} {selectedItem.startDateMonth}</span>! 🎉
                     </p>
                 )}
                 {selectedItem.status === 'Completed' && (
-                    <p className="text-white text-sm tracking-wide leading-relaxed">
+                    <p className="text-white text-md tracking-wide leading-relaxed">
                         The <span className="font-bold text-yellow-300">{selectedItem.title}</span> has ended. Stay tuned for future challenges! ✅
                     </p>
                 )}

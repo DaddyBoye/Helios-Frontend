@@ -293,15 +293,15 @@ const renderImageCarousel = () => (
             <div 
                 key={index} 
                 className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center 
-                transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 
-                cursor-pointer group'
+                transition-all duration-300
+                cursor-pointer'
                 onClick={() => handleItemClick(imageInfo)}
             >
                 {/* Image with improved overlay */}
                 <img 
                     src={imageInfo.image} 
                     alt={imageInfo.title} 
-                    className="w-full h-full object-cover rounded-2xl transition-transform duration-300 group-hover:brightness-90"
+                    className="w-full h-full object-cover rounded-2xl"
                 />
                 
                 {/* Gradient overlay */}
@@ -311,8 +311,7 @@ const renderImageCarousel = () => (
                 <div className='absolute top-3 left-3 w-full justify-between flex'>
                     {/* Status Badge */}
                     <div 
-                        className='px-3 py-1.5 rounded-2xl text-xs font-medium text-black transition-all 
-                        duration-300 group-hover:scale-105'
+                        className='px-3 py-1.5 rounded-2xl text-xs font-medium text-black'
                         style={{backgroundColor: imageInfo.statusColor}}
                     >
                         {imageInfo.status}
@@ -320,7 +319,7 @@ const renderImageCarousel = () => (
                     
                     {/* Date Badge */}
                     <div 
-                        className="absolute right-5 transition-all duration-300 group-hover:translate-y-[-5px]"
+                        className="absolute right-5"
                     >
                         <div 
                             className="flex items-center gap-1.5 bg-gray-900/60 backdrop-blur-sm px-3 py-1.5 
@@ -339,11 +338,11 @@ const renderImageCarousel = () => (
                 </div>
                 
                 {/* Bottom text section */}
-                <div className="absolute text-left bottom-3 left-3 text-white transition-all duration-300 group-hover:translate-y-[-10px]">
-                    <div className="text-lg font-bold mb-1 group-hover:text-yellow-300 transition-colors">
+                <div className="absolute text-left bottom-3 left-3 text-white">
+                    <div className="text-lg font-bold mb-1">
                         {imageInfo.title}
                     </div>
-                    <p className='text-sm opacity-80 group-hover:opacity-100'>
+                    <p className='text-sm opacity-80'>
                         {imageInfo.shortCallToAction}
                     </p>
                 </div>
