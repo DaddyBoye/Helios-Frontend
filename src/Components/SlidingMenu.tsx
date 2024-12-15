@@ -12,13 +12,15 @@ interface CarouselImage {
   longDescription: string;
   taskId: number;
   shortCallToAction: string;
-  status: 'Ongoing' | 'Upcoming' | 'completed';
+  status: 'Ongoing' | 'Upcoming' | 'Completed';
   statusColor: string;
   startDateDay: number;
   startDateMonth: string;
   endDateDay: number;
   endDateMonth: string;
   playerCount: string;
+  prizeBreakdown: { range: string; amount: number }[];
+  statusEmoji?: string;
 }
 
 interface Platform {
@@ -260,7 +262,6 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
           <h4 className="font-bold mb-2">Your Referral Link</h4>
           <div className="bg-gray-800 p-3 rounded-lg flex items-center justify-between">
             <p className="text-sm text-white/70 truncate">
-              https://app.helios.net/ref/{telegramId}
             </p>
             <button 
               onClick={() => navigator.clipboard.writeText(`https://app.helios.net/ref/${telegramId}`)}
@@ -357,7 +358,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
           ) : isCarouselImage(selectedItem) && (
                         <>
                             {/* Carousel items */}
-                            <div className="flex flex-col gap-3 mb-44 mt-12">
+                            <div className="flex flex-col gap-3 mb-48 mt-12">
                                 {/* Challenge */}
                                 <div
                                   className="bg-cover bg-center rounded-xl relative"
@@ -379,8 +380,10 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                         {selectedItem.description}
                                       </p>
                                       <div className="flex space-x-2 mt-2">
-                                        <div className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs flex items-center">
-                                          <span className="mr-1">🎟️</span> Entry 10,000
+                                        <div className="text-white bg-transparent px-2 py-1 rounded-full text-xs flex items-center border"
+                                        style={{borderColor: selectedItem.statusColor}} 
+                                        >
+                                          <span className="mr-1">{selectedItem.statusEmoji}</span> {selectedItem.status}
                                         </div>
                                         <div className="">
                             <div className="flex items-center gap-1.5 bg-gray-900/50 backdrop-blur px-3 py-1.5 rounded-xl border border-gray-700/50"
@@ -399,37 +402,33 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                                   </div>
                                 </div>
 
-                                {/* Prize breakdown */}
-                                <div className="bg-[#1B27AA] rounded-xl p-4">
-                                    <div className='flex justify-between mt-2 mb-4'>
-                                      <div className="text-white text-lg font-bold ">1st prize</div>
-                                      <div className="flex">
-                                          <span className="text-green-400 text-xs mt-auto mb-1 mr-1">in USDT</span>
-                                          <span className="text-white text-xl font-bold mr-2">$1,200</span>
-                                      </div>
-                                    </div>
-                                    {[
-                                        { range: '2nd - 6th', amount: 150 },
-                                        { range: '7th - 26th', amount: 30 },
-                                        { range: '27th - 476th', amount: 1 },
-                                    ].map((prize, index) => (
-                                        <div key={index} className="flex justify-between text-sm text-white mt-2 mb-2">
-                                            <span>{prize.range} prize</span>
-                                            <span className="flex items-center">
-                                                ${prize.amount}
-                                                <span className="text-green-400 ml-1">🟢</span>
-                                            </span>
-                                        </div>
-                                    ))}
-                                    <p className="text-white mb-2 hidden">
-                                        <span className="text-yellow-400 text-lg mr-1">1 🎟️</span> = 1 chance to win
-                                    </p>
-                                </div>
+{/* Prize breakdown */}
+<div className="rounded-xl p-4 bg-gradient-to-br from-black/50 to-black/60 space-y-4 shadow-lg">
+  <div className="flex justify-between items-center border-b border-white/20 pb-2 mb-2">
+    <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
+    <div className="flex items-baseline">
+      <span className="text-green-300 text-xs mr-2 opacity-80">in USDT</span>
+      <span className="text-white text-2xl font-extrabold text-green-100">$1,200</span>
+    </div>
+  </div>
+  {selectedItem.prizeBreakdown.slice(1).map((prize, index) => (
+    <div 
+      key={index} 
+      className="flex justify-between items-center text-sm text-white/90 hover:bg-white/10 transition-colors rounded-md px-2 py-1"
+    >
+      <span className="font-medium">{prize.range} Prize</span>
+      <span className="flex items-center">
+        <span className="font-semibold">${prize.amount}</span>
+        <span className="text-green-400 ml-2">🟢</span>
+      </span>
+    </div>
+  ))}
+</div>
 
                                 {/* Ticket information */}
-                                <div className="bg-[#1B27AA] rounded-xl p-4 text-center">
-                                  <p>Hack Helios</p>
-                                  <p className='text-sm text-left text-center'>{selectedItem.longDescription}</p>
+                                <div className="bg-gradient-to-br from-black/50 to-black/60 rounded-xl p-4 text-center space-y-3">
+                                  <h3 className="text-lg font-bold text-white">{selectedItem.title}</h3>
+                                  <p className="text-sm text-white/70 text-center">{selectedItem.longDescription}</p>
                                 </div>
                             </div>
                         </>
@@ -437,25 +436,80 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                 </div>
             </div>
             
-            {/* Action buttons, render only for carousel images */}
-            {isCarouselImage(selectedItem) && (
-                <div className="fixed bottom-0 left-0 right-0 mx-auto w-full justify-center p-4 bg-blue-900 flex flex-col space-y-3"
-                     onClick={(e) => {
-                     e.stopPropagation();  // Your actual button action
-                  }}
-                >
-                    <p className="text-white">
-                        Collect <span className="text-yellow-400 text-sm">5,971 🎟️</span> more to enter the draw
+{/* Action buttons, render only for carousel images */}
+{isCarouselImage(selectedItem) && (
+    <div
+        className="fixed bottom-0 left-0 right-0 mx-auto max-w-md w-full z-50 shadow-2xl"
+        onClick={(e) => {
+            e.stopPropagation(); // Prevent event propagation
+        }}
+    >
+        <div className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-t-xl p-4 space-y-4 shadow-lg">
+            {/* Dynamic call-to-action message */}
+            <div className="text-center">
+                {selectedItem.status === 'Ongoing' && (
+                    <p className="text-white text-sm tracking-wide leading-relaxed">
+                        Log your progress to participate in the <span className="font-bold text-yellow-300">{selectedItem.title}</span>! 🌍
                     </p>
-                    <button className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm">
-                        JOIN DRAW 10,000 🎟️
-                    </button>
+                )}
+                {selectedItem.status === 'Upcoming' && (
+                    <p className="text-white text-sm tracking-wide leading-relaxed">
+                        Get ready for the <span className="font-bold text-yellow-300">{selectedItem.title}</span> starting on{' '}
+                        <span className="text-green-300">{selectedItem.startDateDay} {selectedItem.startDateMonth}</span>! 🎉
+                    </p>
+                )}
+                {selectedItem.status === 'Completed' && (
+                    <p className="text-white text-sm tracking-wide leading-relaxed">
+                        The <span className="font-bold text-yellow-300">{selectedItem.title}</span> has ended. Stay tuned for future challenges! ✅
+                    </p>
+                )}
+            </div>
 
-                    <button className="w-full bg-blue-700 text-white py-3 rounded-xl font-bold text-sm" onClick={handleClose}>
-                        CLOSE
+            {/* Call-to-action buttons */}
+            <div className="space-y-3">
+                {selectedItem.status === 'Ongoing' && (
+                    <button
+                        className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm 
+                        transition-all duration-300 ease-in-out hover:bg-yellow-400 
+                        active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50"
+                        onClick={() => window.open(selectedItem.link, '_blank')}
+                    >
+                        LOG YOUR PROGRESS 🚀
                     </button>
-                </div>
-            )}
+                )}
+                {selectedItem.status === 'Upcoming' && (
+                    <button
+                        className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm 
+                        transition-all duration-300 ease-in-out hover:bg-yellow-400 
+                        active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50"
+                        onClick={() => window.open(selectedItem.link, '_blank')}
+                    >
+                        SIGN UP NOW 🌱
+                    </button>
+                )}
+                {selectedItem.status === 'Completed' && (
+                    <button
+                        className="w-full bg-gray-600 text-white py-3 rounded-xl font-bold text-sm 
+                        opacity-70 cursor-not-allowed"
+                        disabled
+                    >
+                        CHALLENGE ENDED 🏁
+                    </button>
+                )}
+
+                {/* Close button */}
+                <button
+                    className="w-full bg-blue-700 text-white py-3 rounded-xl font-bold text-sm 
+                    transition-all duration-300 ease-in-out hover:bg-blue-600 
+                    active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    onClick={handleClose}
+                >
+                    CLOSE
+                </button>
+            </div>
+        </div>
+    </div>
+)}
         </div>
     );
 };

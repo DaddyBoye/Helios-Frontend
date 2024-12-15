@@ -60,13 +60,15 @@ interface CarouselImage {
     longDescription: string;
     taskId: number;
     shortCallToAction: string;
-    status: 'Ongoing' | 'Upcoming' | 'completed';
+    status: 'Ongoing' | 'Upcoming' | 'Completed';
     statusColor: string;
     startDateDay: number;
     startDateMonth: string;
     endDateDay: number;
     endDateMonth: string;
     playerCount: string;
+    prizeBreakdown: { range: string; amount: number }[];
+    statusEmoji?: string;
 }
 
 type SelectedItem = Platform | InviteTask | CarouselImage;
@@ -172,58 +174,76 @@ const Earn = () => {
 
     const images: CarouselImage[] = [
         { 
-            image: Helios3,  // 
-            title: "Referral Quest",
-            startDateDay: 21,
-            startDateMonth: 'Oct',
-            endDateDay: 31,
-            endDateMonth: 'Oct',
-            taskId: 20,
+            image: Helios3, // Replace with the relevant image for Plastic-Free Challenge
+            title: "Plastic-Free Challenge",
+            startDateDay: 1,
+            startDateMonth: 'Dec',
+            endDateDay: 15,
+            endDateMonth: 'Dec',
+            taskId: 50,
             status: 'Ongoing',
-            playerCount: "12K",
+            playerCount: "18K",
             statusColor: '#3B82F6',
-            shortCallToAction: "Join the race for a chance at $100",
-            description: "Join the Referral Race for a Shot at $100", 
-            link: 'https://challenge.com',
+            statusEmoji: '🔥',
+            shortCallToAction: "Log your progress and ditch plastics!",
+            description: "Join the Plastic-Free Challenge and report your progress.",
+            link: 'https://forms.gle/RDako1gDgdCSGcGm6', // Replace with the correct link
             color: 'transparent',
-            longDescription: "Compete in our exciting Referral Race and be the first to reach 100 rewards! The winner will snag $100 and 15,000 Helios coins. This is your chance to shine in the Helios ecosystem while driving engagement. "
+            longDescription: "The Plastic-Free Challenge is all about reducing our reliance on single-use plastics. Over 15 days, participants are encouraged to track the number of plastic items avoided, share photos of their creative reusable alternatives, and reflect on the changes they've made. This challenge isn't just about competition; it's a step towards building sustainable habits and inspiring others to do the same. Small changes lead to big impact, so join us today and be part of the movement!",
+            prizeBreakdown: [
+                { range: '1st', amount: 100 },
+                { range: '2nd - 6th', amount: 50 },
+                { range: '7th - 26th', amount: 20 },
+            ],
         },
         { 
-            image: Helios6,  // 
-            title: "$15,000 Prize Pool", 
-            startDateDay: 30,
-            startDateMonth: 'Nov',
-            endDateDay: 14,
+            image: Helios6, // Replace with the relevant image for Tree Planting Drive
+            title: "Tree Planting Drive", 
+            startDateDay: 20,
+            startDateMonth: 'Dec',
+            endDateDay: 31,
             endDateMonth: 'Dec',
-            taskId: 30,
+            taskId: 60,
             status: 'Upcoming',
             statusColor: '#FBBF24',
-            playerCount: "24K",
-            shortCallToAction: "Join the competition",
-            description: "Join our event and compete for a share of the $15,000 prize pool.", 
-            link: 'https://prizepool.com',
+            statusEmoji: '⏳',
+            playerCount: "12K",
+            shortCallToAction: "Sign up to plant your tree!",
+            description: "Get ready for the Tree Planting Drive and make a difference.", 
+            link: 'https://forms.gle/uydrMVoEgVXB4kAu6', // Replace with the correct link
             color: 'transparent',
-            longDescription: "The $15,000 Prize Pool event is a fast-paced, high-energy competition designed to foster innovation in decentralized finance (DeFi). Over two exhilarating weeks, participants will work on creating novel DeFi solutions that address real-world financial challenges. This event is not just about the substantial prize money; it's an opportunity to gain visibility in the DeFi space, receive valuable feedback from experts, and potentially secure funding for your project. Whether you're focusing on yield farming, decentralized exchanges, or innovative lending protocols, this is your chance to make a lasting impact on the future of finance."
+            longDescription: "The Tree Planting Drive is your chance to contribute to reforestation and combat climate change. By planting a tree, you’re not just creating a greener planet; you’re also providing habitats for wildlife, improving air quality, and making your local area more beautiful. Snap a photo of the tree you plant and share its location (if you like) to inspire others in the community. This challenge is open to everyone, and even a single tree can make a difference. Let’s join hands and plant a forest, one tree at a time!",
+            prizeBreakdown: [
+                { range: '1st', amount: 150 },
+                { range: '2nd - 6th', amount: 75 },
+                { range: '7th - 26th', amount: 30 },
+            ],
         },
         { 
-            image: Helios7,  // 
-            title: "Hack Helios", 
-            taskId: 40, 
-            startDateDay: 15,
-            startDateMonth: 'Oct',
-            endDateDay: 29,
-            endDateMonth: 'Oct',
-            status: 'completed',
-            playerCount: "8K",
+            image: Helios7, // Replace with the relevant image for Recycling Race
+            title: "Recycling Race", 
+            taskId: 70, 
+            startDateDay: 1,
+            startDateMonth: 'Nov',
+            endDateDay: 15,
+            endDateMonth: 'Nov',
+            status: 'Completed',
+            playerCount: "2K",
             statusColor: '#34D399',
-            shortCallToAction: "Join the hackathon to win amazing prizes",
-            description: "Get involved in the Helios Hackathon and win amazing rewards!", 
-            link: 'https://hackathon.com',
+            statusEmoji: '✅',
+            shortCallToAction: "Track your impact and compete!",
+            description: "The Recycling Race helped participants recycle and track their impact.", 
+            link: 'https://recyclingrace.com', // Replace with the correct link
             color: 'transparent',
-            longDescription: "The Helios Hackathon is an intense 48-hour coding marathon where creativity meets blockchain technology. This event brings together developers, designers, and blockchain enthusiasts from around the world to tackle some of the most pressing challenges in the crypto space. From scalability solutions to novel applications of smart contracts, the Helios Hackathon is where groundbreaking ideas come to life. With expert mentors on hand, a supportive community, and the chance to win amazing prizes, this hackathon is not just a competition—it's a launchpad for the next big innovations in blockchain technology. Whether you're a seasoned blockchain developer or a curious newcomer, the Helios Hackathon offers an unparalleled opportunity to learn, create, and potentially kickstart your career in the world of decentralized technologies."
+            longDescription: "The Recycling Race was an exciting opportunity for participants to showcase their commitment to sustainability. Over two weeks, hundreds of people tracked the number and types of items they recycled, such as paper, plastic, glass, and metal. This challenge encouraged better waste management practices and highlighted how simple actions can collectively lead to significant environmental impact. With an engaging leaderboard and amazing prizes, the Recycling Race proved that competition can drive positive change for our planet.",
+            prizeBreakdown: [
+                { range: '1st', amount: 200 },
+                { range: '2nd - 6th', amount: 100 },
+                { range: '7th - 26th', amount: 50 },
+            ],
         }
-    ];   
-
+    ];
+    
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -264,36 +284,73 @@ const Earn = () => {
         />
     );
 
-    const renderImageCarousel = () => (
-        <div ref={carouselRef} className='flex gap-2 pl-3 overflow-x-auto pr-3 mt-16 hide-scrollbar snap-x snap-mandatory'>
-            {images.map((imageInfo, index) => (
-                <div key={index} className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center' onClick={() => handleItemClick(imageInfo)}>
-                    <img src={imageInfo.image} alt={imageInfo.title} className="w-full h-full object-cover rounded-2xl" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#09161F] via-transparent to-[#09161F] rounded-2xl"></div>
-                    <div className='absolute top-3 left-3 w-full justify-between flex'> 
-                        <div className='bg-yellow-500 px-2 py-1 rounded-2xl text-xs text-black'
+const renderImageCarousel = () => (
+    <div 
+        ref={carouselRef} 
+        className='flex gap-4 pl-3 overflow-x-auto pr-3 mt-16 hide-scrollbar snap-x snap-mandatory scroll-smooth'
+    >
+        {images.map((imageInfo, index) => (
+            <div 
+                key={index} 
+                className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center 
+                transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 
+                cursor-pointer group'
+                onClick={() => handleItemClick(imageInfo)}
+            >
+                {/* Image with improved overlay */}
+                <img 
+                    src={imageInfo.image} 
+                    alt={imageInfo.title} 
+                    className="w-full h-full object-cover rounded-2xl transition-transform duration-300 group-hover:brightness-90"
+                />
+                
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#09161F]/70 via-transparent to-[#09161F] rounded-2xl"></div>
+                
+                {/* Top section with status and date */}
+                <div className='absolute top-3 left-3 w-full justify-between flex'>
+                    {/* Status Badge */}
+                    <div 
+                        className='px-3 py-1.5 rounded-2xl text-xs font-medium text-black transition-all 
+                        duration-300 group-hover:scale-105'
                         style={{backgroundColor: imageInfo.statusColor}}
-                        >
-                        <p >{imageInfo.status}</p>
-                        </div>
-                        <div className="absolute right-5">
-                            <div className="flex items-center gap-1.5 bg-gray-900/50 backdrop-blur px-3 py-1.5 rounded-xl border border-gray-700/50"
-                            style={{borderColor: imageInfo.statusColor}}
-                            >
-                            <span className="text-yellow-500 font-bold text-lg leading-none">{imageInfo.endDateDay}</span>
-                            <div className="w-px h-4 bg-gray-700/50"></div>
-                            <span className="text-yellow-500/80 text-xs uppercase tracking-wider">{imageInfo.endDateMonth}</span>
-                        </div>
-                        </div>
+                    >
+                        {imageInfo.status}
                     </div>
-                    <div className="absolute text-left bottom-2 left-3 text-white">
-                        <div className="text-md font-semibold">{imageInfo.title}</div>
-                        <p className='text-sm'>{imageInfo.shortCallToAction}</p>
+                    
+                    {/* Date Badge */}
+                    <div 
+                        className="absolute right-5 transition-all duration-300 group-hover:translate-y-[-5px]"
+                    >
+                        <div 
+                            className="flex items-center gap-1.5 bg-gray-900/60 backdrop-blur-sm px-3 py-1.5 
+                            rounded-xl border border-gray-700/50 shadow-lg"
+                            style={{borderColor: imageInfo.statusColor}}
+                        >
+                            <span className="text-yellow-500 font-bold text-lg leading-none">
+                                {imageInfo.endDateDay}
+                            </span>
+                            <div className="w-px h-4 bg-gray-700/50"></div>
+                            <span className="text-yellow-500/80 text-xs uppercase tracking-wider">
+                                {imageInfo.endDateMonth}
+                            </span>
+                        </div>
                     </div>
                 </div>
-            ))}
-        </div>
-    );
+                
+                {/* Bottom text section */}
+                <div className="absolute text-left bottom-3 left-3 text-white transition-all duration-300 group-hover:translate-y-[-10px]">
+                    <div className="text-lg font-bold mb-1 group-hover:text-yellow-300 transition-colors">
+                        {imageInfo.title}
+                    </div>
+                    <p className='text-sm opacity-80 group-hover:opacity-100'>
+                        {imageInfo.shortCallToAction}
+                    </p>
+                </div>
+            </div>
+        ))}
+    </div>
+);
 
     const renderSocialSection = () => (
         <>
