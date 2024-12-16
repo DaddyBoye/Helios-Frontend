@@ -356,162 +356,162 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
               )}
             </div>
           ) : isCarouselImage(selectedItem) && (
-                        <>
-                            {/* Carousel items */}
-                            <div className="flex flex-col gap-3 mb-48 mt-12">
-                                {/* Challenge */}
-                                <div
-                                  className="bg-cover bg-center rounded-xl relative"
-                                  style={{
-                                    backgroundImage: `url(${selectedItem.image})`,
-                                  }}
-                                >
-                                  <div className="absolute inset-0 bg-gradient-to-b from-[#09161F] via-transparent to-[#09161F] rounded-lg"></div>
-                                  <div className="relative z-10">
-                                    <div className="flex justify-between px-3 pt-3 h-28 mb-2">
-                                    <h2 className="text-white text-lg font-bold mb-1">Weekly Challenge</h2>
-                                      <button className="bg-blue-700 text-white px-3 mb-auto py-0.5 rounded-full text-xs">
-                                        LEARN MORE
-                                      </button>
-                                    </div>
-                                    <div className='bg-black/30 rounded-b-xl backdrop-blur-sm py-2 px-2'>
-                                    <h2 className="text-white text-sm font-bold text-left">{selectedItem.title}</h2>
-                                      <p className="text-white/50 text-xs flex text-left">
-                                        {selectedItem.description}
-                                      </p>
-                                      <div className="flex space-x-2 mt-2">
-                                        <div className="text-white bg-transparent px-2 py-1 rounded-full text-xs flex items-center border"
-                                        style={{borderColor: selectedItem.statusColor}} 
-                                        >
-                                          <span className="mr-1">{selectedItem.statusEmoji}</span> {selectedItem.status}
-                                        </div>
-                                        <div className="">
-                            <div className="flex items-center gap-1.5 bg-gray-900/50 backdrop-blur px-3 py-1.5 rounded-xl border border-gray-700/50"
+            <>
+              {/* Carousel items */}
+              <div className="flex flex-col gap-3 mb-48 mt-12">
+                {/* Challenge */}
+                <div
+                  className="bg-cover bg-center rounded-xl relative"
+                  style={{
+                    backgroundImage: `url(${selectedItem.image})`,
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#09161F] via-transparent to-[#09161F] rounded-lg"></div>
+                  <div className="relative z-10">
+                    <div className="flex justify-between px-3 pt-3 h-28 mb-2">
+                      <h2 className="text-white text-lg font-bold mb-1">Weekly Challenge</h2>
+                      <button className="bg-blue-700 text-white px-3 mb-auto py-0.5 rounded-full text-xs">
+                        LEARN MORE
+                      </button>
+                    </div>
+                    <div className='bg-black/30 rounded-b-xl backdrop-blur-sm py-2 px-2'>
+                      <h2 className="text-white text-sm font-bold text-left">{selectedItem.title}</h2>
+                      <p className="text-white/50 text-xs flex text-left">
+                        {selectedItem.description}
+                      </p>
+                      <div className="flex space-x-2 mt-2">
+                        <div className="text-white bg-transparent px-2 py-1 rounded-full text-xs flex items-center border"
+                          style={{borderColor: selectedItem.statusColor}} 
+                        >
+                          <span className="mr-1">{selectedItem.statusEmoji}</span> {selectedItem.status}
+                        </div>
+                        <div className="">
+                          <div className="flex items-center gap-1.5 bg-gray-900/50 backdrop-blur px-3 py-1.5 rounded-xl border border-gray-700/50"
                             style={{borderColor: selectedItem.statusColor}}
-                            >
+                          >
                             <span className="text-yellow-500 font-bold text-lg leading-none">{selectedItem.endDateDay}</span>
                             <div className="w-px h-4 bg-gray-700/50"></div>
                             <span className="text-yellow-500/80 text-xs uppercase tracking-wider">{selectedItem.endDateMonth}</span>
+                          </div>
                         </div>
+                        <div className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm flex items-center">
+                          <img src={Friends} alt="Users Icon" className='mr-1'/>{selectedItem.playerCount}
                         </div>
-                                        <div className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                                          <img src={Friends} alt="Users Icon" className='mr-1'/>{selectedItem.playerCount}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-{/* Prize breakdown */}
-<div className="rounded-xl p-4 bg-gradient-to-br from-black/50 to-black/60 space-y-4 shadow-lg">
-  <div className="flex justify-between items-center border-b border-white/20 pb-2 mb-2">
-    <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
-    <div className="flex items-baseline">
-      <span className="text-green-300 text-xs mr-2 opacity-80">in USDT</span>
-      <span className="text-white text-2xl font-extrabold text-green-100">$1,200</span>
-    </div>
-  </div>
-  {selectedItem.prizeBreakdown.slice(1).map((prize, index) => (
-    <div 
-      key={index} 
-      className="flex justify-between items-center text-sm text-white/90 hover:bg-white/10 transition-colors rounded-md px-2 py-1"
-    >
-      <span className="font-medium">{prize.range} Prize</span>
-      <span className="flex items-center">
-        <span className="font-semibold">${prize.amount}</span>
-        <span className="text-green-400 ml-2">🟢</span>
-      </span>
-    </div>
-  ))}
-</div>
-
-                                {/* Ticket information */}
-                                <div className="bg-gradient-to-br from-black/50 to-black/60 rounded-xl p-4 text-center space-y-3">
-                                  <h3 className="text-lg font-bold text-white">{selectedItem.title}</h3>
-                                  <p className="text-sm text-white/70 text-center">{selectedItem.longDescription}</p>
-                                </div>
-                            </div>
-                        </>
-                    )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-            
-{/* Action buttons, render only for carousel images */}
-{isCarouselImage(selectedItem) && (
-    <div
-        className="fixed bottom-0 left-0 right-0 mx-auto max-w-md w-full z-50 shadow-2xl"
-        onClick={(e) => {
+
+                {/* Prize breakdown */}
+                <div className="rounded-xl p-4 bg-gradient-to-br from-black/50 to-black/60 space-y-4 shadow-lg">
+                  <div className="flex justify-between items-center border-b border-white/20 pb-2 mb-2">
+                    <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
+                    <div className="flex items-baseline">
+                      <span className="text-green-300 text-xs mr-2 opacity-80">in USDT</span>
+                      <span className="text-white text-2xl font-extrabold text-green-100">$1,200</span>
+                    </div>
+                  </div>
+                  {selectedItem.prizeBreakdown.slice(1).map((prize, index) => (
+                    <div 
+                      key={index} 
+                      className="flex justify-between items-center text-sm text-white/90 hover:bg-white/10 transition-colors rounded-md px-2 py-1"
+                    >
+                      <span className="font-medium">{prize.range} Prize</span>
+                      <span className="flex items-center">
+                        <span className="font-semibold">${prize.amount}</span>
+                        <span className="text-green-400 ml-2">🟢</span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Ticket information */}
+                <div className="bg-gradient-to-br from-black/50 to-black/60 rounded-xl p-4 text-center space-y-3">
+                  <h3 className="text-lg font-bold text-white">{selectedItem.title}</h3>
+                  <p className="text-sm text-white/70 text-center">{selectedItem.longDescription}</p>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+      
+      {/* Action buttons, render only for carousel images */}
+      {isCarouselImage(selectedItem) && (
+        <div
+          className="fixed bottom-0 left-0 right-0 mx-auto max-w-md w-full z-50 shadow-2xl"
+          onClick={(e) => {
             e.stopPropagation(); // Prevent event propagation
-        }}
-    >
-        <div className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-t-xl p-4 space-y-4 shadow-lg">
+          }}
+        >
+          <div className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-t-xl p-4 space-y-4 shadow-lg">
             {/* Dynamic call-to-action message */}
             <div className="text-center">
-                {selectedItem.status === 'Ongoing' && (
-                    <p className="text-white text-md tracking-wide leading-relaxed">
-                        Log your progress to participate in the <span className="font-bold text-yellow-300">{selectedItem.title}</span>! 🌍
-                    </p>
-                )}
-                {selectedItem.status === 'Upcoming' && (
-                    <p className="text-white text-md tracking-wide leading-relaxed">
-                        Get ready for the <span className="font-bold text-yellow-300">{selectedItem.title}</span> starting on{' '}
-                        <span className="text-green-300">{selectedItem.startDateDay} {selectedItem.startDateMonth}</span>! 🎉
-                    </p>
-                )}
-                {selectedItem.status === 'Completed' && (
-                    <p className="text-white text-md tracking-wide leading-relaxed">
-                        The <span className="font-bold text-yellow-300">{selectedItem.title}</span> has ended. Stay tuned for future challenges! ✅
-                    </p>
-                )}
+              {selectedItem.status === 'Ongoing' && (
+                <p className="text-white text-md tracking-wide leading-relaxed">
+                  Log your progress to participate in the <span className="font-bold text-yellow-300">{selectedItem.title}</span>! 🌍
+                </p>
+              )}
+              {selectedItem.status === 'Upcoming' && (
+                <p className="text-white text-md tracking-wide leading-relaxed">
+                  Get ready for the <span className="font-bold text-yellow-300">{selectedItem.title}</span> starting on{' '}
+                  <span className="text-green-300">{selectedItem.startDateDay} {selectedItem.startDateMonth}</span>! 🎉
+                </p>
+              )}
+              {selectedItem.status === 'Completed' && (
+                <p className="text-white text-md tracking-wide leading-relaxed">
+                  The <span className="font-bold text-yellow-300">{selectedItem.title}</span> has ended. Stay tuned for future challenges! ✅
+                </p>
+              )}
             </div>
 
             {/* Call-to-action buttons */}
             <div className="space-y-3">
-                {selectedItem.status === 'Ongoing' && (
-                    <button
-                        className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm 
-                        transition-all duration-300 ease-in-out hover:bg-yellow-400 
-                        active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50"
-                        onClick={() => window.open(selectedItem.link, '_blank')}
-                    >
-                        LOG YOUR PROGRESS 🚀
-                    </button>
-                )}
-                {selectedItem.status === 'Upcoming' && (
-                    <button
-                        className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm 
-                        transition-all duration-300 ease-in-out hover:bg-yellow-400 
-                        active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50"
-                        onClick={() => window.open(selectedItem.link, '_blank')}
-                    >
-                        SIGN UP NOW 🌱
-                    </button>
-                )}
-                {selectedItem.status === 'Completed' && (
-                    <button
-                        className="w-full bg-gray-600 text-white py-3 rounded-xl font-bold text-sm 
-                        opacity-70 cursor-not-allowed"
-                        disabled
-                    >
-                        CHALLENGE ENDED 🏁
-                    </button>
-                )}
-
-                {/* Close button */}
+              {selectedItem.status === 'Ongoing' && (
                 <button
-                    className="w-full bg-blue-700 text-white py-3 rounded-xl font-bold text-sm 
-                    transition-all duration-300 ease-in-out hover:bg-blue-600 
-                    active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                    onClick={handleClose}
+                  className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm 
+                  transition-all duration-300 ease-in-out hover:bg-yellow-400 
+                  active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50"
+                  onClick={() => window.open(selectedItem.link, '_blank')}
                 >
-                    CLOSE
+                  LOG YOUR PROGRESS 🚀
                 </button>
+              )}
+              {selectedItem.status === 'Upcoming' && (
+                <button
+                  className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm 
+                  transition-all duration-300 ease-in-out hover:bg-yellow-400 
+                  active:scale-95 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50"
+                  onClick={() => window.open(selectedItem.link, '_blank')}
+                >
+                  SIGN UP NOW 🌱
+                </button>
+              )}
+              {selectedItem.status === 'Completed' && (
+                <button
+                  className="w-full bg-gray-600 text-white py-3 rounded-xl font-bold text-sm 
+                  opacity-70 cursor-not-allowed"
+                  disabled
+                >
+                  CHALLENGE ENDED 🏁
+                </button>
+              )}
+
+              {/* Close button */}
+              <button
+                className="w-full bg-blue-700 text-white py-3 rounded-xl font-bold text-sm 
+                transition-all duration-300 ease-in-out hover:bg-blue-600 
+                active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                onClick={handleClose}
+              >
+                CLOSE
+              </button>
             </div>
+          </div>
         </div>
+      )}
     </div>
-)}
-        </div>
-    );
+  );
 };
 
 export default SlidingMenu;
