@@ -78,7 +78,7 @@ const Airdrop = () => {
         {/* Timeline indicator */}
         <div className="flex items-center justify-center w-40 mb-1 mx-auto">
           <div className="bg-white w-2 h-2 mx-auto rounded-full"></div>
-          <p className="text-sm">August</p>
+          <p className="text-sm">December</p>
           <div className="bg-white w-2 h-2 mx-auto rounded-full"></div>
         </div>
 
