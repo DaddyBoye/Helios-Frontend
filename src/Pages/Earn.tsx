@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
 import Header from '../Components/Header';
-import Instagram from '../icons/insta-removebg-preview 1.svg';
+import Instagram from '../icons/instagram.svg';
 import X from '../icons/x-removebg-preview 1.svg';
 import YouTube from '../icons/yt-removebg-preview 1.svg';
 import Telegram from '../icons/tg-removebg-preview 1.svg';
