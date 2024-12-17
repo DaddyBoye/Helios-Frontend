@@ -405,23 +405,23 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                 {/* Prize breakdown */}
                 <div className="rounded-xl p-4 bg-gradient-to-br from-black/50 to-black/60 space-y-4 shadow-lg">
                   <div className="flex justify-between items-center border-b border-white/20 pb-2 mb-2">
-                    <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
-                    <div className="flex items-baseline">
-                      <span className="text-green-300 text-xs mr-2 opacity-80">in USDT</span>
-                      <span className="text-white text-2xl font-extrabold text-green-100">$1,200</span>
-                    </div>
+                  <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
+                  <div className="flex items-baseline">
+                    <span className="text-green-300 text-xs mr-2 opacity-80">in USDT</span>
+                    <span className="text-white text-2xl font-extrabold text-green-100">${selectedItem.prizeBreakdown[0].amount}</span>
+                  </div>
                   </div>
                   {selectedItem.prizeBreakdown.slice(1).map((prize, index) => (
-                    <div 
-                      key={index} 
-                      className="flex justify-between items-center text-sm text-white/90 hover:bg-white/10 transition-colors rounded-md px-2 py-1"
-                    >
-                      <span className="font-medium">{prize.range} Prize</span>
-                      <span className="flex items-center">
-                        <span className="font-semibold">${prize.amount}</span>
-                        <span className="text-green-400 ml-2">🟢</span>
-                      </span>
-                    </div>
+                  <div 
+                    key={index} 
+                    className="flex justify-between items-center text-sm text-white/90 hover:bg-white/10 transition-colors rounded-md px-2 py-1"
+                  >
+                    <span className="font-medium">{prize.range} Prize</span>
+                    <span className="flex items-center">
+                    <span className="font-semibold">${prize.amount}</span>
+                    <span className="text-green-400 ml-2">🟢</span>
+                    </span>
+                  </div>
                   ))}
                 </div>
 

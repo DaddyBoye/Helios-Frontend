@@ -3,9 +3,9 @@ import { useOutletContext } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
 import Header from '../Components/Header';
 import Instagram from '../icons/instagram.svg';
-import X from '../icons/x-removebg-preview 1.svg';
-import YouTube from '../icons/yt-removebg-preview 1.svg';
-import Telegram from '../icons/tg-removebg-preview 1.svg';
+import X from '../icons/twitter.svg';
+import YouTube from '../icons/youtube.svg';
+import Telegram from '../icons/telegram.svg';
 import Friends from '../icons/Friends Vector.svg';
 import SlidingMenu from '../Components/SlidingMenu';
 import Solis from '../images/Solis-coin.svg';
@@ -233,12 +233,12 @@ const Earn = () => {
             statusEmoji: '✅',
             shortCallToAction: "Track your impact and compete!",
             description: "The Recycling Race helped participants recycle and track their impact.", 
-            link: 'https://recyclingrace.com', // Replace with the correct link
+            link: '', // Replace with the correct link
             color: 'transparent',
             longDescription: "The Recycling Race was an exciting opportunity for participants to showcase their commitment to sustainability. Over two weeks, hundreds of people tracked the number and types of items they recycled, such as paper, plastic, glass, and metal. This challenge encouraged better waste management practices and highlighted how simple actions can collectively lead to significant environmental impact. With an engaging leaderboard and amazing prizes, the Recycling Race proved that competition can drive positive change for our planet.",
             prizeBreakdown: [
-                { range: '1st', amount: 200 },
-                { range: '2nd - 6th', amount: 100 },
+                { range: '1st', amount: 100 },
+                { range: '2nd - 6th', amount: 75 },
                 { range: '7th - 26th', amount: 50 },
             ],
         }
