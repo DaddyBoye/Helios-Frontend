@@ -212,7 +212,7 @@ function App() {
             <p className="font-bold text-lg">Offset Rate</p>
             <div className="flex flex-row">
               <img src={freshcoin} alt="" className="w-9 my-auto h-9" />
-              <p className="text-md -ml-1.5 my-auto">{minerate}22/hr</p>
+              <p className="text-md -ml-1.5 my-auto">{minerate}/hr</p>
             </div>
             <p className="font-bold text-sm">Current Offset Round</p>
           </div>
