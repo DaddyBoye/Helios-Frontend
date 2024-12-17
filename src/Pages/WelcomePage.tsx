@@ -1,6 +1,6 @@
 import React from 'react';
 import StarryBackground from '../Components/StarryBackground';
-import Warrior from '../images/Helios Warrior.svg';
+import Warrior from '../icons/mascot.svg';
 import '../App.css';
 
 interface WelcomePageProps {
