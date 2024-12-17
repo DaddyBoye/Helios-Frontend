@@ -3,12 +3,11 @@ import ShareComponent from '../Components/ShareComponent';
 import { useOutletContext } from 'react-router-dom';
 import StarryBackground from '../Components/StarryBackground';
 import UserOutline from '../icons/Users Outline.svg';
-import Solis from '../images/Solisss.svg';
-import DarkSolis from '../images/Solisss.svg';
+import Solis from '../icons/Solis-raw2.svg';
 import Copy from '../icons/Group 107.svg';
 import { motion, AnimatePresence } from 'framer-motion';
 import FriendsIcon from '../icons/Friends Vector.svg';
-import FreshCoin from '../images/Group 9.svg';
+import FreshCoin from '../icons/Solis-coin.svg';
 import Cat from '../images/Cat.svg';
 import Capybara from '../images/Capybara.svg';
 import Parrot from '../images/Parrot.svg';
@@ -154,7 +153,7 @@ const Friends: React.FC = () => {
       <div className="z-10 w-full h-full text-center bg-transparent pb-36">
       {alertMessage && (
         <div className="mb-4 mt-4 pl-2 z-20 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 top-4 left-1/2 transform -translate-x-1/2">
-          <img src={DarkSolis} alt="" className="w-7 h-7 animate-spinZoomGlow" />
+          <img src={Solis} alt="" className="w-10 h-10 animate-spinZoomGlow" />
           <p className='pl-2 my-auto'>{alertMessage}</p>
         </div>
           )}
@@ -182,7 +181,7 @@ const Friends: React.FC = () => {
               <p className="my-auto font-bold text-white">{friends.length}</p>
             </div>
             <div className="flex flex-row">
-              <img src={FreshCoin} className="w-4 h-4 my-auto" />
+              <img src={FreshCoin} className="w-8 h-8 my-auto" />
               <p className="my-auto font-bold text-white">{formatNumber(totalAirdrops)}</p>
             </div>
           </div>
