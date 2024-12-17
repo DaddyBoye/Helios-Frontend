@@ -100,7 +100,7 @@ const LoadingPage = () => {
       {/* Loading bar at the bottom of the page */}
       <div className="absolute bottom-0 left-0 w-full h-2 bg-gray-200">
         <div 
-          className="h-full bg-gradient-to-r from-yellow-400 to-red-500 transition-all duration-300 ease-out"
+          className="h-full bg-yellow-400 transition-all duration-300 ease-out"
           style={{ width: `${loadingProgress}%` }}
         />
       </div>

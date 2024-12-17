@@ -211,8 +211,8 @@ function App() {
           <div className="flex flex-col">
             <p className="font-bold text-lg">Offset Rate</p>
             <div className="flex flex-row">
-              <img src={freshcoin} alt="" className="w-5 my-auto pr-0.5 h-5" />
-              <p className="text-md">{minerate}/hr</p>
+              <img src={freshcoin} alt="" className="w-9 my-auto h-9" />
+              <p className="text-md -ml-1.5 my-auto">{minerate}22/hr</p>
             </div>
             <p className="font-bold text-sm">Current Offset Round</p>
           </div>
@@ -251,9 +251,9 @@ function App() {
                   }}
                   className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto"
                 >
-                  <img src={Solis} className="w-8 h-8 mr-3 my-auto" />
+                  <img src={Solis} className="w-10 h-10 mr-3 my-auto" />
                   <div className="flex my-auto text-sm mr-2 flex-col">Offset Complete</div>
-                  <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
+                  <img src={freshcoin} className="my-auto mr-1 w-10 h-10" />
                   <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
                   <div className="my-auto">
                     {new Date(airdrop.timestamp).toLocaleTimeString("en-GB", {
