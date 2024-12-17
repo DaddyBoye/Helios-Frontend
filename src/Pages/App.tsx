@@ -1,5 +1,5 @@
 import ProgressBar from '../Components/ProgressBar';
-import Solis from '../icons/fdv 1 (1).svg';
+import Solis from '../icons/Solis-raw.svg';
 import freshcoin from '../images/Group 9.svg';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';

@@ -117,7 +117,7 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
   return (
     <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-between z-50">
       <div
-        className="text-white p-5 rounded-lg shadow-lg max-h-[90vh] overflow-y-auto"
+        className="text-white p-5 rounded-lg shadow-lg max-h-[90vh]"
         style={{ marginTop: `${topMargin}px` }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -135,22 +135,20 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
             {avatars.map((avatar) => (
               <button
                 key={avatar.name}
-                className={`relative rounded-lg transition-transform duration-200 ${
+                className={`relative min-w-20 rounded-lg transition-transform duration-200 ${
                   selectedAvatar === avatar.path ? 'scale-110' : ''
                 }`}
                 onClick={() => handleAvatarSelect(avatar.path)}
               >
-                <div className="w-24 h-24 flex items-center justify-center">
                   <img
                     src={avatar.clientPath}
                     alt={avatar.name}
-                    className="w-fit h-24"
+                    className="w-full h-full"
                     loading="eager"
                   />
-                </div>
                 {selectedAvatar === avatar.path && (
-                  <div className="absolute flex inset-0 bg-black/75 ml-2 h-28 w-20 rounded-full">
-                    <img src={Check} alt="" className='w-10 h-10 mx-auto my-auto' />
+                  <div className="absolute flex inset-0 bg-black/75 h-full w-full rounded-full">
+                    <img src={Check} alt="" className='w-5/12 mx-auto my-auto' />
                   </div>
                 )}
               </button>

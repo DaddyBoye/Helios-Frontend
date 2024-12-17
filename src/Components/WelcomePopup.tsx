@@ -99,28 +99,38 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onClose, toggleTaskbar }) =
           </div>
         );
 
-      case 3:
-        return (
-          <div className="font-sans">
-            <h2 className="text-xl font-bold text-emerald-500 mb-3 text-center">
-              Your Green Impact 🌿
-            </h2>
-            <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
-              <div className="space-y-3">
-                <div className="p-3 bg-gray-700/50 rounded-lg">
-                  <div className="text-sm text-gray-300 mb-1">Hourly Contribution</div>
-                  <div className="text-lg text-emerald-500 font-semibold">130 Helios</div>
-                  <div className="text-xs text-gray-400">≈ 1.3 kg CO₂ offset</div>
-                </div>
-                <div className="p-3 bg-gray-700/50 rounded-lg">
-                  <div className="text-sm text-gray-300 mb-1">Monthly Potential</div>
-                  <div className="text-lg text-emerald-500 font-semibold">93,600 Helios</div>
-                  <div className="text-xs text-gray-400">≈ 936 kg CO₂ offset</div>
+        case 3:
+          return (
+            <div className="font-sans">
+              <h2 className="text-xl font-bold text-emerald-500 mb-3 text-center">
+                Your Green Impact 🌿
+              </h2>
+              <div className="bg-gray-800/50 rounded-lg p-4 mb-4">
+                <div className="space-y-3">
+                  <div className="p-3 bg-gray-700/50 rounded-lg">
+                    <div className="text-sm text-gray-300 mb-1">Daily Potential</div>
+                    <div className="text-lg text-emerald-500 font-semibold">800 Helios</div>
+                    <div className="text-xs text-gray-400">
+                      ≈ 0.02 kg CO₂ offset <br />
+                      <span className="italic">
+                        That’s like neutralizing the emissions of a car driving 0.1 km!
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-gray-700/50 rounded-lg">
+                    <div className="text-sm text-gray-300 mb-1">Monthly Potential</div>
+                    <div className="text-lg text-emerald-500 font-semibold">20,000 Helios</div>
+                    <div className="text-xs text-gray-400">
+                      ≈ 0.4 kg CO₂ offset <br />
+                      <span className="italic">
+                        Equivalent to absorbing the emissions from powering a small home for a day!
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        );
+          );
 
       case 4:
         return (
@@ -155,7 +165,7 @@ const WelcomePopup: React.FC<WelcomePopupProps> = ({ onClose, toggleTaskbar }) =
                 </div>
                 <div className="text-left flex-1">
                   <h3 className="text-white text-sm font-semibold">Community Impact</h3>
-                  <p className="text-gray-400 text-xs">See collective progress</p>
+                  <p className="text-gray-400 text-xs">Join collective progress</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </button>
