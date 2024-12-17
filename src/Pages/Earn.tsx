@@ -8,7 +8,7 @@ import YouTube from '../icons/yt-removebg-preview 1.svg';
 import Telegram from '../icons/tg-removebg-preview 1.svg';
 import Friends from '../icons/Friends Vector.svg';
 import SlidingMenu from '../Components/SlidingMenu';
-import Solis from '../images/solis.svg';
+import Solis from '../images/solis-coin.svg';
 import Helios3 from '../images/helios 3 mascot.png'; 
 import Helios6 from '../images/helios 6 mascot.png';
 import Helios7 from '../images/helios 7 mascot.png';

@@ -1,5 +1,5 @@
-import Coin from '../images/dollar-coin.png';
-import Solis from '../icons/fdv 1 (1).svg';
+import Coin from '../icons/Solis-coin.svg';
+import Solis from '../icons/Solis-raw2.svg';
 import { useState, useEffect } from 'react';
 
 interface ProgressBarProps {
@@ -27,11 +27,11 @@ const ProgressBar = ({ progress, minerate }: ProgressBarProps) => {
           style={{ width: `${(progress / CYCLE_DURATION) * 100}%` }}
         ></div>
         <div className="z-40 absolute flex flex-row h-16 text-md my-auto p-3 pl-6">
-          <img src={Solis} className="w-8 h-8 mr-3 my-auto animate-spinZoomGlow"/>
+          <img src={Solis} className="w-10 h-10 mr-3 my-auto animate-spinZoomGlow"/>
           <div className="flex my-auto text-sm flex-row gap-1">
             Offsetting...
           </div>
-          <img src={Coin} className="my-auto w-4 mr-0.5 h-4 ml-3" alt="Coin" />
+          <img src={Coin} className="my-auto w-8 mr-0.5 h-8 ml-3" alt="Coin" />
             <p className="text-sm w-12 mr-1 my-auto">
               {(progress / 60 * minerate).toFixed(2)}
             </p>

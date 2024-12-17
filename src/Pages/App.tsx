@@ -1,6 +1,6 @@
 import ProgressBar from '../Components/ProgressBar';
-import Solis from '../icons/Solis-raw.svg';
-import freshcoin from '../images/Group 9.svg';
+import Solis from '../icons/Solis-raw2.svg';
+import freshcoin from '../icons/Solis-coin.svg';
 import Popup from '../Components/Popup';
 import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -196,8 +196,8 @@ function App() {
             <p className="hidden">{referralToken}</p>
           </h1>
         </div>
-      <div className="flex flex-row mb-5 mt-2 z-10 items-center justify-center">
-        <img src={freshcoin} alt="" className="w-12 pr-0.5 h-12" />
+      <div className="flex flex-row mb-2 z-10 items-center justify-center">
+        <img src={freshcoin} alt="" className=" -mr-2 h-20" />
         <p className="my-auto text-white font-bold text-4xl">
           {claimInitiated ? (
             <animated.span>{number.to((n) => Math.floor(n))}</animated.span>
@@ -252,7 +252,7 @@ function App() {
                   className="bg-gradient-to-r from-[#40659C] to-[#162336] justify-left mb-2 flex flex-row rounded-2xl w-11/12 h-14 pl-4 text-sm my-auto"
                 >
                   <img src={Solis} className="w-8 h-8 mr-3 my-auto" />
-                  <div className="flex my-auto text-sm mr-2 flex-col">Mining Complete</div>
+                  <div className="flex my-auto text-sm mr-2 flex-col">Offset Complete</div>
                   <img src={freshcoin} className="my-auto mr-1 w-4 h-4" />
                   <div className="text-sm mr-2 my-auto">{airdrop.value}</div>
                   <div className="my-auto">
