@@ -20,12 +20,6 @@ import Cheetah from '../images/Cheetah.svg';
 import Panther from '../images/Panther.svg';
 import SeriousDog from '../images/Serious Dog.svg';
 import SomeBird from '../images/Some Bird.svg';
-import badge1 from '../icons/badgeschecked/badge 1.svg';
-import badge10 from '../icons/badgeschecked/badge 10.svg';
-import badge11 from '../icons/badgeschecked/badge 11.svg';
-import badge12 from '../icons/badgeschecked/badge 12.svg';
-import badge13 from '../icons/badgeschecked/badge 13.svg';
-import badge14 from '../icons/badgeschecked/badge 14.svg';
 
 interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void;
@@ -138,15 +132,6 @@ const Friends: React.FC = () => {
     return number.toString();
   };
 
-  const getBadgeByMinerate = (minerate: number | null) => {
-    if (minerate === null) return badge1;
-    if (minerate >= 200) return badge14;
-    if (minerate >= 150) return badge13;
-    if (minerate >= 100) return badge12;
-    if (minerate >= 50) return badge11;
-    if (minerate >= 20) return badge10;
-  };
-
   return (
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
       <StarryBackground />
@@ -161,28 +146,20 @@ const Friends: React.FC = () => {
         <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12 pb-4">
             <div className="relative mx-auto rounded-full h-28 w-28 flex justify-center items-center">
               <img src={avatarMap[avatarPath || 'avatars/Some Bird.svg']} alt="Your Avatar" className="w-24 h-24" />
-              {/* Render badge if there's a valid badge for the minerate */}
-              {(
-                <img
-                  src={getBadgeByMinerate(minerate)}
-                  alt="Badge"
-                  className="absolute top-16 left-2 w-10 h-10"
-                />
-              )}
             </div>
           <p className="text-white font-bold text-xl">{heliosUsername}</p>
-          <div className="mx-auto justify-between mt-2 w-fit gap-5 px-2 bg-white/20 backdrop-blur-md rounded-2xl flex flex-row">
+          <div className="mx-auto justify-between mt-2 w-fit gap-5 px-2 bg-white/10 backdrop-blur-md rounded-2xl flex flex-row">
             <div className="flex flex-row">
-              <img src={Solis} className="w-7 h-7" />
+              <img src={Solis} className="w-7 h-7 my-auto" />
               <p className="my-auto font-bold text-white">{minerate}</p>
             </div>
             <div className="flex flex-row">
-              <img src={FriendsIcon} className="w-5.5 h-5.5 my-auto" />
-              <p className="my-auto font-bold text-white">{friends.length}</p>
+              <img src={FriendsIcon} className="w-5.5 h-5.5 pr-0.5 my-auto" />
+              <p className="my-auto font-bold my-auto text-white">{friends.length}</p>
             </div>
             <div className="flex flex-row">
-              <img src={FreshCoin} className="w-8 h-8 my-auto" />
-              <p className="my-auto font-bold text-white">{formatNumber(totalAirdrops)}</p>
+              <img src={FreshCoin} className="w-9 h-9 -ml-2 my-auto" />
+              <p className="my-auto font-bold -ml-1.5 text-white">{formatNumber(totalAirdrops)}</p>
             </div>
           </div>
         </div>
