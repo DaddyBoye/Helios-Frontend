@@ -26,18 +26,25 @@ const ProgressBar = ({ progress, minerate }: ProgressBarProps) => {
           className="bg-gradient-to-r from-[#25F503] to-[#C5D327] h-16 rounded-l-2xl"
           style={{ width: `${(progress / CYCLE_DURATION) * 100}%` }}
         ></div>
-        <div className="z-40 absolute flex flex-row h-16 text-md my-auto p-3 pl-6">
-          <img src={Solis} className="w-10 h-10 mr-3 my-auto animate-spinZoomGlow"/>
-          <div className="flex my-auto text-sm flex-row gap-1">
-            Offsetting...
-          </div>
-          <img src={Coin} className="my-auto w-8 mr-0.5 h-8 ml-3" alt="Coin" />
-            <p className="text-sm w-12 mr-1 my-auto">
+    <div className="z-40 absolute flex flex-row items-center justify-between w-full h-16 px-3">
+      <div className="flex items-center space-x-2">
+        <img 
+          src={Solis} 
+          className="w-10 h-10 animate-spinZoomGlow"
+        />
+        <span className="text-sm font-medium">Offsetting...</span>
+      </div>
+      <div className="flex">
+          <img src={Coin} className="my-auto w-8 h-8 " alt="Coin" />
+            <p className="text-sm w-12 -ml-1.5 my-auto">
               {(progress / 3600 * minerate).toFixed(2)}
             </p>
-          <p id="timer" className="text-sm my-auto">
+            </div>
+            <div className="flex items-center space-x-1 tabular-nums">
+          <span className="text-sm font-medium">
             {minutes}m:{seconds < 10 ? `0${seconds}` : seconds}s
-          </p>
+          </span>
+        </div>
         </div>
       </div>
     </div>

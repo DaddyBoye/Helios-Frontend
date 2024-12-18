@@ -295,9 +295,9 @@ const Friends: React.FC = () => {
             <div className='flex'>
               <div className='bg-[#FAAD00] w-2 h-2 my-auto -ml-2 mr-1 rounded-full'>
               </div>
-              <p className='text-left text-white text-sm'>Score 10% from buddies</p>
+              <p className='text-left text-white text-sm'>You earn 2000 Helios coins</p>
             </div>
-            <p className='text-left ml-1 text-white/50 text-sm'>Plus an extra 2.5% from their referrals</p>
+            <p className='text-left ml-1 text-white/50 text-sm'>Plus an extra claimble 10% of your friends totals</p>
           </div>
         </div>
       </div>
