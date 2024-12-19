@@ -115,7 +115,7 @@ const ProgressBar = ({ progress, minerate, airdropCount = 0 }: ProgressBarProps)
               <div className="flex items-center font-medium text-sm tabular-nums">
                 <AnimatedDigit value={Math.floor(minutes / 10)} />
                 <AnimatedDigit value={minutes % 10} />
-                <span className="">m</span>
+                <span className="">m:</span>
                 <AnimatedDigit value={Math.floor(seconds / 10)} />
                 <AnimatedDigit value={seconds % 10} />
                 <span className="">s</span>
