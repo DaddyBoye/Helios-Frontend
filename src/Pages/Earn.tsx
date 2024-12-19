@@ -19,15 +19,15 @@ interface EarnProps {
     minerate: number | null;
     telegramId: string;
     avatarPath: string | null;
-  }
+}
 
-  interface Friend {
+interface Friend {
     id: number;
     name: string;
     score: number;
     avatar: string;
     referralCount: number;
-  }
+}
 
 interface Platform {
     icon: string;
@@ -95,14 +95,14 @@ const Earn = () => {
         { icon: X, name: 'X', text: 'Engage Helios on X', link: 'https://x.com/heliosbot_', image: X, color: '#1DA1F2', taskId: 2, points: 2000 },
         { icon: YouTube, name: 'YouTube', text: 'Subscribe to Our YouTube', link: 'https://www.youtube.com/@Helios-app', image: YouTube, color: '#FF0000', taskId: 3, points: 1500 },
     ];
-    
+
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '1000', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 1000  },
-        { title: 'Invite 10 friends', reward: '25000', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 25000  },
-        { title: 'Invite 20 friends', reward: '60000', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 60000  },
-        { title: 'Invite 50 friends', reward: '200000', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 200000  },
+        { title: 'Invite 5 friends', reward: '1000', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 1000 },
+        { title: 'Invite 10 friends', reward: '25000', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 25000 },
+        { title: 'Invite 20 friends', reward: '60000', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 60000 },
+        { title: 'Invite 50 friends', reward: '200000', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 200000 },
     ];
-    
+
     // Fetch task statuses on mount
     useEffect(() => {
         const fetchTaskStatuses = async () => {
@@ -120,26 +120,42 @@ const Earn = () => {
         if (telegramId) {
             fetchTaskStatuses();
         }
-    }, [telegramId]);  
-    
-    const isTaskCompleted = (taskId: number) => {
-        return taskStatuses.some(status => status.task_id === taskId && status.completed && status.claimed);
-    };    
+    }, [telegramId]);
 
-    const isTaskClaimable = (task: InviteTask) => {
+    const isTaskCompletedAndClaimed = (taskId: number) => {
+        const status = taskStatuses.find(status => status.task_id === taskId);
+        return status?.completed && status?.claimed;
+    };
+
+    const isTaskClaimable = (taskId: number) => {
+        const status = taskStatuses.find(status => status.task_id === taskId);
+        return status?.completed && !status?.claimed;
+    };
+
+    const isInviteTaskClaimable = (task: InviteTask) => {
         const status = taskStatuses.find(status => status.task_id === task.taskId);
-        // Check if task is not already completed and claimed
         if (!status?.completed || !status?.claimed) {
-            // Check if friend count meets the threshold
             return friends.length >= task.referralThreshold;
         }
         return false;
     };
 
+    const getTaskStyle = (taskId: number) => {
+        const completed = isTaskCompletedAndClaimed(taskId);
+        const claimable = isTaskClaimable(taskId);
+        
+        return {
+            opacity: completed ? 0.7 : 1,
+            position: 'relative' as const,
+            cursor: completed ? 'default' : 'pointer',
+            backgroundColor: claimable ? 'rgba(34, 197, 94, 0.2)' : 'transparent',
+        };
+    };
+
     const getInviteTaskStyle = (task: InviteTask) => {
         const status = taskStatuses.find(status => status.task_id === task.taskId);
         const completed = status?.completed && status?.claimed;
-        const claimable = isTaskClaimable(task);
+        const claimable = isInviteTaskClaimable(task);
 
         return {
             opacity: completed ? 0.7 : 1,
@@ -157,20 +173,27 @@ const Earn = () => {
         return `${friends.length}/${task.referralThreshold} friends`;
     };
 
-    const getTaskStyle = (taskId: number) => {
-        const completed = isTaskCompleted(taskId);
-        return {
-            opacity: completed ? 0.7 : 1,
-            position: 'relative' as const,
-            cursor: completed ? 'default' : 'pointer',
-        };
-    };   
-
-    const CompletedBadge = () => (
-        <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-            Completed
-        </div>
-    );
+    const TaskStatusBadge = ({ taskId }: { taskId: number }) => {
+        const status = taskStatuses.find(status => status.task_id === taskId);
+        
+        if (status?.completed && status?.claimed) {
+            return (
+                <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                    Completed
+                </div>
+            );
+        }
+        
+        if (status?.completed && !status?.claimed) {
+            return (
+                <div className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                    Claim Now
+                </div>
+            );
+        }
+        
+        return null;
+    };
 
     const images: CarouselImage[] = [
         { 
@@ -265,10 +288,11 @@ const Earn = () => {
             // It's an invite task
             const status = taskStatuses.find(status => status.task_id === item.taskId);
             if (status?.completed && status?.claimed) return; // Don't open if completed and claimed
-            if (!isTaskClaimable(item)) return; // Don't open if not claimable
-        } else {
-            // It's a social task
-            if (isTaskCompleted(item.taskId)) return;
+            if (!isInviteTaskClaimable(item)) return; // Don't open if not claimable
+        } else if ('text' in item) {
+            // It's a social platform task
+            const completed = isTaskCompletedAndClaimed(item.taskId);
+            if (completed && !isTaskClaimable(item.taskId)) return;
         }
         
         setSelectedItem(item);
@@ -351,51 +375,54 @@ const renderImageCarousel = () => (
     </div>
 );
 
-    const renderSocialSection = () => (
-        <>
-            <div className='flex flex-row items-center pt-5 pl-5 pb-1'>
-                <img src={Friends} alt="Friends icon" className='w-6 h-6' />
-                <h1 className='text-left ml-2 text-md'>Socials</h1>
-            </div>
-            <div className="p-1 pl-3 bg-[#194564]/80 w-11/12 flex flex-col mx-auto rounded-xl text-sm">
-                 {socialPlatforms.map((platform, index) => {
-                    const completed = isTaskCompleted(platform.taskId);
-                        return (
-                            <React.Fragment key={platform.name}>
-                            <div
-                                className="flex flex-row items-center py-1 relative"
-                                style={getTaskStyle(platform.taskId)}
-                                onClick={() => !completed && handleItemClick(platform)}
-                            >
-                                <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center">
+const renderSocialSection = () => (
+    <>
+        <div className='flex flex-row items-center pt-5 pl-5 pb-1'>
+            <img src={Friends} alt="Friends icon" className='w-6 h-6' />
+            <h1 className='text-left ml-2 text-md'>Socials</h1>
+        </div>
+        <div className="p-1 pl-3 bg-[#194564]/80 w-11/12 flex flex-col mx-auto rounded-xl text-sm">
+            {socialPlatforms.map((platform, index) => {
+                const completed = isTaskCompletedAndClaimed(platform.taskId);
+                const claimable = isTaskClaimable(platform.taskId);
+                
+                return (
+                    <React.Fragment key={platform.name}>
+                        <div
+                            className={`flex flex-row items-center py-1 relative transition-all duration-300 ${
+                                claimable ? 'bg-green-500/20 rounded-lg' : ''
+                            }`}
+                            style={getTaskStyle(platform.taskId)}
+                            onClick={() => (!completed || claimable) && handleItemClick(platform)}
+                        >
+                            <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center">
                                 <img src={platform.icon} alt={platform.name} className="w-9 h-9" />
-                                </div>
-                                <div className="flex flex-row items-center justify-between flex-1 pl-2">
+                            </div>
+                            <div className="flex flex-row items-center justify-between flex-1 pl-2">
                                 <div className="flex flex-col">
-
                                     <p className="text-left truncate text-left w-36 text-xs">{platform.text}</p>
                                     <p className="truncate text-left w-40 text-white/60 text-xs">
-                                    {completed ? 'Task completed' : 'Engage for rewards'}
+                                        {completed ? 'Task completed' : claimable ? 'Click to claim reward' : 'Engage for rewards'}
                                     </p>
                                 </div>
-                                {!completed && (
-                                    <div className=" px-2 py-1 rounded-md text-white text-xs flex items-center">
+                                {(!completed || claimable) && (
+                                    <div className="px-2 py-1 rounded-md text-white text-xs flex items-center">
                                         <span className='my-auto font-semibold text-sm'>{platform.points}</span>
                                         <img src={Solis} alt="Reward icon" className="w-8 h-8" />
                                     </div>
                                 )}
-                                </div>
-                                {completed && <CompletedBadge />}
                             </div>
-                            {index < socialPlatforms.length - 1 && (
-                                <hr className="border-t border-white/30 my-1 ml-12" />
-                            )}
-                            </React.Fragment>
-                        );
-                    })}
-            </div>
-        </>
-    );
+                            <TaskStatusBadge taskId={platform.taskId} />
+                        </div>
+                        {index < socialPlatforms.length - 1 && (
+                            <hr className="border-t border-white/30 my-1 ml-12" />
+                        )}
+                    </React.Fragment>
+                );
+            })}
+        </div>
+    </>
+);
 
     const renderInviteTasksSection = () => (
         <>
@@ -407,7 +434,7 @@ const renderImageCarousel = () => (
                 {inviteTasks.map((task, index) => {
                     const status = taskStatuses.find(status => status.task_id === task.taskId);
                     const completed = status?.completed && status?.claimed;
-                    const claimable = isTaskClaimable(task);
+                    const claimable = isTaskClaimable(task.taskId);
                     
                     return (
                         <div 
