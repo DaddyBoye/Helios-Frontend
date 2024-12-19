@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
-import freshcoin from '../icons/Solis-coin.svg';
+import Solis from '../icons/Solis-raw2.svg';
 
 interface MaxAirdropAlertProps {
   airdropCount: number;
@@ -14,7 +14,7 @@ const MaxAirdropAlert = ({ airdropCount, onClose }: MaxAirdropAlertProps) => {
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    if (airdropCount >= 8) {
+    if (airdropCount >= 0) {
       setShouldRender(true);
       setTimeout(() => setIsVisible(true), 50);
     }
@@ -80,13 +80,13 @@ const MaxAirdropAlert = ({ airdropCount, onClose }: MaxAirdropAlertProps) => {
               You've reached the maximum number of offsets
             </p>
             
-            <div className={`flex items-center justify-center bg-white/5 rounded-lg p-3 gap-3 hover:bg-white/10 transition-colors
+            <div className={`flex items-center justify-center bg-white/5 rounded-lg py-2 px-3 gap-3 hover:bg-white/10 transition-colors
               ${isShaking ? 'animate-shake-sm' : ''}`}>
               <div className="flex items-center">
                 <img 
-                  src={freshcoin} 
+                  src={Solis} 
                   alt="coin" 
-                  className={`w-6 h-6 ${isShaking ? 'animate-coin-shake' : 'animate-pulse'}`} 
+                  className={`w-10 h-10 ${isShaking ? 'animate-coin-shake' : 'animate-pulse'}`} 
                 />
                 <span className={`text-xl font-bold text-yellow-500 ml-1 ${isShaking ? 'animate-text-shake' : ''}`}>8/8</span>
               </div>
