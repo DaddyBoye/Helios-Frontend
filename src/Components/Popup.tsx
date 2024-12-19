@@ -10,11 +10,11 @@ interface PopupProps {
 }
 
 const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onClose, progress }) => {
-  const [timeRemaining, setTimeRemaining] = useState(60);
+  const [timeRemaining, setTimeRemaining] = useState(3600);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setTimeRemaining(60 - progress);
+      setTimeRemaining(3600 - progress);
     }, 500);
     return () => clearInterval(intervalId);
   }, [progress]);
@@ -69,7 +69,7 @@ const Popup: React.FC<PopupProps> = ({ airdropCount, totalValue, onConfirm, onCl
             <div className="w-full bg-gray-700 h-1 rounded-full">
               <div 
                 className="bg-emerald-500 h-1 rounded-full transition-all duration-300"
-                style={{ width: `${(progress / 60) * 100}%` }}
+                style={{ width: `${(progress / 3600) * 100}%` }}
               />
             </div>
           </div>

@@ -90,7 +90,7 @@ const LoadingPage = () => {
                 onClick={handleCloseAlert}
                 className="w-full py-2 px-4 bg-gradient-to-r mb-2 from-pink-500 to-yellow-500 text-white font-bold rounded-full hover:from-pink-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transform transition hover:scale-105"
               >
-                Let's Go!
+                Wake Him!
               </button>
             </div>
           </div>

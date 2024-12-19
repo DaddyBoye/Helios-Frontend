@@ -97,10 +97,10 @@ const Earn = () => {
     ];
     
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '100', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 100  },
-        { title: 'Invite 10 friends', reward: '250', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 500  },
-        { title: 'Invite 20 friends', reward: '600', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 1000  },
-        { title: 'Invite 50 friends', reward: '2000', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 10000  },
+        { title: 'Invite 5 friends', reward: '1000', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 1000  },
+        { title: 'Invite 10 friends', reward: '25000', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 25000  },
+        { title: 'Invite 20 friends', reward: '60000', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 60000  },
+        { title: 'Invite 50 friends', reward: '200000', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 200000  },
     ];
     
     // Fetch task statuses on mount
@@ -123,8 +123,8 @@ const Earn = () => {
     }, [telegramId]);  
     
     const isTaskCompleted = (taskId: number) => {
-        return taskStatuses.some(status => status.task_id === taskId && status.completed);
-    };
+        return taskStatuses.some(status => status.task_id === taskId && status.completed && status.claimed);
+    };    
 
     const isTaskClaimable = (task: InviteTask) => {
         const status = taskStatuses.find(status => status.task_id === task.taskId);
@@ -164,7 +164,7 @@ const Earn = () => {
             position: 'relative' as const,
             cursor: completed ? 'default' : 'pointer',
         };
-    };
+    };   
 
     const CompletedBadge = () => (
         <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
@@ -421,8 +421,8 @@ const renderImageCarousel = () => (
                             </div>
                             <p className="text-left text-sm font-bold mb-1">{task.title}</p>
                             <div className='flex items-center'>
-                                <p className="text-left text-xs font-bold text-white/70">Reward: {task.reward}</p>
-                                <img src={Solis} alt="Solis" className='w-9 h-9' />
+                                <p className="text-left text-xs font-bold text-white/70">Earn: {task.reward}</p>
+                                <img src={Solis} alt="Solis" className='w-8 h-8 -ml-1' />
                             </div>
                             <p className="text-left text-xs mt-1 text-white/70">
                                 {getInviteTaskStatus(task)}

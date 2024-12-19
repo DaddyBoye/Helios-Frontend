@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import Header from '../Components/Header';
 import { useSpring, animated } from 'react-spring';
+import MaxAirdropAlert from '../Components/MaxAirdropAlert';
 import '../App.css';
 
 interface Airdrop {
@@ -31,6 +32,7 @@ function App() {
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]); // Visible airdrops in the UI
   const [claimInitiated, setClaimInitiated] = useState(false); 
   const [isRemoving, setIsRemoving] = useState(false);
+  const [isMaxAlertVisible, setIsMaxAlertVisible] = useState(true);
 
   const {
     airdrops,
@@ -228,7 +230,7 @@ function App() {
           </div>
           <p className="hidden">{airdropsError}</p>
         </div>
-        <ProgressBar progress={progress ?? 0} minerate={minerate ?? 0} />
+        <ProgressBar progress={progress ?? 0} minerate={minerate ?? 0} airdropCount={airdropCount ?? 0}/>
       </div>
       {/* Make this container grow to take up remaining space */}
       <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-36 text-white rounded-3xl z-10 w-full">
@@ -277,6 +279,12 @@ function App() {
           onConfirm={handleConfirm}
           onClose={handleClose}
           progress={progress}
+        />
+      )}
+      {isMaxAlertVisible && visibleAirdrops.length >= 0 && (
+        <MaxAirdropAlert 
+          airdropCount={visibleAirdrops.length}
+          onClose={() => setIsMaxAlertVisible(false)}
         />
       )}
     </div>
