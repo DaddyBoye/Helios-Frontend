@@ -28,7 +28,7 @@ const Taskbar = () => {
  // }, []); //
   
   return (
-    <div className="taskbar">
+    <div className="taskbar font-sans">
       <div className="p-4 bg-[#3D4549] h-16 flex flex-row justify-between items-center"> {/* Add items-center for vertical centering */}
         {/* Home */}
         <NavLink

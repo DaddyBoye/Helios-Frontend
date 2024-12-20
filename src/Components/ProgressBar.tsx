@@ -9,38 +9,6 @@ interface ProgressBarProps {
   airdropCount?: number;
 }
 
-const AnimatedDigit = ({ value }: { value: number }) => {
-  const [prevValue, setPrevValue] = useState(value);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    if (prevValue !== value) {
-      setIsAnimating(true);
-      const timer = setTimeout(() => {
-        setPrevValue(value);
-        setIsAnimating(false);
-      }, 250);
-      return () => clearTimeout(timer);
-    }
-  }, [value, prevValue]);
-
-  return (
-    <span className="inline-block w-3 text-center">
-      <div className="relative h-5 overflow-hidden perspective">
-        <div 
-          className={`transition-all duration-250 ${
-            isAnimating 
-              ? 'animate-flipTop' 
-              : ''
-          }`}
-        >
-          {value}
-        </div>
-      </div>
-    </span>
-  );
-};
-
 const ProgressBar = ({ progress, minerate, airdropCount = 0 }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 3600;
@@ -113,12 +81,12 @@ const ProgressBar = ({ progress, minerate, airdropCount = 0 }: ProgressBarProps)
                 </span>
               </div>
               <div className="flex items-center font-medium text-sm tabular-nums">
-                <AnimatedDigit value={Math.floor(minutes / 10)} />
-                <AnimatedDigit value={minutes % 10} />
-                <span className="">m:</span>
-                <AnimatedDigit value={Math.floor(seconds / 10)} />
-                <AnimatedDigit value={seconds % 10} />
-                <span className="">s</span>
+                <span>{Math.floor(minutes / 10)}</span>
+                <span>{minutes % 10}</span>
+                <span>m:</span>
+                <span>{Math.floor(seconds / 10)}</span>
+                <span>{seconds % 10}</span>
+                <span>s</span>
               </div>
             </>
           )}
@@ -136,4 +104,3 @@ const ProgressBar = ({ progress, minerate, airdropCount = 0 }: ProgressBarProps)
 };
 
 export default ProgressBar;
-

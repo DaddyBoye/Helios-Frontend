@@ -14,7 +14,7 @@ const MaxAirdropAlert = ({ airdropCount, onClose }: MaxAirdropAlertProps) => {
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    if (airdropCount >= 0) {
+    if (airdropCount >= 8) {
       setShouldRender(true);
       setTimeout(() => setIsVisible(true), 50);
     }

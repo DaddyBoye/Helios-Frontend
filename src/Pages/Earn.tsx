@@ -389,9 +389,7 @@ const renderSocialSection = () => (
                 return (
                     <React.Fragment key={platform.name}>
                         <div
-                            className={`flex flex-row items-center py-1 relative transition-all duration-300 ${
-                                claimable ? 'bg-green-500/20 rounded-lg' : ''
-                            }`}
+                            className="flex flex-row items-center py-1 relative transition-all duration-300"
                             style={getTaskStyle(platform.taskId)}
                             onClick={() => (!completed || claimable) && handleItemClick(platform)}
                         >

@@ -8,7 +8,9 @@ import StarryBackground from '../Components/StarryBackground';
 import Header from '../Components/Header';
 import { useSpring, animated } from 'react-spring';
 import MaxAirdropAlert from '../Components/MaxAirdropAlert';
+// import InfoButton from '../Components/InfoButton';
 import '../App.css';
+
 
 interface Airdrop {
   id: number;
@@ -211,7 +213,10 @@ function App() {
       <div className="bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12">
         <div className="flex flex-row pl-7 pr-6 pt-3 justify-between">
           <div className="flex flex-col">
+            <div className="flex flex-row items-center">
             <p className="font-bold text-lg">Offset Rate</p>
+            {/* <InfoButton /> */}
+            </div>
             <div className="flex flex-row">
               <img src={freshcoin} alt="" className="w-9 my-auto h-9" />
               <p className="text-md -ml-1.5 my-auto">{minerate}/hr</p>
