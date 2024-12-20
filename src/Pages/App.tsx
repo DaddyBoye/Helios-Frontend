@@ -8,7 +8,8 @@ import StarryBackground from '../Components/StarryBackground';
 import Header from '../Components/Header';
 import { useSpring, animated } from 'react-spring';
 import MaxAirdropAlert from '../Components/MaxAirdropAlert';
-// import InfoButton from '../Components/InfoButton';
+import InfoModal from "../Components/InfoModal";
+import { Info } from "lucide-react";
 import '../App.css';
 
 
@@ -30,6 +31,7 @@ interface Friend {
 
 function App() {
   const [popupVisible, setPopupVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [airdropsFromParent, setAirdropsFromParent] = useState<Airdrop[]>([]); // Stores airdrops passed from parent
   const [visibleAirdrops, setVisibleAirdrops] = useState<Airdrop[]>([]); // Visible airdrops in the UI
   const [claimInitiated, setClaimInitiated] = useState(false); 
@@ -132,6 +134,14 @@ function App() {
     setPopupVisible(false);
   };
 
+  const handleOpenModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
   const slideOutDuration = 250; // Duration of the slide-out animation for each airdrop (in ms)
   const slideOutOverlap = 125;   // Overlap delay before starting the next airdrop (in ms)
   
@@ -214,8 +224,13 @@ function App() {
         <div className="flex flex-row pl-7 pr-6 pt-3 justify-between">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
-            <p className="font-bold text-lg">Offset Rate</p>
-            {/* <InfoButton /> */}
+              <p className="font-bold text-lg">Offset Rate</p>
+              <button
+                onClick={handleOpenModal}
+                className="p-3 rounded-full "
+                >
+                <Info className="w-5 h-5 text-yellow-500" />
+              </button>
             </div>
             <div className="flex flex-row">
               <img src={freshcoin} alt="" className="w-9 my-auto h-9" />
@@ -292,6 +307,8 @@ function App() {
           onClose={() => setIsMaxAlertVisible(false)}
         />
       )}
+      {/* Info Modal */}
+      <InfoModal isVisible={isModalVisible} onClose={handleCloseModal} />
     </div>
   );
   
