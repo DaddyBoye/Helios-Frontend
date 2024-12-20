@@ -41,4 +41,4 @@ Helios aims to revolutionize environmental activism by integrating gamification 
 For inquiries or feedback, please reach out:
 
 - Telegram: [@HeeliossBot](https://t.me/HeeliossBot/Helios)
-- Email: [youremail@example.com](mailto:support@heliosapp.tech)
+- Email: [support@heliosapp.tech](mailto:support@heliosapp.tech)
