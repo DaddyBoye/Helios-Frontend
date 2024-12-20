@@ -149,6 +149,7 @@ const Earn = () => {
             position: 'relative' as const,
             cursor: completed ? 'default' : 'pointer',
             backgroundColor: claimable ? 'rgba(34, 197, 94, 0.2)' : 'transparent',
+            marginLeft: claimable ? '4px' : '8px',
         };
     };
 
@@ -381,7 +382,7 @@ const renderSocialSection = () => (
             <img src={Friends} alt="Friends icon" className='w-6 h-6' />
             <h1 className='text-left ml-2 text-md'>Socials</h1>
         </div>
-        <div className="p-1 pl-3 bg-[#194564]/80 w-11/12 flex flex-col mx-auto rounded-xl text-sm">
+        <div className="p-1 pl-1 bg-[#194564]/80 w-11/12 flex flex-col mx-auto rounded-xl text-sm">
             {socialPlatforms.map((platform, index) => {
                 const completed = isTaskCompletedAndClaimed(platform.taskId);
                 const claimable = isTaskClaimable(platform.taskId);
@@ -389,11 +390,11 @@ const renderSocialSection = () => (
                 return (
                     <React.Fragment key={platform.name}>
                         <div
-                            className="flex flex-row items-center py-1 relative transition-all duration-300"
+                            className="flex flex-row items-center py-1 relative transition-all duration-300 rounded-lg"
                             style={getTaskStyle(platform.taskId)}
                             onClick={() => (!completed || claimable) && handleItemClick(platform)}
                         >
-                            <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center">
+                            <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center" style={{ marginLeft: claimable ? '4px' : '0' }}>
                                 <img src={platform.icon} alt={platform.name} className="w-9 h-9" />
                             </div>
                             <div className="flex flex-row items-center justify-between flex-1 pl-2">
