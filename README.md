@@ -1,94 +1,38 @@
 # Helios 🌍
 
-Helios is a gamified Telegram mini-app that promotes environmental sustainability. Users can participate in tasks, earn rewards, and contribute to a greener planet!
+Helios is a gamified Telegram mini-app designed to promote environmental sustainability. Through interactive tasks and rewards, users are empowered to accumulate Helios Coins, which will eventually be minted as tokens using the TON blockchain and traded in a decentralized carbon market.
+
+---
+### How It Works:
+1. **Join via Telegram**: Access the mini-app at [Helios on Telegram](https://t.me/HeeliossBot/Helios).
+2. **Complete Tasks**: Participate in environmental activities and challenges.
+3. **Accumulate Helios Coins**: Earn coins for your efforts, which can later be minted into tokens.
 
 ---
 
-## 🌐 Live Preview
+## ⚙️ Technical Overview
 
-[Check out the live app!](https://t.me/HeeliossBot/Helios?startapp=ref_85babcb5ecb229e5)
-
----
-
-## ⚡ Features
-
-- **Gamified Airdrops**: Participate in engaging tasks and earn rewards.
-- **Real-Time Leaderboard**: See how you rank among other eco-warriors.
-- **Telegram Integration**: Fully optimized for seamless use within Telegram.
-- **Sustainability Goals**: Track your impact on the environment.
-
----
-
-## 🚀 Install & Run
-
-Ensure you have the following prerequisites:
-
-- Node.js `v19.9.0` or higher
-- npm `v9.6.3` or higher
-
-### Steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/helios.git
-   cd helios
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-4. View the app:
-   - Local: `http://localhost:8000`
-   - Network: Accessible via your network IP.
-
----
-
-## 📚 Storybook
-
-Explore the UI components via Storybook:
-
-```bash
-npm run dev:storybook
-```
-
-Visit [http://localhost:6006](http://localhost:6006) to view.
+- **Telegram Mini-App**: Built to work natively within Telegram for ease of use.
+- **Frontend**:
+  - **React with Vite**: Provides a fast and efficient user experience.
+  - **Deployed on Vercel**: Ensures reliable and scalable hosting.
+- **Backend**:
+  - **Express Server**: Deployed on a Google Cloud Platform (GCP) Compute Engine Virtual Machine to handle API logic and communication.
 
 ---
 
 ## 🌟 Deployment
 
-Helios is deployed on [Render](https://render.com) for seamless hosting. To deploy:
+Helios is live and accessible via the Telegram mini-app at [Helios on Telegram](https://t.me/HeeliossBot/Helios). The app infrastructure includes:
 
-1. Push your code to the `main` branch.
-2. Connect the repository to Render.
-3. Set up the environment variables:
-   - `TELEGRAM_TOKEN`
-   - `API_BASE_URL`
-4. Deploy and enjoy!
+- **React + Vite Frontend**: Deployed on Vercel for seamless interaction.
+- **Express Server**: Runs on a GCP Compute Engine VM for backend services.
 
 ---
 
-## 🤝 Contributing
+## 💡 Vision
 
-We welcome contributions to Helios! Please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch (`feature/my-feature`).
-3. Commit your changes.
-4. Open a pull request.
-
----
-
-## 📄 License
-
-Helios is licensed under the [MIT License](LICENSE).
+Helios aims to revolutionize environmental activism by integrating gamification and blockchain technology. The ultimate goal is to create a decentralized carbon market where Helios tokens can be traded, providing tangible value for eco-friendly actions and driving global sustainability efforts.
 
 ---
 
@@ -96,5 +40,5 @@ Helios is licensed under the [MIT License](LICENSE).
 
 For inquiries or feedback, please reach out:
 
-- Telegram: [@HeeliossBot](https://t.me/HeeliossBot)
-- Email: [youremail@example.com](mailto:youremail@example.com)
+- Telegram: [@HeeliossBot](https://t.me/HeeliossBot/Helios)
+- Email: [youremail@example.com](mailto:support@heliosapp.tech)
