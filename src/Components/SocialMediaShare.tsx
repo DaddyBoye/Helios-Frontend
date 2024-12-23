@@ -19,6 +19,9 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu 
   const [telegramId, setTelegramId] = useState<number | null>(null);
   const baseUrl = VITE_TELEGRAM_URL;
 
+  const shareMessage = 
+    "Experience Helios—an exciting innovation using TON in the carbon trading market! 🌍 Start your journey today and join me on this groundbreaking adventure.";
+
   // Fetch telegramId using the Telegram SDK
   useEffect(() => {
     if (window.Telegram?.WebApp?.initDataUnsafe) {
@@ -64,7 +67,9 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu 
         <div className="grid grid-cols-4 gap-4">
           {/* Facebook */}
           <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink || '')}`}
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+              `${referralLink || ''}&text=${shareMessage}`
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-full transition-transform transform hover:scale-110 active:scale-95"
@@ -74,7 +79,9 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu 
 
           {/* WhatsApp */}
           <a
-            href={`https://wa.me/?text=${encodeURIComponent(referralLink || '')}`}
+            href={`https://wa.me/?text=${encodeURIComponent(
+              `${shareMessage} ${referralLink || ''}`
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-full transition-transform transform hover:scale-110 active:scale-95"
@@ -84,7 +91,9 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu 
 
           {/* Twitter */}
           <a
-            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(referralLink || '')}`}
+            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+              `${referralLink || ''}&text=${shareMessage}`
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-full transition-transform transform hover:scale-110 active:scale-95"
@@ -94,7 +103,9 @@ const SocialMediaShare: React.FC<SocialMediaShareProps> = ({ isOpen, toggleMenu 
 
           {/* Telegram */}
           <a
-            href={`https://t.me/share/url?url=${encodeURIComponent(referralLink || '')}`}
+            href={`https://t.me/share/url?url=${encodeURIComponent(referralLink || '')}&text=${encodeURIComponent(
+              shareMessage
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-full transition-transform transform hover:scale-110 active:scale-95"
