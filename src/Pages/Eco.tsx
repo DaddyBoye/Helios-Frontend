@@ -77,7 +77,7 @@ function Eco() {
                     
                     {/* Learning */}
                     <section>
-                        <div className="flex items-center gap-2 pl-4">
+                        <div className="flex -mb-4 items-center mt-2 gap-2 pl-4">
                             <BookOpen className="text-white" size={20} />
                             <h2 className="text-lg font-bold text-white">Learn</h2>
                         </div>

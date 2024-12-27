@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Star, StarOff } from 'lucide-react';
 import Rectangle from '../images/Rectangle 95-1.png';
 import Rectangle2 from '../images/Rectangle 95.png';
@@ -15,10 +15,12 @@ interface ProjectImage {
 interface Project {
   id: string;
   title: string;
+  type: string;
   description: string;
   carbonStandard: string;
   creditType: string;
   carbonRemoved: number;
+  location: string;
   images: ProjectImage[];
 }
 
@@ -39,6 +41,7 @@ interface ProjectCardProps {
   averageRating: number;
   hasRated: boolean;
   onClick: () => void;
+  isLast?: boolean;
 }
 
 interface ProjectCardScrollerProps {
@@ -53,9 +56,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   type, 
   averageRating, 
   hasRated, 
-  onClick 
+  onClick,
+  isLast 
 }) => (
-  <div className="flex-shrink-0 w-72 pl-5" onClick={onClick}>
+  <div className={`flex-shrink-0 font-sans pl-5 w-72 ${isLast ? 'pr-5' : ''}`} onClick={onClick}>
     <div className="relative rounded-lg overflow-hidden cursor-pointer">
       <div className="flex justify-between absolute top-3 left-3 right-3">
         <div className="bg-gray-800/80 text-white text-sm px-2 py-1 rounded-full">
@@ -75,10 +79,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         className="w-full h-40 object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50"></div>
-      <div className="absolute bottom-0 p-4 w-full">
+      <div className="absolute bottom-0 pb-2 px-3 w-full">
         <div className="flex justify-between items-center">
           <h3 className="text-white font-medium">{title}</h3>
-          <button className={`px-3 py-1 rounded-full text-xs ${
+          <button className={`px-3 py-1 my-auto rounded-full text-xs ${
             type === 'energy' ? 'bg-green-500' : 
             type === 'default' ? 'bg-orange-500' : 
             type === 'water' ? 'bg-blue-500' : 
@@ -88,9 +92,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </button>
         </div>
         <div className="flex items-center text-xs text-gray-300 mt-1">
-          <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="12" cy="12" r="10" strokeWidth="2"/>
-            <path d="M12 6v6l4 2" strokeWidth="2"/>
+          <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
           </svg>
           {location}
         </div>
@@ -102,15 +105,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 const ProjectCardScroller: React.FC<ProjectCardScrollerProps> = ({ onProjectClick, telegramId }) => {
   const [projectsWithRatings, setProjectsWithRatings] = useState<ProjectWithRating[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const projects: Project[] = [
     {
       id: "1",
-      title: "Project Alpha",
-      description: "Description for Project Alpha",
+      title: "Project Gamma",
+      type: "water",
+      description: "Description for Project Gamma",
       carbonStandard: "Standard A",
       creditType: "Credit A",
       carbonRemoved: 100,
+      location: "Location Gamma",
       images: [
         { url: Rectangle, caption: "Beautiful Landscape", description: "A breathtaking view of nature." },
         { url: Helios, caption: "Helios Mascot", description: "The vibrant Helios mascot illustration." },
@@ -122,16 +129,35 @@ const ProjectCardScroller: React.FC<ProjectCardScrollerProps> = ({ onProjectClic
     {
       id: "2",
       title: "Project Beta",
+      type: "energy",
       description: "Description for Project Beta",
       carbonStandard: "Standard B",
       creditType: "Credit B",
       carbonRemoved: 200,
+      location: "Location Beta",
       images: [
         { url: Rectangle2, caption: "Urban Planning", description: "Smart urban planning for sustainability." },
         { url: Helios, caption: "Helios Mascot", description: "The vibrant Helios mascot illustration." },
         { url: Helios2, caption: "Solar Farm", description: "A thriving solar farm under a clear sky." },
         { url: Helios3, caption: "Sustainable Future", description: "A vision of a green, sustainable future." },
         { url: Rectangle, caption: "Beautiful Landscape", description: "A breathtaking view of nature." },
+      ],
+    },
+    {
+      id: "3",
+      title: "Project Gamma",
+      type: "water",
+      description: "Description for Project Gamma",
+      carbonStandard: "Standard A",
+      creditType: "Credit A",
+      carbonRemoved: 100,
+      location: "Location Gamma",
+      images: [
+        { url: Rectangle, caption: "Beautiful Landscape", description: "A breathtaking view of nature." },
+        { url: Helios, caption: "Helios Mascot", description: "The vibrant Helios mascot illustration." },
+        { url: Helios2, caption: "Solar Farm", description: "A thriving solar farm under a clear sky." },
+        { url: Helios3, caption: "Sustainable Future", description: "A vision of a green, sustainable future." },
+        { url: Rectangle2, caption: "Urban Planning", description: "Smart urban planning for sustainability." },
       ],
     },
   ];
@@ -173,6 +199,25 @@ const ProjectCardScroller: React.FC<ProjectCardScrollerProps> = ({ onProjectClic
     fetchProjectData();
   }, [projects, telegramId]);
 
+  useEffect(() => {
+    if (!isLoading && projectsWithRatings.length > 0) {
+      const interval = setInterval(() => {
+        const nextIndex = (currentIndex + 1) % projectsWithRatings.length;
+        setCurrentIndex(nextIndex);
+        
+        // Smooth scroll to the next card
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTo({
+            left: nextIndex * 288, // 288px is the width of each card (272px) + padding (16px)
+            behavior: 'smooth'
+          });
+        }
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [currentIndex, isLoading, projectsWithRatings.length]);
+
   if (isLoading) {
     return (
       <div className="w-full h-40 flex items-center justify-center">
@@ -182,19 +227,23 @@ const ProjectCardScroller: React.FC<ProjectCardScrollerProps> = ({ onProjectClic
   }
 
   return (
-    <div className="w-full">
-      <div className="overflow-x-auto scrollbar-hide">
+    <div className="w-full font-sans">
+      <div 
+        ref={scrollContainerRef}
+        className="overflow-x-auto scrollbar-hide scroll-smooth"
+      >
         <div className="flex">
           {projectsWithRatings.map((project, index) => (
             <ProjectCard
               key={index}
               title={project.title}
-              location="Location"
+              location={project.location}
               image={project.images[0].url}
-              type="default"
+              type={project.type}
               averageRating={project.rating.averageRating}
               hasRated={project.rating.hasRated}
               onClick={() => onProjectClick(project)}
+              isLast={index === projectsWithRatings.length - 1}
             />
           ))}
         </div>

@@ -37,7 +37,7 @@ const InfoCards = ({ onCardClick }: { onCardClick: (title: string) => void }) =>
     ];
 
     return (
-        <div className="w-full overflow-x-auto overflow-y-auto pt-2">
+        <div className="w-full font-sans overflow-x-auto overflow-y-auto pt-3 -mt-2">
             <div className="flex gap-2 pl-5 pr-5 p-2 min-w-min">
                 {cards.map((card, index) => (
                     <div key={index} className="relative">

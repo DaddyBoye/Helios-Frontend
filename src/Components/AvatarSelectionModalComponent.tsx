@@ -115,7 +115,7 @@ const AvatarSelectionModal: React.FC<AvatarSelectionModalProps> = ({ isOpen, onC
   const bottomMargin = Math.max(12, availableSpace * 0.2);
 
   return (
-    <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-between z-50">
+    <div className="fixed inset-0 bg-black/90 font-sans flex flex-col items-center justify-between z-50">
       <div
         className="text-white p-5 rounded-lg shadow-lg max-h-[90vh]"
         style={{ marginTop: `${topMargin}px` }}

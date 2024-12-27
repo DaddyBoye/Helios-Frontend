@@ -366,7 +366,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose, t
     ];
 
     return (
-        <div className="fixed inset-0 z-50 flex backdrop-blur-sm items-center justify-center bg-black/50 p-3">
+        <div className="fixed font-sans inset-0 z-50 flex backdrop-blur-sm items-center justify-center bg-black/50 p-3">
             <Card className="w-full max-w-sm bg-white shadow-xl">
                 <CardContent className="p-4">
                     <div className="flex justify-between items-center mb-4">

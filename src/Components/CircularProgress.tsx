@@ -42,17 +42,18 @@ const RoundProgress: React.FC<RoundProgressProps> = ({ progress, total }) => {
   const TrendIcon = trend.icon;
 
   return (
-    <div className="flex -ml-3 -mt-3 items-center justify-center relative" style={{ width: '110px', height: '110px' }}>
+    <div className="flex -ml-3 -mt-3 font-sans items-center justify-center relative" style={{ width: '110px', height: '110px' }}>
       <svg width="110" height="110">
         <defs>
           <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 0.9 }} />
-            <stop offset="100%" style={{ stopColor: '#22c55e', stopOpacity: 0.9 }} />
+            <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 1 }} />
+            <stop offset="50%" style={{ stopColor: '#eab308', stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: '#22c55e', stopOpacity: 1 }} />
           </linearGradient>
-          <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style={{ stopColor: '#ffffff', stopOpacity: 0.3 }} />
-            <stop offset="100%" style={{ stopColor: '#ffffff', stopOpacity: 0.15 }} />
-          </linearGradient>
+            <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{ stopColor: '#64748b', stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: '#64748b', stopOpacity: 1 }} />
+            </linearGradient>
         </defs>
         <circle
           cx="55"

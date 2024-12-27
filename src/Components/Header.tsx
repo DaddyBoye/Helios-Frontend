@@ -37,7 +37,7 @@ const avatarMap: { [key: string]: string } = {
 
 const Header: React.FC<HeaderProps> = ({ minerate, friendsCount, avatarPath }) => {
   return (
-    <div className='w-full backdrop-blur text-white fixed pt-2 top-0 left-0 z-20 right-0 mx-auto'>
+    <div className='w-full font-sans backdrop-blur text-white fixed pt-2 top-0 left-0 z-20 right-0 mx-auto'>
       <div className='flex flex-row items-center w-11/12 justify-between mx-auto my-auto bg-[#185C8D]/70 h-12 p-1 pl-2 rounded-lg'>
         <div className='flex flex-row items-center justify-center'>
           <img src={Solis} alt="Solis" className="w-10 h-10 animate-spinZoomGlow" />

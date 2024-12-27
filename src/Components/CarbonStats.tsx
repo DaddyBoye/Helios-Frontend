@@ -5,7 +5,7 @@ const CarbonStats = () => {
     const criticalCO2 = 450;
 
     return (
-        <div className='flex flex-col w-10/12 mx-auto'>
+        <div className='flex font-sans flex-col w-10/12 mx-auto'>
             <div className='rounded-full mt-3 ml-auto w-fit -mb-9 bg-[#22c55e]'>
                 <p className='text-xs px-2 text-white py-2'>Global CO₂</p>
             </div>

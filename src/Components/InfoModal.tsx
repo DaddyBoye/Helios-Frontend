@@ -56,7 +56,7 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50">
+    <div className="fixed font-sans inset-0 z-50">
       {/* Modal Overlay */}
       <div
         className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${
@@ -67,7 +67,7 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
 
       {/* Modal Content */}
       <div
-        className={`absolute inset-0 flex items-center justify-center p-4 transition-all duration-500 ease-in-out ${
+        className={`absolute font-sans inset-0 flex items-center justify-center p-4 transition-all duration-500 ease-in-out ${
           isExiting ? "opacity-0 scale-95" : "opacity-100 scale-100"
         }`}
       >
