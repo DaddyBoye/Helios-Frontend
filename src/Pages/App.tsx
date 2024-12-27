@@ -210,13 +210,13 @@ function App() {
             <p className="hidden">{referralToken}</p>
           </h1>
         </div>
-      <div className="flex flex-row mb-2 z-10 items-center justify-center">
+      <div className="flex -ml-6 flex-row mb-2 z-10 items-center justify-center">
         <img src={freshcoin} alt="" className=" -mr-2 h-20" />
         <p className="my-auto text-white font-bold text-4xl">
           {claimInitiated ? (
             <animated.span>{number.to((n) => Math.floor(n))}</animated.span>
           ) : (
-            totalAirdrops
+            totalAirdrops 
           )}
         </p>
       </div>

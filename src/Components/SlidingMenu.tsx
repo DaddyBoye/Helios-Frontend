@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios, { AxiosError } from 'axios';
 import Header from './Header';
 import Friends from '../icons/Friends Vector.svg';
+import Solis from '../icons/Solis-coin.svg';
 
 interface CarouselImage {
   image: string;
@@ -242,7 +243,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
               disabled={isLoading}
               className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Claiming...' : 'Claim Reward'}
+              {isLoading ? 'CLAIMING...' : `CLAIM ${(selectedItem as Platform | InviteTask).points} POINTS`}
             </button>
           </div>
         </div>
@@ -327,7 +328,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                   href={selectedItem.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white text-black py-3 px-6 mb-5 rounded-lg text-center h-12 flex items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
+                  className="bg-white text-black py-3 px-6 mb-5 rounded-xl text-center h-11 flex items-center justify-center text-lg font-semibold hover:bg-opacity-90 transition-colors"
                   onClick={(e) => {
                     e.preventDefault();
                     handlePlatformClick(selectedItem);
@@ -338,13 +339,17 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
               )}
 
               {taskStatuses.find(s => s.task_id === selectedItem.taskId)?.completed && 
-               !taskStatuses.find(s => s.task_id === selectedItem.taskId)?.claimed && (
+              !taskStatuses.find(s => s.task_id === selectedItem.taskId)?.claimed && (
                 <button
-                  className="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold text-sm mb-5"
+                  className="w-full bg-slate-800 h-12 text-white py-3 rounded-xl font-bold text-sm mb-5 flex items-center justify-center "
                   onClick={() => handleClaimReward(selectedItem.taskId)}
                   disabled={isLoading}
                 >
-                  {isLoading ? 'CLAIMING...' : 'CLAIM REWARD'}
+                  {isLoading ? 'CLAIMING...' : (
+                    <>
+                      CLAIM <img src={Solis} alt="Solis" className="h-10 w-10 -mr-1" />{selectedItem.points}
+                    </>
+                  )}
                 </button>
               )}
 

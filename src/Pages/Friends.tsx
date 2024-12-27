@@ -136,9 +136,9 @@ const Friends: React.FC = () => {
     <div className="relative flex flex-col font-sans h-full overflow-y-auto bg-transparent">
       <StarryBackground />
       <div className="z-10 w-full h-full text-center bg-transparent pb-36">
-      {alertMessage && (
+      { alertMessage &&(
         <div className="mb-4 mt-4 pl-2 z-20 text-sm p-0 text-white w-11/12 h-7 text-center rounded-md fixed flex flex-row items-center bg-[#000000]/50 top-4 left-1/2 transform -translate-x-1/2">
-          <img src={Solis} alt="" className="w-10 h-10 animate-spinZoomGlow" />
+          <img src={Solis} alt="" className="w-7 h-7 animate-spinZoomGlow" />
           <p className='pl-2 my-auto'>{alertMessage}</p>
         </div>
           )}
