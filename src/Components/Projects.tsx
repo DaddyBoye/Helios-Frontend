@@ -59,7 +59,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onClick,
   isLast 
 }) => (
-  <div className={`flex-shrink-0 font-sans pl-5 w-72 ${isLast ? 'pr-5' : ''}`} onClick={onClick}>
+  <div className={`flex-shrink-0 font-sans pl-5 w-72 ${isLast ? 'mr-5' : ''}`} onClick={onClick}>
     <div className="relative rounded-lg overflow-hidden cursor-pointer">
       <div className="flex justify-between absolute top-3 left-3 right-3">
         <div className="bg-gray-800/80 text-white text-sm px-2 py-1 rounded-full">
