@@ -28,7 +28,7 @@ const Taskbar = () => {
   }, []);
 
   return (
-    <div className="taskbar">
+    <div className="taskbar font-sans">
       <img src={Rectangle} alt="" className='absolute'/>
       <div className="p-4 h-16 flex flex-row justify-between items-center"> {/* Add items-center for vertical centering */}
         {/* Home */}
