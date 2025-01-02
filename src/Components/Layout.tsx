@@ -443,7 +443,7 @@ useEffect(() => {
     return <LoadingPage />;
   }
 
-  //Nullify to run locally
+  //Nullify newUser conditional
   if (newUser === true || newUser === null) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
