@@ -404,6 +404,7 @@ useEffect(() => {
     setIsTaskbarVisible(isVisible);
   };
 
+  //Nullify to run locally
   useEffect(() => {
     if (loadingTimePassed && user && dataFetched && heliosUsernameFetched && avatarPathFetched) {
       setIsLoading(false);  // Loading stops once all essential and additional data is fetched (or attempted)
@@ -442,6 +443,7 @@ useEffect(() => {
     return <LoadingPage />;
   }
 
+  //Nullify to run locally
   if (newUser === true || newUser === null) {
     return showWelcomePage ? (
       <WelcomePage onContinue={() => handleSetWelcomePage(false)} /> // Welcome page shown first
