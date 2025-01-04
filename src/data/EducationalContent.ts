@@ -1,5 +1,13 @@
-import Rectangle from '../images/Rectangle 95-1.png';
-import Rectangle2 from '../images/Rectangle 95.png';
+import CarbonStory from "../images/Learn/Carbon Story.jpg";
+import CarbonCredits from "../images/Learn/Carbon Credit 2.jpg";
+import CartbonTrading from "../images/Learn/Carbon Trading 2.jpg";
+import GreenSuper from "../images/Learn/Green Superpowers.jpg";
+import ImpactJourney from "../images/Learn/Impact Journey.jpg";
+import ReduceFootprint from "../images/Learn/Reduce Footprint.jpg";
+import SpotEmissions from "../images/Learn/Spot Emissions.jpg";
+import JoinMovement from "../images/Learn/Join Movement.jpg";
+import LevelUp from "../images/Learn/Level Up.jpg";
+
 
 interface Slide {
     title: string;
@@ -12,60 +20,60 @@ interface EducationalCategory {
 }
 
 export const educationalContent: Record<string, EducationalCategory> = {
-    Footprint: {
+    Emissions: {
         slides: [
             {
-                title: "Measuring Your Impact",
-                content: "Every action leaves a carbon trace. Your daily choices in transportation, food, and energy use contribute to your carbon footprint. Understanding this impact is the first step toward positive change.",
-                image: Rectangle,
+                title: "Carbon Story 🌱",
+                content: "Imagine your daily life leaves a trail of invisible bubbles - that's your carbon footprint! Each time you charge your phone (170g CO2), drive to work (2.4kg CO2/mile), or enjoy a burger (3.6kg CO2), you're adding to your story. Let's discover yours!",
+                image: CarbonStory,
             },
             {
-                title: "The Numbers Matter",
-                content: "The average person creates 32.3B tonnes of CO2 yearly. Small changes in daily habits can lead to significant reductions in your personal carbon footprint and help combat climate change.",
-                image: Rectangle2,
+                title: "Spot Emissions 🔍",
+                content: "Think of carbon like a savings account in reverse - the less you spend, the better! Your morning coffee's journey from bean to cup creates about 200g CO2. A return flight from NY to LA? That's like running your AC for 3 years! Ready to start counting?",
+                image: SpotEmissions,
             },
             {
-                title: "Making Better Choices",
-                content: "From choosing public transport to reducing energy consumption, every sustainable choice counts. Discover how your daily decisions can help create a greener future for all.",
-                image: Rectangle,
+                title: "Green Superpowers 💪",
+                content: "You're more powerful than you think! Switching to a reusable water bottle saves 83kg CO2/year. Going meatless on Mondays? That's 331kg CO2 saved annually! What will be your first green superpower?",
+                image: GreenSuper,
             },
         ],
     },
-    Emission: {
+    Trading: {
         slides: [
             {
-                title: "Global Impact",
-                content: "Carbon emissions are reaching critical levels, with 32.3B tonnes released annually. These emissions trap heat in our atmosphere, leading to rising temperatures and climate change.",
-                image: Rectangle2,
+                title: "Carbon Credits 💡",
+                content: "Think of carbon credits like fitness points, but for the planet! When you help the Earth (like planting trees or installing solar panels), you earn these points. One credit = stopping 1 tonne of CO2 from entering our atmosphere. Cool, right?",
+                image: CarbonCredits,
             },
             {
-                title: "Industry Effects",
-                content: "Power plants, factories, and vehicles are major emission sources. Understanding where emissions come from helps us target solutions and drive meaningful change.",
-                image: Rectangle,
+                title: "Trade & Change 📈",
+                content: "Welcome to the carbon trading market! Here, companies can buy your carbon-saving achievements (credits) to balance their emissions. It's like a global game of environmental tag - and you can be a player!",
+                image: CartbonTrading,
             },
             {
-                title: "Tracking Progress",
-                content: "Monitoring emission levels helps us measure our progress in fighting climate change. Cities and industries worldwide are working to reduce their carbon output.",
-                image: Rectangle2,
+                title: "Impact Journey 🌍",
+                content: "Start small, dream big! Your household could earn credits by switching to solar ($15-40 per tonne). Or join community projects like local forest protection. Every credit traded is a high-five to the planet!",
+                image: ImpactJourney,
             },
         ],
     },
-    Solutions: {
+    Action: {
         slides: [
             {
-                title: "Green Technology",
-                content: "Renewable energy and efficient technologies are revolutionizing how we power our world. Solar, wind, and other clean energy sources are becoming more accessible and affordable.",
-                image: Rectangle,
+                title: "Reduce Footprint 🚀",
+                content: "Ready to be a climate hero? Calculate your footprint (we'll guide you!), then explore ways to shrink it. From smart thermostats (saves 1.2 tonnes CO2/year) to composting (reduces 650kg CO2/year) - every action counts!",
+                image: ReduceFootprint,
             },
             {
-                title: "Smart Cities",
-                content: "Cities are implementing green infrastructure and sustainable transport systems. These innovations show how we can build a cleaner, more efficient future.",
-                image: Rectangle2,
+                title: "Join Movement 🤝",
+                content: "Connect with fellow planet-savers! Join local green initiatives, start an eco-challenge at work, or create your own carbon-cutting project. Remember: alone we're a drop, together we're an ocean of change!",
+                image: JoinMovement,
             },
             {
-                title: "Working Together",
-                content: "From individual actions to global agreements, everyone has a role in creating sustainable solutions. Together, we can build a cleaner, healthier planet for future generations.",
-                image: Rectangle,
+                title: "Level Up ⭐",
+                content: "Transform your daily habits into climate action! Track your progress, earn green badges, and challenge friends. Did you know? If everyone made just three small changes, we'd save billions of tonnes of CO2. What will your three changes be?",
+                image: LevelUp,
             },
         ],
     },

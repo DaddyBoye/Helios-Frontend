@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent } from "@/Components/ui/card";
-import { Leaf, Wind, TreePine, Sprout, Droplets, Sun, ArrowLeft, ArrowRight, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, X } from "lucide-react";
 
 interface Slide {
     title: string;
@@ -8,15 +8,6 @@ interface Slide {
     image: string;
     icon?: string;
 }
-
-const icons = {
-    leaf: Leaf,
-    wind: Wind,
-    tree: TreePine,
-    sprout: Sprout,
-    droplets: Droplets,
-    sun: Sun,
-};
 
 interface EducationalModalProps {
     isOpen: boolean;
@@ -29,7 +20,6 @@ const EducationalModal: React.FC<EducationalModalProps> = ({ isOpen, onClose, co
     const [currentSlideIndex, setCurrentSlideIndex] = React.useState(0);
     const slides = content.slides;
     const currentSlide = slides[currentSlideIndex];
-    const Icon = currentSlide.icon ? icons[currentSlide.icon as keyof typeof icons] : Leaf;
     const [isExpanded, setIsExpanded] = React.useState(false);
 
     const handleOutsideClick = (e: React.MouseEvent) => {
@@ -48,7 +38,6 @@ const EducationalModal: React.FC<EducationalModalProps> = ({ isOpen, onClose, co
 
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
-                            <Icon className="h-5 w-5 text-emerald-600 animate-pulse" />
                             <h2 className="text-lg font-bold text-emerald-800">{currentSlide.title}</h2>
                         </div>
 

@@ -8,30 +8,33 @@ import SoluIcon from '../icons/3.png';
 const InfoCards = ({ onCardClick }: { onCardClick: (title: string) => void }) => {
     const cards = [
         {
-            title: 'Footprint',
+            title: 'Emissions',
             color: 'bg-green-500',
             gradient: 'from-green-400/90 to-green-600/0',
             icon: FootIcon,
-            description: 'Personal and collective carbon footprints',
-            value: '32.3B',
+            description: 'Carbon emissions and their impacts',
+            value: '36.8',
+            unit: 'Gt CO₂',
             bgImage: Footprint,
         },
         {
-            title: 'Emission',
+            title: 'Trading',
             color: 'bg-orange-400',
             gradient: 'from-orange-400/90 to-orange-600/0',
             icon: EmmiIcon,
-            description: 'Carbon emissions and their impacts',
-            value: '32.3B',
+            description: 'Carbon trading and market dynamics',
+            value: '850',
+            unit: 'Bn USD',
             bgImage: Emissions,
         },
         {
-            title: 'Solutions',
+            title: 'Action',
             color: 'bg-blue-500',
             gradient: 'from-blue-400/90 to-blue-600/0',
             icon: SoluIcon,
             description: 'Steps to a sustainable future',
-            value: '32.3B',
+            value: '70',
+            unit: 'regions',
             bgImage: Solutions,
         },
     ];
@@ -55,15 +58,18 @@ const InfoCards = ({ onCardClick }: { onCardClick: (title: string) => void }) =>
                                 <h2 className="text-base font-bold mt-9 mb-1">{card.title}</h2>
                                 <p className="text-xs opacity-90">{card.description}</p>
                                 <div className="flex items-center gap-1.5 mt-auto">
-                                    <span className="text-lg font-bold">{card.value}</span>
-                                    <button className="rounded-full bg-white/20 p-1 hover:bg-white/30">
-                                        <div className="w-1.5 h-1.5 flex items-center justify-center">▶</div>
+                                    <div className="flex flex-col items-baseline">
+                                        <span className="text-lg font-bold">{card.value}</span>
+                                        <span className="text-xs ml-1 opacity-90">{card.unit}</span>
+                                    </div>
+                                    <button className="rounded-full bg-white/20 p-1 mt-auto ml-auto hover:bg-white/30">
+                                        <div className="w-5 h-5 flex items-center ml-1 justify-center">▶</div>
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div className="absolute -top-5 -right-2 w-16 h-16">
-                                <img src={card.icon} alt="" className="w-full h-full object-cover" />
+                            <img src={card.icon} alt="" className="w-full h-full object-cover" />
                         </div>
                     </div>
                 ))}

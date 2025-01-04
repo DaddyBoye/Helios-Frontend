@@ -67,7 +67,7 @@ interface CarouselImage {
     endDateDay: number;
     endDateMonth: string;
     playerCount: string;
-    prizeBreakdown: { range: string; amount: number }[];
+    prizeBreakdown: { range: string; amount: string }[];
     statusEmoji?: string;
 }
 
@@ -200,13 +200,13 @@ const Earn = () => {
         { 
             image: Helios3, // Replace with the relevant image for Plastic-Free Challenge
             title: "Plastic-Free Challenge",
-            startDateDay: 1,
-            startDateMonth: 'Dec',
-            endDateDay: 15,
-            endDateMonth: 'Dec',
+            startDateDay: 3,
+            startDateMonth: 'Jan',
+            endDateDay: 21,
+            endDateMonth: 'Jan',
             taskId: 50,
             status: 'Ongoing',
-            playerCount: "18K",
+            playerCount: "2k",
             statusColor: '#3B82F6',
             statusEmoji: '🔥',
             shortCallToAction: "Log your progress and ditch plastics!",
@@ -215,32 +215,32 @@ const Earn = () => {
             color: 'transparent',
             longDescription: "The Plastic-Free Challenge is all about reducing our reliance on single-use plastics. Over 15 days, participants are encouraged to track the number of plastic items avoided, share photos of their creative reusable alternatives, and reflect on the changes they've made. This challenge isn't just about competition; it's a step towards building sustainable habits and inspiring others to do the same. Small changes lead to big impact, so join us today and be part of the movement!",
             prizeBreakdown: [
-                { range: '1st', amount: 100 },
-                { range: '2nd - 6th', amount: 50 },
-                { range: '7th - 26th', amount: 20 },
+                { range: '1st', amount: "100K" },
+                { range: '2nd - 6th', amount: "50K" },
+                { range: '7th - 26th', amount: "20K" },
             ],
         },
         { 
             image: Helios6, // Replace with the relevant image for Tree Planting Drive
             title: "Tree Planting Drive", 
-            startDateDay: 20,
-            startDateMonth: 'Dec',
-            endDateDay: 31,
-            endDateMonth: 'Dec',
+            startDateDay: 3,
+            startDateMonth: 'Feb',
+            endDateDay: 20,
+            endDateMonth: 'Feb',
             taskId: 60,
             status: 'Upcoming',
             statusColor: '#FBBF24',
             statusEmoji: '⏳',
-            playerCount: "12K",
+            playerCount: "1.5K",
             shortCallToAction: "Sign up to plant your tree!",
             description: "Get ready for the Tree Planting Drive and make a difference.", 
             link: 'https://forms.gle/uydrMVoEgVXB4kAu6', // Replace with the correct link
             color: 'transparent',
             longDescription: "The Tree Planting Drive is your chance to contribute to reforestation and combat climate change. By planting a tree, you’re not just creating a greener planet; you’re also providing habitats for wildlife, improving air quality, and making your local area more beautiful. Snap a photo of the tree you plant and share its location (if you like) to inspire others in the community. This challenge is open to everyone, and even a single tree can make a difference. Let’s join hands and plant a forest, one tree at a time!",
             prizeBreakdown: [
-                { range: '1st', amount: 150 },
-                { range: '2nd - 6th', amount: 75 },
-                { range: '7th - 26th', amount: 30 },
+                { range: '1st', amount: "150K" },
+                { range: '2nd - 6th', amount: "75K" },
+                { range: '7th - 26th', amount: "30K" },
             ],
         },
         { 
@@ -252,7 +252,7 @@ const Earn = () => {
             endDateDay: 15,
             endDateMonth: 'Nov',
             status: 'Completed',
-            playerCount: "2K",
+            playerCount: "289",
             statusColor: '#34D399',
             statusEmoji: '✅',
             shortCallToAction: "Track your impact and compete!",
@@ -261,9 +261,9 @@ const Earn = () => {
             color: 'transparent',
             longDescription: "The Recycling Race was an exciting opportunity for participants to showcase their commitment to sustainability. Over two weeks, hundreds of people tracked the number and types of items they recycled, such as paper, plastic, glass, and metal. This challenge encouraged better waste management practices and highlighted how simple actions can collectively lead to significant environmental impact. With an engaging leaderboard and amazing prizes, the Recycling Race proved that competition can drive positive change for our planet.",
             prizeBreakdown: [
-                { range: '1st', amount: 100 },
-                { range: '2nd - 6th', amount: 75 },
-                { range: '7th - 26th', amount: 50 },
+                { range: '1st', amount: "100K" },
+                { range: '2nd - 6th', amount: "75K" },
+                { range: '7th - 26th', amount: "50K" },
             ],
         }
     ];

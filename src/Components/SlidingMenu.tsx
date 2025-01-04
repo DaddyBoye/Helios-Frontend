@@ -20,7 +20,7 @@ interface CarouselImage {
   endDateDay: number;
   endDateMonth: string;
   playerCount: string;
-  prizeBreakdown: { range: string; amount: number }[];
+  prizeBreakdown: { range: string; amount: string }[];
   statusEmoji?: string;
 }
 
@@ -412,8 +412,8 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                   <div className="flex justify-between items-center border-b border-white/20 pb-2 mb-2">
                   <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
                   <div className="flex items-baseline">
-                    <span className="text-green-300 text-xs mr-2 opacity-80">in USDT</span>
-                    <span className="text-white text-2xl font-extrabold text-green-100">${selectedItem.prizeBreakdown[0].amount}</span>
+                    <span className="text-yellow-500 text-xs mr-2 opacity-80">in $HELIOS</span>
+                    <span className="text-white text-2xl font-extrabold text-green-100">{selectedItem.prizeBreakdown[0].amount}</span>
                   </div>
                   </div>
                   {selectedItem.prizeBreakdown.slice(1).map((prize, index) => (
@@ -423,8 +423,8 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                   >
                     <span className="font-medium">{prize.range} Prize</span>
                     <span className="flex items-center">
-                    <span className="font-semibold">${prize.amount}</span>
-                    <span className="text-green-400 ml-2">🟢</span>
+                    <img src={Solis} alt="Helios Coin" className='w-10 -mr-2 h-10' />
+                    <span className="font-semibold">{prize.amount}</span>
                     </span>
                   </div>
                   ))}
