@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Info, X } from "lucide-react";
 
 interface InfoModalProps {
@@ -8,49 +8,28 @@ interface InfoModalProps {
 
 const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
   const [page, setPage] = useState(0);
-  const [isShaking, setIsShaking] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
 
   const pages = [
     {
       title: "Earning Tokens",
-      content:
-        "Your Offset Rate shows how many tokens you earn per hour.",
+      content: "Your Offset Rate shows how many tokens you earn per hour.",
     },
     {
       title: "Claiming Tokens",
-      content:
-        "When your tokens are ready, tap 'Reap' to add them to your balance.",
+      content: "When your tokens are ready, tap 'Reap' to add them to your balance.",
     },
     {
       title: "Token Accumulation Limit",
-      content:
-        "Offsets stop accumulating after 8 unclaimed tokens.",
+      content: "Offsets stop accumulating after 8 unclaimed tokens.",
     },
     {
       title: "Boosting Your Offset Rate",
-      content:
-        "Invite more people and complete tasks to increase your Offset Rate.",
+      content: "Invite more people and complete tasks to increase your Offset Rate.",
     },
   ];
 
-  useEffect(() => {
-    if (isVisible) {
-      const shakeInterval = setInterval(() => {
-        setIsShaking(true);
-        setTimeout(() => setIsShaking(false), 1000);
-      }, 5000);
-
-      return () => clearInterval(shakeInterval);
-    }
-  }, [isVisible]);
-
   const handleClose = () => {
-    setIsExiting(true);
-    setTimeout(() => {
-      setIsExiting(false);
-      onClose();
-    }, 500);
+    onClose();
   };
 
   if (!isVisible) return null;
@@ -59,31 +38,20 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
     <div className="fixed font-sans inset-0 z-50">
       {/* Modal Overlay */}
       <div
-        className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        }`}
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={handleClose}
       />
 
       {/* Modal Content */}
-      <div
-        className={`absolute font-sans inset-0 flex items-center justify-center p-4 transition-all duration-500 ease-in-out ${
-          isExiting ? "opacity-0 scale-95" : "opacity-100 scale-100"
-        }`}
-      >
+      <div className="absolute font-sans inset-0 flex items-center justify-center p-4">
         <div
           onClick={(e) => e.stopPropagation()}
-          className={`relative bg-gradient-to-br from-[#1a1f35] to-[#0d1220] rounded-xl border border-yellow-500/50 
-            shadow-2xl w-[90%] max-w-[320px] p-4 transform overflow-hidden ${
-              isShaking ? "animate-shake" : ""
-            }`}
+          className="relative bg-gradient-to-br from-[#1a1f35] to-[#0d1220] rounded-xl border border-yellow-500/50 
+            shadow-2xl w-[90%] max-w-[320px] p-4 overflow-hidden"
         >
           {/* Modal Title */}
           <div className="relative h-[250px] overflow-hidden">
-            <div
-              className="h-full transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${page * 100}%)` }}
-            >
+            <div style={{ transform: `translateX(-${page * 100}%)` }}>
               <div className="flex h-full">
                 {pages.map((p, i) => (
                   <div
@@ -105,7 +73,7 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
             {/* Navigation */}
             <div className="absolute bottom-4 left-0 right-0 flex justify-between px-6">
               <button
-                className={`px-3 py-1 rounded-lg text-sm transition-colors ${
+                className={`px-3 py-1 rounded-lg text-sm ${
                   page === 0
                     ? "bg-white/5 text-gray-400 cursor-not-allowed"
                     : "bg-white/10 text-yellow-400 hover:bg-yellow-400 hover:text-black"
@@ -116,7 +84,7 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
                 Prev
               </button>
               <button
-                className={`px-3 py-1 rounded-lg text-sm transition-colors ${
+                className={`px-3 py-1 rounded-lg text-sm ${
                   page === pages.length - 1
                     ? "bg-white/5 text-gray-400 cursor-not-allowed"
                     : "bg-white/10 text-yellow-400 hover:bg-yellow-400 hover:text-black"
@@ -132,7 +100,7 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
           {/* Close Button */}
           <button
             onClick={handleClose}
-            className="absolute top-3 right-3 p-2 bg-yellow-500/10 rounded-full hover:bg-yellow-400 hover:text-black transition"
+            className="absolute top-3 right-3 p-2 bg-yellow-500/10 rounded-full hover:bg-yellow-400 hover:text-black"
           >
             <X className="w-5 h-5 text-yellow-500" />
           </button>
