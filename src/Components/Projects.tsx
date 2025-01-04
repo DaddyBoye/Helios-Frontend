@@ -49,6 +49,33 @@ interface ProjectCardScrollerProps {
   telegramId: string;
 }
 
+const SkeletonCard = ({ isLast }: { isLast?: boolean }) => (
+  <div className={`flex-shrink-0 font-sans pl-5 w-72 ${isLast ? 'mr-5' : ''}`}>
+    <div className="relative rounded-lg overflow-hidden animate-pulse">
+      <div className="flex justify-between absolute top-3 left-3 right-3">
+        <div className="bg-gray-300 text-transparent px-6 py-1 rounded-full">
+          -
+        </div>
+        <div className="bg-gray-300 text-transparent px-6 py-1 rounded-full">
+          -
+        </div>
+      </div>
+      <div className="w-full h-40 bg-gray-300" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50">
+        <div className="absolute bottom-0 pb-2 px-3 w-full">
+          <div className="flex justify-between items-center">
+            <div className="bg-gray-300 h-4 w-32 rounded" />
+            <div className="bg-gray-300 h-6 w-20 rounded-full" />
+          </div>
+          <div className="flex items-center mt-1">
+            <div className="bg-gray-300 h-4 w-24 rounded mt-2" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const ProjectCard: React.FC<ProjectCardProps> = ({ 
   title, 
   location, 
@@ -220,8 +247,14 @@ const ProjectCardScroller: React.FC<ProjectCardScrollerProps> = ({ onProjectClic
 
   if (isLoading) {
     return (
-      <div className="w-full h-40 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      <div className="w-full font-sans">
+        <div className="overflow-x-auto scrollbar-hide">
+          <div className="flex">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard isLast />
+          </div>
+        </div>
       </div>
     );
   }
