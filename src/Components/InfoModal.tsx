@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Info, X } from "lucide-react";
 
 interface InfoModalProps {
@@ -8,29 +8,41 @@ interface InfoModalProps {
 
 const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
   const [page, setPage] = useState(0);
+  const [isShaking, setIsShaking] = useState(false);
 
   const pages = [
     {
       title: "Earning Tokens",
-      content: "Your Offset Rate shows how many tokens you earn per hour.",
+      content:
+        "Your Offset Rate shows how many tokens you earn per hour.",
     },
     {
       title: "Claiming Tokens",
-      content: "When your tokens are ready, tap 'Reap' to add them to your balance.",
+      content:
+        "When your tokens are ready, tap 'Reap' to add them to your balance.",
     },
     {
       title: "Token Accumulation Limit",
-      content: "Offsets stop accumulating after 8 unclaimed tokens.",
+      content:
+        "Offsets stop accumulating after 8 unclaimed tokens.",
     },
     {
       title: "Boosting Your Offset Rate",
-      content: "Invite more people and complete tasks to increase your Offset Rate.",
+      content:
+        "Invite more people and complete tasks to increase your Offset Rate.",
     },
   ];
 
-  const handleClose = () => {
-    onClose();
-  };
+  useEffect(() => {
+    if (isVisible) {
+      const shakeInterval = setInterval(() => {
+        setIsShaking(true);
+        setTimeout(() => setIsShaking(false), 1000);
+      }, 5000);
+
+      return () => clearInterval(shakeInterval);
+    }
+  }, [isVisible]);
 
   if (!isVisible) return null;
 
@@ -39,19 +51,24 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
       {/* Modal Overlay */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={handleClose}
+        onClick={onClose}
       />
 
       {/* Modal Content */}
       <div className="absolute font-sans inset-0 flex items-center justify-center p-4">
         <div
           onClick={(e) => e.stopPropagation()}
-          className="relative bg-gradient-to-br from-[#1a1f35] to-[#0d1220] rounded-xl border border-yellow-500/50 
-            shadow-2xl w-[90%] max-w-[320px] p-4 overflow-hidden"
+          className={`relative bg-gradient-to-br from-[#1a1f35] to-[#0d1220] rounded-xl border border-yellow-500/50 
+            shadow-2xl w-[90%] max-w-[320px] p-4 transform overflow-hidden ${
+              isShaking ? "animate-shake" : ""
+            }`}
         >
           {/* Modal Title */}
           <div className="relative h-[250px] overflow-hidden">
-            <div style={{ transform: `translateX(-${page * 100}%)` }}>
+            <div
+              className="h-full transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${page * 100}%)` }}
+            >
               <div className="flex h-full">
                 {pages.map((p, i) => (
                   <div
@@ -73,7 +90,7 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
             {/* Navigation */}
             <div className="absolute bottom-4 left-0 right-0 flex justify-between px-6">
               <button
-                className={`px-3 py-1 rounded-lg text-sm ${
+                className={`px-3 py-1 rounded-lg text-sm transition-colors ${
                   page === 0
                     ? "bg-white/5 text-gray-400 cursor-not-allowed"
                     : "bg-white/10 text-yellow-400 hover:bg-yellow-400 hover:text-black"
@@ -84,7 +101,7 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
                 Prev
               </button>
               <button
-                className={`px-3 py-1 rounded-lg text-sm ${
+                className={`px-3 py-1 rounded-lg text-sm transition-colors ${
                   page === pages.length - 1
                     ? "bg-white/5 text-gray-400 cursor-not-allowed"
                     : "bg-white/10 text-yellow-400 hover:bg-yellow-400 hover:text-black"
@@ -99,8 +116,8 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
 
           {/* Close Button */}
           <button
-            onClick={handleClose}
-            className="absolute top-3 right-3 p-2 bg-yellow-500/10 rounded-full hover:bg-yellow-400 hover:text-black"
+            onClick={onClose}
+            className="absolute top-3 right-3 p-2 bg-yellow-500/10 rounded-full hover:bg-yellow-400 hover:text-black transition"
           >
             <X className="w-5 h-5 text-yellow-500" />
           </button>
