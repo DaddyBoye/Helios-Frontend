@@ -1,12 +1,12 @@
-import CarbonStory from "../images/Learn/Carbon Story.jpg";
-import CarbonCredits from "../images/Learn/Carbon Credit 2.jpg";
-import CartbonTrading from "../images/Learn/Carbon Trading 2.jpg";
-import GreenSuper from "../images/Learn/Green Superpowers.jpg";
-import ImpactJourney from "../images/Learn/Impact Journey.jpg";
-import ReduceFootprint from "../images/Learn/Reduce Footprint.jpg";
-import SpotEmissions from "../images/Learn/Spot Emissions.jpg";
-import JoinMovement from "../images/Learn/Join Movement.jpg";
-import LevelUp from "../images/Learn/Level Up.jpg";
+import CarbonStory from "../images/Learn/Carbon Story.png";
+import CarbonCredits from "../images/Learn/Carbon Credit 2.png";
+import CarbonTrading from "../images/Learn/Carbon Trading 2.png";
+import GreenSuper from "../images/Learn/Green Superpowers.png";
+import ImpactJourney from "../images/Learn/Impact Journey.png";
+import ReduceFootprint from "../images/Learn/Reduce Footprint.png";
+import SpotEmissions from "../images/Learn/Spot Emissions.png";
+import JoinMovement from "../images/Learn/Join Movement.png";
+import LevelUp from "../images/Learn/Level Up.png";
 
 
 interface Slide {
@@ -49,7 +49,7 @@ export const educationalContent: Record<string, EducationalCategory> = {
             {
                 title: "Trade & Change 📈",
                 content: "Welcome to the carbon trading market! Here, companies can buy your carbon-saving achievements (credits) to balance their emissions. It's like a global game of environmental tag - and you can be a player!",
-                image: CartbonTrading,
+                image: CarbonTrading,
             },
             {
                 title: "Impact Journey 🌍",
