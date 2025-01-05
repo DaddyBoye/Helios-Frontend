@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import path from "path"
+import path from "path";
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -48,7 +48,8 @@ export default defineConfig({
               }
             }
           }
-        ]
+        ],
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // Set the limit to 10 MB (10 * 1024 * 1024)
       }
     })
   ],
