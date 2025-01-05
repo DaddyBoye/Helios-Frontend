@@ -38,7 +38,7 @@ interface Project {
     description: string;
     carbonStandard: string;
     creditType: string;
-    carbonRemoved: number;
+    carbonRemoved: string;
     images: ProjectImage[];
 }
 
