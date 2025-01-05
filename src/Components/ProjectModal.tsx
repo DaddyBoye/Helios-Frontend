@@ -176,7 +176,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose, t
                     <img
                         src={project.images[0].url}
                         alt="Project Overview"
-                        className="w-full h-48 object-cover rounded-lg"
+                        className="w-full h-44 object-cover rounded-lg"
                     />
                     <p className="text-gray-600 text-sm leading-relaxed max-h-24 overflow-y-auto">
                         {project.description}
@@ -191,17 +191,17 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose, t
                     <div className="grid grid-cols-2 gap-3">
                         <div className="bg-white p-3 rounded-lg shadow-sm">
                             <div className="text-lg font-semibold text-gray-900">{project.carbonRemoved}</div>
-                            <div className="text-xs text-gray-500">CO₂ Removed</div>
+                            <div className="text-xs text-gray-500">{project.creditType}</div>
                         </div>
                         <div className="bg-white p-3 rounded-lg shadow-sm">
                             <div className="text-lg font-semibold text-gray-900">{project.carbonStandard}</div>
-                            <div className="text-xs text-gray-500">Standard</div>
+                            <div className="text-xs text-gray-500">Registry</div>
                         </div>
                     </div>
                     <img
                         src={project.images[1].url}
                         alt="Impact Metrics"
-                        className="w-full h-48 object-cover rounded-lg"
+                        className="w-full h-44 object-cover rounded-lg"
                     />
                 </div>
             )
@@ -214,7 +214,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose, t
                         <img
                             src={project.images[currentState.activeImageIndex].url}
                             alt={`Project image ${currentState.activeImageIndex + 1}`}
-                            className="w-full h-48 object-cover rounded-lg"
+                            className="w-full h-44 object-cover rounded-lg"
                         />
                         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2 rounded-b-lg">
                             <p className="text-white text-sm font-medium">
@@ -266,7 +266,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose, t
                         <p className="text-sm text-gray-500">
                             {currentState.hasExistingRating 
                                 ? "You've already rated this project"
-                                : "Your rating helps improve carbon removal"
+                                : "Your rating helps in featuring the best projects"
                             }
                         </p>
                     </div>

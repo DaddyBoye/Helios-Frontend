@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Star, StarOff } from 'lucide-react';
-import Rectangle from '../images/Rectangle 95-1.png';
-import Rectangle2 from '../images/Rectangle 95.png';
-import Helios from '../images/helios 3 mascot.png';
-import Helios2 from '../images/helios 6 mascot.png';
-import Helios3 from '../images/helios 7 mascot.png';
+import Pacajai1 from "../images/Projects/Pacajai/Pacajai1.png";
+import Pacajai2 from "../images/Projects/Pacajai/Pacajai2.png";
+import Pacajai3 from "../images/Projects/Pacajai/Pacajai3.png";
+import BRFCP1 from "../images/Projects/BRFCP/BRFC.png";
+import BRFCP2 from "../images/Projects/BRFCP/BRFC2.png";
+import BRFCP3 from "../images/Projects/BRFCP/BRFC3.png";
+import BRFCP4 from "../images/Projects/BRFCP/BRFC4.png";
+import MMR1 from "../images/Projects/MMR/MMR1.png";
+import MMR2 from "../images/Projects/MMR/MMR2.png";
+import MMR3 from "../images/Projects/MMR/MMR3.png";
+import MMR4 from "../images/Projects/MMR/MMR4.png";
+import MMR5 from "../images/Projects/MMR/MMR5.png";
 
 interface ProjectImage {
   url: string;
@@ -19,7 +26,7 @@ interface Project {
   description: string;
   carbonStandard: string;
   creditType: string;
-  carbonRemoved: number;
+  carbonRemoved: string;
   location: string;
   images: ProjectImage[];
 }
@@ -109,14 +116,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       <div className="absolute bottom-0 pb-2 px-3 w-full">
         <div className="flex justify-between items-center">
           <h3 className="text-white font-medium">{title}</h3>
-          <button className={`px-3 py-1 my-auto rounded-full text-xs ${
-            type === 'energy' ? 'bg-green-500' : 
-            type === 'default' ? 'bg-orange-500' : 
+            <button className={`px-3 py-1 my-auto rounded-full text-xs ${
+            type === 'forestry' ? 'bg-green-500' : 
             type === 'water' ? 'bg-blue-500' : 
+            type === 'energy' ? 'bg-yellow-500' : 
             'bg-gray-500'
-          }`}>
-            Learn more
-          </button>
+            }`}>
+            {type}
+            </button>
         </div>
         <div className="flex items-center text-xs text-gray-300 mt-1">
           <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -138,53 +145,50 @@ const ProjectCardScroller: React.FC<ProjectCardScrollerProps> = ({ onProjectClic
   const projects: Project[] = [
     {
       id: "1",
-      title: "Project Gamma",
-      type: "water",
-      description: "Description for Project Gamma",
-      carbonStandard: "Standard A",
-      creditType: "Credit A",
-      carbonRemoved: 100,
-      location: "Location Gamma",
+      title: "Pacajai REDD+ Project",
+      type: "forestry",
+      description: "In the heart of Brazil, a REDD project has been implemented to prevent deforestation on private parcels of land spanning 135,105 hectares.",
+      carbonStandard: "Verra",
+      creditType: "Credits Issued",
+      carbonRemoved: "3,444.08",
+      location: "Brazil, Portel",
       images: [
-        { url: Rectangle, caption: "Beautiful Landscape", description: "A breathtaking view of nature." },
-        { url: Helios, caption: "Helios Mascot", description: "The vibrant Helios mascot illustration." },
-        { url: Helios2, caption: "Solar Farm", description: "A thriving solar farm under a clear sky." },
-        { url: Helios3, caption: "Sustainable Future", description: "A vision of a green, sustainable future." },
-        { url: Rectangle2, caption: "Urban Planning", description: "Smart urban planning for sustainability." },
+        { url: Pacajai2, caption: "The Amazon River", description: "The Amazon river is the largest river in the world." },
+        { url: Pacajai1, caption: "The Amazon Rainforest", description: "Pacajai REDD+ works to protect parts of the Amazon." },
+        { url: Pacajai3, caption: "Jaguar", description: "A jaguar in part of the Amazon protected by the Pacajai project." },
       ],
     },
     {
       id: "2",
-      title: "Project Beta",
-      type: "energy",
-      description: "Description for Project Beta",
-      carbonStandard: "Standard B",
-      creditType: "Credit B",
-      carbonRemoved: 200,
-      location: "Location Beta",
+      title: "Myanmar Mangrove Reforestation",
+      type: "forestry",
+      description: "This project in the Northern Ayeyarwady Division of Myanmar seeks to rejuvenate and safeguard 2,265.47 hectares of deteriorated land.",
+      carbonStandard: "VCS",
+      creditType: "Hectares Restored",
+      carbonRemoved: "1000",
+      location: "Myanmar, Northern Ayeyarwady",
       images: [
-        { url: Rectangle2, caption: "Urban Planning", description: "Smart urban planning for sustainability." },
-        { url: Helios, caption: "Helios Mascot", description: "The vibrant Helios mascot illustration." },
-        { url: Helios2, caption: "Solar Farm", description: "A thriving solar farm under a clear sky." },
-        { url: Helios3, caption: "Sustainable Future", description: "A vision of a green, sustainable future." },
-        { url: Rectangle, caption: "Beautiful Landscape", description: "A breathtaking view of nature." },
+        { url: MMR1, caption: "A mnagrove in the Northern Ayeyarwady Division", description: "The Ayeyarwady Delta mangroves shrank by 64.2% between 1978 and 2011, from 262,300 to just 93,800 hectares" },
+        { url: MMR2, caption: "Farmer at work in the mangrove", description: "Local communities recognize the value of conserving forests surrounding their dwellings both for protection against extreme weather events and as a source of sustenance given the importance of habitat conditions for crab and fish populations." },
+        { url: MMR3, caption: "A mangrove drying up", description: "Mangrove drying disrupts ecosystems, biodiversity, coastal protection, and carbon storage." },
+        { url: MMR4, caption: "A seed nursey shed", description: "The project has successfully planted 2.5 million magrove plant species. Mitigating 1.5 million tonnes of carbon." },
+        { url: MMR5, caption: "Young mangrove saplings", description: "Mangrove forests provide essential ecosystem services like protecting coastlines from erosion, acting as nurseries for marine life, and sequestering carbon to mitigate climate change." },
       ],
     },
     {
       id: "3",
-      title: "Project Gamma",
-      type: "water",
-      description: "Description for Project Gamma",
-      carbonStandard: "Standard A",
-      creditType: "Credit A",
-      carbonRemoved: 100,
-      location: "Location Gamma",
+      title: "Bull Run Forest Carbon Project",
+      type: "forestry",
+      description: "This project preserves 666 hectares, combats deforestation, protects biodiversity, and promotes sustainable development within Central Belize.",
+      carbonStandard: "Verra",
+      creditType: "Credits Issued",
+      carbonRemoved: "79,530.92",
+      location: "Belize, Mountain Pine Ridge",
       images: [
-        { url: Rectangle, caption: "Beautiful Landscape", description: "A breathtaking view of nature." },
-        { url: Helios, caption: "Helios Mascot", description: "The vibrant Helios mascot illustration." },
-        { url: Helios2, caption: "Solar Farm", description: "A thriving solar farm under a clear sky." },
-        { url: Helios3, caption: "Sustainable Future", description: "A vision of a green, sustainable future." },
-        { url: Rectangle2, caption: "Urban Planning", description: "Smart urban planning for sustainability." },
+        { url: BRFCP1, caption: "The Mountain Pine Ridge Forest Reserve", description: "The reserve was established in 1944 to protect and manage the native Belizean pine forests. It spans 106,352.5 acres (430 km2)." },
+        { url: BRFCP2, caption: "Shower Falls", description: "Shower Falls is a stunning natural attraction located in the picturesque village of Cristo Rey, Belize. It falls under the reserve being protected by BRCFP." },
+        { url: BRFCP3, caption: "Pablo, a local guide", description: "Cristo Rey in Belize receives numerous tourist each year who are usually attracted by the stunning landscape and waterfalls." },
+        { url: BRFCP4, caption: "Jaguars caught on camera", description: "BRCFP protects one of the largest jaguar populations in the world by protecting the Mountain Pine Ridge Forest Reserve in the Cayo District." },
       ],
     },
   ];
@@ -260,7 +264,7 @@ const ProjectCardScroller: React.FC<ProjectCardScrollerProps> = ({ onProjectClic
   }
 
   return (
-    <div className="w-full font-sans">
+    <div className="w-full mb-4 font-sans">
       <div 
         ref={scrollContainerRef}
         className="overflow-x-auto scrollbar-hide scroll-smooth"
