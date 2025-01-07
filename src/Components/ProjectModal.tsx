@@ -304,7 +304,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose, t
                                 {currentState.hasExistingRating ? "You've rated this project!" : "Thank you for your feedback!"}
                             </h3>
                             <p className="text-sm text-gray-500">
-                                Your rating helps us improve carbon removal projects
+                            Your rating helps us feature the best projects.
                             </p>
                         </div>
                     </div>
