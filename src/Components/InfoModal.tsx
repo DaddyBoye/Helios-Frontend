@@ -47,11 +47,14 @@ const InfoModal = ({ isVisible, onClose }: InfoModalProps) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed font-sans inset-0 z-50">
+    <div
+      className="fixed font-sans inset-0 z-50"
+      onClick={onClose} // Ensure clicking anywhere outside triggers onClose
+    >
       {/* Modal Overlay */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={(e) => e.stopPropagation()} // Prevent clicks on overlay from bubbling
       />
 
       {/* Modal Content */}
