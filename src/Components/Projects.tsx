@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Star, StarOff } from 'lucide-react';
-import Pacajai1 from "../images/Projects/Pacajai/Pacajai1.png";
+import Pacajai1 from "../images/Projects/Pacajai/Pacajai1.jpg";
 import Pacajai2 from "../images/Projects/Pacajai/Pacajai2.png";
-import Pacajai3 from "../images/Projects/Pacajai/Pacajai3.png";
+import Pacajai3 from "../images/Projects/Pacajai/Pacajai3.jpg";
 import BRFCP1 from "../images/Projects/BRFCP/BRFC.png";
 import BRFCP2 from "../images/Projects/BRFCP/BRFC2.png";
 import BRFCP3 from "../images/Projects/BRFCP/BRFC3.png";
@@ -169,7 +169,7 @@ const ProjectCardScroller: React.FC<ProjectCardScrollerProps> = ({ onProjectClic
       location: "Myanmar, Northern Ayeyarwady",
       images: [
         { url: MMR1, caption: "A mnagrove in the Northern Ayeyarwady Division", description: "The Ayeyarwady Delta mangroves shrank by 64.2% between 1978 and 2011, from 262,300 to just 93,800 hectares" },
-        { url: MMR2, caption: "Farmer at work in the mangrove", description: "Local communities recognize the value of conserving forests surrounding their dwellings both for protection against extreme weather events and as a source of sustenance given the importance of habitat conditions for crab and fish populations." },
+        { url: MMR2, caption: "Farmer at work in the mangrove", description: "Local communities recognize the value of conserving forests for protection against extreme weather events and as a source of sustenance given the importance of habitat conditions for crab and fish populations." },
         { url: MMR3, caption: "A mangrove drying up", description: "Mangrove drying disrupts ecosystems, biodiversity, coastal protection, and carbon storage." },
         { url: MMR4, caption: "A seed nursey shed", description: "The project has successfully planted 2.5 million magrove plant species. Mitigating 1.5 million tonnes of carbon." },
         { url: MMR5, caption: "Young mangrove saplings", description: "Mangrove forests provide essential ecosystem services like protecting coastlines from erosion, acting as nurseries for marine life, and sequestering carbon to mitigate climate change." },

@@ -311,7 +311,7 @@ const Friends: React.FC = () => {
       </div>
 
       {/* Fixed invite component */}
-      <div className="fixed bottom-16 justify-between flex left-0 right-0 z-20 pb-4 pt-4 bg-gradient-to-t from-[#09161F] to-transparent">
+      <div className="fixed bottom-0 justify-between flex left-0 right-0 z-20 pb-20 pt-4 bg-gradient-to-t from-[#09161F] to-transparent">
         <button
           className="mx-auto bg-[#DCAA19] rounded-2xl py-4 w-4/6 md:w-5/6 lg:w-1/2 block"
           onClick={toggleShareMenu}
