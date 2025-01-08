@@ -9,7 +9,7 @@ import Lion from '../images/Lion.svg';
 import Goat from '../images/Goat.svg';
 import Cheetah from '../images/Cheetah.svg';
 import Panther from '../images/Panther.svg';
-import SeriousDog from '../images/Serious Dog.svg';
+import SeriousDog from '../icons/Avatars/SeriousDog.png';
 import SomeBird from '../images/Some Bird.svg';
 import Check from '../icons/formkit_check.svg';
 
