@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import Cat from '../images/Cat.svg';
+import Cat from '../icons/Avatars/Cat.png';
 import Capybara from '../images/Capybara.svg';
-import Parrot from '../images/Parrot.svg';
-import Sheep from '../images/Sheep.svg';
-import Rooster from '../images/Rooster.svg';
-import Dog from '../images/Dog.svg';
-import Lion from '../images/Lion.svg';
-import Goat from '../images/Goat.svg';
-import Cheetah from '../images/Cheetah.svg';
-import Panther from '../images/Panther.svg';
+import Parrot from '../icons/Avatars/Parrot.png';
+import Sheep from '../icons/Avatars/Sheep.png';
+import Rooster from '../icons/Avatars/Rooster.png';
+import Dog from '../icons/Avatars/Dog.png';
+import Lion from '../icons/Avatars/Lion.png';
+import Goat from '../icons/Avatars/Goat.png';
+import Cheetah from '../icons/Avatars/Cheetah.png';
+import Panther from '../icons/Avatars/Panther.png';
 import SeriousDog from '../icons/Avatars/SeriousDog.png';
-import SomeBird from '../images/Some Bird.svg';
+import SomeBird from '../icons/Avatars/SomeBird.png';
 import Check from '../icons/formkit_check.svg';
 
 interface AvatarSelectionModalProps {
