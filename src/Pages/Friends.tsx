@@ -318,6 +318,7 @@ const Friends: React.FC = () => {
         >
           <span className="text-base md:text-lg lg:text-xl">Invite a friend</span>
         </button>
+        
         <button
           className="mx-auto bg-white rounded-2xl py-4 w-1/6 md:w-5/6 lg:w-1/2 flex justify-center items-center"
           onClick={copyToClipboard}
