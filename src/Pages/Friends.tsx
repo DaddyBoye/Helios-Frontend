@@ -145,7 +145,7 @@ const Friends: React.FC = () => {
         {/* Card with profile */}
         <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12 pb-4">
             <div className="relative mx-auto rounded-full h-28 w-28 flex justify-center items-center">
-              <img src={avatarMap[avatarPath || 'avatars/Some Bird.svg']} alt="Your Avatar" className="w-24 h-24" />
+              <img src={avatarMap[avatarPath || 'avatars/Sheep.svg']} alt="Your Avatar" className="w-24 h-24" />
             </div>
           <p className="text-white font-bold text-xl">{heliosUsername}</p>
           <div className="mx-auto justify-between mt-2 w-fit gap-5 px-2 bg-white/10 backdrop-blur-md rounded-2xl flex flex-row">

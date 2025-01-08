@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({ minerate, friendsCount, avatarPath }) =
             </div>
           </div>
           <div className="absolute right-0 top-1/2 -translate-y-1/2 rounded-full p-0.5 flex items-center justify-center">
-            <img src={avatarMap[avatarPath || 'avatars/Some Bird.svg']} alt="User" className="w-12 h-12 -mt-1 -mr-1 rounded-full object-cover" />
+            <img src={avatarMap[avatarPath || 'avatars/Sheep.svg']} alt="User" className="w-12 h-12 -mt-1 -mr-1 rounded-full object-cover" />
           </div>
         </div>
       </div>
