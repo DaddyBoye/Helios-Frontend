@@ -58,7 +58,7 @@ const Airdrop = () => {
   const { minerate, friends, avatarPath } = useOutletContext<AirdropProps>();
   
   return (
-    <div className="relative font-sans h-full pb-20">
+    <div className="relative font-sans h-full pb-40">
       <StarryBackground />
 
       {/* Main container */}
