@@ -279,31 +279,39 @@ const Friends: React.FC = () => {
               </div>
               <p className='text-left text-white text-sm'>Share your invite links</p>
             </div>
-            <p className='text-left ml-1 text-white/50 text-sm'>Get a free play pass for each friend</p>
+            <p className='text-left ml-1 text-white/50 text-sm'>Your friend joins Helios</p>
           </div>
           <hr className="border-t border-white/30 mx-5"/>
           <div className="py-2 w-11/12 mx-auto">
             <div className='flex'>
               <div className='bg-[#FAAD00] w-2 h-2 my-auto -ml-2 mr-1 rounded-full'>
               </div>
-              <p className='text-left text-white text-sm'>Your friend joins Helios </p>
+              <div className='flex flex-row'>
+                <p className='text-left text-white text-sm'>Your offset rate increases by </p>
+                <img src={FreshCoin} alt="SolisCoin" className='w-9 h-9 -mt-1' />
+                <p className='font-bold -ml-1 text-white text-yellow-500 text-lg'>10</p>
+              </div>
             </div>
-            <p className='text-left ml-1 text-white/50 text-sm'>And starts farming</p>
+            <p className='text-left ml-1 text-white/50 -mt-2 text-sm'>You earn more each hour</p>
           </div>
           <hr className="border-t border-white/30 mx-5" />
           <div className="py-2 w-11/12 mx-auto">
             <div className='flex'>
               <div className='bg-[#FAAD00] w-2 h-2 my-auto -ml-2 mr-1 rounded-full'>
               </div>
-              <p className='text-left text-white text-sm'>You earn 2000 Helios coins</p>
+              <div className='flex flex-row'>
+                <p className='text-left text-white text-sm mr-4'>Your balance increases by </p>
+                <img src={FreshCoin} alt="SolisCoin" className='w-9 h-9 -mt-1' />
+                <p className='font-bold -ml-1 text-white text-yellow-500 text-lg'>2K</p>
+              </div>
             </div>
-            <p className='text-left ml-1 text-white/50 text-sm'>Plus an extra claimble 10% of your friends totals</p>
+            <p className='text-left ml-1 text-white/50 -mt-2 text-sm'>You can earn more from tasks</p>
           </div>
         </div>
       </div>
 
       {/* Fixed invite component */}
-      <div className="fixed bottom-14 justify-between flex left-0 right-0 z-20 pb-4 pt-4 bg-gradient-to-t from-[#09161F] to-transparent">
+      <div className="fixed bottom-16 justify-between flex left-0 right-0 z-20 pb-4 pt-4 bg-gradient-to-t from-[#09161F] to-transparent">
         <button
           className="mx-auto bg-[#DCAA19] rounded-2xl py-4 w-4/6 md:w-5/6 lg:w-1/2 block"
           onClick={toggleShareMenu}
