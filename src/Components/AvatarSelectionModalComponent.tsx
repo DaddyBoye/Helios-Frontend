@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Cat from '../icons/Avatars/Cat.png';
-import Capybara from '../images/Capybara.svg';
+import Capybara from '../icons/Avatars/Capybara.svg';
 import Parrot from '../icons/Avatars/Parrot.png';
 import Sheep from '../icons/Avatars/Sheep.png';
 import Rooster from '../icons/Avatars/Rooster.png';
