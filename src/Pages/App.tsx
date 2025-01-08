@@ -9,7 +9,6 @@ import Header from '../Components/Header';
 import { useSpring, animated } from 'react-spring';
 import MaxAirdropAlert from '../Components/MaxAirdropAlert';
 import InfoModal from "../Components/InfoModal";
-import { Info } from "lucide-react";
 import '../App.css';
 
 
@@ -224,12 +223,18 @@ function App() {
         <div className="flex flex-row pl-7 pr-6 pt-3 justify-between">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
-              <p className="font-bold text-lg">Offset Rate</p>
+              <p className="font-bold -ml-1 text-lg">Offset Rate</p>
+              <p 
+                onClick={handleOpenModal}
+                className='text-yellow-500 text-sm ml-2'
+                >
+                  Boost
+              </p>
               <button
                 onClick={handleOpenModal}
-                className="p-3 rounded-full "
+                className=" rounded-full border-2 items-center border-yellow-500 w-4 h-4 ml-1" 
                 >
-                <Info className="w-5 h-5 text-yellow-500" />
+                <p className="text-yellow-500 text-xs" >?</p>
               </button>
             </div>
             <div className="flex flex-row">
