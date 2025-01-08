@@ -35,7 +35,7 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpeg,jpg}'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\.example\.com\/.*/i,
@@ -44,12 +44,12 @@ export default defineConfig({
               cacheName: 'api-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 24 * 60 * 60 // 24 hours
-              }
-            }
-          }
-        ],
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // Set the limit to 10 MB (10 * 1024 * 1024)
+                // 24 hours
+                        }
+                      }
+                      }
+                    ],
+                    maximumFileSizeToCacheInBytes: 2.5 * 1024 * 1024, // Set the limit to 2.5 MB (2.5 * 1024 * 1024)
       }
     })
   ],

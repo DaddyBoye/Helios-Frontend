@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Star, StarOff } from 'lucide-react';
-import Pacajai1 from "../images/Projects/Pacajai/Pacajai1.png";
+import Pacajai1 from "../images/Projects/Pacajai/Pacajai1.jpg";
 import Pacajai2 from "../images/Projects/Pacajai/Pacajai2.png";
-import Pacajai3 from "../images/Projects/Pacajai/Pacajai3.png";
+import Pacajai3 from "../images/Projects/Pacajai/Pacajai3.jpg";
 import BRFCP1 from "../images/Projects/BRFCP/BRFC.png";
 import BRFCP2 from "../images/Projects/BRFCP/BRFC2.png";
 import BRFCP3 from "../images/Projects/BRFCP/BRFC3.png";
