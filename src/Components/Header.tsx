@@ -1,18 +1,18 @@
 import React from 'react';
 import Solis from '../icons/Solis-raw2.svg';
 import Friends from '../icons/Friends Vector.svg';
-import Cat from '../images/Cat.svg';
-import Capybara from '../images/Capybara.svg';
-import Parrot from '../images/Parrot.svg';
-import Sheep from '../images/Sheep.svg';
-import Rooster from '../images/Rooster.svg';
-import Dog from '../images/Dog.svg';
-import Lion from '../images/Lion.svg';
-import Goat from '../images/Goat.svg';
-import Cheetah from '../images/Cheetah.svg';
-import Panther from '../images/Panther.svg';
-import SeriousDog from '../images/Serious Dog.svg';
-import SomeBird from '../images/Some Bird.svg';
+import Cat from '../icons/Avatars/Cat.png';
+import Capybara from '../icons/Avatars/Capybara.svg';
+import Parrot from '../icons/Avatars/Parrot.png';
+import Sheep from '../icons/Avatars/Sheep1.png';
+import Rooster from '../icons/Avatars/Rooster.png';
+import Dog from '../icons/Avatars/Dog.png';
+import Lion from '../icons/Avatars/Lion.png';
+import Goat from '../icons/Avatars/Goat.png';
+import Cheetah from '../icons/Avatars/Cheetah.png';
+import Panther from '../icons/Avatars/Panther.png';
+import SeriousDog from '../icons/Avatars/SeriousDog.png';
+import SomeBird from '../icons/Avatars/SomeBird.png';
 
 interface HeaderProps {
   minerate: number | null;
@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({ minerate, friendsCount, avatarPath }) =
             </div>
           </div>
           <div className="absolute right-0 top-1/2 -translate-y-1/2 rounded-full p-0.5 flex items-center justify-center">
-            <img src={avatarMap[avatarPath || 'avatars/Some Bird.svg']} alt="User" className="w-12 h-12 -mt-1 -mr-1 rounded-full object-cover" />
+            <img src={avatarMap[avatarPath || 'avatars/Sheep.svg']} alt="User" className="w-12 h-12 -mt-1 -mr-1 rounded-full object-cover" />
           </div>
         </div>
       </div>

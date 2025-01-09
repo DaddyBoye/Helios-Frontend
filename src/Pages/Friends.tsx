@@ -8,18 +8,18 @@ import Copy from '../icons/Group 107.svg';
 import { motion, AnimatePresence } from 'framer-motion';
 import FriendsIcon from '../icons/Friends Vector.svg';
 import FreshCoin from '../icons/Solis-coin.svg';
-import Cat from '../images/Cat.svg';
-import Capybara from '../images/Capybara.svg';
-import Parrot from '../images/Parrot.svg';
-import Sheep from '../images/Sheep.svg';
-import Rooster from '../images/Rooster.svg';
-import Dog from '../images/Dog.svg';
-import Lion from '../images/Lion.svg';
-import Goat from '../images/Goat.svg';
-import Cheetah from '../images/Cheetah.svg';
-import Panther from '../images/Panther.svg';
-import SeriousDog from '../images/Serious Dog.svg';
-import SomeBird from '../images/Some Bird.svg';
+import Cat from '../icons/Avatars/Cat.png';
+import Capybara from '../icons/Avatars/Capybara.svg';
+import Parrot from '../icons/Avatars/Parrot.png';
+import Sheep from '../icons/Avatars/Sheep1.png';
+import Rooster from '../icons/Avatars/Rooster.png';
+import Dog from '../icons/Avatars/Dog.png';
+import Lion from '../icons/Avatars/Lion.png';
+import Goat from '../icons/Avatars/Goat.png';
+import Cheetah from '../icons/Avatars/Cheetah.png';
+import Panther from '../icons/Avatars/Panther.png';
+import SeriousDog from '../icons/Avatars/SeriousDog.png';
+import SomeBird from '../icons/Avatars/SomeBird.png';
 
 interface FriendsProps {
   toggleTaskbar: (isVisible: boolean) => void;
@@ -145,7 +145,7 @@ const Friends: React.FC = () => {
         {/* Card with profile */}
         <div className="bg-white/10 border-solid flex flex-col mx-auto mt-4 border-2 border-[#B4CADA] backdrop-blur-md rounded-xl w-11/12 pb-4">
             <div className="relative mx-auto rounded-full h-28 w-28 flex justify-center items-center">
-              <img src={avatarMap[avatarPath || 'avatars/Some Bird.svg']} alt="Your Avatar" className="w-24 h-24" />
+              <img src={avatarMap[avatarPath || 'avatars/Sheep.svg']} alt="Your Avatar" className="w-24 h-24" />
             </div>
           <p className="text-white font-bold text-xl">{heliosUsername}</p>
           <div className="mx-auto justify-between mt-2 w-fit gap-5 px-2 bg-white/10 backdrop-blur-md rounded-2xl flex flex-row">
@@ -318,6 +318,7 @@ const Friends: React.FC = () => {
         >
           <span className="text-base md:text-lg lg:text-xl">Invite a friend</span>
         </button>
+
         <button
           className="mx-auto bg-white rounded-2xl py-4 w-1/6 md:w-5/6 lg:w-1/2 flex justify-center items-center"
           onClick={copyToClipboard}

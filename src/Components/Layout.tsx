@@ -476,6 +476,7 @@ useEffect(() => {
             deleteAllUserAirdrops
           }}
         />
+        
       {showPopup && <WelcomePopup onClose={handlePopupClose} toggleTaskbar={handleToggleTaskbar} />}
       <p className='hidden'>{message}</p>
       <div className='hidden'>

@@ -10,86 +10,26 @@ import Airdrop from '../icons/mingcute_airdrop-fill.svg';
 import EcoOpen from '../icons/EcoOpen.svg';
 import Eco from '../icons/Eco.svg';
 import { NavLink } from 'react-router-dom';
-import Rectangle from '../icons/Rectangle 67 (3).png';
 
 const Taskbar = () => {
-  const [iconSize, setIconSize] = useState(window.innerWidth * (1 / 12)); // Initial size: 2/12 of screen width
+  const [iconSize, setIconSize] = useState(window.innerWidth * (1 / 12));
 
   useEffect(() => {
     const handleResize = () => {
-      const newSize = window.innerWidth * (2 / 12); // Recalculate size on window resize
+      const newSize = Math.min(window.innerWidth * (2 / 12), 100); // Set a maximum size of 100px
       setIconSize(newSize);
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // Set size initially based on current screen width
+    handleResize();
 
-    return () => window.removeEventListener('resize', handleResize); // Cleanup listener
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
-    <div className="taskbar font-sans">
-      <img src={Rectangle} alt="" className='absolute'/>
-      <div className="p-4 h-16 flex flex-row justify-between items-center"> {/* Add items-center for vertical centering */}
-        {/* Home */}
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
-              isActive ? 'text-[#FFD700]' : 'text-white'
-            }`
-          }
-        >
-          {({ isActive }) => (
-            <>
-              <img
-                src={isActive ? HomeOpen : Home}
-                className={`w-6 mx-auto h-5 transition-transform duration-200 ${
-                  isActive ? 'scale-110' : 'scale-90'
-                }`}
-                alt="Home Logo"
-              />
-              <span
-                className={`transition-transform z-50 duration-200 ${
-                  isActive ? 'text-sm' : 'text-xs'
-                }`}
-              >
-                Home
-              </span>
-            </>
-          )}
-        </NavLink>
-
-        {/* Earn */}
-        <NavLink
-          to="/earn"
-          className={({ isActive }) =>
-            `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
-              isActive ? 'text-[#FFD700]' : 'text-white'
-            }`
-          }
-        >
-          {({ isActive }) => (
-            <>
-              <img
-                src={isActive ? EarnOpen : Earn}
-                className={`w-6 mx-auto h-5 transition-transform duration-200 ${
-                  isActive ? 'scale-110' : 'scale-100'
-                }`}
-                alt="Earn Logo"
-              />
-              <span
-                className={`transition-transform z-50 duration-200 ${
-                  isActive ? 'text-sm' : 'text-xs'
-                }`}
-              >
-                Earn
-              </span>
-            </>
-          )}
-        </NavLink>
-
-        {/* Eco Tab */}
+    <div className="relative font-sans">
+      {/* Eco Tab - Positioned absolutely to prevent clipping */}
+      <div className="fixed left-[50.5%] eco-1 -translate-x-1/2 bottom-9 z-50">
         <NavLink
           to="/eco"
           className={({ isActive }) =>
@@ -98,88 +38,153 @@ const Taskbar = () => {
             }`
           }
         >
-        {({ isActive }) => (
-          <div
-            style={{
-              width: iconSize,
-              height: iconSize,
-            }}
-            className={`shadow-2xl flex rounded-full items-center ml-1 justify-center transition-all duration-500 ease-in-out ${
-              isActive
-                ? 'scale-125 -mt-16 bg-gradient-to-r from-[#5A7FB8] to-[#2A3C4E]'
-                : 'scale-110 -mt-16 bg-gradient-to-r from-[#A4E786] to-[#2E7D32]'
-            }`}
+          {({ isActive }) => (
+            <div
+              style={{
+                width: iconSize,
+                height: iconSize,
+              }}
+              className={`shadow-2xl flex rounded-full items-center justify-center transition-all duration-500 ease-in-out ${
+                isActive
+                  ? 'scale-125 bg-gradient-to-r from-[#5A7FB8] to-[#2A3C4E]'
+                  : 'scale-110 bg-gradient-to-r from-[#A4E786] to-[#2E7D32]'
+              }`}
+            >
+              <img
+                src={isActive ? EcoOpen : Eco}
+                style={{ width: iconSize * 0.5, height: iconSize * 0.5 }}
+                className={`transition-transform duration-500 ease-in-out ${
+                  isActive ? 'scale-120' : 'scale-110'
+                }`}
+                alt="Eco Logo"
+              />
+            </div>
+          )}
+        </NavLink>
+      </div>
+
+      {/* Main taskbar */}
+      <div className="taskbar1 taskbar h-20 -mb-3 bg-[#444F5E]">
+        <div className="p-4 h-16 flex flex-row justify-between items-center">
+          {/* Home */}
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
+                isActive ? 'text-[#FFD700]' : 'text-white'
+              }`
+            }
           >
-          <img
-            src={isActive ? EcoOpen : Eco}
-            style={{ width: iconSize * 0.5, height: iconSize * 0.5 }} // Dynamically scale the icon size
-            className={`transition-transform duration-500 ease-in-out ${
-              isActive ? 'scale-120' : 'scale-110'
-            }`}
-            alt="Eco Logo"
-          />
+            {({ isActive }) => (
+              <>
+                <img
+                  src={isActive ? HomeOpen : Home}
+                  className={`w-6 mx-auto h-5 transition-transform duration-200 ${
+                    isActive ? 'scale-110' : 'scale-90'
+                  }`}
+                  alt="Home Logo"
+                />
+                <span
+                  className={`transition-transform z-50 duration-200 ${
+                    isActive ? 'text-sm' : 'text-xs'
+                  }`}
+                >
+                  Home
+                </span>
+              </>
+            )}
+          </NavLink>
+
+          {/* Earn */}
+          <NavLink
+            to="/earn"
+            className={({ isActive }) =>
+              `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
+                isActive ? 'text-[#FFD700]' : 'text-white'
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <img
+                  src={isActive ? EarnOpen : Earn}
+                  className={`w-6 mx-auto h-5 transition-transform duration-200 ${
+                    isActive ? 'scale-110' : 'scale-100'
+                  }`}
+                  alt="Earn Logo"
+                />
+                <span
+                  className={`transition-transform z-50 duration-200 ${
+                    isActive ? 'text-sm' : 'text-xs'
+                  }`}
+                >
+                  Earn
+                </span>
+              </>
+            )}
+          </NavLink>
+
+          {/* Placeholder div for Eco spacing */}
+          <div className="w-16"></div>
+
+          {/* Friends */}
+          <NavLink
+            to="/friends"
+            className={({ isActive }) =>
+              `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
+                isActive ? 'text-[#FFD700]' : 'text-white'
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <img
+                  src={isActive ? FriendsOpen : Friends}
+                  className={`w-6 mx-auto h-5 transition-transform duration-200 ${
+                    isActive ? 'scale-110' : 'scale-90'
+                  }`}
+                  alt="Friends Logo"
+                />
+                <span
+                  className={`transition-transform z-50 duration-200 ${
+                    isActive ? 'text-sm' : 'text-xs'
+                  }`}
+                >
+                  Friends
+                </span>
+              </>
+            )}
+          </NavLink>
+
+          {/* Airdrop */}
+          <NavLink
+            to="/airdrop"
+            className={({ isActive }) =>
+              `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
+                isActive ? 'text-[#FFD700]' : 'text-white'
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <img
+                  src={isActive ? AirdropOpen : Airdrop}
+                  className={`w-6 mx-auto h-5 transition-transform duration-200 ${
+                    isActive ? 'scale-110' : 'scale-90'
+                  }`}
+                  alt="Airdrop Logo"
+                />
+                <span
+                  className={`transition-transform z-50 duration-200 ${
+                    isActive ? 'text-sm' : 'text-xs'
+                  }`}
+                >
+                  Airdrop
+                </span>
+              </>
+            )}
+          </NavLink>
         </div>
-      )}
-    </NavLink>
-
-
-        {/* Friends */}
-        <NavLink
-          to="/friends"
-          className={({ isActive }) =>
-            `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
-              isActive ? 'text-[#FFD700]' : 'text-white'
-            }`
-          }
-        >
-          {({ isActive }) => (
-            <>
-              <img
-                src={isActive ? FriendsOpen : Friends}
-                className={`w-6 mx-auto h-5 transition-transform duration-200 ${
-                  isActive ? 'scale-110' : 'scale-90'
-                }`}
-                alt="Friends Logo"
-              />
-              <span
-                className={`transition-transform z-50 duration-200 ${
-                  isActive ? 'text-sm' : 'text-xs'
-                }`}
-              >
-                Friends
-              </span>
-            </>
-          )}
-        </NavLink>
-
-        {/* Airdrop */}
-        <NavLink
-          to="/airdrop"
-          className={({ isActive }) =>
-            `pl-2 w-16 pr-2 justify-center text-center flex flex-col ${
-              isActive ? 'text-[#FFD700]' : 'text-white'
-            }`
-          }
-        >
-          {({ isActive }) => (
-            <>
-              <img
-                src={isActive ? AirdropOpen : Airdrop}
-                className={`w-6 mx-auto h-5 transition-transform duration-200 ${
-                  isActive ? 'scale-110' : 'scale-90'
-                }`}
-                alt="Airdrop Logo"
-              />
-              <span
-                className={`transition-transform z-50 duration-200 ${
-                  isActive ? 'text-sm' : 'text-xs'
-                }`}
-              >
-                Airdrop
-              </span>
-            </>
-          )}
-        </NavLink>
       </div>
     </div>
   );
