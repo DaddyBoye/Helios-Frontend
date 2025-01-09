@@ -148,13 +148,15 @@ const Friends: React.FC = () => {
               <img src={avatarMap[avatarPath || 'avatars/Sheep.svg']} alt="Your Avatar" className="w-24 h-24" />
             </div>
           <p className="text-white font-bold text-xl">{heliosUsername}</p>
-          <div className="mx-auto justify-between mt-2 w-fit gap-5 px-2 bg-white/10 backdrop-blur-md rounded-2xl flex flex-row">
+
+          {/* user stats */}
+          <div className="mx-auto justify-between mt-2 w-fit gap-5 px-2 rounded-2xl flex flex-row">
             <div className="flex flex-row">
               <img src={Solis} className="w-7 h-7 my-auto" />
               <p className="my-auto font-bold text-white">{minerate}</p>
             </div>
             <div className="flex flex-row">
-              <img src={FriendsIcon} className="w-5.5 h-5.5 pr-0.5 my-auto" />
+              <img src={FriendsIcon} className="w-6 h-6 pr-0.5 my-auto" />
               <p className="my-auto font-bold my-auto text-white">{friends.length}</p>
             </div>
             <div className="flex flex-row">
