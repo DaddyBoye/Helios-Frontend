@@ -89,8 +89,8 @@ const Airdrop = () => {
         </div>
 
         {/* Horizontal Divider */}
-        <hr className="border-t border-white/30 mx-5 my-5" />
-
+        <hr className="border-t border-white/30 mx-5 my-5" /> 
+        
         {/* Invite Section */}
         <div className="gap-2 flex-col flex">
           {inviteLinks.map((link, index) => (

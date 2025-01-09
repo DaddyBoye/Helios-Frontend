@@ -16,12 +16,25 @@ body {
 .taskbar {
   position: fixed;
   bottom: 0;
-  width: 102%;
-  color: white;
-  text-align: center;
-  margin-left: -4px;
-  z-index: 1000; /* Ensure it stays on top */
+  left: -5px;
+  right: -5px;
+  overflow: visible;
+  z-index: 999; /* Ensure it stays on top */
 }
+
+.eco-1 {
+  z-index: 1000; /* Higher than taskbar to ensure it's on top */
+}
+
+.eco {
+  position: absolute;
+  top: -20px; /* Adjust this value to control how much it overlaps */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000; /* Higher than taskbar to ensure it's on top */
+  cursor: pointer;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
