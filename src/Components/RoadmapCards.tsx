@@ -35,7 +35,7 @@ const AnimatedActivityCards = () => {
       }, 2000);
 
       return () => clearInterval(highlightInterval);
-    }, 1000);
+    }, 800);
 
     return () => clearTimeout(timeout);
   }, []);
