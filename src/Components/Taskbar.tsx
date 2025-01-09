@@ -29,7 +29,7 @@ const Taskbar = () => {
   return (
     <div className="relative font-sans">
       {/* Eco Tab - Positioned absolutely to prevent clipping */}
-      <div className="fixed left-[50.5%] eco-1 -translate-x-1/2 bottom-8 z-50">
+      <div className="fixed left-[50.5%] eco-1 -translate-x-1/2 bottom-9 z-50">
         <NavLink
           to="/eco"
           className={({ isActive }) =>
@@ -64,7 +64,7 @@ const Taskbar = () => {
       </div>
 
       {/* Main taskbar */}
-      <div className="taskbar1 taskbar h-16 -mb-2 bg-[#444F5E]">
+      <div className="taskbar1 taskbar h-20 -mb-3 bg-[#444F5E]">
         <div className="p-4 h-16 flex flex-row justify-between items-center">
           {/* Home */}
           <NavLink
