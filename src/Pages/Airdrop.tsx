@@ -171,7 +171,7 @@ const HeaderContent = memo(({ shouldAnimate }: { shouldAnimate: boolean }) => (
     >
       <TimelinePoint active={true} shouldAnimate={shouldAnimate} />
       <span className="text-sm text-yellow-400">January</span>
-      <TimelinePoint active={false} shouldAnimate={shouldAnimate} />
+      <TimelinePoint active={true} shouldAnimate={shouldAnimate} />
     </motion.div>
 
     <div className="flex flex-row justify-between items-center w-full">
@@ -205,7 +205,7 @@ const Airdrop = () => {
       description: 'Kickstart your journey with our first product release',
       textColor: 'text-white/50',
       icon: EiCheck,
-      time: 'November',
+      time: 'December',
       status: 'completed' as const
     },
     {
@@ -229,7 +229,7 @@ const Airdrop = () => {
       description: 'Get ready to trade by minting your own tokens',
       textColor: 'text-white/50',
       icon: Timer,
-      time: 'March',
+      time: 'May',
       status: 'upcoming' as const
     },
     {
@@ -237,7 +237,7 @@ const Airdrop = () => {
       description: 'Trade your tokens in our decentralized marketplace',
       textColor: 'text-white/50',
       icon: Timer,
-      time: 'May',
+      time: 'July',
       status: 'upcoming' as const
     },
     {
@@ -245,7 +245,7 @@ const Airdrop = () => {
       description: 'Vote on what you want to see next in our ecosystem',
       textColor: 'text-green-400',
       icon: Timer,
-      time: 'July',
+      time: 'August',
       status: 'upcoming' as const
     },
   ], []);
