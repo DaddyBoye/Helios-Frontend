@@ -1,6 +1,6 @@
 import { useOutletContext} from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useMemo, useState, useEffect, memo  } from 'react';
+import { useMemo, useState, memo  } from 'react';
 import StarryBackground from '../Components/StarryBackground';
 import EiCheck from '../icons/ei_check.svg';
 import CompletedTimer from '../icons/basil_timer-outline.svg';
@@ -189,15 +189,15 @@ const HeaderContent = memo(({ shouldAnimate }: { shouldAnimate: boolean }) => (
 
 const Airdrop = () => {
   const { minerate, friends, avatarPath } = useOutletContext<OutletContext>();
-  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [shouldAnimate] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShouldAnimate(true);
-    }, 200);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setShouldAnimate(true);
+  //   }, 200);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   const inviteLinks = useMemo(() => [
     {
