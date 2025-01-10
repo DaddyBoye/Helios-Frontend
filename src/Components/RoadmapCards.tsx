@@ -125,7 +125,7 @@ const AnimatedActivityCards = () => {
   return (
     <div 
       ref={containerRef} 
-      className="flex overflow-x-auto gap-2 py-4 px-2 w-full scrollbar-hide scroll-smooth"
+      className="flex overflow-x-auto gap-2 py-8 px-2 w-full scrollbar-hide scroll-smooth"
     >
       {cardData.map((card, index) => renderCard(index, card))}
     </div>
