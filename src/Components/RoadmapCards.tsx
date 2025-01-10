@@ -16,9 +16,9 @@ const AnimatedActivityCards = () => {
     const timeout = setTimeout(() => {
       const interval = setInterval(() => {
         setScrollIndex((prev) => (prev + 1) % cardData.length);
-      }, 3000);
+      }, 4000);
       return () => clearInterval(interval);
-    }, 3000);
+    }, 4000);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -32,7 +32,7 @@ const AnimatedActivityCards = () => {
         } else {
           clearInterval(highlightInterval);
         }
-      }, 1000);
+      }, 2000);
 
       return () => clearInterval(highlightInterval);
     }, 800);
