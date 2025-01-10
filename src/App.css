@@ -245,6 +245,16 @@
   backdrop-filter: blur(10px); /* Adds blur to the background */
 }
 
+/* Hide all scrollbars */
+* {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;     /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
 .popup-overlay {
   position: fixed;
   top: 0;
