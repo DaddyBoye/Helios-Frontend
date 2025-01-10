@@ -60,7 +60,7 @@ const TimelineItem = memo(({ item, index, shouldAnimate }: {
         damping: 12,
         delay: 1 + (index * 0.1)
       }}
-      className="group relative w-11/12 mx-auto mb-4"
+      className="group relative w-10/12 mx-auto mb-4"
     >
       <div className="flex items-start space-x-3">
         <div className="flex flex-col items-center">
@@ -158,7 +158,7 @@ const HeaderContent = memo(({ shouldAnimate }: { shouldAnimate: boolean }) => (
         stiffness: 200,
         delay: 1
       }}
-      className="py-1 px-8 bg-gradient-to-r from-yellow-400 to-yellow-500 mx-auto mt-14 rounded-2xl font-medium text-black shadow-lg shadow-yellow-400/20"
+      className="py-1 px-8 bg-gradient-to-r from-yellow-300 to-yellow-500 mx-auto mt-14 rounded-2xl font-medium text-black shadow-lg shadow-yellow-400/20"
     >
       Roadmap
     </motion.div>
@@ -167,7 +167,7 @@ const HeaderContent = memo(({ shouldAnimate }: { shouldAnimate: boolean }) => (
       initial={{ opacity: 0, y: 10 }}
       animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
       transition={{ delay: 1.3 }}
-      className="flex justify-center space-x-2 mt-4"
+      className="flex justify-center space-x-2 items-center mt-3 -mb-2"
     >
       <TimelinePoint active={true} shouldAnimate={shouldAnimate} />
       <span className="text-sm text-yellow-400">January</span>
@@ -182,7 +182,7 @@ const HeaderContent = memo(({ shouldAnimate }: { shouldAnimate: boolean }) => (
       initial={{ scaleX: 0 }}
       animate={shouldAnimate ? { scaleX: 1 } : { scaleX: 0 }}
       transition={{ delay: 1.5 }}
-      className="border-t border-white/10 mx-5 my-6" 
+      className="border-t border-white/10 -mt-1 mx-5 my-6" 
     />
   </>
 ));
