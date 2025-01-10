@@ -194,7 +194,7 @@ const Airdrop = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShouldAnimate(true);
-    }, 700);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
