@@ -16,9 +16,9 @@ const AnimatedActivityCards = () => {
     const timeout = setTimeout(() => {
       const interval = setInterval(() => {
         setScrollIndex((prev) => (prev + 1) % cardData.length);
-      }, 5000);
+      }, 4000);
       return () => clearInterval(interval);
-    }, 5000);
+    }, 4000);
     return () => clearTimeout(timeout);
   }, []);
 
