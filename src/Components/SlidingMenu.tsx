@@ -209,71 +209,57 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
   const renderInviteTaskContent = (task: InviteTask) => {
     const status = taskStatuses.find(s => s.task_id === task.taskId);
     const progress = friends.length;
-    const remaining = Math.max(0, task.referralThreshold - progress);
-
-    if (status?.completed && status?.claimed) {
-      return (
-        <div className="p-4">
-          <div className="bg-green-500/20 rounded-lg p-4 mb-4">
-            <h3 className="text-green-500 font-bold mb-2">Task Completed!</h3>
-            <p className="text-sm text-white/70">
-              You've successfully completed this task and claimed your reward of {task.reward}.
-            </p>
-          </div>
-        </div>
-      );
-    }
 
     if (progress >= task.referralThreshold && (!status?.completed || !status?.claimed)) {
       return (
-        <div className="px-4">
-          <div className="bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl px-4 py-2 mb-4">
-            <h3 className="text-yellow-500 font-bold mb-2">Ready to Claim!</h3>
-            <p className="text-sm text-white/70">
-              Congratulations! You've met the threshold to claim your reward.
-            </p>
-          </div>
-
-          <div className="mt-4">
-            <p className="text-sm text-white/70 mb-4">
-              {task.reward} is waiting for you!
-            </p>
-            <button
-              onClick={() => handleClaimReward(task.taskId)}
-              disabled={isLoading}
-              className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? 'CLAIMING...' : `CLAIM ${(selectedItem as Platform | InviteTask).points} POINTS`}
-            </button>
-          </div>
+      <div className="flex flex-col">
+        <div className="flex items-center mb-3">
+        <img
+          src={task.image}
+          className="w-20 h-20 mr-2"
+          alt="Task Image"
+        />
+        <p className="text-md text-left">
+          Congratulations! You've met the threshold to claim your reward.
+        </p>
         </div>
+        <button
+        onClick={() => handleClaimReward(task.taskId)}
+        disabled={isLoading}
+        className="w-full bg-yellow-700 h-12 text-white py-3 rounded-xl font-bold text-sm mb-5 flex items-center justify-center"
+        >
+        {isLoading ? 'CLAIMING...' : (
+          <>
+          CLAIM <img src={Solis} alt="Solis" className="h-10 w-10 -mr-1" />{task.points}
+          </>
+        )}
+        </button>
+      </div>
       );
     }
 
-    return (
-      <div className="px-4">
-        <div className="bg-blue-500/20 rounded-lg px-4 mb-4">
-          <h3 className="text-white font-bold mb-2">Task In Progress</h3>
-          <p className="text-sm text-white/70">
-            Keep going! Invite {remaining} more {remaining === 1 ? 'friend' : 'friends'} to claim your reward.
-          </p>
+    if (status?.completed && status?.claimed) {
+      return (
+      <div className="flex flex-col">
+        <div className="flex items-center mb-3">
+        <img
+          src={task.image}
+          className="w-20 h-20 mr-2"
+          alt="Task Image"
+        />
+        <p className="text-md text-left">
+          You have successfully claimed your reward.
+        </p>
         </div>
-
-        <div className="mt-4">
-          <h4 className="font-bold mb-2">Your Referral Link</h4>
-          <div className="bg-gray-800 p-3 rounded-lg flex items-center justify-between">
-            <p className="text-sm text-white/70 truncate">
-            </p>
-            <button 
-              onClick={() => navigator.clipboard.writeText(`https://app.helios.net/ref/${telegramId}`)}
-              className="ml-2 text-blue-500 hover:text-blue-400"
-            >
-              Copy
-            </button>
-          </div>
-        </div>
+        <button
+        className="w-full bg-green-500 h-12 text-white py-3 rounded-xl font-bold text-sm mb-5 flex items-center justify-center"
+        disabled
+        >
+        COMPLETED
+        </button>
       </div>
-    );
+      );
+    }
   };
 
   return (
@@ -336,25 +322,25 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                 >
                   {`Go to ${selectedItem.name}`}
                 </a>
-              )}
+                )}
 
-              {taskStatuses.find(s => s.task_id === selectedItem.taskId)?.completed && 
-              !taskStatuses.find(s => s.task_id === selectedItem.taskId)?.claimed && (
+                {taskStatuses.find(s => s.task_id === selectedItem.taskId)?.completed && 
+                !taskStatuses.find(s => s.task_id === selectedItem.taskId)?.claimed && (
                 <button
-                  className="w-full bg-slate-800 h-12 text-white py-3 rounded-xl font-bold text-sm mb-5 flex items-center justify-center "
+                  className="w-full bg-yellow-500 h-12 text-black py-3 rounded-xl font-bold text-sm mb-5 flex items-center justify-center"
                   onClick={() => handleClaimReward(selectedItem.taskId)}
                   disabled={isLoading}
                 >
                   {isLoading ? 'CLAIMING...' : (
-                    <>
-                      CLAIM <img src={Solis} alt="Solis" className="h-10 w-10 -mr-1" />{selectedItem.points}
-                    </>
+                  <>
+                    CLAIM <img src={Solis} alt="Solis" className="h-10 w-10 -mr-1" />{selectedItem.points}
+                  </>
                   )}
                 </button>
-              )}
+                )}
 
-              {taskStatuses.find(s => s.task_id === selectedItem.taskId)?.completed && 
-               taskStatuses.find(s => s.task_id === selectedItem.taskId)?.claimed && (
+                {taskStatuses.find(s => s.task_id === selectedItem.taskId)?.completed && 
+                 taskStatuses.find(s => s.task_id === selectedItem.taskId)?.claimed && (
                 <button className="w-full bg-green-500 text-white py-3 rounded-xl font-bold text-sm mb-5" disabled>
                   COMPLETED
                 </button>
@@ -413,7 +399,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                   <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
                   <div className="flex items-baseline">
                     <span className="text-yellow-500 text-xs mr-2 opacity-80">in $HELIOS</span>
-                    <span className="text-white text-2xl font-extrabold text-green-100">{selectedItem.prizeBreakdown[0].amount}</span>
+                    <span className="text-white text-2xl font-extrabold">{selectedItem.prizeBreakdown[0].amount}</span>
                   </div>
                   </div>
                   {selectedItem.prizeBreakdown.slice(1).map((prize, index) => (
