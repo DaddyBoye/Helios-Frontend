@@ -459,7 +459,7 @@ const renderInviteTasksSection = () => (
                             </div>
                         )}
                         {claimable && !completed && (
-                            <div className="absolute top-4 right-2 -mr-1 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                            <div className="absolute top-4 ml-2 right-2 -mr-1 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
                                 Claim Now
                             </div>
                         )}
