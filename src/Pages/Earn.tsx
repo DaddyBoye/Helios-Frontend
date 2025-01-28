@@ -438,7 +438,7 @@ const renderInviteTasksSection = () => (
                 return (
                     <div 
                         key={index} 
-                        className='min-w-36 rounded-xl p-3 flex flex-col justify-between shrink-0 relative transition-all duration-300' 
+                        className='min-w-36 rounded-xl p-3 flex flex-col shrink-0 relative transition-all duration-300' 
                         style={getInviteTaskStyle(task)}
                         onClick={() => handleItemClick(task)}
                     >
@@ -454,12 +454,12 @@ const renderInviteTasksSection = () => (
                             {getInviteTaskStatus(task)}
                         </p>
                         {completed && (
-                            <div className="absolute top-3 right-2 -mr-1 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                            <div className="absolute top-4 right-2 -mr-1 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
                                 Completed
                             </div>
                         )}
                         {claimable && !completed && (
-                            <div className="absolute top-3 right-2 -mr-1 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                            <div className="absolute top-4 right-2 -mr-1 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
                                 Claim Now
                             </div>
                         )}
