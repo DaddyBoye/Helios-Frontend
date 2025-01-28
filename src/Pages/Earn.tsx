@@ -202,8 +202,8 @@ const Earn = () => {
             title: "Plastic-Free Challenge",
             startDateDay: 3,
             startDateMonth: 'Jan',
-            endDateDay: 21,
-            endDateMonth: 'Jan',
+            endDateDay: 5,
+            endDateMonth: 'Feb',
             taskId: 50,
             status: 'Ongoing',
             playerCount: "2k",
@@ -309,72 +309,76 @@ const Earn = () => {
         />
     );
 
-const renderImageCarousel = () => (
-    <div 
-        ref={carouselRef} 
-        className='flex gap-4 pl-3 overflow-x-auto pr-3 mt-16 hide-scrollbar snap-x snap-mandatory scroll-smooth'
-    >
-        {images.map((imageInfo, index) => (
-            <div 
-                key={index} 
-                className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center 
-                transition-all duration-300
-                cursor-pointer'
-                onClick={() => handleItemClick(imageInfo)}
-            >
-                {/* Image with improved overlay */}
-                <img 
-                    src={imageInfo.image} 
-                    alt={imageInfo.title} 
-                    className="w-full h-full object-cover rounded-2xl"
-                />
-                
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#09161F]/70 via-transparent to-[#09161F] rounded-2xl"></div>
-                
-                {/* Top section with status and date */}
-                <div className='absolute top-3 left-3 w-full justify-between flex'>
-                    {/* Status Badge */}
-                    <div 
-                        className='px-3 py-1.5 rounded-2xl text-xs font-medium text-black'
-                        style={{backgroundColor: imageInfo.statusColor}}
-                    >
-                        {imageInfo.status}
-                    </div>
+    const renderImageCarousel = () => (
+        <div 
+            ref={carouselRef} 
+            className='flex gap-4 pl-3 overflow-x-auto pr-3 mt-16 hide-scrollbar snap-x snap-mandatory scroll-smooth'
+        >
+            {images.map((imageInfo, index) => (
+                <div 
+                    key={index} 
+                    className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center 
+                    transition-all duration-300
+                    cursor-pointer'
+                    onClick={() => handleItemClick(imageInfo)}
+                >
+                    {/* Image with improved overlay */}
+                    <img 
+                        src={imageInfo.image} 
+                        alt={imageInfo.title} 
+                        className="w-full h-full object-cover rounded-2xl"
+                    />
                     
-                    {/* Date Badge */}
-                    <div 
-                        className="absolute right-5"
-                    >
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#09161F]/70 via-transparent to-[#09161F] rounded-2xl"></div>
+                    
+                    {/* Top section with status and date */}
+                    <div className='absolute top-3 left-3 w-full justify-between flex'>
+                        {/* Status Badge */}
                         <div 
-                            className="flex items-center gap-1.5 bg-gray-900/60 backdrop-blur-sm px-3 py-1.5 
-                            rounded-xl border border-gray-700/50 shadow-lg"
-                            style={{borderColor: imageInfo.statusColor}}
+                            className='px-3 py-1.5 rounded-2xl text-xs font-medium text-black'
+                            style={{backgroundColor: imageInfo.statusColor}}
                         >
-                            <span className="text-yellow-500 font-bold text-lg leading-none">
-                                {imageInfo.endDateDay}
-                            </span>
-                            <div className="w-px h-4 bg-gray-700/50"></div>
-                            <span className="text-yellow-500/80 text-xs uppercase tracking-wider">
-                                {imageInfo.endDateMonth}
-                            </span>
+                            {imageInfo.status}
+                        </div>
+                        
+                        {/* Date Badge */}
+                        <div 
+                            className="absolute right-5"
+                        >
+                            <div className="flex items-center gap-2 bg-gray-900/50 backdrop-blur px-3 py-2 rounded-xl border border-gray-700/50"
+                                style={{ borderColor: imageInfo.statusColor }}
+                            >
+                                <div className="flex flex-col items-center">
+                                    <span className="text-white text-[8px] uppercase leading-none mb-0.5">
+                                        {imageInfo.status === 'Upcoming' ? 'starts' : imageInfo.status === 'Ongoing' ? 'ends' : 'ended'}
+                                    </span>
+                                    <div className="flex items-center gap-1">
+                                        <span className="text-yellow-500 font-bold text-base leading-none">
+                                            {imageInfo.status === 'Upcoming' ? imageInfo.startDateDay : imageInfo.endDateDay}
+                                        </span>
+                                        <span className="text-yellow-500/80 text-xs uppercase tracking-wider">
+                                            {imageInfo.status === 'Upcoming' ? imageInfo.startDateMonth : imageInfo.endDateMonth}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                {/* Bottom text section */}
-                <div className="absolute text-left bottom-3 left-3 text-white">
-                    <div className="text-lg font-bold mb-1">
-                        {imageInfo.title}
+                    
+                    {/* Bottom text section */}
+                    <div className="absolute text-left bottom-3 left-3 text-white">
+                        <div className="text-lg font-bold mb-1">
+                            {imageInfo.title}
+                        </div>
+                        <p className='text-sm opacity-80'>
+                            {imageInfo.shortCallToAction}
+                        </p>
                     </div>
-                    <p className='text-sm opacity-80'>
-                        {imageInfo.shortCallToAction}
-                    </p>
                 </div>
-            </div>
-        ))}
-    </div>
-);
+            ))}
+        </div>
+    );
 
 const renderSocialSection = () => (
     <>

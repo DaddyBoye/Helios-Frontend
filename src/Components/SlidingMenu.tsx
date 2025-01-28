@@ -350,77 +350,93 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
             <>
               {/* Carousel items */}
               <div className="flex flex-col gap-3 mb-48 mt-12">
-                {/* Challenge */}
-                <div
-                  className="bg-cover bg-center rounded-xl relative"
-                  style={{
-                    backgroundImage: `url(${selectedItem.image})`,
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#09161F] via-transparent to-[#09161F] rounded-lg"></div>
-                  <div className="relative z-10">
-                    <div className="flex justify-between px-3 pt-3 h-28 mb-2">
-                      <h2 className="text-white text-lg font-bold mb-1">Weekly Challenge</h2>
-                      <button className="bg-blue-700 text-white px-3 mb-auto py-0.5 rounded-full text-xs">
-                        LEARN MORE
-                      </button>
+              {/* Challenge */}
+              <div
+                className="bg-cover bg-center rounded-xl relative"
+                style={{
+                backgroundImage: `url(${selectedItem.image})`,
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-b from-[#09161F] via-transparent to-[#09161F] rounded-lg"></div>
+                <div className="relative z-10">
+                <div className="flex justify-between px-3 pt-3 h-28 mb-2">
+                  <h2 className="text-white text-lg font-bold mb-1">{selectedItem.title}</h2>
+                </div>
+                <div className='bg-black/30 rounded-b-xl backdrop-blur-sm py-2 px-2'>
+                  <p className="text-white/50 text-xs flex text-left">
+                  {selectedItem.description}
+                  </p>
+                  <div className="flex flex-row mt-2">
+                  <div className="flex items-center space-x-2">
+                    <div 
+                    className="text-white bg-transparent px-2 py-1 rounded-full text-xs flex items-center border"
+                    style={{borderColor: selectedItem.statusColor}} 
+                    >
+                    <span className="mr-1">{selectedItem.statusEmoji}</span> {selectedItem.status}
                     </div>
-                    <div className='bg-black/30 rounded-b-xl backdrop-blur-sm py-2 px-2'>
-                      <h2 className="text-white text-sm font-bold text-left">{selectedItem.title}</h2>
-                      <p className="text-white/50 text-xs flex text-left">
-                        {selectedItem.description}
-                      </p>
-                      <div className="flex space-x-2 mt-2">
-                        <div className="text-white bg-transparent px-2 py-1 rounded-full text-xs flex items-center border"
-                          style={{borderColor: selectedItem.statusColor}} 
-                        >
-                          <span className="mr-1">{selectedItem.statusEmoji}</span> {selectedItem.status}
-                        </div>
-                        <div className="">
-                          <div className="flex items-center gap-1.5 bg-gray-900/50 backdrop-blur px-3 py-1.5 rounded-xl border border-gray-700/50"
-                            style={{borderColor: selectedItem.statusColor}}
-                          >
-                            <span className="text-yellow-500 font-bold text-lg leading-none">{selectedItem.endDateDay}</span>
-                            <div className="w-px h-4 bg-gray-700/50"></div>
-                            <span className="text-yellow-500/80 text-xs uppercase tracking-wider">{selectedItem.endDateMonth}</span>
-                          </div>
-                        </div>
-                        <div className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm flex items-center">
-                          <img src={Friends} alt="Users Icon" className='mr-1'/>{selectedItem.playerCount}
-                        </div>
+                    <div className="bg-gray-700 text-white px-3 py-1 rounded-full text-sm flex items-center">
+                    <img src={Friends} alt="Users Icon" className='mr-1'/>{selectedItem.playerCount}
+                    </div>
+                  </div>
+                  
+                    {/* Date Range */}
+                    <div className="flex ml-2 items-center gap-2 bg-gray-900/50 backdrop-blur px-3 py-1 rounded-xl border border-gray-700/50"
+                    style={{borderColor: selectedItem.statusColor}}
+                    >
+                    {/* Start Date */}
+                    <div className="flex flex-col items-center">
+                      <span className="text-white text-[8px] uppercase leading-none mb-0.5">starts</span>
+                      <div className="flex items-center gap-1">
+                      <span className="text-yellow-500 font-bold text-sm leading-none">{selectedItem.startDateDay}</span>
+                      <span className="text-yellow-500/80 text-[10px] uppercase tracking-wider">{selectedItem.startDateMonth}</span>
                       </div>
                     </div>
+                    
+                    {/* Divider */}
+                    <div className="h-full border-l border-gray-700/50"></div>
+                    
+                    {/* End Date */}
+                    <div className="flex flex-col items-center">
+                      <span className="text-white text-[8px] uppercase leading-none mb-0.5">ends</span>
+                      <div className="flex items-center gap-1">
+                      <span className="text-yellow-500 font-bold text-sm leading-none">{selectedItem.endDateDay}</span>
+                      <span className="text-yellow-500/80 text-[10px] uppercase tracking-wider">{selectedItem.endDateMonth}</span>
+                      </div>
+                    </div>
+                    </div>
                   </div>
                 </div>
+                </div>
+              </div>
 
-                {/* Prize breakdown */}
-                <div className="rounded-xl p-4 bg-gradient-to-br from-black/50 to-black/60 space-y-4 shadow-lg">
-                  <div className="flex justify-between items-center border-b border-white/20 pb-2 mb-2">
-                  <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
-                  <div className="flex items-baseline">
-                    <span className="text-yellow-500 text-xs mr-2 opacity-80">in $HELIOS</span>
-                    <span className="text-white text-2xl font-extrabold">{selectedItem.prizeBreakdown[0].amount}</span>
-                  </div>
-                  </div>
-                  {selectedItem.prizeBreakdown.slice(1).map((prize, index) => (
-                  <div 
-                    key={index} 
-                    className="flex justify-between items-center text-sm text-white/90 hover:bg-white/10 transition-colors rounded-md px-2 py-1"
-                  >
-                    <span className="font-medium">{prize.range} Prize</span>
-                    <span className="flex items-center">
-                    <img src={Solis} alt="Helios Coin" className='w-10 -mr-2 h-10' />
-                    <span className="font-semibold">{prize.amount}</span>
-                    </span>
-                  </div>
-                  ))}
+              {/* Prize breakdown */}
+              <div className="rounded-xl p-4 bg-gradient-to-br from-black/50 to-black/60 space-y-4 shadow-lg">
+                <div className="flex justify-between items-center border-b border-white/20 pb-2 mb-2">
+                <div className="text-white text-lg font-bold tracking-wide">1st Prize</div>
+                <div className="flex items-baseline">
+                  <span className="text-yellow-500 text-xs mr-2 opacity-80">in $HELIOS</span>
+                  <span className="text-white text-2xl font-extrabold">{selectedItem.prizeBreakdown[0].amount}</span>
                 </div>
+                </div>
+                {selectedItem.prizeBreakdown.slice(1).map((prize, index) => (
+                <div 
+                  key={index} 
+                  className="flex justify-between items-center text-sm text-white/90 hover:bg-white/10 transition-colors rounded-md px-2 py-1"
+                >
+                  <span className="font-medium">{prize.range} Prize</span>
+                  <span className="flex items-center">
+                  <img src={Solis} alt="Helios Coin" className='w-10 -mr-2 h-10' />
+                  <span className="font-semibold">{prize.amount}</span>
+                  </span>
+                </div>
+                ))}
+              </div>
 
-                {/* Ticket information */}
-                <div className="bg-gradient-to-br from-black/50 to-black/60 rounded-xl p-4 text-center space-y-3">
-                  <h3 className="text-lg font-bold text-white">{selectedItem.title}</h3>
-                  <p className="text-sm text-white/70 text-center">{selectedItem.longDescription}</p>
-                </div>
+              {/* Ticket information */}
+              <div className="bg-gradient-to-br from-black/50 to-black/60 rounded-xl p-4 text-center space-y-3">
+                <h3 className="text-lg font-bold text-white">{selectedItem.title}</h3>
+                <p className="text-sm text-white/70 text-center">{selectedItem.longDescription}</p>
+              </div>
               </div>
             </>
           )}
