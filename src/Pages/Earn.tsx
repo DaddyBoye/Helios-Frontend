@@ -97,7 +97,7 @@ const Earn = () => {
     ];
 
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '1000', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 1000 },
+        { title: 'Invite 5 friends', reward: '10000', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 10000 },
         { title: 'Invite 10 friends', reward: '25000', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 25000 },
         { title: 'Invite 20 friends', reward: '60000', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 60000 },
         { title: 'Invite 50 friends', reward: '200000', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 200000 },
@@ -438,11 +438,11 @@ const renderInviteTasksSection = () => (
                 return (
                     <div 
                         key={index} 
-                        className='min-w-36 rounded-xl p-3 flex flex-col shrink-0 relative transition-all duration-300' 
+                        className='min-w-36 rounded-xl p-3 flex flex-col transition-all duration-300' 
                         style={getInviteTaskStyle(task)}
                         onClick={() => handleItemClick(task)}
                     >
-                        <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center" style={{ marginLeft: claimable ? '4px' : '0' }}>
+                        <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center" >
                             <img src={Friends} alt="Invite icon" className="w-6 h-6" />
                         </div>
                         <p className="text-left text-sm font-bold mb-1">{task.title}</p>
@@ -454,12 +454,12 @@ const renderInviteTasksSection = () => (
                             {getInviteTaskStatus(task)}
                         </p>
                         {completed && (
-                            <div className="absolute top-4 right-2 -mr-1 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                            <div className="absolute top-4 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
                                 Completed
                             </div>
                         )}
                         {claimable && !completed && (
-                            <div className="absolute top-4 ml-2 right-2 -mr-1 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                            <div className="absolute top-4 ml-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
                                 Claim Now
                             </div>
                         )}
