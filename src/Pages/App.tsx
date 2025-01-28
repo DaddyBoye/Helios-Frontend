@@ -219,7 +219,7 @@ function App() {
           )}
         </p>
       </div>
-      <div className="bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md rounded-2xl mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto z-10 w-11/12">
+      <div className="bg-white/20 border-solid border-2 border-[#B4CADA] backdrop-blur-md mb-[-20px] z-20 pb-6 rounded-2xl justify-center mx-auto w-11/12">
         <div className="flex flex-row pl-7 pr-6 pt-3 justify-between">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
@@ -255,7 +255,12 @@ function App() {
           </div>
           <p className="hidden">{airdropsError}</p>
         </div>
-        <ProgressBar progress={progress ?? 0} minerate={minerate ?? 0} airdropCount={airdropCount ?? 0}/>
+        <ProgressBar
+          progress={progress ?? 0}
+          minerate={minerate ?? 0}
+          airdropCount={airdropCount ?? 0}
+          togglePopup={() => setPopupVisible(true)} // Passing the function
+        />
       </div>
       {/* Make this container grow to take up remaining space */}
       <div className="flex-grow bg-[#D9D9D9] min-h-80 overflow-auto pb-36 text-white rounded-3xl z-10 w-full">

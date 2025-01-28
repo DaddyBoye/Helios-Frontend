@@ -7,9 +7,10 @@ interface ProgressBarProps {
   progress: number;
   minerate: number;
   airdropCount?: number;
+  togglePopup: () => void;
 }
 
-const ProgressBar = ({ progress, minerate, airdropCount = 0 }: ProgressBarProps) => {
+const ProgressBar = ({ progress, togglePopup, minerate, airdropCount = 0 }: ProgressBarProps) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const CYCLE_DURATION = 3600;
   const MAX_AIRDROPS = 8;
@@ -37,7 +38,10 @@ const ProgressBar = ({ progress, minerate, airdropCount = 0 }: ProgressBarProps)
 
   return (
     <div>
-      <div className="w-11/12 overflow-hidden bg-gray-600 text-white flex flex-row rounded-2xl mx-auto h-16 relative">
+      <div 
+        className="w-11/12 overflow-hidden bg-gray-600 text-white flex flex-row rounded-2xl mx-auto h-16 relative"
+        onClick={isReadyToReap ? togglePopup : undefined}
+      >
         <div
           className="h-16 rounded-l-2xl transition-all duration-300 ease-in-out"
           style={{

@@ -97,7 +97,7 @@ const Earn = () => {
     ];
 
     const inviteTasks: InviteTask[] = [
-        { title: 'Invite 5 friends', reward: '1000', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 1000 },
+        { title: 'Invite 5 friends', reward: '10000', link: '', image: Friends, color: '#4CAF50', taskId: 5, referralThreshold: 5, points: 10000 },
         { title: 'Invite 10 friends', reward: '25000', link: '', image: Friends, color: '#2196F3', taskId: 6, referralThreshold: 10, points: 25000 },
         { title: 'Invite 20 friends', reward: '60000', link: '', image: Friends, color: '#FFC107', taskId: 7, referralThreshold: 20, points: 60000 },
         { title: 'Invite 50 friends', reward: '200000', link: '', image: Friends, color: '#FF5722', taskId: 8, referralThreshold: 50, points: 200000 },
@@ -202,8 +202,8 @@ const Earn = () => {
             title: "Plastic-Free Challenge",
             startDateDay: 3,
             startDateMonth: 'Jan',
-            endDateDay: 21,
-            endDateMonth: 'Jan',
+            endDateDay: 5,
+            endDateMonth: 'Feb',
             taskId: 50,
             status: 'Ongoing',
             playerCount: "2k",
@@ -309,72 +309,76 @@ const Earn = () => {
         />
     );
 
-const renderImageCarousel = () => (
-    <div 
-        ref={carouselRef} 
-        className='flex gap-4 pl-3 overflow-x-auto pr-3 mt-16 hide-scrollbar snap-x snap-mandatory scroll-smooth'
-    >
-        {images.map((imageInfo, index) => (
-            <div 
-                key={index} 
-                className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center 
-                transition-all duration-300
-                cursor-pointer'
-                onClick={() => handleItemClick(imageInfo)}
-            >
-                {/* Image with improved overlay */}
-                <img 
-                    src={imageInfo.image} 
-                    alt={imageInfo.title} 
-                    className="w-full h-full object-cover rounded-2xl"
-                />
-                
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#09161F]/70 via-transparent to-[#09161F] rounded-2xl"></div>
-                
-                {/* Top section with status and date */}
-                <div className='absolute top-3 left-3 w-full justify-between flex'>
-                    {/* Status Badge */}
-                    <div 
-                        className='px-3 py-1.5 rounded-2xl text-xs font-medium text-black'
-                        style={{backgroundColor: imageInfo.statusColor}}
-                    >
-                        {imageInfo.status}
-                    </div>
+    const renderImageCarousel = () => (
+        <div 
+            ref={carouselRef} 
+            className='flex gap-4 pl-3 overflow-x-auto pr-3 mt-16 hide-scrollbar snap-x snap-mandatory scroll-smooth'
+        >
+            {images.map((imageInfo, index) => (
+                <div 
+                    key={index} 
+                    className='w-10/12 max-h-50 rounded-2xl min-h-40 shrink-0 relative snap-center 
+                    transition-all duration-300
+                    cursor-pointer'
+                    onClick={() => handleItemClick(imageInfo)}
+                >
+                    {/* Image with improved overlay */}
+                    <img 
+                        src={imageInfo.image} 
+                        alt={imageInfo.title} 
+                        className="w-full h-full object-cover rounded-2xl"
+                    />
                     
-                    {/* Date Badge */}
-                    <div 
-                        className="absolute right-5"
-                    >
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#09161F]/70 via-transparent to-[#09161F] rounded-2xl"></div>
+                    
+                    {/* Top section with status and date */}
+                    <div className='absolute top-3 left-3 w-full justify-between flex'>
+                        {/* Status Badge */}
                         <div 
-                            className="flex items-center gap-1.5 bg-gray-900/60 backdrop-blur-sm px-3 py-1.5 
-                            rounded-xl border border-gray-700/50 shadow-lg"
-                            style={{borderColor: imageInfo.statusColor}}
+                            className='px-3 py-1.5 rounded-2xl text-xs font-medium text-black'
+                            style={{backgroundColor: imageInfo.statusColor}}
                         >
-                            <span className="text-yellow-500 font-bold text-lg leading-none">
-                                {imageInfo.endDateDay}
-                            </span>
-                            <div className="w-px h-4 bg-gray-700/50"></div>
-                            <span className="text-yellow-500/80 text-xs uppercase tracking-wider">
-                                {imageInfo.endDateMonth}
-                            </span>
+                            {imageInfo.status}
+                        </div>
+                        
+                        {/* Date Badge */}
+                        <div 
+                            className="absolute right-5"
+                        >
+                            <div className="flex items-center gap-2 bg-gray-900/50 backdrop-blur px-3 py-2 rounded-xl border border-gray-700/50"
+                                style={{ borderColor: imageInfo.statusColor }}
+                            >
+                                <div className="flex flex-col items-center">
+                                    <span className="text-white text-[8px] uppercase leading-none mb-0.5">
+                                        {imageInfo.status === 'Upcoming' ? 'starts' : imageInfo.status === 'Ongoing' ? 'ends' : 'ended'}
+                                    </span>
+                                    <div className="flex items-center gap-1">
+                                        <span className="text-yellow-500 font-bold text-base leading-none">
+                                            {imageInfo.status === 'Upcoming' ? imageInfo.startDateDay : imageInfo.endDateDay}
+                                        </span>
+                                        <span className="text-yellow-500/80 text-xs uppercase tracking-wider">
+                                            {imageInfo.status === 'Upcoming' ? imageInfo.startDateMonth : imageInfo.endDateMonth}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                {/* Bottom text section */}
-                <div className="absolute text-left bottom-3 left-3 text-white">
-                    <div className="text-lg font-bold mb-1">
-                        {imageInfo.title}
+                    
+                    {/* Bottom text section */}
+                    <div className="absolute text-left bottom-3 left-3 text-white">
+                        <div className="text-lg font-bold mb-1">
+                            {imageInfo.title}
+                        </div>
+                        <p className='text-sm opacity-80'>
+                            {imageInfo.shortCallToAction}
+                        </p>
                     </div>
-                    <p className='text-sm opacity-80'>
-                        {imageInfo.shortCallToAction}
-                    </p>
                 </div>
-            </div>
-        ))}
-    </div>
-);
+            ))}
+        </div>
+    );
 
 const renderSocialSection = () => (
     <>
@@ -399,7 +403,7 @@ const renderSocialSection = () => (
                             </div>
                             <div className="flex flex-row items-center justify-between flex-1 pl-2">
                                 <div className="flex flex-col">
-                                    <p className="text-left truncate text-left w-36 text-xs">{platform.text}</p>
+                                    <p className="truncate text-left w-36 text-xs">{platform.text}</p>
                                     <p className="truncate text-left w-40 text-white/60 text-xs">
                                         {completed ? 'Task completed' : claimable ? 'Click to claim reward' : 'Engage for rewards'}
                                     </p>
@@ -423,55 +427,55 @@ const renderSocialSection = () => (
     </>
 );
 
-    const renderInviteTasksSection = () => (
-        <>
-            <div className='flex flex-row items-center pt-5 pl-5 pb-1'>
-                <img src={Friends} alt="Friends icon" className='w-6 h-6' />
-                <h1 className='text-left ml-2 text-md'>Invite Tasks</h1>
-            </div>
-            <div className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar'>
-                {inviteTasks.map((task, index) => {
-                    const status = taskStatuses.find(status => status.task_id === task.taskId);
-                    const completed = status?.completed && status?.claimed;
-                    const claimable = isTaskClaimable(task.taskId);
-                    
-                    return (
-                        <div 
-                            key={index} 
-                            className='w-5/12 rounded-xl p-3 flex flex-col justify-between shrink-0 relative transition-all duration-300' 
-                            style={getInviteTaskStyle(task)}
-                            onClick={() => handleItemClick(task)}
-                        >
-                            <div className="bg-[#435B6D] rounded-lg flex items-center w-10 h-10 justify-center mb-2">
-                                <img src={Friends} alt="Invite icon" className="w-6 h-6" />
-                            </div>
-                            <p className="text-left text-sm font-bold mb-1">{task.title}</p>
-                            <div className='flex items-center'>
-                                <p className="text-left text-xs font-bold text-white/70">Earn: {task.reward}</p>
-                                <img src={Solis} alt="Solis" className='w-8 h-8 -ml-1' />
-                            </div>
-                            <p className="text-left text-xs mt-1 text-white/70">
-                                {getInviteTaskStatus(task)}
-                            </p>
-                            {completed && (
-                                <div className="absolute top-3 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                                    Completed
-                                </div>
-                            )}
-                            {claimable && !completed && (
-                                <div className="absolute top-3 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
-                                    Claimable
-                                </div>
-                            )}
+const renderInviteTasksSection = () => (
+    <>
+        <div className='flex flex-row items-center pt-5 pl-5 pb-1'>
+            <img src={Friends} alt="Friends icon" className='w-6 h-6' />
+            <h1 className='text-left ml-2 text-md'>Invite Tasks</h1>
+        </div>
+        <div className='flex gap-2 pl-3 overflow-x-auto pr-3 hide-scrollbar'>
+            {inviteTasks.map((task, index) => {
+                const status = taskStatuses.find(status => status.task_id === task.taskId);
+                const completed = status?.completed && status?.claimed;
+                const claimable = isInviteTaskClaimable(task);
+                
+                return (
+                    <div 
+                        key={index} 
+                        className='min-w-36 rounded-xl p-3 flex flex-col transition-all duration-300' 
+                        style={getInviteTaskStyle(task)}
+                        onClick={() => handleItemClick(task)}
+                    >
+                        <div className="bg-[#435B6D] rounded-lg flex items-center p-2 w-10 h-10 justify-center" >
+                            <img src={Friends} alt="Invite icon" className="w-6 h-6" />
                         </div>
-                    );
-                })}
-            </div>
-        </>
-    );
+                        <p className="text-left text-sm font-bold mb-1">{task.title}</p>
+                        <div className='flex items-center'>
+                            <p className="text-left text-xs font-bold text-white/70">Earn: {task.reward}</p>
+                            <img src={Solis} alt="Solis" className='w-8 h-8 -ml-1' />
+                        </div>
+                        <p className="text-left text-xs mt-1 text-white/70">
+                            {getInviteTaskStatus(task)}
+                        </p>
+                        {completed && (
+                            <div className="absolute top-4 right-1.5 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                                Completed
+                            </div>
+                        )}
+                        {claimable && !completed && (
+                            <div className="absolute top-4 right-1.5 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                                Claim Now
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
+        </div>
+    </>
+);
 
     return (
-        <div className="relative font-sans h-full pb-20 flex flex-col overflow-y-auto">
+        <div className="relative font-sans h-full pb-24 flex flex-col overflow-y-auto">
             <StarryBackground />
             <div className="relative z-10 flex flex-col text-center text-white flex-grow">
                 {!hideHeader && renderHeader()}
