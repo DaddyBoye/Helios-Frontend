@@ -327,7 +327,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({
                 {taskStatuses.find(s => s.task_id === selectedItem.taskId)?.completed && 
                 !taskStatuses.find(s => s.task_id === selectedItem.taskId)?.claimed && (
                 <button
-                  className="w-full bg-yellow-500 h-12 text-black py-3 rounded-xl font-bold text-sm mb-5 flex items-center justify-center"
+                  className="w-full bg-yellow-700 h-12 text-black py-3 rounded-xl font-bold text-sm mb-5 flex items-center justify-center"
                   onClick={() => handleClaimReward(selectedItem.taskId)}
                   disabled={isLoading}
                 >
