@@ -223,7 +223,7 @@ const Earn = () => {
         { 
             image: Helios6, // Replace with the relevant image for Tree Planting Drive
             title: "Tree Planting Drive", 
-            startDateDay: 3,
+            startDateDay: 15,
             startDateMonth: 'Feb',
             endDateDay: 20,
             endDateMonth: 'Feb',
